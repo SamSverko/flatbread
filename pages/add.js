@@ -14,6 +14,14 @@ const schema = yup.object().shape({
     name: yup.string().lowercase().required(),
     url: yup.string().url(),
   }),
+  yield: yup.object({
+    amount: yup.number().required(),
+    unit: yup.string().lowercase().required(),
+  }),
+  duration: yup.object({
+    prepTime: yup.number().required(),
+    cookTime: yup.number().required(),
+  }),
 });
 
 export default function Add({
@@ -138,6 +146,50 @@ export default function Add({
           <input name="source.url" id="form-source-url" ref={register} />
           <br />
           {errors.source?.url && <span>{errors.source.url.message}</span>}
+        </div>
+        {/* yield */}
+        <div>
+          <h2>Yield</h2>
+          <label htmlFor="form-yield-amount">Amount</label>
+          <br />
+          <input name="yield.amount" id="form-yield-amount" ref={register} />
+          <br />
+          {errors.yield?.amount && <span>{errors.yield.amount.message}</span>}
+          <br />
+          <label htmlFor="form-yield-unit">
+            Unit (e.g. servings, burgers, etc.)
+          </label>
+          <br />
+          <input name="yield.unit" id="form-yield-unit" ref={register} />
+          <br />
+          {errors.yield?.unit && <span>{errors.yield.unit.message}</span>}
+        </div>
+        {/* duration */}
+        <div>
+          <h2>Duration</h2>
+          <label htmlFor="form-duration-prepTime">Prep Time (in minutes)</label>
+          <br />
+          <input
+            name="duration.prepTime"
+            id="form-duration-prepTime"
+            ref={register}
+          />
+          <br />
+          {errors.duration?.prepTime && (
+            <span>{errors.duration.prepTime.message}</span>
+          )}
+          <br />
+          <label htmlFor="form-duration-cookTime">Unit (in minutes)</label>
+          <br />
+          <input
+            name="duration.cookTime"
+            id="form-duration-cookTime"
+            ref={register}
+          />
+          <br />
+          {errors.duration?.cookTime && (
+            <span>{errors.duration.cookTime.message}</span>
+          )}
         </div>
         {/* submit */}
         <div>
