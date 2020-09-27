@@ -1,7 +1,6 @@
 {
-  "name": "flatbread-next",
+  "name": "with-mongodb",
   "version": "0.1.0",
-  "license": "MIT",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -12,5 +11,6 @@
     "next": "latest",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
-  }
+  },
+  "license": "MIT"
 }
