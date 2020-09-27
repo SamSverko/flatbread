@@ -7,7 +7,7 @@ export default async (req, res) => {
 
   const {
     query: { id },
-  } = req
+  } = req;
 
   const recipe = await db.collection("recipes").findOne({
     _id: ObjectId(id),

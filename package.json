@@ -8,9 +8,12 @@
     "start": "next start"
   },
   "dependencies": {
+    "@hookform/resolvers": "^0.1.1",
     "mongodb": "^3.5.9",
     "next": "latest",
     "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react-dom": "^16.13.1",
+    "react-hook-form": "^6.8.6",
+    "yup": "^0.29.3"
   }
 }
