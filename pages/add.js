@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers";
 import * as yup from "yup";
 
@@ -6,10 +6,10 @@ import { connectToDatabase } from "../util/mongodb";
 
 const schema = yup.object().shape({
   title: yup.string().min(4).lowercase().required(),
-  courseTypes: yup.array().min(1),
-  dishTypes: yup.array().min(1),
-  cuisines: yup.array().min(1),
-  dietaryRestrictions: yup.array(),
+  courseTypes: yup.array().of(yup.string()).min(1),
+  dishTypes: yup.array().of(yup.string()).min(1),
+  cuisines: yup.array().of(yup.string()).min(1),
+  dietaryRestrictions: yup.array().of(yup.string()),
   source: yup.object({
     name: yup.string().lowercase().required(),
     url: yup.string().url(),
@@ -22,6 +22,16 @@ const schema = yup.object().shape({
     prepTime: yup.number().required(),
     cookTime: yup.number().required(),
   }),
+  ingredients: yup.array().of(
+    yup.object({
+      section: yup.string().lowercase(),
+      amount: yup.number().required(),
+      unit: yup.string().lowercase().required(),
+      name: yup.string().lowercase().required(),
+      alteration: yup.string().lowercase().required(),
+      substitutions: yup.array().of(yup.string()),
+    })
+  ),
 });
 
 export default function Add({
@@ -30,12 +40,31 @@ export default function Add({
   dietaryRestrictions,
   dishTypes,
 }) {
-  const { errors, handleSubmit, register } = useForm({
+  const {
+    errors,
+    handleSubmit,
+    register,
+    control,
+  } = useForm(/*{
     resolver: yupResolver(schema),
+  }*/);
+
+  const {
+    fields: ingredients,
+    append,
+    prepend,
+    remove,
+    swap,
+    move,
+    insert,
+  } = useFieldArray({
+    control,
+    name: "ingredients",
   });
 
   const onSubmit = (data) => {
     console.log(data);
+    console.log(data.ingredients);
   };
 
   return (
@@ -191,7 +220,37 @@ export default function Add({
             <span>{errors.duration.cookTime.message}</span>
           )}
         </div>
-        {/* submit */}
+        {/* ingredients */}
+        <div>
+          <h2>Ingredients</h2>
+          {ingredients.map((ingredient, index) => (
+            <div key={ingredient.id}>
+              <label htmlFor={`ingredients[${index}].section`}>Section</label>
+              <input
+                defaultValue={ingredient.section}
+                id={`ingredients[${index}].section`}
+                name={`ingredients[${index}].section`}
+                ref={register()}
+                type="text"
+              />
+              <label htmlFor={`ingredients[${index}].amount`}>Amount</label>
+              <input
+                defaultValue={ingredient.amountId}
+                id={`ingredients[${index}].amount`}
+                name={`ingredients[${index}].amount`}
+                ref={register()}
+                type="number"
+              />
+              {ingredients.length > 1 && (
+                <button onClick={() => remove(index)}>Remove Ingredient</button>
+              )}
+            </div>
+          ))}
+          <button type="button" onClick={() => append()}>
+            Add Ingredient
+          </button>
+        </div>
+
         <div>
           <input type="submit" />
         </div>
