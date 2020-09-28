@@ -26,10 +26,10 @@ const schema = yup.object().shape({
     yup.object({
       section: yup.string().lowercase(),
       amount: yup.number().required(),
-      unit: yup.string().lowercase().required(),
-      name: yup.string().lowercase().required(),
-      alteration: yup.string().lowercase().required(),
-      substitutions: yup.array().of(yup.string()),
+      // unit: yup.string().lowercase().required(),
+      // name: yup.string().lowercase().required(),
+      // alteration: yup.string().lowercase().required(),
+      // substitutions: yup.array().of(yup.string()),
     })
   ),
 });
@@ -40,14 +40,9 @@ export default function Add({
   dietaryRestrictions,
   dishTypes,
 }) {
-  const {
-    errors,
-    handleSubmit,
-    register,
-    control,
-  } = useForm(/*{
+  const { errors, handleSubmit, register, control } = useForm({
     resolver: yupResolver(schema),
-  }*/);
+  });
 
   const {
     fields: ingredients,
@@ -181,7 +176,12 @@ export default function Add({
           <h2>Yield</h2>
           <label htmlFor="form-yield-amount">Amount</label>
           <br />
-          <input name="yield.amount" id="form-yield-amount" ref={register} />
+          <input
+            name="yield.amount"
+            id="form-yield-amount"
+            ref={register}
+            type="number"
+          />
           <br />
           {errors.yield?.amount && <span>{errors.yield.amount.message}</span>}
           <br />
@@ -202,6 +202,7 @@ export default function Add({
             name="duration.prepTime"
             id="form-duration-prepTime"
             ref={register}
+            type="number"
           />
           <br />
           {errors.duration?.prepTime && (
@@ -214,6 +215,7 @@ export default function Add({
             name="duration.cookTime"
             id="form-duration-cookTime"
             ref={register}
+            type="number"
           />
           <br />
           {errors.duration?.cookTime && (
@@ -250,7 +252,7 @@ export default function Add({
             Add Ingredient
           </button>
         </div>
-
+        {/* submit */}
         <div>
           <input type="submit" />
         </div>
