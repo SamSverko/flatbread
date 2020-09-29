@@ -1,38 +1,9 @@
+import { useEffect, useRef } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers";
 import * as yup from "yup";
 
 import { connectToDatabase } from "../util/mongodb";
-
-const schema = yup.object().shape({
-  title: yup.string().min(4).lowercase().required(),
-  courseTypes: yup.array().of(yup.string()).min(1),
-  dishTypes: yup.array().of(yup.string()).min(1),
-  cuisines: yup.array().of(yup.string()).min(1),
-  dietaryRestrictions: yup.array().of(yup.string()),
-  source: yup.object({
-    name: yup.string().lowercase().required(),
-    url: yup.string().url(),
-  }),
-  yield: yup.object({
-    amount: yup.number().required(),
-    unit: yup.string().lowercase().required(),
-  }),
-  duration: yup.object({
-    prepTime: yup.number().required(),
-    cookTime: yup.number().required(),
-  }),
-  ingredients: yup.array().of(
-    yup.object({
-      section: yup.string().lowercase(),
-      amount: yup.number().required(),
-      // unit: yup.string().lowercase().required(),
-      // name: yup.string().lowercase().required(),
-      // alteration: yup.string().lowercase().required(),
-      // substitutions: yup.array().of(yup.string()),
-    })
-  ),
-});
 
 export default function Add({
   courseTypes,
@@ -40,6 +11,46 @@ export default function Add({
   dietaryRestrictions,
   dishTypes,
 }) {
+  // const courseTypesFlat = courseTypes.reduce((r, obj) => r.concat(obj._id), []);
+  // console.log(courseTypesFlat);
+  const schema = yup.object().shape({
+    title: yup.string().trim().lowercase().min(4).required(),
+    courseTypes: yup.array().of(yup.string()).min(1),
+    dishTypes: yup.array().of(yup.string()).min(1),
+    cuisines: yup.array().of(yup.string()).min(1),
+    dietaryRestrictions: yup.array().of(yup.string()),
+    source: yup.object({
+      name: yup.string().trim().lowercase().required(),
+      url: yup.string().trim().url(),
+    }),
+    yield: yup.object({
+      amount: yup.number().required(),
+      unit: yup.string().trim().lowercase().required(),
+    }),
+    duration: yup.object({
+      prepTime: yup.number().required(),
+      cookTime: yup.number().required(),
+    }),
+    ingredients: yup
+      .array()
+      .of(
+        yup.object({
+          section: yup.string().trim().lowercase(),
+          amount: yup.number().required(),
+          unit: yup.string().trim().lowercase().required(),
+          name: yup.string().trim().lowercase().required(),
+          alteration: yup.string().trim().lowercase(),
+          substitutions: yup
+            .string()
+            .trim()
+            .lowercase()
+            .matches(/^$|([a-zA-Z0-9]+,?\s*)+$/g)
+            .nullable(),
+        })
+      )
+      .min(1),
+  });
+
   const { errors, handleSubmit, register, control } = useForm({
     resolver: yupResolver(schema),
   });
@@ -56,6 +67,12 @@ export default function Add({
     control,
     name: "ingredients",
   });
+
+  const addIngredientButton = useRef(0);
+
+  useEffect(() => {
+    addIngredientButton.current.click();
+  }, [addIngredientButton]);
 
   const onSubmit = (data) => {
     console.log(data);
@@ -227,7 +244,9 @@ export default function Add({
           <h2>Ingredients</h2>
           {ingredients.map((ingredient, index) => (
             <div key={ingredient.id}>
+              <h3>Ingredient {index + 1}</h3>
               <label htmlFor={`ingredients[${index}].section`}>Section</label>
+              <br />
               <input
                 defaultValue={ingredient.section}
                 id={`ingredients[${index}].section`}
@@ -235,7 +254,9 @@ export default function Add({
                 ref={register()}
                 type="text"
               />
+              <br />
               <label htmlFor={`ingredients[${index}].amount`}>Amount</label>
+              <br />
               <input
                 defaultValue={ingredient.amountId}
                 id={`ingredients[${index}].amount`}
@@ -243,14 +264,68 @@ export default function Add({
                 ref={register()}
                 type="number"
               />
+              <br />
+              <label htmlFor={`ingredients[${index}].unit`}>
+                Unit (e.g. g, ml, tbsp, etc.)
+              </label>
+              <br />
+              <input
+                defaultValue={ingredient.unit}
+                id={`ingredients[${index}].unit`}
+                name={`ingredients[${index}].unit`}
+                ref={register()}
+                type="text"
+              />
+              <br />
+              <label htmlFor={`ingredients[${index}].name`}>Name</label>
+              <br />
+              <input
+                defaultValue={ingredient.name}
+                id={`ingredients[${index}].name`}
+                name={`ingredients[${index}].name`}
+                ref={register()}
+                type="text"
+              />
+              <br />
+              <label htmlFor={`ingredients[${index}].alteration`}>
+                Alteration (e.g. chopped, warm, etc.)
+              </label>
+              <br />
+              <input
+                defaultValue={ingredient.alteration}
+                id={`ingredients[${index}].alteration`}
+                name={`ingredients[${index}].alteration`}
+                ref={register()}
+                type="text"
+              />
+              <br />
+              <label htmlFor={`ingredients[${index}].substitutions`}>
+                Substitutions
+              </label>
+              <br />
+              <input
+                defaultValue={ingredient.substitutions}
+                id={`ingredients[${index}].substitutions`}
+                name={`ingredients[${index}].substitutions`}
+                ref={register()}
+                type="text"
+              />
+              <br />
               {ingredients.length > 1 && (
                 <button onClick={() => remove(index)}>Remove Ingredient</button>
               )}
             </div>
           ))}
-          <button type="button" onClick={() => append()}>
+          <button
+            type="button"
+            onClick={() => append()}
+            ref={addIngredientButton}
+          >
             Add Ingredient
           </button>
+          {errors.ingredients && (
+            <span>Please fill out at least one ingredient.</span>
+          )}
         </div>
         {/* submit */}
         <div>
