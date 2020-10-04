@@ -11,8 +11,6 @@ export default function Add({
   dietaryRestrictions,
   dishTypes,
 }) {
-  // const courseTypesFlat = courseTypes.reduce((r, obj) => r.concat(obj._id), []);
-  // console.log(courseTypesFlat);
   const schema = yup.object().shape({
     title: yup.string().trim().lowercase().min(4).required(),
     courseTypes: yup.array().of(yup.string()).min(1),
@@ -75,8 +73,42 @@ export default function Add({
   }, [addIngredientButton]);
 
   const onSubmit = (data) => {
-    console.log(data);
-    console.log(data.ingredients);
+    let formErrors = false;
+    if (
+      !data.courseTypes.every((courseType) =>
+        flattenDBArray(courseTypes).includes(courseType)
+      )
+    ) {
+      formErrors = "Improper Course Type data value in form";
+    } else if (
+      !data.dishTypes.every((dishType) =>
+        flattenDBArray(dishTypes).includes(dishType)
+      )
+    ) {
+      formErrors = "Improper Dish Type data value in form";
+    } else if (
+      !data.cuisines.every((cuisine) =>
+        flattenDBArray(cuisines).includes(cuisine)
+      )
+    ) {
+      formErrors = "Improper Cuisine data value in form";
+    } else if (
+      !data.dietaryRestrictions.every((dietaryRestriction) =>
+        flattenDBArray(dietaryRestrictions).includes(dietaryRestriction)
+      )
+    ) {
+      formErrors = "Improper Dietary Restriction data value in form";
+    }
+
+    if (formErrors) {
+      console.log(formErrors);
+    } else {
+      console.log(data);
+    }
+  };
+
+  const flattenDBArray = (array) => {
+    return array.reduce((r, obj) => r.concat(obj._id), []);
   };
 
   return (
