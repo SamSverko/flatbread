@@ -11,15 +11,17 @@ export default async (req, res) => {
 
   // FIND ALL RECIPES WITH A CERTAIN CUISINE
   // 5ee796516735b6218d717552 = italian
-  // const cuisines = [ObjectId("5ee796516735b6218d717552")];
-  // const recipes = await db
-  //   .collection("recipes")
-  //   .find({
-  //     cuisines: {
-  //       $in: cuisines,
-  //     },
-  //   })
-  //   .toArray();
+  // 5edf9ac1d02ffeab85e17371 = african
+  const cuisines = [ObjectId("5ee796516735b6218d717552")];
+  const recipes = await db
+    .collection("recipes")
+    .find({
+      cuisines: {
+        $in: cuisines,
+      },
+    })
+    .toArray();
+  res.json(recipes);
 
   // GET A RANDOM RECIPE
   // const recipes = await db

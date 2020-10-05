@@ -1,6 +1,7 @@
+import { yupResolver } from "@hookform/resolvers";
+import axios from "axios";
 import { useEffect, useRef } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers";
 import * as yup from "yup";
 
 import { connectToDatabase } from "../util/mongodb";
@@ -100,10 +101,17 @@ export default function Add({
       formErrors = "Improper Dietary Restriction data value in form";
     }
 
-    if (formErrors) {
-      console.log(formErrors);
+    if (!formErrors) {
+      axios
+        .post("/api/addRecipe", data)
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     } else {
-      console.log(data);
+      console.log(formErrors);
     }
   };
 
