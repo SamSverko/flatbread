@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^0.1.1",
+    "axios": "^0.20.0",
     "mongodb": "^3.5.9",
     "next": "latest",
     "react": "^16.13.1",
