@@ -258,6 +258,9 @@ export default function Add({
         </FormControl>
         <br />
         {/* source */}
+        <Typography component="h2" gutterBottom variant="h4">
+          Source
+        </Typography>
         <TextField
           error={typeof errors.source?.name !== "undefined"}
           helperText={errors.source?.name?.message}
@@ -279,6 +282,9 @@ export default function Add({
         />
         <br />
         {/* yield */}
+        <Typography component="h2" gutterBottom variant="h4">
+          Yield
+        </Typography>
         <TextField
           error={typeof errors.yield?.amount !== "undefined"}
           helperText={errors.yield?.amount?.message}
@@ -305,6 +311,9 @@ export default function Add({
         />
         <br />
         {/* duration */}
+        <Typography component="h2" gutterBottom variant="h4">
+          Duration
+        </Typography>
         <TextField
           error={typeof errors.duration?.prepTime !== "undefined"}
           helperText={
@@ -337,78 +346,77 @@ export default function Add({
         <br />
         {/* ingredients */}
         <div>
-          <h2>Ingredients</h2>
+          <Typography component="h2" gutterBottom variant="h4">
+            Ingredients
+          </Typography>
+          {errors.ingredients !== "undefined" &&
+            errors.ingredients?.length > 0 && (
+              <FormHelperText className="Mui-error">
+                Please fill out at least one ingredient.
+              </FormHelperText>
+            )}
           {ingredients.map((ingredient, index) => (
             <div key={ingredient.id}>
-              <h3>Ingredient {index + 1}</h3>
-              <label htmlFor={`ingredients[${index}].section`}>Section</label>
-              <br />
-              <input
-                defaultValue={ingredient.section}
+              <Typography component="h3" gutterBottom variant="h5">
+                Ingredient {index + 1}
+              </Typography>
+              <TextField
                 id={`ingredients[${index}].section`}
+                inputRef={register}
+                label="Section"
                 name={`ingredients[${index}].section`}
-                ref={register()}
-                type="text"
+                style={{ margin: "0 0 10px 0" }}
               />
               <br />
-              <label htmlFor={`ingredients[${index}].amount`}>Amount</label>
-              <br />
-              <input
-                defaultValue={ingredient.amountId}
+              <TextField
                 id={`ingredients[${index}].amount`}
+                inputRef={register}
+                label="Amount"
                 name={`ingredients[${index}].amount`}
-                ref={register()}
+                style={{ margin: "0 0 10px 0" }}
                 type="number"
               />
               <br />
-              <label htmlFor={`ingredients[${index}].unit`}>
-                Unit (e.g. gram, cup, ml, tbsp, etc.)
-              </label>
-              <br />
-              <input
-                defaultValue={ingredient.unit}
+              <TextField
+                helperText="Example: cup, gram, etc."
                 id={`ingredients[${index}].unit`}
+                inputRef={register}
+                label="Unit"
                 name={`ingredients[${index}].unit`}
-                ref={register()}
-                type="text"
+                style={{ margin: "0 0 10px 0" }}
               />
               <br />
-              <label htmlFor={`ingredients[${index}].name`}>Name</label>
-              <br />
-              <input
-                defaultValue={ingredient.name}
+              <TextField
                 id={`ingredients[${index}].name`}
+                inputRef={register}
+                label="Name"
                 name={`ingredients[${index}].name`}
-                ref={register()}
-                type="text"
+                style={{ margin: "0 0 10px 0" }}
               />
               <br />
-              <label htmlFor={`ingredients[${index}].alteration`}>
-                Alteration (e.g. chopped, warm, etc.)
-              </label>
-              <br />
-              <input
-                defaultValue={ingredient.alteration}
+              <TextField
                 id={`ingredients[${index}].alteration`}
+                inputRef={register}
+                label="Alteration"
                 name={`ingredients[${index}].alteration`}
-                ref={register()}
-                type="text"
+                style={{ margin: "0 0 10px 0" }}
               />
               <br />
-              <label htmlFor={`ingredients[${index}].substitutions`}>
-                Substitutions
-              </label>
-              <br />
-              <input
-                defaultValue={ingredient.substitutions}
+              <TextField
                 id={`ingredients[${index}].substitutions`}
+                inputRef={register}
+                label="Substitutions"
                 name={`ingredients[${index}].substitutions`}
-                ref={register()}
-                type="text"
+                style={{ margin: "0 0 10px 0" }}
               />
               <br />
               {ingredients.length > 1 && (
-                <button onClick={() => remove(index)}>Remove Ingredient</button>
+                <button
+                  onClick={() => remove(index)}
+                  style={{ margin: "0 0 10px 0" }}
+                >
+                  Remove Ingredient
+                </button>
               )}
             </div>
           ))}
@@ -419,9 +427,6 @@ export default function Add({
           >
             Add Ingredient
           </button>
-          {errors.ingredients && (
-            <span>Please fill out at least one ingredient.</span>
-          )}
         </div>
         {/* submit */}
         <div>
