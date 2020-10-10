@@ -10,7 +10,7 @@ import Typography from "@material-ui/core/Typography";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import axios from "axios";
 import { useEffect, useRef } from "react";
-import { useForm, useFieldArray } from "react-hook-form";
+import { Controller, useForm, useFieldArray } from "react-hook-form";
 import * as yup from "yup";
 
 import { connectToDatabase } from "../util/mongodb";
@@ -60,7 +60,7 @@ export default function Add({
       .min(1),
   });
 
-  const { errors, handleSubmit, register, control } = useForm({
+  const { control, errors, handleSubmit, register } = useForm({
     resolver: yupResolver(schema),
   });
 
@@ -307,7 +307,7 @@ export default function Add({
           inputRef={register}
           label="Yield Unit"
           name="yield.unit"
-          style={{ margin: "0 0 40px 0" }}
+          style={{ margin: "0 0 10px 0", maxWidth: 167, width: "100%" }}
         />
         <br />
         {/* duration */}
@@ -377,13 +377,31 @@ export default function Add({
                 type="number"
               />
               <br />
-              <TextField
-                helperText="Example: cup, gram, etc."
-                id={`ingredients[${index}].unit`}
-                inputRef={register}
-                label="Unit"
+              <Controller
+                render={({ onChange, ...props }) => (
+                  <Autocomplete
+                    options={ingredientUnits}
+                    getOptionLabel={(option) => option}
+                    renderOption={(option) => <span>{option}</span>}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Unit"
+                        style={{
+                          margin: "0 0 10px 0",
+                          maxWidth: 167,
+                          width: "100%",
+                        }}
+                      />
+                    )}
+                    onChange={(e, data) => onChange(data)}
+                    {...props}
+                  />
+                )}
+                onChange={([, data]) => data}
+                defaultValue="gram"
                 name={`ingredients[${index}].unit`}
-                style={{ margin: "0 0 10px 0" }}
+                control={control}
               />
               <br />
               <TextField
