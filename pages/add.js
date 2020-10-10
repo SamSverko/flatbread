@@ -1,4 +1,13 @@
 import { yupResolver } from "@hookform/resolvers";
+import Checkbox from "@material-ui/core/Checkbox";
+import FormControl from "@material-ui/core/FormControl";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormLabel from "@material-ui/core/FormLabel";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 import axios from "axios";
 import { useEffect, useRef } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
@@ -11,6 +20,7 @@ export default function Add({
   cuisines,
   dietaryRestrictions,
   dishTypes,
+  ingredientUnits,
 }) {
   const schema = yup.object().shape({
     title: yup.string().trim().lowercase().min(4).required(),
@@ -54,15 +64,7 @@ export default function Add({
     resolver: yupResolver(schema),
   });
 
-  const {
-    fields: ingredients,
-    append,
-    prepend,
-    remove,
-    swap,
-    move,
-    insert,
-  } = useFieldArray({
+  const { fields: ingredients, append, remove } = useFieldArray({
     control,
     name: "ingredients",
   });
@@ -76,209 +78,263 @@ export default function Add({
   const onSubmit = (data) => {
     let formErrors = false;
     if (
-      !data.courseTypes.every((courseType) =>
-        flattenDBArray(courseTypes).includes(courseType)
-      )
+      !data.courseTypes.every((courseType) => courseTypes.includes(courseType))
     ) {
       formErrors = "Improper Course Type data value in form";
     } else if (
-      !data.dishTypes.every((dishType) =>
-        flattenDBArray(dishTypes).includes(dishType)
-      )
+      !data.dishTypes.every((dishType) => dishTypes.includes(dishType))
     ) {
       formErrors = "Improper Dish Type data value in form";
-    } else if (
-      !data.cuisines.every((cuisine) =>
-        flattenDBArray(cuisines).includes(cuisine)
-      )
-    ) {
+    } else if (!data.cuisines.every((cuisine) => cuisines.includes(cuisine))) {
       formErrors = "Improper Cuisine data value in form";
     } else if (
       !data.dietaryRestrictions.every((dietaryRestriction) =>
-        flattenDBArray(dietaryRestrictions).includes(dietaryRestriction)
+        dietaryRestrictions.includes(dietaryRestriction)
       )
     ) {
       formErrors = "Improper Dietary Restriction data value in form";
     }
 
     if (!formErrors) {
-      axios
-        .post("/api/addRecipe", data)
-        .then(function (response) {
-          console.log(response);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+      // TODO: SPLIT SUBSTITUTIONS INTO AN ARRAY
+      // data.ingredients.forEach((ingredient) => {
+      //   console.log(ingredient.substitutions.split(","));
+      // });
+      // console.log(data.ingredients);
+      console.log(data);
+      // axios
+      //   .post('/api/addRecipe', data)
+      //   .then(function (response) {
+      //     console.log(response);
+      //   })
+      //   .catch(function (error) {
+      //     console.log(error);
+      //   });
     } else {
       console.log(formErrors);
     }
   };
 
-  const flattenDBArray = (array) => {
-    return array.reduce((r, obj) => r.concat(obj._id), []);
-  };
-
   return (
     <div>
-      <h1>Add new recipe</h1>
+      <Typography component="h1" gutterBottom variant="h3">
+        Add new recipe
+      </Typography>
 
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* title */}
-        <div>
-          <h2>Title</h2>
-          <label htmlFor="form-title">Title</label>
-          <br />
-          <input name="title" id="form-title" ref={register} />
-          <br />
-          {errors.title && <span>{errors.title.message}</span>}
-        </div>
+        <TextField
+          error={typeof errors.title !== "undefined"}
+          helperText={errors.title?.message}
+          id="form-title"
+          inputRef={register}
+          label="Title"
+          name="title"
+          style={{ margin: "0 0 40px 0" }}
+        />
+        <br />
         {/* course types */}
-        <div>
-          <h2>Course Types</h2>
-          {courseTypes
-            .sort((a, b) => a.name.localeCompare(b.name))
-            .map((item, index) => (
-              <li key={index}>
-                <input
-                  id={`form-courseTypes-${index}`}
-                  name={`courseTypes`}
-                  ref={register}
-                  type="checkbox"
-                  value={item._id}
-                />
-                <label htmlFor={`form-courseTypes-${index}`}>{item.name}</label>
-              </li>
+        <FormControl component="fieldset" style={{ margin: "0 0 40px 0" }}>
+          <FormLabel
+            error={typeof errors.courseTypes !== "undefined"}
+            component="legend"
+          >
+            Course Types
+          </FormLabel>
+          <FormHelperText className="Mui-error">
+            {errors.courseTypes?.message}
+          </FormHelperText>
+          <FormGroup>
+            {courseTypes.map((item, index) => (
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    color="primary"
+                    id={`form-courseTypes-${index}`}
+                    inputRef={register}
+                    name={`courseTypes`}
+                    type="checkbox"
+                    value={item}
+                  />
+                }
+                key={index}
+                label={item}
+              />
             ))}
-          {errors.courseTypes && <span>{errors.courseTypes.message}</span>}
-        </div>
+          </FormGroup>
+        </FormControl>
+        <br />
         {/* dish types */}
-        <div>
-          <h2>Dish Types</h2>
-          {dishTypes
-            .sort((a, b) => a.name.localeCompare(b.name))
-            .map((item, index) => (
-              <li key={index}>
-                <input
-                  id={`form-dishTypes-${index}`}
-                  name={`dishTypes`}
-                  ref={register}
-                  type="checkbox"
-                  value={item._id}
-                />
-                <label htmlFor={`form-dishTypes-${index}`}>{item.name}</label>
-              </li>
+        <FormControl component="fieldset" style={{ margin: "0 0 40px 0" }}>
+          <FormLabel
+            error={typeof errors.dishTypes !== "undefined"}
+            component="legend"
+          >
+            Dish Types
+          </FormLabel>
+          <FormHelperText className="Mui-error">
+            {errors.dishTypes?.message}
+          </FormHelperText>
+          <FormGroup>
+            {dishTypes.map((item, index) => (
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    color="primary"
+                    id={`form-dishTypes-${index}`}
+                    inputRef={register}
+                    name={`dishTypes`}
+                    type="checkbox"
+                    value={item}
+                  />
+                }
+                key={index}
+                label={item}
+              />
             ))}
-          {errors.dishTypes && <span>{errors.dishTypes.message}</span>}
-        </div>
+          </FormGroup>
+        </FormControl>
+        <br />
         {/* cuisines */}
-        <div>
-          <h2>Cuisines</h2>
-          {cuisines
-            .sort((a, b) => a.name.localeCompare(b.name))
-            .map((item, index) => (
-              <li key={index}>
-                <input
-                  id={`form-cuisines-${index}`}
-                  name={`cuisines`}
-                  ref={register}
-                  type="checkbox"
-                  value={item._id}
-                />
-                <label htmlFor={`form-cuisines-${index}`}>{item.name}</label>
-              </li>
+        <FormControl component="fieldset" style={{ margin: "0 0 40px 0" }}>
+          <FormLabel
+            error={typeof errors.cuisines !== "undefined"}
+            component="legend"
+          >
+            Cuisines
+          </FormLabel>
+          <FormHelperText className="Mui-error">
+            {errors.cuisines?.message}
+          </FormHelperText>
+          <FormGroup>
+            {cuisines.map((item, index) => (
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    color="primary"
+                    id={`form-cuisines-${index}`}
+                    inputRef={register}
+                    name={`cuisines`}
+                    type="checkbox"
+                    value={item}
+                  />
+                }
+                key={index}
+                label={item}
+              />
             ))}
-          {errors.cuisines && <span>{errors.cuisines.message}</span>}
-        </div>
+          </FormGroup>
+        </FormControl>
+        <br />
         {/* dietaryRestrictions */}
-        <div>
-          <h2>dietaryRestrictions</h2>
-          {dietaryRestrictions
-            .sort((a, b) => a.name.localeCompare(b.name))
-            .map((item, index) => (
-              <li key={index}>
-                <input
-                  id={`form-dietaryRestrictions-${index}`}
-                  name={`dietaryRestrictions`}
-                  ref={register}
-                  type="checkbox"
-                  value={item._id}
-                />
-                <label htmlFor={`form-dietaryRestrictions-${index}`}>
-                  {item.name}
-                </label>
-              </li>
+        <FormControl component="fieldset" style={{ margin: "0 0 40px 0" }}>
+          <FormLabel
+            error={typeof errors.dietaryRestrictions !== "undefined"}
+            component="legend"
+          >
+            Dietary Restrictions
+          </FormLabel>
+          <FormHelperText className="Mui-error">
+            {errors.dietaryRestrictions?.message}
+          </FormHelperText>
+          <FormGroup>
+            {dietaryRestrictions.map((item, index) => (
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    color="primary"
+                    id={`form-dietaryRestrictions-${index}`}
+                    inputRef={register}
+                    name={`dietaryRestrictions`}
+                    type="checkbox"
+                    value={item}
+                  />
+                }
+                key={index}
+                label={item}
+              />
             ))}
-          {errors.dietaryRestrictions && (
-            <span>{errors.dietaryRestrictions.message}</span>
-          )}
-        </div>
+          </FormGroup>
+        </FormControl>
+        <br />
         {/* source */}
-        <div>
-          <h2>Source</h2>
-          <label htmlFor="form-source-name">Name</label>
-          <br />
-          <input name="source.name" id="form-source-name" ref={register} />
-          <br />
-          {errors.source?.name && <span>{errors.source.name.message}</span>}
-          <br />
-          <label htmlFor="form-source-url">URL</label>
-          <br />
-          <input name="source.url" id="form-source-url" ref={register} />
-          <br />
-          {errors.source?.url && <span>{errors.source.url.message}</span>}
-        </div>
+        <TextField
+          error={typeof errors.source?.name !== "undefined"}
+          helperText={errors.source?.name?.message}
+          id="form-source-name"
+          inputRef={register}
+          label="Source Name"
+          name="source.name"
+          style={{ margin: "0 0 10px 0" }}
+        />
+        <br />
+        <TextField
+          error={typeof errors.source?.url !== "undefined"}
+          helperText={errors.source?.url?.message}
+          id="form-source-url"
+          inputRef={register}
+          label="Source URL"
+          name="source.url"
+          style={{ margin: "0 0 40px 0" }}
+        />
+        <br />
         {/* yield */}
-        <div>
-          <h2>Yield</h2>
-          <label htmlFor="form-yield-amount">Amount</label>
-          <br />
-          <input
-            name="yield.amount"
-            id="form-yield-amount"
-            ref={register}
-            type="number"
-          />
-          <br />
-          {errors.yield?.amount && <span>{errors.yield.amount.message}</span>}
-          <br />
-          <label htmlFor="form-yield-unit">
-            Unit (e.g. servings, burgers, etc.)
-          </label>
-          <br />
-          <input name="yield.unit" id="form-yield-unit" ref={register} />
-          <br />
-          {errors.yield?.unit && <span>{errors.yield.unit.message}</span>}
-        </div>
+        <TextField
+          error={typeof errors.yield?.amount !== "undefined"}
+          helperText={errors.yield?.amount?.message}
+          id="form-yield-amount"
+          inputRef={register}
+          label="Yield Amount"
+          name="yield.amount"
+          style={{ margin: "0 0 10px 0" }}
+          type="number"
+        />
+        <br />
+        <TextField
+          error={typeof errors.yield?.unit !== "undefined"}
+          helperText={
+            errors.yield?.unit?.message
+              ? errors.yield?.unit?.message
+              : "Example: cookies, burgers, servings, etc."
+          }
+          id="form-yield-unit"
+          inputRef={register}
+          label="Yield Unit"
+          name="yield.unit"
+          style={{ margin: "0 0 40px 0" }}
+        />
+        <br />
         {/* duration */}
-        <div>
-          <h2>Duration</h2>
-          <label htmlFor="form-duration-prepTime">Prep Time (in minutes)</label>
-          <br />
-          <input
-            name="duration.prepTime"
-            id="form-duration-prepTime"
-            ref={register}
-            type="number"
-          />
-          <br />
-          {errors.duration?.prepTime && (
-            <span>{errors.duration.prepTime.message}</span>
-          )}
-          <br />
-          <label htmlFor="form-duration-cookTime">Unit (in minutes)</label>
-          <br />
-          <input
-            name="duration.cookTime"
-            id="form-duration-cookTime"
-            ref={register}
-            type="number"
-          />
-          <br />
-          {errors.duration?.cookTime && (
-            <span>{errors.duration.cookTime.message}</span>
-          )}
-        </div>
+        <TextField
+          error={typeof errors.duration?.prepTime !== "undefined"}
+          helperText={
+            errors.duration?.prepTime?.message
+              ? errors.duration?.prepTime?.message
+              : "In minutes."
+          }
+          id="form-duration-prepTime"
+          inputRef={register}
+          label="Prep Time"
+          name="duration.prepTime"
+          style={{ margin: "0 0 10px 0" }}
+          type="number"
+        />
+        <br />
+        <TextField
+          error={typeof errors.duration?.cookTime !== "undefined"}
+          helperText={
+            errors.duration?.cookTime?.message
+              ? errors.duration?.cookTime?.message
+              : "In minutes."
+          }
+          id="form-duration-cookTime"
+          inputRef={register}
+          label="Cook Time"
+          name="duration.cookTime"
+          style={{ margin: "0 0 40px 0" }}
+          type="number"
+        />
+        <br />
         {/* ingredients */}
         <div>
           <h2>Ingredients</h2>
@@ -306,7 +362,7 @@ export default function Add({
               />
               <br />
               <label htmlFor={`ingredients[${index}].unit`}>
-                Unit (e.g. g, ml, tbsp, etc.)
+                Unit (e.g. gram, cup, ml, tbsp, etc.)
               </label>
               <br />
               <input
@@ -386,13 +442,28 @@ export async function getServerSideProps() {
     .collection("dietaryRestrictions")
     .find({})
     .toArray();
+  const ingredientUnits = await db
+    .collection("ingredientUnits")
+    .find({})
+    .toArray();
 
   return {
     props: {
-      courseTypes: JSON.parse(JSON.stringify(courseTypes)),
-      dishTypes: JSON.parse(JSON.stringify(dishTypes)),
-      cuisines: JSON.parse(JSON.stringify(cuisines)),
-      dietaryRestrictions: JSON.parse(JSON.stringify(dietaryRestrictions)),
+      courseTypes: JSON.parse(JSON.stringify(courseTypes))
+        .map((courseType) => courseType.name)
+        .sort((a, b) => a.localeCompare(b)),
+      dishTypes: JSON.parse(JSON.stringify(dishTypes))
+        .map((dishType) => dishType.name)
+        .sort((a, b) => a.localeCompare(b)),
+      cuisines: JSON.parse(JSON.stringify(cuisines))
+        .map((cuisine) => cuisine.name)
+        .sort((a, b) => a.localeCompare(b)),
+      dietaryRestrictions: JSON.parse(JSON.stringify(dietaryRestrictions))
+        .map((dietaryRestriction) => dietaryRestriction.name)
+        .sort((a, b) => a.localeCompare(b)),
+      ingredientUnits: JSON.parse(JSON.stringify(ingredientUnits))
+        .map((ingredientUnit) => ingredientUnit.singular.name)
+        .sort((a, b) => a.localeCompare(b)),
     },
   };
 }
