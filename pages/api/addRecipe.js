@@ -7,24 +7,24 @@ export default async (req, res) => {
     const recipeToInsert = {
       title: req.body.title.toLowerCase(),
       courseTypes: req.body.courseTypes.map((courseType) =>
-        ObjectId(courseType)
+        courseType.toLowerCase()
       ),
-      dishTypes: req.body.dishTypes.map((dishType) => ObjectId(dishType)),
-      cuisines: req.body.cuisines.map((cuisine) => ObjectId(cuisine)),
+      dishTypes: req.body.dishTypes.map((dishType) => dishType.toLowerCase()),
+      cuisines: req.body.cuisines.map((cuisine) => cuisine.toLowerCase()),
       dietaryRestrictions: req.body.dietaryRestrictions.map(
-        (dietaryRestriction) => ObjectId(dietaryRestriction)
+        (dietaryRestriction) => dietaryRestriction.toLowerCase()
       ),
       source: {
         name: req.body.source.name.toLowerCase(),
-        url: req.body.source.url.toLowerCase(),
+        url: req.body.source.url,
       },
       yield: {
-        name: req.body.yield.amount,
-        url: req.body.yield.unit.toLowerCase(),
+        amount: req.body.yield.amount,
+        unit: req.body.yield.unit.toLowerCase(),
       },
       duration: {
-        name: req.body.duration.prepTime,
-        url: req.body.duration.cookTime,
+        cookTime: req.body.duration.cookTime,
+        prepTime: req.body.duration.prepTime,
       },
       ingredients: req.body.ingredients,
       steps: req.body.steps,
