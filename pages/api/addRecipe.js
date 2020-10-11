@@ -1,5 +1,3 @@
-import { ObjectId } from "mongodb";
-
 import { connectToDatabase } from "../../util/mongodb";
 
 export default async (req, res) => {
@@ -31,8 +29,25 @@ export default async (req, res) => {
       notes: req.body.notes,
     };
 
-    const { db } = await connectToDatabase();
-    const result = await db.collection("recipes").insertOne(recipeToInsert);
-    res.send(result);
+    if (req.body.adminCode === process.env.ADD_RECIPE_SECRET) {
+      const { db } = await connectToDatabase();
+      const result = await db.collection("recipes").insertOne(recipeToInsert);
+      if (result.insertedCount < 1) {
+        res.send({
+          status: "error",
+          details: "Error adding recipe to the database",
+        });
+      } else {
+        res.send({
+          status: "success",
+          details: "Recipe added to the database",
+        });
+      }
+    } else {
+      res.send({
+        status: "error",
+        details: "Incorrect Admin Code",
+      });
+    }
   }
 };

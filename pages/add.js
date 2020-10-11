@@ -7,6 +7,7 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import FormLabel from "@material-ui/core/FormLabel";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
+import Alert from "@material-ui/lab/Alert";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import axios from "axios";
 import React, { useState } from "react";
@@ -24,6 +25,7 @@ export default function Add({
   ingredientNames,
 }) {
   const [formError, setFormError] = useState(false);
+  const [submitStatus, setSubmitStatus] = useState(false);
 
   const schema = yup.object().shape({
     title: yup.string().trim().lowercase().min(4).required(),
@@ -145,15 +147,14 @@ export default function Add({
     });
 
     if (!formError) {
-      console.log(data);
-      // axios
-      //   .post('/api/addRecipe', data)
-      //   .then(function (response) {
-      //     console.log(response);
-      //   })
-      //   .catch(function (error) {
-      //     console.log(error);
-      //   });
+      axios
+        .post("/api/addRecipe", data)
+        .then(function (response) {
+          setSubmitStatus(response.data);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     }
   };
 
@@ -661,6 +662,14 @@ export default function Add({
         <div>
           {formError && (
             <FormHelperText className="Mui-error">{formError}</FormHelperText>
+          )}
+          {submitStatus.status === "error" && (
+            <Alert severity="error">
+              Recipe Not Added To Database | {submitStatus.details}
+            </Alert>
+          )}
+          {submitStatus.status === "success" && (
+            <Alert severity="success">{submitStatus.details}</Alert>
           )}
           <input type="submit" />
         </div>
