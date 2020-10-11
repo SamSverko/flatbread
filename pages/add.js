@@ -21,6 +21,7 @@ export default function Add({
   dietaryRestrictions,
   dishTypes,
   ingredientUnits,
+  ingredientNames,
 }) {
   const [formError, setFormError] = useState(false);
 
@@ -127,6 +128,12 @@ export default function Add({
       )
     ) {
       setFormError("Improper Dietary Restriction data value in form");
+    } else if (
+      !data.ingredients.every((ingredient) =>
+        ingredientNames.includes(ingredient.name)
+      )
+    ) {
+      setFormError("Improper Ingredient Name data value in form");
     }
 
     if (!formError) {
@@ -440,12 +447,12 @@ export default function Add({
                   />
                 )}
                 onChange={([, data]) => data}
-                defaultValue="gram"
+                defaultValue={ingredientUnits[0]}
                 name={`ingredients[${index}].unit`}
                 control={control}
               />
               <br />
-              <TextField
+              {/* <TextField
                 error={
                   typeof errors !== "undefined" &&
                   typeof errors.ingredients !== "undefined" &&
@@ -465,6 +472,32 @@ export default function Add({
                 label="Name"
                 name={`ingredients[${index}].name`}
                 style={{ margin: "0 0 10px 0" }}
+              /> */}
+              <Controller
+                render={({ onChange, ...props }) => (
+                  <Autocomplete
+                    options={ingredientNames}
+                    getOptionLabel={(option) => option}
+                    renderOption={(option) => <span>{option}</span>}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Name"
+                        style={{
+                          margin: "0 0 10px 0",
+                          maxWidth: 167,
+                          width: "100%",
+                        }}
+                      />
+                    )}
+                    onChange={(e, data) => onChange(data)}
+                    {...props}
+                  />
+                )}
+                onChange={([, data]) => data}
+                defaultValue={ingredientNames[0]}
+                name={`ingredients[${index}].name`}
+                control={control}
               />
               <br />
               <TextField
@@ -643,6 +676,10 @@ export async function getServerSideProps() {
     .collection("ingredientUnits")
     .find({})
     .toArray();
+  const ingredientNames = await db
+    .collection("ingredientNames")
+    .find({})
+    .toArray();
 
   return {
     props: {
@@ -660,6 +697,9 @@ export async function getServerSideProps() {
         .sort((a, b) => a.localeCompare(b)),
       ingredientUnits: JSON.parse(JSON.stringify(ingredientUnits))
         .map((ingredientUnit) => ingredientUnit.singular.name)
+        .sort((a, b) => a.localeCompare(b)),
+      ingredientNames: JSON.parse(JSON.stringify(ingredientNames))
+        .map((ingredientName) => ingredientName.name)
         .sort((a, b) => a.localeCompare(b)),
     },
   };
