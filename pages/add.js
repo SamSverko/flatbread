@@ -9,7 +9,6 @@ import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import axios from "axios";
-import { useEffect, useRef } from "react";
 import { Controller, useForm, useFieldArray } from "react-hook-form";
 import * as yup from "yup";
 
@@ -57,11 +56,21 @@ export default function Add({
             .nullable(),
         })
       )
-      .min(1),
-    steps: yup.array().of(
+      .min(1)
+      .required(),
+    steps: yup
+      .array()
+      .of(
+        yup.object({
+          section: yup.string().trim().lowercase(),
+          description: yup.string().trim().lowercase().required(),
+        })
+      )
+      .min(1)
+      .required(),
+    notes: yup.array().of(
       yup.object({
-        section: yup.string().trim().lowercase(),
-        description: yup.string().trim().lowercase().required(),
+        description: yup.string().trim().lowercase(),
       })
     ),
   });
@@ -88,13 +97,14 @@ export default function Add({
     name: "steps",
   });
 
-  const addIngredientButton = useRef(0);
-  const addStepButton = useRef(0);
-
-  useEffect(() => {
-    addIngredientButton.current.click();
-    addStepButton.current.click();
-  }, [addIngredientButton, addStepButton]);
+  const {
+    fields: notes,
+    append: notesAppend,
+    remove: notesRemove,
+  } = useFieldArray({
+    control,
+    name: "notes",
+  });
 
   const onSubmit = (data) => {
     let formErrors = false;
@@ -370,8 +380,8 @@ export default function Add({
           <Typography component="h2" gutterBottom variant="h4">
             Ingredients
           </Typography>
-          {errors.ingredients !== "undefined" &&
-            errors.ingredients?.length > 0 && (
+          {typeof errors !== "undefined" &&
+            typeof errors.ingredients !== "undefined" && (
               <FormHelperText className="Mui-error">
                 Please fill out at least one ingredient.
               </FormHelperText>
@@ -490,7 +500,6 @@ export default function Add({
           <button
             type="button"
             onClick={() => ingredientsAppend()}
-            ref={addIngredientButton}
             style={{ margin: "0 0 40px 0" }}
           >
             Add Ingredient
@@ -501,11 +510,12 @@ export default function Add({
           <Typography component="h2" gutterBottom variant="h4">
             Steps
           </Typography>
-          {errors.steps !== "undefined" && errors.steps?.length > 0 && (
-            <FormHelperText className="Mui-error">
-              Please fill out at least one step.
-            </FormHelperText>
-          )}
+          {typeof errors !== "undefined" &&
+            typeof errors.steps !== "undefined" && (
+              <FormHelperText className="Mui-error">
+                Please fill out at least one step.
+              </FormHelperText>
+            )}
           {steps.map((step, index) => (
             <div key={step.id}>
               <Typography component="h3" gutterBottom variant="h5">
@@ -554,10 +564,45 @@ export default function Add({
           <button
             type="button"
             onClick={() => stepsAppend()}
-            ref={addStepButton}
             style={{ margin: "0 0 40px 0" }}
           >
             Add Step
+          </button>
+        </div>
+        {/* notes */}
+        <div>
+          <Typography component="h2" gutterBottom variant="h4">
+            Notes
+          </Typography>
+          {notes.map((note, index) => (
+            <div key={note.id}>
+              <Typography component="h3" gutterBottom variant="h5">
+                Note {index + 1}
+              </Typography>
+              <TextField
+                id={`notes[${index}].description`}
+                inputRef={register}
+                label="Note"
+                name={`notes[${index}].description`}
+                style={{ margin: "0 0 10px 0" }}
+              />
+              <br />
+              {notes.length > 1 && (
+                <button
+                  onClick={() => notesRemove(index)}
+                  style={{ margin: "0 0 10px 0" }}
+                >
+                  Remove Note
+                </button>
+              )}
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => notesAppend()}
+            style={{ margin: "0 0 40px 0" }}
+          >
+            Add Note
           </button>
         </div>
         {/* submit */}
