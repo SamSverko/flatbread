@@ -136,6 +136,14 @@ export default function Add({
       setFormError("Improper Ingredient Name data value in form");
     }
 
+    // format ingredients.substitutions from string, to array of strings
+    let formattedIngredients = [...data.ingredients];
+    data.ingredients.forEach((ingredient, index) => {
+      formattedIngredients[
+        index
+      ].substitutions = ingredient.substitutions.split(",");
+    });
+
     if (!formError) {
       console.log(data);
       // axios
@@ -452,27 +460,6 @@ export default function Add({
                 control={control}
               />
               <br />
-              {/* <TextField
-                error={
-                  typeof errors !== "undefined" &&
-                  typeof errors.ingredients !== "undefined" &&
-                  typeof errors.ingredients[index] !== "undefined" &&
-                  typeof errors.ingredients[index].name !== "undefined"
-                }
-                helperText={
-                  typeof errors !== "undefined" &&
-                  typeof errors.ingredients !== "undefined" &&
-                  typeof errors.ingredients[index] !== "undefined" &&
-                  typeof errors.ingredients[index].name !== "undefined"
-                    ? errors.ingredients[index].name.message
-                    : ""
-                }
-                id={`ingredients[${index}].name`}
-                inputRef={register}
-                label="Name"
-                name={`ingredients[${index}].name`}
-                style={{ margin: "0 0 10px 0" }}
-              /> */}
               <Controller
                 render={({ onChange, ...props }) => (
                   <Autocomplete
@@ -508,12 +495,32 @@ export default function Add({
                 style={{ margin: "0 0 10px 0" }}
               />
               <br />
-              <TextField
-                id={`ingredients[${index}].substitutions`}
-                inputRef={register}
-                label="Substitutions"
+              <Controller
+                render={({ onChange, ...props }) => (
+                  <Autocomplete
+                    multiple
+                    options={ingredientNames}
+                    getOptionLabel={(option) => option}
+                    renderOption={(option) => <span>{option}</span>}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Substitutions"
+                        style={{
+                          margin: "0 0 10px 0",
+                          maxWidth: 167,
+                          width: "100%",
+                        }}
+                      />
+                    )}
+                    onChange={(e, data) => onChange(data)}
+                    {...props}
+                  />
+                )}
+                onChange={([, data]) => data}
+                defaultValue={[ingredientNames[0]]}
                 name={`ingredients[${index}].substitutions`}
-                style={{ margin: "0 0 10px 0" }}
+                control={control}
               />
               <br />
               {ingredients.length > 1 && (
