@@ -58,22 +58,43 @@ export default function Add({
         })
       )
       .min(1),
+    steps: yup.array().of(
+      yup.object({
+        section: yup.string().trim().lowercase(),
+        description: yup.string().trim().lowercase().required(),
+      })
+    ),
   });
 
   const { control, errors, handleSubmit, register } = useForm({
     resolver: yupResolver(schema),
   });
 
-  const { fields: ingredients, append, remove } = useFieldArray({
+  const {
+    fields: ingredients,
+    append: ingredientsAppend,
+    remove: ingredientsRemove,
+  } = useFieldArray({
     control,
     name: "ingredients",
   });
 
+  const {
+    fields: steps,
+    append: stepsAppend,
+    remove: stepsRemove,
+  } = useFieldArray({
+    control,
+    name: "steps",
+  });
+
   const addIngredientButton = useRef(0);
+  const addStepButton = useRef(0);
 
   useEffect(() => {
     addIngredientButton.current.click();
-  }, [addIngredientButton]);
+    addStepButton.current.click();
+  }, [addIngredientButton, addStepButton]);
 
   const onSubmit = (data) => {
     let formErrors = false;
@@ -458,7 +479,7 @@ export default function Add({
               <br />
               {ingredients.length > 1 && (
                 <button
-                  onClick={() => remove(index)}
+                  onClick={() => ingredientsRemove(index)}
                   style={{ margin: "0 0 10px 0" }}
                 >
                   Remove Ingredient
@@ -468,10 +489,75 @@ export default function Add({
           ))}
           <button
             type="button"
-            onClick={() => append()}
+            onClick={() => ingredientsAppend()}
             ref={addIngredientButton}
+            style={{ margin: "0 0 40px 0" }}
           >
             Add Ingredient
+          </button>
+        </div>
+        {/* steps */}
+        <div>
+          <Typography component="h2" gutterBottom variant="h4">
+            Steps
+          </Typography>
+          {errors.steps !== "undefined" && errors.steps?.length > 0 && (
+            <FormHelperText className="Mui-error">
+              Please fill out at least one step.
+            </FormHelperText>
+          )}
+          {steps.map((step, index) => (
+            <div key={step.id}>
+              <Typography component="h3" gutterBottom variant="h5">
+                Step {index + 1}
+              </Typography>
+              <TextField
+                id={`steps[${index}].section`}
+                inputRef={register}
+                label="Section"
+                name={`steps[${index}].section`}
+                style={{ margin: "0 0 10px 0" }}
+              />
+              <br />
+              <TextField
+                error={
+                  typeof errors !== "undefined" &&
+                  typeof errors.steps !== "undefined" &&
+                  typeof errors.steps[index] !== "undefined" &&
+                  typeof errors.steps[index].description !== "undefined"
+                }
+                helperText={
+                  typeof errors !== "undefined" &&
+                  typeof errors.steps !== "undefined" &&
+                  typeof errors.steps[index] !== "undefined" &&
+                  typeof errors.steps[index].description !== "undefined"
+                    ? errors.steps[index].description.message
+                    : ""
+                }
+                id={`steps[${index}].description`}
+                inputRef={register}
+                label="Description"
+                name={`steps[${index}].description`}
+                style={{ margin: "0 0 10px 0" }}
+              />
+              <br />
+              {steps.length > 1 && (
+                <button
+                  onClick={() => stepsRemove(index)}
+                  style={{ margin: "0 0 10px 0" }}
+                >
+                  Remove Step
+                </button>
+              )}
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => stepsAppend()}
+            ref={addStepButton}
+            style={{ margin: "0 0 40px 0" }}
+          >
+            Add Step
           </button>
         </div>
         {/* submit */}
