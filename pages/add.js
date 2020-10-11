@@ -29,10 +29,10 @@ export default function Add({
 
   const schema = yup.object().shape({
     title: yup.string().trim().lowercase().min(4).required(),
-    courseTypes: yup.array().of(yup.string()).min(1),
-    dishTypes: yup.array().of(yup.string()).min(1),
-    cuisines: yup.array().of(yup.string()).min(1),
-    dietaryRestrictions: yup.array().of(yup.string()),
+    courseTypes: yup.array().of(yup.string().trim().lowercase()).min(1),
+    dishTypes: yup.array().of(yup.string().trim().lowercase()).min(1),
+    cuisines: yup.array().of(yup.string().trim().lowercase()).min(1),
+    dietaryRestrictions: yup.array().of(yup.string().trim().lowercase()),
     source: yup.object({
       name: yup.string().trim().lowercase().required(),
       url: yup.string().trim().url(),
@@ -69,14 +69,14 @@ export default function Add({
       .of(
         yup.object({
           section: yup.string().trim().lowercase(),
-          description: yup.string().trim().lowercase().required(),
+          description: yup.string().trim().required(),
         })
       )
       .min(1)
       .required(),
     notes: yup.array().of(
       yup.object({
-        description: yup.string().trim().lowercase(),
+        description: yup.string().trim(),
       })
     ),
     adminCode: yup.string().trim().required(),
