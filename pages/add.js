@@ -369,6 +369,20 @@ export default function Add({
               />
               <br />
               <TextField
+                error={
+                  typeof errors !== "undefined" &&
+                  typeof errors.ingredients !== "undefined" &&
+                  typeof errors.ingredients[index] !== "undefined" &&
+                  typeof errors.ingredients[index].amount !== "undefined"
+                }
+                helperText={
+                  typeof errors !== "undefined" &&
+                  typeof errors.ingredients !== "undefined" &&
+                  typeof errors.ingredients[index] !== "undefined" &&
+                  typeof errors.ingredients[index].amount !== "undefined"
+                    ? errors.ingredients[index].amount.message
+                    : ""
+                }
                 id={`ingredients[${index}].amount`}
                 inputRef={register}
                 label="Amount"
@@ -405,6 +419,20 @@ export default function Add({
               />
               <br />
               <TextField
+                error={
+                  typeof errors !== "undefined" &&
+                  typeof errors.ingredients !== "undefined" &&
+                  typeof errors.ingredients[index] !== "undefined" &&
+                  typeof errors.ingredients[index].name !== "undefined"
+                }
+                helperText={
+                  typeof errors !== "undefined" &&
+                  typeof errors.ingredients !== "undefined" &&
+                  typeof errors.ingredients[index] !== "undefined" &&
+                  typeof errors.ingredients[index].name !== "undefined"
+                    ? errors.ingredients[index].name.message
+                    : ""
+                }
                 id={`ingredients[${index}].name`}
                 inputRef={register}
                 label="Name"
