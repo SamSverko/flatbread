@@ -9,6 +9,7 @@ import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import Autocomplete from "@material-ui/lab/Autocomplete";
 import axios from "axios";
+import React, { useState } from "react";
 import { Controller, useForm, useFieldArray } from "react-hook-form";
 import * as yup from "yup";
 
@@ -21,6 +22,8 @@ export default function Add({
   dishTypes,
   ingredientUnits,
 }) {
+  const [formError, setFormError] = useState(false);
+
   const schema = yup.object().shape({
     title: yup.string().trim().lowercase().min(4).required(),
     courseTypes: yup.array().of(yup.string()).min(1),
@@ -73,6 +76,7 @@ export default function Add({
         description: yup.string().trim().lowercase(),
       })
     ),
+    adminCode: yup.string().trim().required(),
   });
 
   const { control, errors, handleSubmit, register } = useForm({
@@ -107,31 +111,25 @@ export default function Add({
   });
 
   const onSubmit = (data) => {
-    let formErrors = false;
     if (
       !data.courseTypes.every((courseType) => courseTypes.includes(courseType))
     ) {
-      formErrors = "Improper Course Type data value in form";
+      setFormError("Improper Course Type data value in form");
     } else if (
       !data.dishTypes.every((dishType) => dishTypes.includes(dishType))
     ) {
-      formErrors = "Improper Dish Type data value in form";
+      setFormError("Improper Dish Type data value in form");
     } else if (!data.cuisines.every((cuisine) => cuisines.includes(cuisine))) {
-      formErrors = "Improper Cuisine data value in form";
+      setFormError("Improper Cuisine data value in form");
     } else if (
       !data.dietaryRestrictions.every((dietaryRestriction) =>
         dietaryRestrictions.includes(dietaryRestriction)
       )
     ) {
-      formErrors = "Improper Dietary Restriction data value in form";
+      setFormError("Improper Dietary Restriction data value in form");
     }
 
-    if (!formErrors) {
-      // TODO: SPLIT SUBSTITUTIONS INTO AN ARRAY
-      // data.ingredients.forEach((ingredient) => {
-      //   console.log(ingredient.substitutions.split(","));
-      // });
-      // console.log(data.ingredients);
+    if (!formError) {
       console.log(data);
       // axios
       //   .post('/api/addRecipe', data)
@@ -141,8 +139,6 @@ export default function Add({
       //   .catch(function (error) {
       //     console.log(error);
       //   });
-    } else {
-      console.log(formErrors);
     }
   };
 
@@ -605,8 +601,27 @@ export default function Add({
             Add Note
           </button>
         </div>
+        {/* admin code */}
+        <TextField
+          error={typeof errors.adminCode !== "undefined"}
+          helperText={
+            errors.adminCode?.message
+              ? errors.adminCode?.message
+              : "Only admins can add new recipes at this time."
+          }
+          id="form-adminCode"
+          inputRef={register}
+          label="Admin Code"
+          name="adminCode"
+          style={{ margin: "0 0 40px 0" }}
+          type="password"
+        />
+        <br />
         {/* submit */}
         <div>
+          {formError && (
+            <FormHelperText className="Mui-error">{formError}</FormHelperText>
+          )}
           <input type="submit" />
         </div>
       </form>
