@@ -46,26 +46,31 @@ export default function PageLayout(props) {
 
   return (
     <div className={classes.page}>
+      {/* header */}
       <AppBar className={classes.header} position="static">
         <Toolbar className={classes.toolbar}>
           <Typography variant="h6">Flatbread</Typography>
         </Toolbar>
       </AppBar>
 
+      {/* content */}
       <div className={classes.content}>{props.children}</div>
 
-      <BottomNavigation
-        className={classes.footer}
-        onChange={(event, newValue) => {
-          setValue(newValue);
-        }}
-        showLabels
-        value={value}
-      >
-        <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
-        <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
-        <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
-      </BottomNavigation>
+      {/* footer */}
+      {!props.noFooter && (
+        <BottomNavigation
+          className={classes.footer}
+          onChange={(event, newValue) => {
+            setValue(newValue);
+          }}
+          showLabels
+          value={value}
+        >
+          <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
+          <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
+          <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
+        </BottomNavigation>
+      )}
     </div>
   );
 }

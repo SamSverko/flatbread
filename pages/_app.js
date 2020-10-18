@@ -1,13 +1,17 @@
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { ThemeProvider } from "@material-ui/core/styles";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 
 import PageLayout from "../src/page-layout";
 import theme from "../src/theme";
 
+const NO_FOOTER_ROUTES = ["/", "/add"];
+
 export default function MyApp(props) {
   const { Component, pageProps } = props;
+  const router = useRouter();
 
   useEffect(() => {
     const jssStyles = document.querySelector("#jss-server-side");
@@ -27,7 +31,7 @@ export default function MyApp(props) {
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <PageLayout>
+        <PageLayout noFooter={NO_FOOTER_ROUTES.includes(router.pathname)}>
           <Component {...pageProps} />
         </PageLayout>
       </ThemeProvider>
