@@ -1,12 +1,15 @@
 import CssBaseline from "@material-ui/core/CssBaseline";
+import { ThemeProvider } from "@material-ui/core/styles";
 import Head from "next/head";
-import React from "react";
+import React, { useEffect } from "react";
+
+import PageLayout from "../src/page-layout";
+import theme from "../src/theme";
 
 export default function MyApp(props) {
   const { Component, pageProps } = props;
 
-  React.useEffect(() => {
-    // Remove the server-side injected CSS.
+  useEffect(() => {
     const jssStyles = document.querySelector("#jss-server-side");
     if (jssStyles) {
       jssStyles.parentElement.removeChild(jssStyles);
@@ -14,7 +17,7 @@ export default function MyApp(props) {
   }, []);
 
   return (
-    <React.Fragment>
+    <>
       <Head>
         <title>Flatbread</title>
         <meta
@@ -22,8 +25,12 @@ export default function MyApp(props) {
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
       </Head>
-      <CssBaseline />
-      <Component {...pageProps} />
-    </React.Fragment>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <PageLayout>
+          <Component {...pageProps} />
+        </PageLayout>
+      </ThemeProvider>
+    </>
   );
 }
