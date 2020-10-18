@@ -47,9 +47,9 @@ const StyledAlert = withStyles((theme) => {
   };
 })(Alert);
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles(() => {
   return {
-    container: {
+    pageContainer: {
       display: "flex",
       flexDirection: "column",
       height: "100%",
@@ -68,7 +68,7 @@ export default function Home({ isConnected }) {
     title: yup.string().trim().lowercase().min(4).required(),
   });
 
-  const { control, errors, handleSubmit, register } = useForm({
+  const { errors, handleSubmit, register } = useForm({
     resolver: yupResolver(schema),
   });
 
@@ -86,7 +86,7 @@ export default function Home({ isConnected }) {
   };
 
   return (
-    <div>
+    <div className={classes.pageContainer}>
       {!isConnected && (
         <Alert severity="error">
           Error connecting to the database, please try again later.
@@ -148,7 +148,7 @@ export default function Home({ isConnected }) {
 
       {/* search results */}
       {recipes && recipes.length !== 0 && (
-        <div className={classes.results}>
+        <div>
           {recipes.map((recipe, index) => (
             <Card key={index} variant="outlined">
               <CardContent>
