@@ -5,7 +5,6 @@ import {
   Card,
   CardActions,
   CardContent,
-  Divider,
   Link,
   TextField,
   Typography,
@@ -28,6 +27,7 @@ const useStyles = makeStyles((theme) => {
     pageContainer: {
       display: "flex",
       flexDirection: "column",
+      height: "100%",
       justifyContent: "center",
       margin: "0 auto",
       maxWidth: `${theme.breakpoints.values.sm}px`,
@@ -210,7 +210,7 @@ export default function Home({ isConnected }) {
                   <div>
                     <RestaurantMenuIcon titleAccess="Knife and spoon icon." />
                     <Typography>
-                      <span class="font-weight-bold">Prep</span>
+                      <span className="font-weight-bold">Prep</span>
                     </Typography>
                     <Typography>
                       {recipe.duration.prepTime} min
@@ -220,7 +220,7 @@ export default function Home({ isConnected }) {
                   <div>
                     <AccessTimeIcon titleAccess="Clock icon." />
                     <Typography>
-                      <span class="font-weight-bold">Cook</span>
+                      <span className="font-weight-bold">Cook</span>
                     </Typography>
                     <Typography>
                       {recipe.duration.cookTime} min
@@ -230,7 +230,7 @@ export default function Home({ isConnected }) {
                   <div>
                     <GroupWorkIcon titleAccess="Circle with three dots in it." />
                     <Typography>
-                      <span class="font-weight-bold">Yield</span>
+                      <span className="font-weight-bold">Yield</span>
                     </Typography>
                     <Typography>
                       {recipe.yield.amount} {recipe.yield.unit}

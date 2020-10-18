@@ -17,7 +17,6 @@ const useStyles = makeStyles((theme) => {
       display: "flex",
       flexDirection: "column",
       flexWrap: "nowrap",
-      height: "100vh",
       width: "100%",
     },
     content: {
