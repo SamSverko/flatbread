@@ -7,7 +7,7 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
 import RestaurantMenuIcon from "@material-ui/icons/RestaurantMenu";
 import { Alert } from "@material-ui/lab";
@@ -18,6 +18,35 @@ import * as yup from "yup";
 
 import { connectToDatabase } from "../util/mongodb";
 
+const StyledCard = withStyles((theme) => {
+  return {
+    root: {
+      margin: `0 auto ${theme.spacing(2)}px auto`,
+      maxWidth: "400px",
+      padding: theme.spacing(1),
+      textAlign: "center",
+      width: "100%",
+      "& .MuiCardContent-root": {
+        paddingBottom: `${theme.spacing(1)}px !important`,
+      },
+      "& .MuiTypography-root": {
+        margin: `0 0 ${theme.spacing(2)}px 0`,
+      },
+      "& .MuiTextField-root": {
+        margin: `0 0 ${theme.spacing(2)}px 0`,
+      },
+    },
+  };
+})(Card);
+
+const StyledAlert = withStyles((theme) => {
+  return {
+    root: {
+      margin: `0 0 ${theme.spacing(2)}px 0`,
+    },
+  };
+})(Alert);
+
 const useStyles = makeStyles((theme) => {
   return {
     container: {
@@ -25,28 +54,6 @@ const useStyles = makeStyles((theme) => {
       flexDirection: "column",
       height: "100%",
       justifyContent: "center",
-    },
-    card: {
-      margin: `0 auto ${theme.spacing(2)}px auto`,
-      maxWidth: "400px",
-      padding: theme.spacing(1),
-      textAlign: "center",
-      width: "100%",
-    },
-    cardContent: {
-      paddingBottom: `${theme.spacing(1)}px !important`,
-    },
-    title: {
-      margin: `0 0 ${theme.spacing(2)}px 0`,
-    },
-    searchBar: {
-      margin: `0 0 ${theme.spacing(2)}px 0`,
-    },
-    alert: {
-      margin: `0 0 ${theme.spacing(2)}px 0`,
-    },
-    results: {
-      // margin: `0 0 ${theme.spacing(2)}px 0`,
     },
   };
 });
@@ -66,8 +73,6 @@ export default function Home({ isConnected }) {
   });
 
   const onSubmit = (data) => {
-    console.log(data);
-
     axios
       .post(`/api/recipes?title=${data.title}`, data)
       .then(function (response) {
@@ -81,23 +86,23 @@ export default function Home({ isConnected }) {
   };
 
   return (
-    <div className={classes.container}>
+    <div>
       {!isConnected && (
         <Alert severity="error">
           Error connecting to the database, please try again later.
         </Alert>
       )}
 
-      <Card className={classes.card} variant="outlined">
-        <CardContent className={classes.cardContent}>
-          <Typography className={classes.title} component="h1" variant="h5">
+      {/* search card */}
+      <StyledCard variant="outlined">
+        <CardContent>
+          <Typography component="h1" variant="h5">
             Find a Recipe
           </Typography>
 
           <form onSubmit={handleSubmit(onSubmit)}>
             {/* title */}
             <TextField
-              className={classes.searchBar}
               error={typeof errors.title !== "undefined"}
               fullWidth
               helperText={errors.title?.message}
@@ -117,12 +122,11 @@ export default function Home({ isConnected }) {
             </div>
           </form>
         </CardContent>
-      </Card>
+      </StyledCard>
 
       {/* search alert feedback */}
       {!hideAlerts && recipes && recipes.length === 0 && (
         <Alert
-          className={classes.alert}
           onClose={() => {
             setHideAlerts(true);
           }}
@@ -132,15 +136,14 @@ export default function Home({ isConnected }) {
         </Alert>
       )}
       {!hideAlerts && recipes && recipes.length !== 0 && (
-        <Alert
-          className={classes.alert}
+        <StyledAlert
           onClose={() => {
             setHideAlerts(true);
           }}
           severity="success"
         >
           {recipes.length} recipe{recipes.length > 1 ? "s" : ""} found!
-        </Alert>
+        </StyledAlert>
       )}
 
       {/* search results */}
