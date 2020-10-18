@@ -1,4 +1,4 @@
-import CssBaseline from "@material-ui/core/CssBaseline";
+import { CssBaseline } from "@material-ui/core";
 import Head from "next/head";
 
 export default function MyApp({ Component, pageProps }) {

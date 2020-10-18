@@ -49,5 +49,7 @@ export default async (req, res) => {
         details: "Incorrect Admin Code",
       });
     }
+  } else {
+    res.redirect("/");
   }
 };

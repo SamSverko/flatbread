@@ -1,5 +1,6 @@
-import Alert from "@material-ui/lab/Alert";
+import { Typography } from "@material-ui/core";
 import { fade, makeStyles } from "@material-ui/core/styles";
+import { Alert } from "@material-ui/lab";
 
 import { connectToDatabase } from "../util/mongodb";
 
@@ -17,6 +18,9 @@ export default function Home({ isConnected }) {
           Error connecting to the database, please try again later.
         </Alert>
       )}
+      <Typography component="h1" gutterBottom variant="h3">
+        Flatbread
+      </Typography>
     </div>
   );
 }
