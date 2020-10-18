@@ -1,11 +1,17 @@
 import { Typography } from "@material-ui/core";
 import { fade, makeStyles } from "@material-ui/core/styles";
+import { AppBar, Toolbar } from "@material-ui/core";
 import { Alert } from "@material-ui/lab";
 
 import { connectToDatabase } from "../util/mongodb";
 
 const useStyles = makeStyles((theme) => {
-  return {};
+  return {
+    toolbar: {
+      display: "flex",
+      justifyContent: "center",
+    },
+  };
 });
 
 export default function Home({ isConnected }) {
@@ -13,13 +19,18 @@ export default function Home({ isConnected }) {
 
   return (
     <div>
+      <AppBar position="static">
+        <Toolbar className={classes.toolbar}>
+          <Typography variant="h6">Flatbread</Typography>
+        </Toolbar>
+      </AppBar>
       {!isConnected && (
         <Alert severity="error">
           Error connecting to the database, please try again later.
         </Alert>
       )}
       <Typography component="h1" gutterBottom variant="h3">
-        Flatbread
+        Welcome
       </Typography>
     </div>
   );
