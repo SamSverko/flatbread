@@ -81,6 +81,11 @@ const StyledRecipeCard = withStyles((theme) => {
         display: "flex",
         justifyContent: "center",
       },
+      "& .MuiLink-root": {
+        "&:hover": {
+          textDecoration: "none",
+        },
+      },
     },
   };
 })(Card);
@@ -239,9 +244,11 @@ export default function Home({ isConnected }) {
                 </div>
               </CardContent>
               <CardActions>
-                <Button color="primary" variant="contained">
-                  View Recipe
-                </Button>
+                <Link href={`/recipe/${recipe._id}`}>
+                  <Button color="primary" variant="contained">
+                    View Recipe
+                  </Button>
+                </Link>
               </CardActions>
             </StyledRecipeCard>
           ))}

@@ -2,6 +2,7 @@ import {
   AppBar,
   BottomNavigation,
   BottomNavigationAction,
+  Link,
   Toolbar,
   Typography,
 } from "@material-ui/core";
@@ -33,6 +34,12 @@ const StyledAppBar = withStyles((theme) => {
   return {
     root: {
       flexShrink: 0,
+      "& .MuiTypography-root": {
+        color: theme.palette.common.white,
+        "&:hover": {
+          textDecoration: "none",
+        },
+      },
     },
   };
 })(AppBar);
@@ -62,9 +69,11 @@ export default function PageLayout(props) {
     <div className={classes.pageContainer}>
       {/* header */}
       <StyledAppBar position="static">
-        <StyledToolbar>
-          <Typography variant="h6">Flatbread</Typography>
-        </StyledToolbar>
+        <Link href="/">
+          <StyledToolbar>
+            <Typography variant="h6">Flatbread</Typography>
+          </StyledToolbar>
+        </Link>
       </StyledAppBar>
 
       {/* content */}
