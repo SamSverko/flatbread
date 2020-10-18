@@ -1,14 +1,19 @@
 import { yupResolver } from "@hookform/resolvers";
 import {
+  Box,
   Button,
   Card,
   CardActions,
   CardContent,
+  Divider,
+  Link,
   TextField,
   Typography,
 } from "@material-ui/core";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
+import { fade } from "@material-ui/core/styles/colorManipulator";
 import AccessTimeIcon from "@material-ui/icons/AccessTime";
+import GroupWorkIcon from "@material-ui/icons/GroupWork";
 import RestaurantMenuIcon from "@material-ui/icons/RestaurantMenu";
 import { Alert } from "@material-ui/lab";
 import axios from "axios";
@@ -18,19 +23,28 @@ import * as yup from "yup";
 
 import { connectToDatabase } from "../util/mongodb";
 
-const StyledCard = withStyles((theme) => {
+const useStyles = makeStyles((theme) => {
+  return {
+    pageContainer: {
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      margin: "0 auto",
+      maxWidth: `${theme.breakpoints.values.sm}px`,
+      width: "100%",
+    },
+  };
+});
+
+const StyledSearchCard = withStyles((theme) => {
   return {
     root: {
       margin: `0 auto ${theme.spacing(2)}px auto`,
-      maxWidth: "400px",
       padding: theme.spacing(1),
       textAlign: "center",
       width: "100%",
       "& .MuiCardContent-root": {
         paddingBottom: `${theme.spacing(1)}px !important`,
-      },
-      "& .MuiTypography-root": {
-        margin: `0 0 ${theme.spacing(2)}px 0`,
       },
       "& .MuiTextField-root": {
         margin: `0 0 ${theme.spacing(2)}px 0`,
@@ -47,16 +61,29 @@ const StyledAlert = withStyles((theme) => {
   };
 })(Alert);
 
-const useStyles = makeStyles(() => {
+const StyledRecipeCard = withStyles((theme) => {
   return {
-    pageContainer: {
-      display: "flex",
-      flexDirection: "column",
-      height: "100%",
-      justifyContent: "center",
+    root: {
+      margin: `0 auto ${theme.spacing(2)}px auto`,
+      padding: `0 0 ${theme.spacing(1)}px 0`,
+      textAlign: "center",
+      width: "100%",
+      "& .card-recipe-source": {
+        backgroundColor: fade(theme.palette.primary.main, 0.1),
+        padding: theme.spacing(2),
+      },
+      "& .card-recipe-duration-yield": {
+        alignItems: "center",
+        display: "flex",
+        justifyContent: "space-evenly",
+      },
+      "& .MuiCardActions-root": {
+        display: "flex",
+        justifyContent: "center",
+      },
     },
   };
-});
+})(Card);
 
 export default function Home({ isConnected }) {
   const classes = useStyles();
@@ -94,9 +121,9 @@ export default function Home({ isConnected }) {
       )}
 
       {/* search card */}
-      <StyledCard variant="outlined">
+      <StyledSearchCard>
         <CardContent>
-          <Typography component="h1" variant="h5">
+          <Typography component="h1" gutterBottom variant="h5">
             Find a Recipe
           </Typography>
 
@@ -122,7 +149,7 @@ export default function Home({ isConnected }) {
             </div>
           </form>
         </CardContent>
-      </StyledCard>
+      </StyledSearchCard>
 
       {/* search alert feedback */}
       {!hideAlerts && recipes && recipes.length === 0 && (
@@ -150,30 +177,41 @@ export default function Home({ isConnected }) {
       {recipes && recipes.length !== 0 && (
         <div>
           {recipes.map((recipe, index) => (
-            <Card key={index} variant="outlined">
-              <CardContent>
-                <div>
-                  <Typography
-                    className="text-transform-capitalize"
-                    component="h2"
-                    variant="h6"
-                  >
-                    {recipe.source.name}
-                  </Typography>
-                </div>
+            <StyledRecipeCard key={index}>
+              <Box className="card-recipe-source" boxShadow={1}>
+                <Typography
+                  className="text-transform-capitalize"
+                  component="h2"
+                  variant="h6"
+                >
+                  {recipe.source.url && (
+                    <Link
+                      href={recipe.source.url}
+                      rel="noopener noreferrer"
+                      target="_blank"
+                    >
+                      {recipe.source.name}
+                    </Link>
+                  )}
+                  {!recipe.source.url && recipe.source.name}
+                </Typography>
+              </Box>
 
+              <CardContent>
                 <Typography
                   className="text-transform-capitalize"
                   component="h3"
+                  gutterBottom
                   variant="h5"
                 >
                   {recipe.title}
                 </Typography>
-
-                <div>
+                <div className="card-recipe-duration-yield">
                   <div>
                     <RestaurantMenuIcon titleAccess="Knife and spoon icon." />
-                    <Typography>Prep</Typography>
+                    <Typography>
+                      <span class="font-weight-bold">Prep</span>
+                    </Typography>
                     <Typography>
                       {recipe.duration.prepTime} min
                       {recipe.duration.prepTime > 1 ? "s" : ""}
@@ -181,15 +219,19 @@ export default function Home({ isConnected }) {
                   </div>
                   <div>
                     <AccessTimeIcon titleAccess="Clock icon." />
-                    <Typography>Cook</Typography>
+                    <Typography>
+                      <span class="font-weight-bold">Cook</span>
+                    </Typography>
                     <Typography>
                       {recipe.duration.cookTime} min
                       {recipe.duration.cookTime > 1 ? "s" : ""}
                     </Typography>
                   </div>
                   <div>
-                    <AccessTimeIcon titleAccess="Clock icon." />
-                    <Typography>Yield</Typography>
+                    <GroupWorkIcon titleAccess="Circle with three dots in it." />
+                    <Typography>
+                      <span class="font-weight-bold">Yield</span>
+                    </Typography>
                     <Typography>
                       {recipe.yield.amount} {recipe.yield.unit}
                     </Typography>
@@ -201,7 +243,7 @@ export default function Home({ isConnected }) {
                   View Recipe
                 </Button>
               </CardActions>
-            </Card>
+            </StyledRecipeCard>
           ))}
         </div>
       )}

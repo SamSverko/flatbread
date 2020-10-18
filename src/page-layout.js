@@ -11,6 +11,25 @@ import LocationOnIcon from "@material-ui/icons/LocationOn";
 import RestoreIcon from "@material-ui/icons/Restore";
 import React, { useState } from "react";
 
+const useStyles = makeStyles((theme) => {
+  return {
+    pageContainer: {
+      display: "flex",
+      flexDirection: "column",
+      flexWrap: "nowrap",
+      height: "100vh",
+      width: "100%",
+    },
+    content: {
+      display: "flex",
+      flexDirection: "column",
+      flexGrow: 1,
+      overflow: "auto",
+      padding: theme.spacing(2),
+    },
+  };
+});
+
 const StyledAppBar = withStyles((theme) => {
   return {
     root: {
@@ -35,25 +54,6 @@ const StyledBottomNavigation = withStyles((theme) => {
     },
   };
 })(BottomNavigation);
-
-const useStyles = makeStyles((theme) => {
-  return {
-    pageContainer: {
-      display: "flex",
-      flexDirection: "column",
-      flexWrap: "nowrap",
-      height: "100vh",
-      width: "100%",
-    },
-    content: {
-      display: "flex",
-      flexDirection: "column",
-      flexGrow: 1,
-      overflow: "auto",
-      padding: theme.spacing(2),
-    },
-  };
-});
 
 export default function PageLayout(props) {
   const classes = useStyles();
