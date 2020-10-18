@@ -14,25 +14,28 @@ import React, { useState } from "react";
 const useStyles = makeStyles((theme) => {
   return {
     page: {
-      width: "100%",
-      height: "100vh",
       display: "flex",
       flexDirection: "column",
       flexWrap: "nowrap",
+      height: "100vh",
+      width: "100%",
     },
     header: {
-      flexShrink: 0,
-    },
-    content: {
-      flexGrow: 1,
-      overflow: "auto",
-    },
-    footer: {
       flexShrink: 0,
     },
     toolbar: {
       display: "flex",
       justifyContent: "center",
+    },
+    content: {
+      display: "flex",
+      flexDirection: "column",
+      flexGrow: 1,
+      overflow: "auto",
+      padding: theme.spacing(2),
+    },
+    footer: {
+      flexShrink: 0,
     },
   };
 });
@@ -53,11 +56,11 @@ export default function PageLayout(props) {
 
       <BottomNavigation
         className={classes.footer}
-        value={value}
         onChange={(event, newValue) => {
           setValue(newValue);
         }}
         showLabels
+        value={value}
       >
         <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
         <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
