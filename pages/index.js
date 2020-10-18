@@ -2,11 +2,14 @@ import { yupResolver } from "@hookform/resolvers";
 import {
   Button,
   Card,
+  CardActions,
   CardContent,
   TextField,
   Typography,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import AccessTimeIcon from "@material-ui/icons/AccessTime";
+import RestaurantMenuIcon from "@material-ui/icons/RestaurantMenu";
 import { Alert } from "@material-ui/lab";
 import axios from "axios";
 import React, { useState } from "react";
@@ -39,6 +42,12 @@ const useStyles = makeStyles((theme) => {
     searchBar: {
       margin: `0 0 ${theme.spacing(2)}px 0`,
     },
+    alert: {
+      margin: `0 0 ${theme.spacing(2)}px 0`,
+    },
+    results: {
+      // margin: `0 0 ${theme.spacing(2)}px 0`,
+    },
   };
 });
 
@@ -46,6 +55,7 @@ export default function Home({ isConnected }) {
   const classes = useStyles();
 
   const [recipes, setRecipes] = useState(false);
+  const [hideAlerts, setHideAlerts] = useState(false);
 
   const schema = yup.object().shape({
     title: yup.string().trim().lowercase().min(4).required(),
@@ -63,6 +73,7 @@ export default function Home({ isConnected }) {
       .then(function (response) {
         console.log(response.data);
         setRecipes(response.data);
+        setHideAlerts(false);
       })
       .catch(function (error) {
         console.log(error);
@@ -107,25 +118,89 @@ export default function Home({ isConnected }) {
           </form>
         </CardContent>
       </Card>
-      {recipes && recipes.length === 0 && (
+
+      {/* search alert feedback */}
+      {!hideAlerts && recipes && recipes.length === 0 && (
         <Alert
+          className={classes.alert}
           onClose={() => {
-            setRecipes(false);
+            setHideAlerts(true);
           }}
           severity="warning"
         >
           No recipes found
         </Alert>
       )}
-      {recipes && recipes.length !== 0 && (
+      {!hideAlerts && recipes && recipes.length !== 0 && (
         <Alert
+          className={classes.alert}
           onClose={() => {
-            setRecipes(false);
+            setHideAlerts(true);
           }}
           severity="success"
         >
           {recipes.length} recipe{recipes.length > 1 ? "s" : ""} found!
         </Alert>
+      )}
+
+      {/* search results */}
+      {recipes && recipes.length !== 0 && (
+        <div className={classes.results}>
+          {recipes.map((recipe, index) => (
+            <Card key={index} variant="outlined">
+              <CardContent>
+                <div>
+                  <Typography
+                    className="text-transform-capitalize"
+                    component="h2"
+                    variant="h6"
+                  >
+                    {recipe.source.name}
+                  </Typography>
+                </div>
+
+                <Typography
+                  className="text-transform-capitalize"
+                  component="h3"
+                  variant="h5"
+                >
+                  {recipe.title}
+                </Typography>
+
+                <div>
+                  <div>
+                    <RestaurantMenuIcon titleAccess="Knife and spoon icon." />
+                    <Typography>Prep</Typography>
+                    <Typography>
+                      {recipe.duration.prepTime} min
+                      {recipe.duration.prepTime > 1 ? "s" : ""}
+                    </Typography>
+                  </div>
+                  <div>
+                    <AccessTimeIcon titleAccess="Clock icon." />
+                    <Typography>Cook</Typography>
+                    <Typography>
+                      {recipe.duration.cookTime} min
+                      {recipe.duration.cookTime > 1 ? "s" : ""}
+                    </Typography>
+                  </div>
+                  <div>
+                    <AccessTimeIcon titleAccess="Clock icon." />
+                    <Typography>Yield</Typography>
+                    <Typography>
+                      {recipe.yield.amount} {recipe.yield.unit}
+                    </Typography>
+                  </div>
+                </div>
+              </CardContent>
+              <CardActions>
+                <Button color="primary" variant="contained">
+                  View Recipe
+                </Button>
+              </CardActions>
+            </Card>
+          ))}
+        </div>
       )}
     </div>
   );

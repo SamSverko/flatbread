@@ -14,6 +14,9 @@ const theme = createMuiTheme({
           display: "flex",
           minHeight: "100vh",
         },
+        ".text-transform-capitalize": {
+          textTransform: "capitalize",
+        },
       },
     },
   },
