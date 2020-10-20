@@ -10,15 +10,15 @@
 
 ## Project documents
 
-- [README](https://github.com/SamSverko/flatbread/blob/master/README.md)
-- [CODE OF CONDUCT](https://github.com/SamSverko/flatbread/blob/master/docs/CODE_OF_CONDUCT.md)
-- [CONTRIBUTING](https://github.com/SamSverko/flatbread/blob/master/docs/CONTRIBUTING.md)
-- [CONTRIBUTING CODE](https://github.com/SamSverko/flatbread/blob/master/docs/CONTRIBUTING_CODE.md)
-- [COSTS](https://github.com/SamSverko/flatbread/blob/master/docs/COSTS.md)
-- [DIRECTORY STRUCTURE](https://github.com/SamSverko/flatbread/blob/master/docs/DIRECTORY_STRUCTURE.md)
-- [LICENSE](https://github.com/SamSverko/flatbread/blob/master/docs/LICENSE.md)
-- [RESEARCH](https://github.com/SamSverko/flatbread/blob/master/docs/RESEARCH.md)
-- [SERVER SETUP](https://github.com/SamSverko/flatbread/blob/master/docs/SERVER_SETUP.md)
+- [README](https://github.com/SamSverko/flatbread/blob/main/README.md)
+- [CODE OF CONDUCT](https://github.com/SamSverko/flatbread/blob/main/docs/CODE_OF_CONDUCT.md)
+- [CONTRIBUTING](https://github.com/SamSverko/flatbread/blob/main/docs/CONTRIBUTING.md)
+- [CONTRIBUTING CODE](https://github.com/SamSverko/flatbread/blob/main/docs/CONTRIBUTING_CODE.md)
+- [COSTS](https://github.com/SamSverko/flatbread/blob/main/docs/COSTS.md)
+- [DIRECTORY STRUCTURE](https://github.com/SamSverko/flatbread/blob/main/docs/DIRECTORY_STRUCTURE.md)
+- [LICENSE](https://github.com/SamSverko/flatbread/blob/main/docs/LICENSE.md)
+- [RESEARCH](https://github.com/SamSverko/flatbread/blob/main/docs/RESEARCH.md)
+- [SERVER SETUP](https://github.com/SamSverko/flatbread/blob/main/docs/SERVER_SETUP.md)
 
 ---
 
