@@ -1,77 +1,84 @@
-## Example app using MongoDB
+[![first-timers-only](https://img.shields.io/badge/first--timers--only-friendly-blue.svg)](https://www.firsttimersonly.com/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-[MongoDB](https://www.mongodb.com/) is a general purpose, document-based, distributed database built for modern application developers and for the cloud era. This example will show you how to connect to and use MongoDB as your backend for your Next.js app.
+# Flatbread
 
-If you want to learn more about MongoDB, visit the following pages:
+> "People who love to eat are always the best people. - Julia Child"
 
-- [MongoDB Atlas](https://mongodb.com/atlas)
-- [MongoDB Documentation](https://docs.mongodb.com/)
+\- Flatbread.
 
-## Deploy your own
+---
 
-Once you have access to the environment variables you'll need, deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example):
+## Project documents
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/import/git?c=1&s=https://github.com/vercel/next.js/tree/canary/examples/with-mongodb&env=MONGODB_URI,MONGODB_DB&envDescription=Required%20to%20connect%20the%20app%20with%20MongoDB)
+- [README](https://github.com/SamSverko/flatbread/blob/master/README.md)
+- [CODE OF CONDUCT](https://github.com/SamSverko/flatbread/blob/master/docs/CODE_OF_CONDUCT.md)
+- [CONTRIBUTING](https://github.com/SamSverko/flatbread/blob/master/docs/CONTRIBUTING.md)
+- [CONTRIBUTING CODE](https://github.com/SamSverko/flatbread/blob/master/docs/CONTRIBUTING_CODE.md)
+- [COSTS](https://github.com/SamSverko/flatbread/blob/master/docs/COSTS.md)
+- [DIRECTORY STRUCTURE](https://github.com/SamSverko/flatbread/blob/master/docs/DIRECTORY_STRUCTURE.md)
+- [LICENSE](https://github.com/SamSverko/flatbread/blob/master/docs/LICENSE.md)
+- [RESEARCH](https://github.com/SamSverko/flatbread/blob/master/docs/RESEARCH.md)
+- [SERVER SETUP](https://github.com/SamSverko/flatbread/blob/master/docs/SERVER_SETUP.md)
 
-## How to use
+---
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init) or [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/) to bootstrap the example:
+## What is Flatbread?
 
-```bash
-npx create-next-app --example with-mongodb with-mongodb
-# or
-yarn create next-app --example with-mongodb with-mongodb
-```
+Flatbread is a **web-based app for recipes**. That's it.
 
-## Configuration
+You might be wondering **"why even build this app?"** considering the dozens of already-existing recipes sites ([All Recipes](https://www.allrecipes.com/), [Epicurious](https://www.epicurious.com/), [Tasty](https://tasty.co/), [Yummly](https://www.yummly.com/) and many, many more) that already contain more recipes (and users) than anyone could even count? For us, it all boils down to **simplicity**. Flatbread wants to be as **lean** as you do on the first day of your new years resolution, as **accessible** as possible to work for **everyone**, and **free**. We were going to continue that list with "as free as possible", but while that would keep the list-trend going, it wouldn't be true. We want Flatbread to be free. Period (see the `.` before the word "Period"). There are enough things that you already pay money for, including food. Flatbread doesn't want to be yet another notch on your 'monthly-subscriptions' belt.
 
-### Set up a MongoDB database
+Speaking of spending money on food; while most of us spend somewhere around [**11% of our income on groceries**](https://www.thestreet.com/personal-finance/average-cost-of-food-14845479), Flatbread is looking to do something about that. A later phase of this project will be introducing the **Save-O-Matic Recipe Builder 3000** (working title). This feature will scrape the internet for weekly food flyers and pair what's on sale with what recipes are in the Flatbread database. That way you can save money while you meal prep for the week.
 
-Set up a MongoDB database either locally or with [MongoDB Atlas for free](https://mongodb.com/atlas).
+Thanks for reading this far, friend! If you are interested in this project in any scope, feel free to check out our [Contributing document](https://github.com/SamSverko/flatbread/blob/main/docs/CONTRIBUTING.md), or a message to the project owner (Sam), on Discord (SamTheBigs#3861).
 
-### Set up environment variables
+---
 
-Copy the `env.local.example` file in this directory to `.env.local` (which will be ignored by Git):
+## You keep saying 'we' when it looks like it's just you, Sam
 
-```bash
-cp .env.local.example .env.local
-```
+We thank you for that great observation! Okay, seriously, Flatbread is not just for Sam. Yes, it's his side project to learn new things and become a better web developer, but to him, it's much more than that. It's (hopefully) the start of building a community around developing amazing tools for the internet to enjoy, learn new things, meet new people, and have fun along the way. That day may never come (I'm looking at you `Insights / Contributors: 1`), but this project will always aim to be as inclusive as possible.
 
-Set each variable on `.env.local`:
+Sam hopes to one day remove this section of the **README**.
 
-- `MONGODB_URI` - Your MongoDB connection string. If you are using [MongoDB Atlas](https://mongodb.com/atlas) you can find this by clicking the "Connect" button for your cluster.
-- `MONGODB_DB` - The name of the MongoDB database you want to use.
+---
 
-### Run Next.js in development mode
+## Development
 
-```bash
-npm install
-npm run dev
+This website is built using the [Next.js](https://nextjs.org/) framework.
 
-# or
+To get the website running locally, please do the following:
 
-yarn install
-yarn dev
-```
+1. Ensure your environment has [Git](https://git-scm.com/), [Node.js](https://nodejs.org/en/), and [npm](https://www.npmjs.com/) installed.
+2. Clone repository, run `git clone git@github.com:SamSverko/flatbread.git`.
+3. Install dependencies, run `yarn`.
+4. Copy the `.env.local.example` file and rename it to `.env.local`. Update the values to your needs.
+5. Start the website in development mode, run `yarn dev`.
+6. View website at http://localhost:3000.
 
-Your app should be up and running on [http://localhost:3000](http://localhost:3000)! If it doesn't work, post on [GitHub discussions](https://github.com/zeit/next.js/discussions).
+---
 
-You will either see a message stating "You are connected to MongoDB" or "You are NOT connected to MongoDB". Ensure that you have provided the correct `MONGODB_URI` and `MONGODB_DB` environment variables.
+## Production
 
-When you are successfully connected, you can refer to the [MongoDB Node.js Driver docs](https://mongodb.github.io/node-mongodb-native/3.4/tutorials/collections/) for further instructions on how to query your database.
+We're not quite there yet, however we will most likely be deploying this app to [Vercel](https://vercel.com/) due to it's extremely-interoperable nature with Next.js apps. Stay tuned!
 
-## Deploy on Vercel
+---
 
-You can deploy this app to the cloud with [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+## Resources
 
-#### Deploy Your Local Project
+### Available scripts
 
-To deploy your local project to Vercel, push it to GitHub/GitLab/Bitbucket and [import to Vercel](https://vercel.com/import/git?utm_source=github&utm_medium=readme&utm_campaign=next-example).
+- `yarn build` creates an optimized production build of your application. The output displays information about each route.
+- `yarn dev` starts the application in development mode with hot-code reloading, error reporting, and more.
+- `yarn start` starts the application in production mode. The application should be compiled with `yarn build` first.
 
-**Important**: When you import your project on Vercel, make sure to click on **Environment Variables** and set them to match your `.env.local` file.
+### Tech stack
 
-#### Deploy from Our Template
+- **Hosting (TBD):** [Vercel](https://aws.amazon.com/ec2/) - A cloud platform for static sites and Serverless Functions.
+- **Front End Framework:** [Next.js](https://nextjs.org/) - A React framework for developing single page and multi-page JavaScript applications and websites.
+- **Database:** [MongoDB](https://www.mongodb.com/) - MongoDB is a general purpose, document-based, distributed database.
 
-Alternatively, you can deploy using our template by clicking on the Deploy button below.
+---
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/import/git?c=1&s=https://github.com/vercel/next.js/tree/canary/examples/with-mongodb&env=MONGODB_URI,MONGODB_DB&envDescription=Required%20to%20connect%20the%20app%20with%20MongoDB)
+## Contribute
+
+If you would like to get involved in any way, feel free to give our [Contributing document](https://github.com/SamSverko/flatbread/blob/main/docs/CONTRIBUTING.md) a visit :blush:
