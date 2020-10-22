@@ -69,6 +69,7 @@ We're not quite there yet, however we will most likely be deploying this app to 
 
 - `yarn build` creates an optimized production build of your application. The output displays information about each route.
 - `yarn dev` starts the application in development mode with hot-code reloading, error reporting, and more.
+- `yarn lint` runs ESLint towards all project directories and files except those specified inside the `.eslintignore` configuration file.
 - `yarn start` starts the application in production mode. The application should be compiled with `yarn build` first.
 
 ### Tech stack

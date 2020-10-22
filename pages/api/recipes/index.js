@@ -1,18 +1,18 @@
-import { connectToDatabase } from "../../../util/mongodb";
+import { connectToDatabase } from '../../../util/mongodb'
 
 export default async (req, res) => {
-  const { db } = await connectToDatabase();
+  const { db } = await connectToDatabase()
 
-  let response;
+  let response
 
   if (req.query.title) {
     response = await db
-      .collection("recipes")
+      .collection('recipes')
       .find({ $text: { $search: req.query.title } })
-      .toArray();
+      .toArray()
   } else {
-    response = await db.collection("recipes").find({}).toArray();
+    response = await db.collection('recipes').find({}).toArray()
   }
 
-  res.json(response);
-};
+  res.json(response)
+}

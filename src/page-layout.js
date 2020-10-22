@@ -5,65 +5,66 @@ import {
   Link,
   Toolbar,
   Typography,
-} from "@material-ui/core";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import LocationOnIcon from "@material-ui/icons/LocationOn";
-import RestoreIcon from "@material-ui/icons/Restore";
-import React, { useState } from "react";
+} from '@material-ui/core'
+import { makeStyles, withStyles } from '@material-ui/core/styles'
+import FavoriteIcon from '@material-ui/icons/Favorite'
+import LocationOnIcon from '@material-ui/icons/LocationOn'
+import RestoreIcon from '@material-ui/icons/Restore'
+import PropTypes from 'prop-types'
+import React, { useState } from 'react'
 
 const useStyles = makeStyles((theme) => {
   return {
     pageContainer: {
-      display: "flex",
-      flexDirection: "column",
-      flexWrap: "nowrap",
-      width: "100%",
+      display: 'flex',
+      flexDirection: 'column',
+      flexWrap: 'nowrap',
+      width: '100%',
     },
     content: {
-      display: "flex",
-      flexDirection: "column",
+      display: 'flex',
+      flexDirection: 'column',
       flexGrow: 1,
-      overflow: "auto",
+      overflow: 'auto',
       padding: theme.spacing(2),
     },
-  };
-});
+  }
+})
 
 const StyledAppBar = withStyles((theme) => {
   return {
     root: {
       flexShrink: 0,
-      "& .MuiTypography-root": {
+      '& .MuiTypography-root': {
         color: theme.palette.common.white,
-        "&:hover": {
-          textDecoration: "none",
+        '&:hover': {
+          textDecoration: 'none',
         },
       },
     },
-  };
-})(AppBar);
+  }
+})(AppBar)
 
-const StyledToolbar = withStyles((theme) => {
+const StyledToolbar = withStyles(() => {
   return {
     root: {
-      display: "flex",
-      justifyContent: "center",
+      display: 'flex',
+      justifyContent: 'center',
     },
-  };
-})(Toolbar);
+  }
+})(Toolbar)
 
-const StyledBottomNavigation = withStyles((theme) => {
+const StyledBottomNavigation = withStyles(() => {
   return {
     root: {
       flexShrink: 0,
     },
-  };
-})(BottomNavigation);
+  }
+})(BottomNavigation)
 
 export default function PageLayout(props) {
-  const classes = useStyles();
-  const [value, setValue] = useState(0);
+  const classes = useStyles()
+  const [value, setValue] = useState(0)
 
   return (
     <div className={classes.pageContainer}>
@@ -83,7 +84,7 @@ export default function PageLayout(props) {
       {!props.noFooter && (
         <StyledBottomNavigation
           onChange={(event, newValue) => {
-            setValue(newValue);
+            setValue(newValue)
           }}
           showLabels
           value={value}
@@ -94,5 +95,10 @@ export default function PageLayout(props) {
         </StyledBottomNavigation>
       )}
     </div>
-  );
+  )
+}
+
+PageLayout.propTypes = {
+  children: PropTypes.any,
+  noFooter: PropTypes.bool,
 }

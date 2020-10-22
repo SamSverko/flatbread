@@ -1,4 +1,4 @@
-import { yupResolver } from "@hookform/resolvers";
+import { yupResolver } from '@hookform/resolvers'
 import {
   Box,
   Button,
@@ -8,114 +8,115 @@ import {
   Link,
   TextField,
   Typography,
-} from "@material-ui/core";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
-import { fade } from "@material-ui/core/styles/colorManipulator";
-import AccessTimeIcon from "@material-ui/icons/AccessTime";
-import GroupWorkIcon from "@material-ui/icons/GroupWork";
-import RestaurantMenuIcon from "@material-ui/icons/RestaurantMenu";
-import { Alert } from "@material-ui/lab";
-import axios from "axios";
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
-import * as yup from "yup";
+} from '@material-ui/core'
+import { makeStyles, withStyles } from '@material-ui/core/styles'
+import { fade } from '@material-ui/core/styles/colorManipulator'
+import AccessTimeIcon from '@material-ui/icons/AccessTime'
+import GroupWorkIcon from '@material-ui/icons/GroupWork'
+import RestaurantMenuIcon from '@material-ui/icons/RestaurantMenu'
+import { Alert } from '@material-ui/lab'
+import axios from 'axios'
+import PropTypes from 'prop-types'
+import React, { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import * as yup from 'yup'
 
-import { connectToDatabase } from "../util/mongodb";
+import { connectToDatabase } from '../util/mongodb'
 
 const useStyles = makeStyles((theme) => {
   return {
     pageContainer: {
-      display: "flex",
-      flexDirection: "column",
-      height: "100%",
-      justifyContent: "center",
-      margin: "0 auto",
+      display: 'flex',
+      flexDirection: 'column',
+      height: '100%',
+      justifyContent: 'center',
+      margin: '0 auto',
       maxWidth: `${theme.breakpoints.values.sm}px`,
-      width: "100%",
+      width: '100%',
     },
-  };
-});
+  }
+})
 
 const StyledSearchCard = withStyles((theme) => {
   return {
     root: {
       margin: `0 auto ${theme.spacing(2)}px auto`,
       padding: theme.spacing(1),
-      textAlign: "center",
-      width: "100%",
-      "& .MuiCardContent-root": {
+      textAlign: 'center',
+      width: '100%',
+      '& .MuiCardContent-root': {
         paddingBottom: `${theme.spacing(1)}px !important`,
       },
-      "& .MuiTextField-root": {
+      '& .MuiTextField-root': {
         margin: `0 0 ${theme.spacing(2)}px 0`,
       },
     },
-  };
-})(Card);
+  }
+})(Card)
 
 const StyledAlert = withStyles((theme) => {
   return {
     root: {
       margin: `0 0 ${theme.spacing(2)}px 0`,
     },
-  };
-})(Alert);
+  }
+})(Alert)
 
 const StyledRecipeCard = withStyles((theme) => {
   return {
     root: {
       margin: `0 auto ${theme.spacing(2)}px auto`,
       padding: `0 0 ${theme.spacing(1)}px 0`,
-      textAlign: "center",
-      width: "100%",
-      "& .card-recipe-source": {
+      textAlign: 'center',
+      width: '100%',
+      '& .card-recipe-source': {
         backgroundColor: fade(theme.palette.primary.main, 0.1),
         padding: theme.spacing(2),
       },
-      "& .card-recipe-duration-yield": {
-        alignItems: "center",
-        display: "flex",
-        justifyContent: "space-evenly",
+      '& .card-recipe-duration-yield': {
+        alignItems: 'center',
+        display: 'flex',
+        justifyContent: 'space-evenly',
       },
-      "& .MuiCardActions-root": {
-        display: "flex",
-        justifyContent: "center",
+      '& .MuiCardActions-root': {
+        display: 'flex',
+        justifyContent: 'center',
       },
-      "& .MuiLink-root": {
-        "&:hover": {
-          textDecoration: "none",
+      '& .MuiLink-root': {
+        '&:hover': {
+          textDecoration: 'none',
         },
       },
     },
-  };
-})(Card);
+  }
+})(Card)
 
 export default function Home({ isConnected }) {
-  const classes = useStyles();
+  const classes = useStyles()
 
-  const [recipes, setRecipes] = useState(false);
-  const [hideAlerts, setHideAlerts] = useState(false);
+  const [recipes, setRecipes] = useState(false)
+  const [hideAlerts, setHideAlerts] = useState(false)
 
   const schema = yup.object().shape({
     title: yup.string().trim().lowercase().min(4).required(),
-  });
+  })
 
   const { errors, handleSubmit, register } = useForm({
     resolver: yupResolver(schema),
-  });
+  })
 
   const onSubmit = (data) => {
     axios
       .post(`/api/recipes?title=${data.title}`, data)
       .then(function (response) {
-        console.log(response.data);
-        setRecipes(response.data);
-        setHideAlerts(false);
+        console.log(response.data)
+        setRecipes(response.data)
+        setHideAlerts(false)
       })
       .catch(function (error) {
-        console.log(error);
-      });
-  };
+        console.log(error)
+      })
+  }
 
   return (
     <div className={classes.pageContainer}>
@@ -135,7 +136,7 @@ export default function Home({ isConnected }) {
           <form onSubmit={handleSubmit(onSubmit)}>
             {/* title */}
             <TextField
-              error={typeof errors.title !== "undefined"}
+              error={typeof errors.title !== 'undefined'}
               fullWidth
               helperText={errors.title?.message}
               id="form-title"
@@ -160,7 +161,7 @@ export default function Home({ isConnected }) {
       {!hideAlerts && recipes && recipes.length === 0 && (
         <Alert
           onClose={() => {
-            setHideAlerts(true);
+            setHideAlerts(true)
           }}
           severity="warning"
         >
@@ -170,11 +171,11 @@ export default function Home({ isConnected }) {
       {!hideAlerts && recipes && recipes.length !== 0 && (
         <StyledAlert
           onClose={() => {
-            setHideAlerts(true);
+            setHideAlerts(true)
           }}
           severity="success"
         >
-          {recipes.length} recipe{recipes.length > 1 ? "s" : ""} found!
+          {recipes.length} recipe{recipes.length > 1 ? 's' : ''} found!
         </StyledAlert>
       )}
 
@@ -219,7 +220,7 @@ export default function Home({ isConnected }) {
                     </Typography>
                     <Typography>
                       {recipe.duration.prepTime} min
-                      {recipe.duration.prepTime > 1 ? "s" : ""}
+                      {recipe.duration.prepTime > 1 ? 's' : ''}
                     </Typography>
                   </div>
                   <div>
@@ -229,7 +230,7 @@ export default function Home({ isConnected }) {
                     </Typography>
                     <Typography>
                       {recipe.duration.cookTime} min
-                      {recipe.duration.cookTime > 1 ? "s" : ""}
+                      {recipe.duration.cookTime > 1 ? 's' : ''}
                     </Typography>
                   </div>
                   <div>
@@ -255,15 +256,19 @@ export default function Home({ isConnected }) {
         </div>
       )}
     </div>
-  );
+  )
+}
+
+Home.propTypes = {
+  isConnected: PropTypes.bool,
 }
 
 export async function getServerSideProps() {
-  const { client } = await connectToDatabase();
+  const { client } = await connectToDatabase()
 
-  const isConnected = await client.isConnected();
+  const isConnected = await client.isConnected()
 
   return {
     props: { isConnected },
-  };
+  }
 }

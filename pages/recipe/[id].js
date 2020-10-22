@@ -1,44 +1,44 @@
-import { Card, CardContent, Typography } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { Alert } from "@material-ui/lab";
-import { useRouter } from "next/router";
-import React, { useEffect, useState } from "react";
+import { Card, CardContent, Typography } from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
+import { Alert } from '@material-ui/lab'
+import { useRouter } from 'next/router'
+import React, { useEffect, useState } from 'react'
 
 const useStyles = makeStyles((theme) => {
   return {
     alert: {
       margin: `0 0 ${theme.spacing(2)}px 0`,
     },
-  };
-});
+  }
+})
 
 export default function Recipe() {
-  const router = useRouter();
-  const { id } = router.query;
+  const router = useRouter()
+  const { id } = router.query
 
-  const [recipe, setRecipe] = useState(false);
+  const [recipe, setRecipe] = useState(false)
 
-  const classes = useStyles();
+  const classes = useStyles()
 
   useEffect(() => {
     async function fetchData() {
       // /api/recipes/5f832c34e97769961f0375d1
       if (id) {
-        fetch("/api/recipes/5f832c34e97769961f0375d1")
+        fetch('/api/recipes/5f832c34e97769961f0375d1')
           .then((res) => res.json())
           .then(
             (result) => {
-              console.log(result);
-              setRecipe(result);
+              console.log(result)
+              setRecipe(result)
             },
             (error) => {
-              setRecipe(error);
-            }
-          );
+              setRecipe(error)
+            },
+          )
       }
     }
-    fetchData();
-  }, [id]);
+    fetchData()
+  }, [id])
 
   return (
     <div>
@@ -62,5 +62,5 @@ export default function Recipe() {
         </Card>
       )}
     </div>
-  );
+  )
 }

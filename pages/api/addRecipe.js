@@ -1,16 +1,16 @@
-import { connectToDatabase } from "../../util/mongodb";
+import { connectToDatabase } from '../../util/mongodb'
 
 export default async (req, res) => {
-  if (req.method === "POST") {
+  if (req.method === 'POST') {
     const recipeToInsert = {
       title: req.body.title.toLowerCase(),
       courseTypes: req.body.courseTypes.map((courseType) =>
-        courseType.toLowerCase()
+        courseType.toLowerCase(),
       ),
       dishTypes: req.body.dishTypes.map((dishType) => dishType.toLowerCase()),
       cuisines: req.body.cuisines.map((cuisine) => cuisine.toLowerCase()),
       dietaryRestrictions: req.body.dietaryRestrictions.map(
-        (dietaryRestriction) => dietaryRestriction.toLowerCase()
+        (dietaryRestriction) => dietaryRestriction.toLowerCase(),
       ),
       source: {
         name: req.body.source.name.toLowerCase(),
@@ -27,29 +27,29 @@ export default async (req, res) => {
       ingredients: req.body.ingredients,
       steps: req.body.steps,
       notes: req.body.notes,
-    };
+    }
 
     if (req.body.adminCode === process.env.ADD_RECIPE_SECRET) {
-      const { db } = await connectToDatabase();
-      const result = await db.collection("recipes").insertOne(recipeToInsert);
+      const { db } = await connectToDatabase()
+      const result = await db.collection('recipes').insertOne(recipeToInsert)
       if (result.insertedCount < 1) {
         res.send({
-          status: "error",
-          details: "Error adding recipe to the database",
-        });
+          status: 'error',
+          details: 'Error adding recipe to the database',
+        })
       } else {
         res.send({
-          status: "success",
-          details: "Recipe added to the database",
-        });
+          status: 'success',
+          details: 'Recipe added to the database',
+        })
       }
     } else {
       res.send({
-        status: "error",
-        details: "Incorrect Admin Code",
-      });
+        status: 'error',
+        details: 'Incorrect Admin Code',
+      })
     }
   } else {
-    res.redirect("/");
+    res.redirect('/')
   }
-};
+}
