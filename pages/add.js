@@ -1,4 +1,4 @@
-import { yupResolver } from "@hookform/resolvers";
+import { yupResolver } from '@hookform/resolvers'
 import {
   Checkbox,
   FormControl,
@@ -8,14 +8,15 @@ import {
   FormLabel,
   TextField,
   Typography,
-} from "@material-ui/core";
-import { Alert, Autocomplete } from "@material-ui/lab";
-import axios from "axios";
-import React, { useState } from "react";
-import { Controller, useForm, useFieldArray } from "react-hook-form";
-import * as yup from "yup";
+} from '@material-ui/core'
+import { Alert, Autocomplete } from '@material-ui/lab'
+import axios from 'axios'
+import PropTypes from 'prop-types'
+import React, { useState } from 'react'
+import { Controller, useForm, useFieldArray } from 'react-hook-form'
+import * as yup from 'yup'
 
-import { connectToDatabase } from "../util/mongodb";
+import { connectToDatabase } from '../util/mongodb'
 
 export default function Add({
   courseTypes,
@@ -25,8 +26,8 @@ export default function Add({
   ingredientUnits,
   ingredientNames,
 }) {
-  const [formError, setFormError] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState(false);
+  const [formError, setFormError] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState(false)
 
   const schema = yup.object().shape({
     title: yup.string().trim().lowercase().min(4).required(),
@@ -61,7 +62,7 @@ export default function Add({
             .lowercase()
             .matches(/^$|([a-zA-Z0-9]+,?\s*)+$/g)
             .nullable(),
-        })
+        }),
       )
       .min(1)
       .required(),
@@ -71,21 +72,21 @@ export default function Add({
         yup.object({
           section: yup.string().trim().lowercase(),
           description: yup.string().trim().required(),
-        })
+        }),
       )
       .min(1)
       .required(),
     notes: yup.array().of(
       yup.object({
         description: yup.string().trim(),
-      })
+      }),
     ),
     adminCode: yup.string().trim().required(),
-  });
+  })
 
   const { control, errors, handleSubmit, register } = useForm({
     resolver: yupResolver(schema),
-  });
+  })
 
   const {
     fields: ingredients,
@@ -93,8 +94,8 @@ export default function Add({
     remove: ingredientsRemove,
   } = useFieldArray({
     control,
-    name: "ingredients",
-  });
+    name: 'ingredients',
+  })
 
   const {
     fields: steps,
@@ -102,8 +103,8 @@ export default function Add({
     remove: stepsRemove,
   } = useFieldArray({
     control,
-    name: "steps",
-  });
+    name: 'steps',
+  })
 
   const {
     fields: notes,
@@ -111,53 +112,53 @@ export default function Add({
     remove: notesRemove,
   } = useFieldArray({
     control,
-    name: "notes",
-  });
+    name: 'notes',
+  })
 
   const onSubmit = (data) => {
     if (
       !data.courseTypes.every((courseType) => courseTypes.includes(courseType))
     ) {
-      setFormError("Improper Course Type data value in form");
+      setFormError('Improper Course Type data value in form')
     } else if (
       !data.dishTypes.every((dishType) => dishTypes.includes(dishType))
     ) {
-      setFormError("Improper Dish Type data value in form");
+      setFormError('Improper Dish Type data value in form')
     } else if (!data.cuisines.every((cuisine) => cuisines.includes(cuisine))) {
-      setFormError("Improper Cuisine data value in form");
+      setFormError('Improper Cuisine data value in form')
     } else if (
       !data.dietaryRestrictions.every((dietaryRestriction) =>
-        dietaryRestrictions.includes(dietaryRestriction)
+        dietaryRestrictions.includes(dietaryRestriction),
       )
     ) {
-      setFormError("Improper Dietary Restriction data value in form");
+      setFormError('Improper Dietary Restriction data value in form')
     } else if (
       !data.ingredients.every((ingredient) =>
-        ingredientNames.includes(ingredient.name)
+        ingredientNames.includes(ingredient.name),
       )
     ) {
-      setFormError("Improper Ingredient Name data value in form");
+      setFormError('Improper Ingredient Name data value in form')
     }
 
     // format ingredients.substitutions from string, to array of strings
-    let formattedIngredients = [...data.ingredients];
+    let formattedIngredients = [...data.ingredients]
     data.ingredients.forEach((ingredient, index) => {
       formattedIngredients[
         index
-      ].substitutions = ingredient.substitutions.split(",");
-    });
+      ].substitutions = ingredient.substitutions.split(',')
+    })
 
     if (!formError) {
       axios
-        .post("/api/addRecipe", data)
+        .post('/api/addRecipe', data)
         .then(function (response) {
-          setSubmitStatus(response.data);
+          setSubmitStatus(response.data)
         })
         .catch(function (error) {
-          console.log(error);
-        });
+          console.log(error)
+        })
     }
-  };
+  }
 
   return (
     <div>
@@ -168,19 +169,19 @@ export default function Add({
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* title */}
         <TextField
-          error={typeof errors.title !== "undefined"}
+          error={typeof errors.title !== 'undefined'}
           helperText={errors.title?.message}
           id="form-title"
           inputRef={register}
           label="Title"
           name="title"
-          style={{ margin: "0 0 40px 0" }}
+          style={{ margin: '0 0 40px 0' }}
         />
         <br />
         {/* course types */}
-        <FormControl component="fieldset" style={{ margin: "0 0 40px 0" }}>
+        <FormControl component="fieldset" style={{ margin: '0 0 40px 0' }}>
           <FormLabel
-            error={typeof errors.courseTypes !== "undefined"}
+            error={typeof errors.courseTypes !== 'undefined'}
             component="legend"
           >
             Course Types
@@ -196,7 +197,7 @@ export default function Add({
                     color="primary"
                     id={`form-courseTypes-${index}`}
                     inputRef={register}
-                    name={`courseTypes`}
+                    name={'courseTypes'}
                     type="checkbox"
                     value={item}
                   />
@@ -209,9 +210,9 @@ export default function Add({
         </FormControl>
         <br />
         {/* dish types */}
-        <FormControl component="fieldset" style={{ margin: "0 0 40px 0" }}>
+        <FormControl component="fieldset" style={{ margin: '0 0 40px 0' }}>
           <FormLabel
-            error={typeof errors.dishTypes !== "undefined"}
+            error={typeof errors.dishTypes !== 'undefined'}
             component="legend"
           >
             Dish Types
@@ -227,7 +228,7 @@ export default function Add({
                     color="primary"
                     id={`form-dishTypes-${index}`}
                     inputRef={register}
-                    name={`dishTypes`}
+                    name={'dishTypes'}
                     type="checkbox"
                     value={item}
                   />
@@ -240,9 +241,9 @@ export default function Add({
         </FormControl>
         <br />
         {/* cuisines */}
-        <FormControl component="fieldset" style={{ margin: "0 0 40px 0" }}>
+        <FormControl component="fieldset" style={{ margin: '0 0 40px 0' }}>
           <FormLabel
-            error={typeof errors.cuisines !== "undefined"}
+            error={typeof errors.cuisines !== 'undefined'}
             component="legend"
           >
             Cuisines
@@ -258,7 +259,7 @@ export default function Add({
                     color="primary"
                     id={`form-cuisines-${index}`}
                     inputRef={register}
-                    name={`cuisines`}
+                    name={'cuisines'}
                     type="checkbox"
                     value={item}
                   />
@@ -271,9 +272,9 @@ export default function Add({
         </FormControl>
         <br />
         {/* dietaryRestrictions */}
-        <FormControl component="fieldset" style={{ margin: "0 0 40px 0" }}>
+        <FormControl component="fieldset" style={{ margin: '0 0 40px 0' }}>
           <FormLabel
-            error={typeof errors.dietaryRestrictions !== "undefined"}
+            error={typeof errors.dietaryRestrictions !== 'undefined'}
             component="legend"
           >
             Dietary Restrictions
@@ -289,7 +290,7 @@ export default function Add({
                     color="primary"
                     id={`form-dietaryRestrictions-${index}`}
                     inputRef={register}
-                    name={`dietaryRestrictions`}
+                    name={'dietaryRestrictions'}
                     type="checkbox"
                     value={item}
                   />
@@ -306,23 +307,23 @@ export default function Add({
           Source
         </Typography>
         <TextField
-          error={typeof errors.source?.name !== "undefined"}
+          error={typeof errors.source?.name !== 'undefined'}
           helperText={errors.source?.name?.message}
           id="form-source-name"
           inputRef={register}
           label="Source Name"
           name="source.name"
-          style={{ margin: "0 0 10px 0" }}
+          style={{ margin: '0 0 10px 0' }}
         />
         <br />
         <TextField
-          error={typeof errors.source?.url !== "undefined"}
+          error={typeof errors.source?.url !== 'undefined'}
           helperText={errors.source?.url?.message}
           id="form-source-url"
           inputRef={register}
           label="Source URL"
           name="source.url"
-          style={{ margin: "0 0 40px 0" }}
+          style={{ margin: '0 0 40px 0' }}
         />
         <br />
         {/* yield */}
@@ -330,28 +331,28 @@ export default function Add({
           Yield
         </Typography>
         <TextField
-          error={typeof errors.yield?.amount !== "undefined"}
+          error={typeof errors.yield?.amount !== 'undefined'}
           helperText={errors.yield?.amount?.message}
           id="form-yield-amount"
           inputRef={register}
           label="Yield Amount"
           name="yield.amount"
-          style={{ margin: "0 0 10px 0" }}
+          style={{ margin: '0 0 10px 0' }}
           type="number"
         />
         <br />
         <TextField
-          error={typeof errors.yield?.unit !== "undefined"}
+          error={typeof errors.yield?.unit !== 'undefined'}
           helperText={
             errors.yield?.unit?.message
               ? errors.yield?.unit?.message
-              : "Example: cookies, burgers, servings, etc."
+              : 'Example: cookies, burgers, servings, etc.'
           }
           id="form-yield-unit"
           inputRef={register}
           label="Yield Unit"
           name="yield.unit"
-          style={{ margin: "0 0 10px 0", maxWidth: 167, width: "100%" }}
+          style={{ margin: '0 0 10px 0', maxWidth: 167, width: '100%' }}
         />
         <br />
         {/* duration */}
@@ -359,32 +360,32 @@ export default function Add({
           Duration
         </Typography>
         <TextField
-          error={typeof errors.duration?.prepTime !== "undefined"}
+          error={typeof errors.duration?.prepTime !== 'undefined'}
           helperText={
             errors.duration?.prepTime?.message
               ? errors.duration?.prepTime?.message
-              : "In minutes."
+              : 'In minutes.'
           }
           id="form-duration-prepTime"
           inputRef={register}
           label="Prep Time"
           name="duration.prepTime"
-          style={{ margin: "0 0 10px 0" }}
+          style={{ margin: '0 0 10px 0' }}
           type="number"
         />
         <br />
         <TextField
-          error={typeof errors.duration?.cookTime !== "undefined"}
+          error={typeof errors.duration?.cookTime !== 'undefined'}
           helperText={
             errors.duration?.cookTime?.message
               ? errors.duration?.cookTime?.message
-              : "In minutes."
+              : 'In minutes.'
           }
           id="form-duration-cookTime"
           inputRef={register}
           label="Cook Time"
           name="duration.cookTime"
-          style={{ margin: "0 0 40px 0" }}
+          style={{ margin: '0 0 40px 0' }}
           type="number"
         />
         <br />
@@ -393,12 +394,12 @@ export default function Add({
           <Typography component="h2" gutterBottom variant="h4">
             Ingredients
           </Typography>
-          {typeof errors !== "undefined" &&
-            typeof errors.ingredients !== "undefined" && (
-              <FormHelperText className="Mui-error">
+          {typeof errors !== 'undefined' &&
+            typeof errors.ingredients !== 'undefined' && (
+            <FormHelperText className="Mui-error">
                 Please fill out at least one ingredient.
-              </FormHelperText>
-            )}
+            </FormHelperText>
+          )}
           {ingredients.map((ingredient, index) => (
             <div key={ingredient.id}>
               <Typography component="h3" gutterBottom variant="h5">
@@ -409,29 +410,29 @@ export default function Add({
                 inputRef={register}
                 label="Section"
                 name={`ingredients[${index}].section`}
-                style={{ margin: "0 0 10px 0" }}
+                style={{ margin: '0 0 10px 0' }}
               />
               <br />
               <TextField
                 error={
-                  typeof errors !== "undefined" &&
-                  typeof errors.ingredients !== "undefined" &&
-                  typeof errors.ingredients[index] !== "undefined" &&
-                  typeof errors.ingredients[index].amount !== "undefined"
+                  typeof errors !== 'undefined' &&
+                  typeof errors.ingredients !== 'undefined' &&
+                  typeof errors.ingredients[index] !== 'undefined' &&
+                  typeof errors.ingredients[index].amount !== 'undefined'
                 }
                 helperText={
-                  typeof errors !== "undefined" &&
-                  typeof errors.ingredients !== "undefined" &&
-                  typeof errors.ingredients[index] !== "undefined" &&
-                  typeof errors.ingredients[index].amount !== "undefined"
+                  typeof errors !== 'undefined' &&
+                  typeof errors.ingredients !== 'undefined' &&
+                  typeof errors.ingredients[index] !== 'undefined' &&
+                  typeof errors.ingredients[index].amount !== 'undefined'
                     ? errors.ingredients[index].amount.message
-                    : ""
+                    : ''
                 }
                 id={`ingredients[${index}].amount`}
                 inputRef={register}
                 label="Amount"
                 name={`ingredients[${index}].amount`}
-                style={{ margin: "0 0 10px 0" }}
+                style={{ margin: '0 0 10px 0' }}
                 type="number"
               />
               <br />
@@ -446,9 +447,9 @@ export default function Add({
                         {...params}
                         label="Unit"
                         style={{
-                          margin: "0 0 10px 0",
+                          margin: '0 0 10px 0',
                           maxWidth: 167,
-                          width: "100%",
+                          width: '100%',
                         }}
                       />
                     )}
@@ -473,9 +474,9 @@ export default function Add({
                         {...params}
                         label="Name"
                         style={{
-                          margin: "0 0 10px 0",
+                          margin: '0 0 10px 0',
                           maxWidth: 167,
-                          width: "100%",
+                          width: '100%',
                         }}
                       />
                     )}
@@ -494,7 +495,7 @@ export default function Add({
                 inputRef={register}
                 label="Alteration"
                 name={`ingredients[${index}].alteration`}
-                style={{ margin: "0 0 10px 0" }}
+                style={{ margin: '0 0 10px 0' }}
               />
               <br />
               <Controller
@@ -509,9 +510,9 @@ export default function Add({
                         {...params}
                         label="Substitutions"
                         style={{
-                          margin: "0 0 10px 0",
+                          margin: '0 0 10px 0',
                           maxWidth: 167,
-                          width: "100%",
+                          width: '100%',
                         }}
                       />
                     )}
@@ -528,7 +529,7 @@ export default function Add({
               {ingredients.length > 1 && (
                 <button
                   onClick={() => ingredientsRemove(index)}
-                  style={{ margin: "0 0 10px 0" }}
+                  style={{ margin: '0 0 10px 0' }}
                 >
                   Remove Ingredient
                 </button>
@@ -538,7 +539,7 @@ export default function Add({
           <button
             type="button"
             onClick={() => ingredientsAppend()}
-            style={{ margin: "0 0 40px 0" }}
+            style={{ margin: '0 0 40px 0' }}
           >
             Add Ingredient
           </button>
@@ -548,12 +549,12 @@ export default function Add({
           <Typography component="h2" gutterBottom variant="h4">
             Steps
           </Typography>
-          {typeof errors !== "undefined" &&
-            typeof errors.steps !== "undefined" && (
-              <FormHelperText className="Mui-error">
+          {typeof errors !== 'undefined' &&
+            typeof errors.steps !== 'undefined' && (
+            <FormHelperText className="Mui-error">
                 Please fill out at least one step.
-              </FormHelperText>
-            )}
+            </FormHelperText>
+          )}
           {steps.map((step, index) => (
             <div key={step.id}>
               <Typography component="h3" gutterBottom variant="h5">
@@ -564,35 +565,35 @@ export default function Add({
                 inputRef={register}
                 label="Section"
                 name={`steps[${index}].section`}
-                style={{ margin: "0 0 10px 0" }}
+                style={{ margin: '0 0 10px 0' }}
               />
               <br />
               <TextField
                 error={
-                  typeof errors !== "undefined" &&
-                  typeof errors.steps !== "undefined" &&
-                  typeof errors.steps[index] !== "undefined" &&
-                  typeof errors.steps[index].description !== "undefined"
+                  typeof errors !== 'undefined' &&
+                  typeof errors.steps !== 'undefined' &&
+                  typeof errors.steps[index] !== 'undefined' &&
+                  typeof errors.steps[index].description !== 'undefined'
                 }
                 helperText={
-                  typeof errors !== "undefined" &&
-                  typeof errors.steps !== "undefined" &&
-                  typeof errors.steps[index] !== "undefined" &&
-                  typeof errors.steps[index].description !== "undefined"
+                  typeof errors !== 'undefined' &&
+                  typeof errors.steps !== 'undefined' &&
+                  typeof errors.steps[index] !== 'undefined' &&
+                  typeof errors.steps[index].description !== 'undefined'
                     ? errors.steps[index].description.message
-                    : ""
+                    : ''
                 }
                 id={`steps[${index}].description`}
                 inputRef={register}
                 label="Description"
                 name={`steps[${index}].description`}
-                style={{ margin: "0 0 10px 0" }}
+                style={{ margin: '0 0 10px 0' }}
               />
               <br />
               {steps.length > 1 && (
                 <button
                   onClick={() => stepsRemove(index)}
-                  style={{ margin: "0 0 10px 0" }}
+                  style={{ margin: '0 0 10px 0' }}
                 >
                   Remove Step
                 </button>
@@ -602,7 +603,7 @@ export default function Add({
           <button
             type="button"
             onClick={() => stepsAppend()}
-            style={{ margin: "0 0 40px 0" }}
+            style={{ margin: '0 0 40px 0' }}
           >
             Add Step
           </button>
@@ -622,13 +623,13 @@ export default function Add({
                 inputRef={register}
                 label="Note"
                 name={`notes[${index}].description`}
-                style={{ margin: "0 0 10px 0" }}
+                style={{ margin: '0 0 10px 0' }}
               />
               <br />
               {notes.length > 1 && (
                 <button
                   onClick={() => notesRemove(index)}
-                  style={{ margin: "0 0 10px 0" }}
+                  style={{ margin: '0 0 10px 0' }}
                 >
                   Remove Note
                 </button>
@@ -638,24 +639,24 @@ export default function Add({
           <button
             type="button"
             onClick={() => notesAppend()}
-            style={{ margin: "0 0 40px 0" }}
+            style={{ margin: '0 0 40px 0' }}
           >
             Add Note
           </button>
         </div>
         {/* admin code */}
         <TextField
-          error={typeof errors.adminCode !== "undefined"}
+          error={typeof errors.adminCode !== 'undefined'}
           helperText={
             errors.adminCode?.message
               ? errors.adminCode?.message
-              : "Only admins can add new recipes at this time."
+              : 'Only admins can add new recipes at this time.'
           }
           id="form-adminCode"
           inputRef={register}
           label="Admin Code"
           name="adminCode"
-          style={{ margin: "0 0 40px 0" }}
+          style={{ margin: '0 0 40px 0' }}
           type="password"
         />
         <br />
@@ -664,39 +665,48 @@ export default function Add({
           {formError && (
             <FormHelperText className="Mui-error">{formError}</FormHelperText>
           )}
-          {submitStatus.status === "error" && (
+          {submitStatus.status === 'error' && (
             <Alert severity="error">
               Recipe Not Added To Database | {submitStatus.details}
             </Alert>
           )}
-          {submitStatus.status === "success" && (
+          {submitStatus.status === 'success' && (
             <Alert severity="success">{submitStatus.details}</Alert>
           )}
           <input type="submit" />
         </div>
       </form>
     </div>
-  );
+  )
+}
+
+Add.propTypes = {
+  courseTypes: PropTypes.arrayOf(PropTypes.string),
+  cuisines: PropTypes.arrayOf(PropTypes.string),
+  dietaryRestrictions: PropTypes.arrayOf(PropTypes.string),
+  dishTypes: PropTypes.arrayOf(PropTypes.string),
+  ingredientUnits: PropTypes.arrayOf(PropTypes.string),
+  ingredientNames: PropTypes.arrayOf(PropTypes.string),
 }
 
 export async function getServerSideProps() {
-  const { db } = await connectToDatabase();
+  const { db } = await connectToDatabase()
 
-  const courseTypes = await db.collection("courseTypes").find({}).toArray();
-  const dishTypes = await db.collection("dishTypes").find({}).toArray();
-  const cuisines = await db.collection("cuisines").find({}).toArray();
+  const courseTypes = await db.collection('courseTypes').find({}).toArray()
+  const dishTypes = await db.collection('dishTypes').find({}).toArray()
+  const cuisines = await db.collection('cuisines').find({}).toArray()
   const dietaryRestrictions = await db
-    .collection("dietaryRestrictions")
+    .collection('dietaryRestrictions')
     .find({})
-    .toArray();
+    .toArray()
   const ingredientUnits = await db
-    .collection("ingredientUnits")
+    .collection('ingredientUnits')
     .find({})
-    .toArray();
+    .toArray()
   const ingredientNames = await db
-    .collection("ingredientNames")
+    .collection('ingredientNames')
     .find({})
-    .toArray();
+    .toArray()
 
   return {
     props: {
@@ -719,5 +729,5 @@ export async function getServerSideProps() {
         .map((ingredientName) => ingredientName.name)
         .sort((a, b) => a.localeCompare(b)),
     },
-  };
+  }
 }

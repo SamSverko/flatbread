@@ -1,17 +1,17 @@
-import { ObjectId } from "mongodb";
+import { ObjectId } from 'mongodb'
 
-import { connectToDatabase } from "../../../util/mongodb";
+import { connectToDatabase } from '../../../util/mongodb'
 
 export default async (req, res) => {
-  const { db } = await connectToDatabase();
+  const { db } = await connectToDatabase()
 
   const {
     query: { id },
-  } = req;
+  } = req
 
-  const recipe = await db.collection("recipes").findOne({
+  const recipe = await db.collection('recipes').findOne({
     _id: ObjectId(id),
-  });
+  })
 
-  res.json(recipe);
-};
+  res.json(recipe)
+}

@@ -1,28 +1,28 @@
-import { createMuiTheme } from "@material-ui/core/styles";
+import { createMuiTheme } from '@material-ui/core/styles'
 
 const theme = createMuiTheme({
   overrides: {
     MuiCssBaseline: {
-      "@global": {
+      '@global': {
         html: {
-          height: "100",
+          height: '100',
         },
         body: {
-          height: "100vh",
+          height: '100vh',
         },
-        "#__next": {
-          display: "flex",
-          minHeight: "100vh",
+        '#__next': {
+          display: 'flex',
+          minHeight: '100vh',
         },
-        ".font-weight-bold": {
-          fontWeight: "bold",
+        '.font-weight-bold': {
+          fontWeight: 'bold',
         },
-        ".text-transform-capitalize": {
-          textTransform: "capitalize",
+        '.text-transform-capitalize': {
+          textTransform: 'capitalize',
         },
       },
     },
   },
-});
+})
 
-export default theme;
+export default theme

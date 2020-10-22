@@ -1,24 +1,25 @@
-import CssBaseline from "@material-ui/core/CssBaseline";
-import { ThemeProvider } from "@material-ui/core/styles";
-import Head from "next/head";
-import { useRouter } from "next/router";
-import React, { useEffect } from "react";
+import CssBaseline from '@material-ui/core/CssBaseline'
+import { ThemeProvider } from '@material-ui/core/styles'
+import Head from 'next/head'
+import { useRouter } from 'next/router'
+import PropTypes from 'prop-types'
+import React, { useEffect } from 'react'
 
-import PageLayout from "../src/page-layout";
-import theme from "../src/theme";
+import PageLayout from '../src/page-layout'
+import theme from '../src/theme'
 
-const NO_FOOTER_ROUTES = ["/", "/add"];
+const NO_FOOTER_ROUTES = ['/', '/add']
 
 export default function MyApp(props) {
-  const { Component, pageProps } = props;
-  const router = useRouter();
+  const { Component, pageProps } = props
+  const router = useRouter()
 
   useEffect(() => {
-    const jssStyles = document.querySelector("#jss-server-side");
+    const jssStyles = document.querySelector('#jss-server-side')
     if (jssStyles) {
-      jssStyles.parentElement.removeChild(jssStyles);
+      jssStyles.parentElement.removeChild(jssStyles)
     }
-  }, []);
+  }, [])
 
   return (
     <>
@@ -36,5 +37,10 @@ export default function MyApp(props) {
         </PageLayout>
       </ThemeProvider>
     </>
-  );
+  )
+}
+
+MyApp.propTypes = {
+  Component: PropTypes.any,
+  pageProps: PropTypes.any,
 }
