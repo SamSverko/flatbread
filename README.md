@@ -18,7 +18,6 @@
 - [DIRECTORY STRUCTURE](https://github.com/SamSverko/flatbread/blob/main/docs/DIRECTORY_STRUCTURE.md)
 - [LICENSE](https://github.com/SamSverko/flatbread/blob/main/docs/LICENSE.md)
 - [RESEARCH](https://github.com/SamSverko/flatbread/blob/main/docs/RESEARCH.md)
-- [SERVER SETUP](https://github.com/SamSverko/flatbread/blob/main/docs/SERVER_SETUP.md)
 
 ---
 
@@ -29,6 +28,8 @@ Flatbread is a **web-based app for recipes**. That's it.
 You might be wondering **"why even build this app?"** considering the dozens of already-existing recipes sites ([All Recipes](https://www.allrecipes.com/), [Epicurious](https://www.epicurious.com/), [Tasty](https://tasty.co/), [Yummly](https://www.yummly.com/) and many, many more) that already contain more recipes (and users) than anyone could even count? For us, it all boils down to **simplicity**. Flatbread wants to be as **lean** as you do on the first day of your new years resolution, as **accessible** as possible to work for **everyone**, and **free**. We were going to continue that list with "as free as possible", but while that would keep the list-trend going, it wouldn't be true. We want Flatbread to be free. Period (see the `.` before the word "Period"). There are enough things that you already pay money for, including food. Flatbread doesn't want to be yet another notch on your 'monthly-subscriptions' belt.
 
 Speaking of spending money on food; while most of us spend somewhere around [**11% of our income on groceries**](https://www.thestreet.com/personal-finance/average-cost-of-food-14845479), Flatbread is looking to do something about that. A later phase of this project will be introducing the **Save-O-Matic Recipe Builder 3000** (working title). This feature will scrape the internet for weekly food flyers and pair what's on sale with what recipes are in the Flatbread database. That way you can save money while you meal prep for the week.
+
+Let's peddle back to the lean segment of Flatbread's goals for a moment.
 
 Thanks for reading this far, friend! If you are interested in this project in any scope, feel free to check out our [Contributing document](https://github.com/SamSverko/flatbread/blob/main/docs/CONTRIBUTING.md), or a message to the project owner (Sam), on Discord (SamTheBigs#3861).
 
