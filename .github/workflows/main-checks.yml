@@ -1,4 +1,4 @@
-name: Master Checks
+name: Main Checks
 on:
   push:
     branches: [ main ]
@@ -52,6 +52,9 @@ jobs:
       run: yarn install --frozen-lockfile
     - name: Build app
       run: yarn build
+      env:
+        MONGODB_URI: ${{ secrets.MONGODB_URI }}
+        MONGODB_DB: ${{ secrets.MONGODB_DB }}
   Check-Dependencies:
     runs-on: ubuntu-latest
     strategy:
