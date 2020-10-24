@@ -1,0 +1,75 @@
+name: Master Checks
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+jobs:
+  Lint-Code:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Set node to v${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Cache packages
+      uses: actions/cache@v2
+      with:
+        path: ${{ github.workspace }}/node_modules
+        key: ${{ runner.OS }}-${{ matrix.node-version }}-node-${{ hashFiles('**/yarn.lock') }}
+    - name: Install packages
+      run: yarn install --frozen-lockfile
+    - name: Lint code
+      run: yarn lint
+  Build-App:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Set node to v${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Cache packages
+      uses: actions/cache@v2
+      with:
+        path: ${{ github.workspace }}/node_modules
+        key: ${{ runner.OS }}-${{ matrix.node-version }}-node-${{ hashFiles('**/yarn.lock') }}
+    - name: Cache app build
+      uses: actions/cache@v2
+      with:
+        path: ${{ github.workspace }}/.next/cache
+        key: ${{ runner.os }}-nextjs-${{ hashFiles('**/yarn.lock') }}
+    - name: Install packages
+      run: yarn install --frozen-lockfile
+    - name: Build app
+      run: yarn build
+  Check-Dependencies:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [14.x]
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Set node to v${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Cache packages
+      uses: actions/cache@v2
+      with:
+        path: ${{ github.workspace }}/node_modules
+        key: ${{ runner.OS }}-${{ matrix.node-version }}-node-${{ hashFiles('**/yarn.lock') }}
+    - name: Install packages
+      run: yarn install --frozen-lockfile
+    - name: Check dependencies
+      run: npx depcheck

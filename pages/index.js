@@ -263,7 +263,7 @@ Home.propTypes = {
   isConnected: PropTypes.bool,
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const { client } = await connectToDatabase()
 
   const isConnected = await client.isConnected()
