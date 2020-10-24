@@ -689,7 +689,7 @@ Add.propTypes = {
   ingredientNames: PropTypes.arrayOf(PropTypes.string),
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const { db } = await connectToDatabase()
 
   const courseTypes = await db.collection('courseTypes').find({}).toArray()
