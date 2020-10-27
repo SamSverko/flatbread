@@ -692,19 +692,28 @@ Add.propTypes = {
 export async function getStaticProps() {
   const { db } = await connectToDatabase()
 
-  const courseTypes = await db.collection('courseTypes').find({}).toArray()
-  const dishTypes = await db.collection('dishTypes').find({}).toArray()
-  const cuisines = await db.collection('cuisines').find({}).toArray()
+  const courseTypes = await db
+    .collection(process.env.MONGODB_COLLECTION_COURSE_TYPES)
+    .find({})
+    .toArray()
+  const dishTypes = await db
+    .collection(process.env.MONGODB_COLLECTION_DISH_TYPES)
+    .find({})
+    .toArray()
+  const cuisines = await db
+    .collection(process.env.MONGODB_COLLECTION_CUISINES)
+    .find({})
+    .toArray()
   const dietaryRestrictions = await db
-    .collection('dietaryRestrictions')
+    .collection(process.env.MONGODB_COLLECTION_DIETARY_RESTRICTIONS)
     .find({})
     .toArray()
   const ingredientUnits = await db
-    .collection('ingredientUnits')
+    .collection(process.env.MONGODB_COLLECTION_INGREDIENT_UNITS)
     .find({})
     .toArray()
   const ingredientNames = await db
-    .collection('ingredientNames')
+    .collection(process.env.MONGODB_COLLECTION_INGREDIENT_NAMES)
     .find({})
     .toArray()
 

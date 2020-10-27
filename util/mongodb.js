@@ -1,6 +1,6 @@
 import { MongoClient } from 'mongodb'
 
-let uri = process.env.MONGODB_URI
+let uri = process.env.MONGODB_URL
 let dbName = process.env.MONGODB_DB
 
 let cachedClient = null
@@ -8,7 +8,7 @@ let cachedDb = null
 
 if (!uri) {
   throw new Error(
-    'Please define the MONGODB_URI environment variable inside .env.local',
+    'Please define the MONGODB_URL environment variable inside .env.local',
   )
 }
 

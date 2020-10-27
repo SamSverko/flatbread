@@ -118,14 +118,16 @@ export default function Home({ isConnected }) {
       })
   }
 
+  if (!isConnected) {
+    return (
+      <Alert severity="error">
+        Error connecting to the database, please try again later.
+      </Alert>
+    )
+  }
+
   return (
     <div className={classes.pageContainer}>
-      {!isConnected && (
-        <Alert severity="error">
-          Error connecting to the database, please try again later.
-        </Alert>
-      )}
-
       {/* search card */}
       <StyledSearchCard>
         <CardContent>
@@ -234,7 +236,9 @@ export default function Home({ isConnected }) {
                     </Typography>
                   </div>
                   <div>
-                    <GroupWorkIcon titleAccess="Circle with three dots in it." />
+                    <GroupWorkIcon
+                      titleAccess="Circle with three dots in it."
+                    />
                     <Typography>
                       <span className="font-weight-bold">Yield</span>
                     </Typography>

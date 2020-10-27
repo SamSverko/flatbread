@@ -19,6 +19,7 @@ module.exports = {
     'eol-last': ['error', 'always'],
     indent: ['error', 2],
     'linebreak-style': ['error', 'unix'],
+    'max-len': ['error', { 'code': 80 }],
     'object-curly-spacing': ['error', 'always'],
     quotes: ['error', 'single', { 'avoidEscape': true }],
     semi: ['error', 'never'],
