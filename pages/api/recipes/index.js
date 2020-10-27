@@ -7,11 +7,14 @@ export default async (req, res) => {
 
   if (req.query.title) {
     response = await db
-      .collection('recipes')
+      .collection(process.env.MONGODB_COLLECTION_RECIPES)
       .find({ $text: { $search: req.query.title } })
       .toArray()
   } else {
-    response = await db.collection('recipes').find({}).toArray()
+    response = await db
+      .collection(process.env.MONGODB_COLLECTION_RECIPES)
+      .find({})
+      .toArray()
   }
 
   res.json(response)

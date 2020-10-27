@@ -31,7 +31,9 @@ export default async (req, res) => {
 
     if (req.body.adminCode === process.env.ADD_RECIPE_SECRET) {
       const { db } = await connectToDatabase()
-      const result = await db.collection('recipes').insertOne(recipeToInsert)
+      const result = await db
+        .collection(process.env.MONGODB_COLLECTION_RECIPES)
+        .insertOne(recipeToInsert)
       if (result.insertedCount < 1) {
         res.send({
           status: 'error',

@@ -9,9 +9,11 @@ export default async (req, res) => {
     query: { id },
   } = req
 
-  const recipe = await db.collection('recipes').findOne({
-    _id: ObjectId(id),
-  })
+  const recipe = await db
+    .collection(process.env.MONGODB_COLLECTION_RECIPES)
+    .findOne({
+      _id: ObjectId(id),
+    })
 
   res.json(recipe)
 }
