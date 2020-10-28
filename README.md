@@ -29,7 +29,15 @@ You might be wondering **"why even build this app?"** considering the dozens of 
 
 Speaking of spending money on food; while most of us spend somewhere around [**11% of our income on groceries**](https://www.thestreet.com/personal-finance/average-cost-of-food-14845479), Flatbread is looking to do something about that. A later phase of this project will be introducing the **Save-O-Matic Recipe Builder 3000** (working title). This feature will scrape the internet for weekly food flyers and pair what's on sale with what recipes are in the Flatbread database. That way you can save money while you meal prep for the week.
 
-Let's peddle back to the lean segment of Flatbread's goals for a moment.
+Let's peddle back to the lean segment of Flatbread's goals for a moment. It is too common for recipe websites to overload the user with bloat content and endless network requests. As a little experiment, we loaded a generic recipe page from three different recipe websites to test the number of network requests as well as the overall page weight. The results were not pretty:
+
+- App 1 had 162 network requests and loaded 1.0 MB of data! ([screenshot](https://github.com/SamSverko/flatbread/blob/main/docs/img/screenshot-1.md))
+- App 2 had 548 network requests and loaded 3.0 MB of data! ([screenshot](https://github.com/SamSverko/flatbread/blob/main/docs/img/screenshot-2.md))
+- App 3 had 484 network requests and loaded 19.0 MB of data! ([screenshot](https://github.com/SamSverko/flatbread/blob/main/docs/img/screenshot-3.md))
+
+Do not get us started on those lovely full-screen popups that appear after a few seconds asking for you to sign up to their newsletter (we have a screenshot [here](https://github.com/SamSverko/flatbread/blob/main/docs/img/screenshot-4.md) and [here](https://github.com/SamSverko/flatbread/blob/main/docs/img/screenshot-5.md)).
+
+We just wanted waffles people! We can do better.
 
 Thanks for reading this far, friend! If you are interested in this project in any scope, feel free to check out our [Contributing document](https://github.com/SamSverko/flatbread/blob/main/docs/CONTRIBUTING.md), or a message to the project owner (Sam), on Discord (SamTheBigs#3861).
 
