@@ -37,60 +37,6 @@ const useStyles = makeStyles((theme) => {
   }
 })
 
-const StyledSearchCard = withStyles((theme) => {
-  return {
-    root: {
-      margin: `0 auto ${theme.spacing(2)}px auto`,
-      padding: theme.spacing(1),
-      textAlign: 'center',
-      width: '100%',
-      '& .MuiCardContent-root': {
-        paddingBottom: `${theme.spacing(1)}px !important`,
-      },
-      '& .MuiTextField-root': {
-        margin: `0 0 ${theme.spacing(2)}px 0`,
-      },
-    },
-  }
-})(Card)
-
-const StyledAlert = withStyles((theme) => {
-  return {
-    root: {
-      margin: `0 0 ${theme.spacing(2)}px 0`,
-    },
-  }
-})(Alert)
-
-const StyledRecipeCard = withStyles((theme) => {
-  return {
-    root: {
-      margin: `0 auto ${theme.spacing(2)}px auto`,
-      padding: `0 0 ${theme.spacing(1)}px 0`,
-      textAlign: 'center',
-      width: '100%',
-      '& .card-recipe-source': {
-        backgroundColor: fade(theme.palette.primary.main, 0.1),
-        padding: theme.spacing(2),
-      },
-      '& .card-recipe-duration-yield': {
-        alignItems: 'center',
-        display: 'flex',
-        justifyContent: 'space-evenly',
-      },
-      '& .MuiCardActions-root': {
-        display: 'flex',
-        justifyContent: 'center',
-      },
-      '& .MuiLink-root': {
-        '&:hover': {
-          textDecoration: 'none',
-        },
-      },
-    },
-  }
-})(Card)
-
 export default function Home({ isConnected }) {
   const classes = useStyles()
 
@@ -129,7 +75,7 @@ export default function Home({ isConnected }) {
   return (
     <div className={classes.pageContainer}>
       {/* search card */}
-      <StyledSearchCard>
+      <Card>
         <CardContent>
           <Typography component="h1" gutterBottom variant="h5">
             Find a Recipe
@@ -157,7 +103,7 @@ export default function Home({ isConnected }) {
             </div>
           </form>
         </CardContent>
-      </StyledSearchCard>
+      </Card>
 
       {/* search alert feedback */}
       {!hideAlerts && recipes && recipes.length === 0 && (
@@ -171,21 +117,21 @@ export default function Home({ isConnected }) {
         </Alert>
       )}
       {!hideAlerts && recipes && recipes.length !== 0 && (
-        <StyledAlert
+        <Alert
           onClose={() => {
             setHideAlerts(true)
           }}
           severity="success"
         >
           {recipes.length} recipe{recipes.length > 1 ? 's' : ''} found!
-        </StyledAlert>
+        </Alert>
       )}
 
       {/* search results */}
       {recipes && recipes.length !== 0 && (
         <div>
           {recipes.map((recipe, index) => (
-            <StyledRecipeCard key={index}>
+            <Card key={index}>
               <Box className="card-recipe-source" boxShadow={1}>
                 <Typography
                   className="text-transform-capitalize"
@@ -197,6 +143,7 @@ export default function Home({ isConnected }) {
                       href={recipe.source.url}
                       rel="noopener noreferrer"
                       target="_blank"
+                      underline='none'
                     >
                       {recipe.source.name}
                     </Link>
@@ -249,13 +196,13 @@ export default function Home({ isConnected }) {
                 </div>
               </CardContent>
               <CardActions>
-                <Link href={`/recipe/${recipe._id}`}>
+                <Link href={`/recipe/${recipe._id}`} underline='none'>
                   <Button color="primary" variant="contained">
                     View Recipe
                   </Button>
                 </Link>
               </CardActions>
-            </StyledRecipeCard>
+            </Card>
           ))}
         </div>
       )}
