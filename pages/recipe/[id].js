@@ -1,16 +1,13 @@
 import { Card, CardContent, Typography } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
+// import { makeStyles } from '@material-ui/core/styles'
 import { Alert } from '@material-ui/lab'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 
-const useStyles = makeStyles((theme) => {
-  return {
-    alert: {
-      margin: `0 0 ${theme.spacing(2)}px 0`,
-    },
-  }
-})
+// const useStyles = makeStyles(() => {
+//   return {
+//   }
+// })
 
 export default function Recipe() {
   const router = useRouter()
@@ -18,13 +15,13 @@ export default function Recipe() {
 
   const [recipe, setRecipe] = useState(false)
 
-  const classes = useStyles()
+  // const classes = useStyles()
 
   useEffect(() => {
     async function fetchData() {
-      // /api/recipes/5f832c34e97769961f0375d1
+      // /api/recipes/5f832c34e97769961f0375d1 // example recipe ID
       if (id) {
-        fetch('/api/recipes/5f832c34e97769961f0375d1')
+        fetch(`/api/recipes/${id}`)
           .then((res) => res.json())
           .then(
             (result) => {
@@ -32,7 +29,8 @@ export default function Recipe() {
               setRecipe(result)
             },
             (error) => {
-              setRecipe(error)
+              console.error(error)
+              setRecipe(500)
             },
           )
       }
@@ -40,27 +38,44 @@ export default function Recipe() {
     fetchData()
   }, [id])
 
+  if (!recipe) {
+    return (
+      <Alert severity="info">
+        Loading recipe...
+      </Alert>
+    )
+  }
+
+  if (recipe === 404) {
+    return (
+      <Alert severity="warning">
+        Recipe not found.
+      </Alert>
+    )
+  }
+
+  if (recipe === 500) {
+    return (
+      <Alert severity="error">
+        A server error occured while loading this recipe.
+        This is our bad, not yours!
+      </Alert>
+    )
+  }
+
   return (
     <div>
-      {!recipe && (
-        <Alert className={classes.alert} severity="info">
-          Loading recipe...
-        </Alert>
-      )}
+      <Card variant="outlined">
+        <CardContent>
+          <Typography component="h1" variant="h5">
+            {recipe.source.name}
+          </Typography>
 
-      {recipe && (
-        <Card variant="outlined">
-          <CardContent>
-            <Typography component="h1" variant="h5">
-              {recipe.source.name}
-            </Typography>
-
-            <Typography component="h1" variant="h5">
-              {recipe.title}
-            </Typography>
-          </CardContent>
-        </Card>
-      )}
+          <Typography component="h1" variant="h5">
+            {recipe.title}
+          </Typography>
+        </CardContent>
+      </Card>
     </div>
   )
 }

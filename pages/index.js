@@ -9,8 +9,7 @@ import {
   TextField,
   Typography,
 } from '@material-ui/core'
-import { makeStyles, withStyles } from '@material-ui/core/styles'
-import { fade } from '@material-ui/core/styles/colorManipulator'
+import { makeStyles } from '@material-ui/core/styles'
 import AccessTimeIcon from '@material-ui/icons/AccessTime'
 import GroupWorkIcon from '@material-ui/icons/GroupWork'
 import RestaurantMenuIcon from '@material-ui/icons/RestaurantMenu'
@@ -113,7 +112,7 @@ export default function Home({ isConnected }) {
           }}
           severity="warning"
         >
-          No recipes found
+          No recipes found.
         </Alert>
       )}
       {!hideAlerts && recipes && recipes.length !== 0 && (
