@@ -7,9 +7,11 @@ import {
   Typography,
 } from '@material-ui/core'
 import { makeStyles, withStyles } from '@material-ui/core/styles'
-import FavoriteIcon from '@material-ui/icons/Favorite'
-import LocationOnIcon from '@material-ui/icons/LocationOn'
-import RestoreIcon from '@material-ui/icons/Restore'
+import DoneAllIcon from '@material-ui/icons/DoneAll'
+import InfoIcon from '@material-ui/icons/Info'
+import ListAltIcon from '@material-ui/icons/ListAlt'
+import NotesIcon from '@material-ui/icons/Notes'
+import ViewAgendaIcon from '@material-ui/icons/ViewAgenda'
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 
@@ -84,14 +86,17 @@ export default function PageLayout(props) {
       {!props.noFooter && (
         <StyledBottomNavigation
           onChange={(event, newValue) => {
+            console.log(newValue)
             setValue(newValue)
           }}
           showLabels
           value={value}
         >
-          <BottomNavigationAction label='Recents' icon={<RestoreIcon />} />
-          <BottomNavigationAction label='Favorites' icon={<FavoriteIcon />} />
-          <BottomNavigationAction label='Nearby' icon={<LocationOnIcon />} />
+          <BottomNavigationAction label='Info' icon={<InfoIcon />} />
+          <BottomNavigationAction label='Ingredients' icon={<ListAltIcon />} />
+          <BottomNavigationAction label='Steps' icon={<DoneAllIcon />} />
+          <BottomNavigationAction label='Notes' icon={<NotesIcon />} />
+          <BottomNavigationAction label='Show All' icon={<ViewAgendaIcon />} />
         </StyledBottomNavigation>
       )}
     </div>
