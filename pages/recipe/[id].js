@@ -1,8 +1,15 @@
-import { Card, CardContent, Typography } from '@material-ui/core'
+import {
+  Card,
+  CardContent,
+  Divider,
+} from '@material-ui/core'
 // import { makeStyles } from '@material-ui/core/styles'
 import { Alert } from '@material-ui/lab'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
+
+import RecipeHeader from '../../components/recipe-header'
+import RecipeSource from '../../components/recipe-source'
 
 // const useStyles = makeStyles(() => {
 //   return {
@@ -40,7 +47,7 @@ export default function Recipe() {
 
   if (!recipe) {
     return (
-      <Alert severity="info">
+      <Alert severity='info'>
         Loading recipe...
       </Alert>
     )
@@ -48,7 +55,7 @@ export default function Recipe() {
 
   if (recipe === 404) {
     return (
-      <Alert severity="warning">
+      <Alert severity='warning'>
         Recipe not found.
       </Alert>
     )
@@ -56,7 +63,7 @@ export default function Recipe() {
 
   if (recipe === 500) {
     return (
-      <Alert severity="error">
+      <Alert severity='error'>
         A server error occured while loading this recipe.
         This is our bad, not yours!
       </Alert>
@@ -65,15 +72,21 @@ export default function Recipe() {
 
   return (
     <div>
-      <Card variant="outlined">
-        <CardContent>
-          <Typography component="h1" variant="h5">
-            {recipe.source.name}
-          </Typography>
+      <Card>
+        <RecipeSource source={recipe.source} />
 
-          <Typography component="h1" variant="h5">
-            {recipe.title}
-          </Typography>
+        <CardContent>
+
+          <RecipeHeader
+            duration={recipe.duration}
+            recipeYield={recipe.yield}
+            title={recipe.title}
+          />
+
+          <Divider />
+
+          <div className='card-recipe-tags'></div>
+
         </CardContent>
       </Card>
     </div>

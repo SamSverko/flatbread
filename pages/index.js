@@ -1,6 +1,5 @@
 import { yupResolver } from '@hookform/resolvers'
 import {
-  Box,
   Button,
   Card,
   CardActions,
@@ -10,9 +9,6 @@ import {
   Typography,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
-import AccessTimeIcon from '@material-ui/icons/AccessTime'
-import GroupWorkIcon from '@material-ui/icons/GroupWork'
-import RestaurantMenuIcon from '@material-ui/icons/RestaurantMenu'
 import { Alert } from '@material-ui/lab'
 import axios from 'axios'
 import PropTypes from 'prop-types'
@@ -20,6 +16,8 @@ import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as yup from 'yup'
 
+import RecipeHeader from '../components/recipe-header'
+import RecipeSource from '../components/recipe-source'
 import { connectToDatabase } from '../util/mongodb'
 
 const useStyles = makeStyles((theme) => {
@@ -131,68 +129,15 @@ export default function Home({ isConnected }) {
         <div>
           {recipes.map((recipe, index) => (
             <Card key={index}>
-              <Box className='card-recipe-source' boxShadow={1}>
-                <Typography
-                  className='text-transform-capitalize'
-                  component='h2'
-                  variant='h6'
-                >
-                  {recipe.source.url && (
-                    <Link
-                      href={recipe.source.url}
-                      rel='noopener noreferrer'
-                      target='_blank'
-                      underline='none'
-                    >
-                      {recipe.source.name}
-                    </Link>
-                  )}
-                  {!recipe.source.url && recipe.source.name}
-                </Typography>
-              </Box>
+              <RecipeSource source={recipe.source} />
 
               <CardContent>
-                <Typography
-                  className='text-transform-capitalize'
-                  component='h3'
-                  gutterBottom
-                  variant='h5'
-                >
-                  {recipe.title}
-                </Typography>
-                <div className='card-recipe-duration-yield'>
-                  <div>
-                    <RestaurantMenuIcon titleAccess='Knife and spoon icon.' />
-                    <Typography>
-                      <span className='font-weight-bold'>Prep</span>
-                    </Typography>
-                    <Typography>
-                      {recipe.duration.prepTime} min
-                      {recipe.duration.prepTime > 1 ? 's' : ''}
-                    </Typography>
-                  </div>
-                  <div>
-                    <AccessTimeIcon titleAccess='Clock icon.' />
-                    <Typography>
-                      <span className='font-weight-bold'>Cook</span>
-                    </Typography>
-                    <Typography>
-                      {recipe.duration.cookTime} min
-                      {recipe.duration.cookTime > 1 ? 's' : ''}
-                    </Typography>
-                  </div>
-                  <div>
-                    <GroupWorkIcon
-                      titleAccess='Circle with three dots in it.'
-                    />
-                    <Typography>
-                      <span className='font-weight-bold'>Yield</span>
-                    </Typography>
-                    <Typography>
-                      {recipe.yield.amount} {recipe.yield.unit}
-                    </Typography>
-                  </div>
-                </div>
+                <RecipeHeader
+                  duration={recipe.duration}
+                  recipeYield={recipe.yield}
+                  title={recipe.title}
+                />
+
               </CardContent>
               <CardActions>
                 <Link href={`/recipe/${recipe._id}`} underline='none'>

@@ -1,5 +1,4 @@
 import { createMuiTheme } from '@material-ui/core/styles'
-import { fade } from '@material-ui/core/styles/colorManipulator'
 
 const theme = createMuiTheme({
   overrides: {
@@ -48,20 +47,6 @@ theme.overrides.MuiCard = {
     },
     '& .MuiTextField-root': {
       margin: `0 0 ${theme.spacing(2)}px 0`,
-    },
-    '& .card-recipe-source': {
-      backgroundColor: fade(theme.palette.primary.main, 0.1),
-      padding: theme.spacing(2),
-    },
-    '& .card-recipe-duration-yield': {
-      alignItems: 'center',
-      display: 'flex',
-      flexWrap: 'wrap',
-      justifyContent: 'space-evenly',
-      '& div': {
-        maxWidth: '150px',
-        width: '33%',
-      },
     },
   },
 }
