@@ -10,6 +10,7 @@ import React, { useEffect, useState } from 'react'
 
 import RecipeHeader from '../../components/recipe-header'
 import RecipeSource from '../../components/recipe-source'
+import RecipeTags from '../../components/recipe-tags'
 
 // const useStyles = makeStyles(() => {
 //   return {
@@ -85,7 +86,12 @@ export default function Recipe() {
 
           <Divider />
 
-          <div className='card-recipe-tags'></div>
+          <RecipeTags
+            courseTypes={recipe.courseTypes}
+            cuisines={recipe.cuisines}
+            dishTypes={recipe.dishTypes}
+            dietaryRestrictions={recipe.dietaryRestrictions}
+          />
 
         </CardContent>
       </Card>

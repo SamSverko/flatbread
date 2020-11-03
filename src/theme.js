@@ -15,7 +15,7 @@ const theme = createMuiTheme({
           minHeight: '100vh',
         },
         '.font-weight-bold': {
-          fontWeight: 'bold',
+          fontWeight: 'bold !important',
         },
         '.text-transform-capitalize': {
           textTransform: 'capitalize',
