@@ -69,10 +69,10 @@ export default function PageLayout(props) {
   return (
     <div className={classes.pageContainer}>
       {/* header */}
-      <StyledAppBar position="static">
-        <Link href="/">
+      <StyledAppBar position='static'>
+        <Link href='/'>
           <StyledToolbar>
-            <Typography variant="h6">Flatbread</Typography>
+            <Typography variant='h6'>Flatbread</Typography>
           </StyledToolbar>
         </Link>
       </StyledAppBar>
@@ -89,9 +89,9 @@ export default function PageLayout(props) {
           showLabels
           value={value}
         >
-          <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
-          <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
-          <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
+          <BottomNavigationAction label='Recents' icon={<RestoreIcon />} />
+          <BottomNavigationAction label='Favorites' icon={<FavoriteIcon />} />
+          <BottomNavigationAction label='Nearby' icon={<LocationOnIcon />} />
         </StyledBottomNavigation>
       )}
     </div>

@@ -162,7 +162,7 @@ export default function Add({
 
   return (
     <div>
-      <Typography component="h1" gutterBottom variant="h3">
+      <Typography component='h1' gutterBottom variant='h3'>
         Add new recipe
       </Typography>
 
@@ -171,22 +171,22 @@ export default function Add({
         <TextField
           error={typeof errors.title !== 'undefined'}
           helperText={errors.title?.message}
-          id="form-title"
+          id='form-title'
           inputRef={register}
-          label="Title"
-          name="title"
+          label='Title'
+          name='title'
           style={{ margin: '0 0 40px 0' }}
         />
         <br />
         {/* course types */}
-        <FormControl component="fieldset" style={{ margin: '0 0 40px 0' }}>
+        <FormControl component='fieldset' style={{ margin: '0 0 40px 0' }}>
           <FormLabel
             error={typeof errors.courseTypes !== 'undefined'}
-            component="legend"
+            component='legend'
           >
             Course Types
           </FormLabel>
-          <FormHelperText className="Mui-error">
+          <FormHelperText className='Mui-error'>
             {errors.courseTypes?.message}
           </FormHelperText>
           <FormGroup>
@@ -194,11 +194,11 @@ export default function Add({
               <FormControlLabel
                 control={
                   <Checkbox
-                    color="primary"
+                    color='primary'
                     id={`form-courseTypes-${index}`}
                     inputRef={register}
                     name={'courseTypes'}
-                    type="checkbox"
+                    type='checkbox'
                     value={item}
                   />
                 }
@@ -210,14 +210,14 @@ export default function Add({
         </FormControl>
         <br />
         {/* dish types */}
-        <FormControl component="fieldset" style={{ margin: '0 0 40px 0' }}>
+        <FormControl component='fieldset' style={{ margin: '0 0 40px 0' }}>
           <FormLabel
             error={typeof errors.dishTypes !== 'undefined'}
-            component="legend"
+            component='legend'
           >
             Dish Types
           </FormLabel>
-          <FormHelperText className="Mui-error">
+          <FormHelperText className='Mui-error'>
             {errors.dishTypes?.message}
           </FormHelperText>
           <FormGroup>
@@ -225,11 +225,11 @@ export default function Add({
               <FormControlLabel
                 control={
                   <Checkbox
-                    color="primary"
+                    color='primary'
                     id={`form-dishTypes-${index}`}
                     inputRef={register}
                     name={'dishTypes'}
-                    type="checkbox"
+                    type='checkbox'
                     value={item}
                   />
                 }
@@ -241,14 +241,14 @@ export default function Add({
         </FormControl>
         <br />
         {/* cuisines */}
-        <FormControl component="fieldset" style={{ margin: '0 0 40px 0' }}>
+        <FormControl component='fieldset' style={{ margin: '0 0 40px 0' }}>
           <FormLabel
             error={typeof errors.cuisines !== 'undefined'}
-            component="legend"
+            component='legend'
           >
             Cuisines
           </FormLabel>
-          <FormHelperText className="Mui-error">
+          <FormHelperText className='Mui-error'>
             {errors.cuisines?.message}
           </FormHelperText>
           <FormGroup>
@@ -256,11 +256,11 @@ export default function Add({
               <FormControlLabel
                 control={
                   <Checkbox
-                    color="primary"
+                    color='primary'
                     id={`form-cuisines-${index}`}
                     inputRef={register}
                     name={'cuisines'}
-                    type="checkbox"
+                    type='checkbox'
                     value={item}
                   />
                 }
@@ -272,14 +272,14 @@ export default function Add({
         </FormControl>
         <br />
         {/* dietaryRestrictions */}
-        <FormControl component="fieldset" style={{ margin: '0 0 40px 0' }}>
+        <FormControl component='fieldset' style={{ margin: '0 0 40px 0' }}>
           <FormLabel
             error={typeof errors.dietaryRestrictions !== 'undefined'}
-            component="legend"
+            component='legend'
           >
             Dietary Restrictions
           </FormLabel>
-          <FormHelperText className="Mui-error">
+          <FormHelperText className='Mui-error'>
             {errors.dietaryRestrictions?.message}
           </FormHelperText>
           <FormGroup>
@@ -287,11 +287,11 @@ export default function Add({
               <FormControlLabel
                 control={
                   <Checkbox
-                    color="primary"
+                    color='primary'
                     id={`form-dietaryRestrictions-${index}`}
                     inputRef={register}
                     name={'dietaryRestrictions'}
-                    type="checkbox"
+                    type='checkbox'
                     value={item}
                   />
                 }
@@ -303,42 +303,42 @@ export default function Add({
         </FormControl>
         <br />
         {/* source */}
-        <Typography component="h2" gutterBottom variant="h4">
+        <Typography component='h2' gutterBottom variant='h4'>
           Source
         </Typography>
         <TextField
           error={typeof errors.source?.name !== 'undefined'}
           helperText={errors.source?.name?.message}
-          id="form-source-name"
+          id='form-source-name'
           inputRef={register}
-          label="Source Name"
-          name="source.name"
+          label='Source Name'
+          name='source.name'
           style={{ margin: '0 0 10px 0' }}
         />
         <br />
         <TextField
           error={typeof errors.source?.url !== 'undefined'}
           helperText={errors.source?.url?.message}
-          id="form-source-url"
+          id='form-source-url'
           inputRef={register}
-          label="Source URL"
-          name="source.url"
+          label='Source URL'
+          name='source.url'
           style={{ margin: '0 0 40px 0' }}
         />
         <br />
         {/* yield */}
-        <Typography component="h2" gutterBottom variant="h4">
+        <Typography component='h2' gutterBottom variant='h4'>
           Yield
         </Typography>
         <TextField
           error={typeof errors.yield?.amount !== 'undefined'}
           helperText={errors.yield?.amount?.message}
-          id="form-yield-amount"
+          id='form-yield-amount'
           inputRef={register}
-          label="Yield Amount"
-          name="yield.amount"
+          label='Yield Amount'
+          name='yield.amount'
           style={{ margin: '0 0 10px 0' }}
-          type="number"
+          type='number'
         />
         <br />
         <TextField
@@ -348,15 +348,15 @@ export default function Add({
               ? errors.yield?.unit?.message
               : 'Example: cookies, burgers, servings, etc.'
           }
-          id="form-yield-unit"
+          id='form-yield-unit'
           inputRef={register}
-          label="Yield Unit"
-          name="yield.unit"
+          label='Yield Unit'
+          name='yield.unit'
           style={{ margin: '0 0 10px 0', maxWidth: 167, width: '100%' }}
         />
         <br />
         {/* duration */}
-        <Typography component="h2" gutterBottom variant="h4">
+        <Typography component='h2' gutterBottom variant='h4'>
           Duration
         </Typography>
         <TextField
@@ -366,12 +366,12 @@ export default function Add({
               ? errors.duration?.prepTime?.message
               : 'In minutes.'
           }
-          id="form-duration-prepTime"
+          id='form-duration-prepTime'
           inputRef={register}
-          label="Prep Time"
-          name="duration.prepTime"
+          label='Prep Time'
+          name='duration.prepTime'
           style={{ margin: '0 0 10px 0' }}
-          type="number"
+          type='number'
         />
         <br />
         <TextField
@@ -381,34 +381,34 @@ export default function Add({
               ? errors.duration?.cookTime?.message
               : 'In minutes.'
           }
-          id="form-duration-cookTime"
+          id='form-duration-cookTime'
           inputRef={register}
-          label="Cook Time"
-          name="duration.cookTime"
+          label='Cook Time'
+          name='duration.cookTime'
           style={{ margin: '0 0 40px 0' }}
-          type="number"
+          type='number'
         />
         <br />
         {/* ingredients */}
         <div>
-          <Typography component="h2" gutterBottom variant="h4">
+          <Typography component='h2' gutterBottom variant='h4'>
             Ingredients
           </Typography>
           {typeof errors !== 'undefined' &&
             typeof errors.ingredients !== 'undefined' && (
-            <FormHelperText className="Mui-error">
+            <FormHelperText className='Mui-error'>
                 Please fill out at least one ingredient.
             </FormHelperText>
           )}
           {ingredients.map((ingredient, index) => (
             <div key={ingredient.id}>
-              <Typography component="h3" gutterBottom variant="h5">
+              <Typography component='h3' gutterBottom variant='h5'>
                 Ingredient {index + 1}
               </Typography>
               <TextField
                 id={`ingredients[${index}].section`}
                 inputRef={register}
-                label="Section"
+                label='Section'
                 name={`ingredients[${index}].section`}
                 style={{ margin: '0 0 10px 0' }}
               />
@@ -430,10 +430,10 @@ export default function Add({
                 }
                 id={`ingredients[${index}].amount`}
                 inputRef={register}
-                label="Amount"
+                label='Amount'
                 name={`ingredients[${index}].amount`}
                 style={{ margin: '0 0 10px 0' }}
-                type="number"
+                type='number'
               />
               <br />
               <Controller
@@ -445,7 +445,7 @@ export default function Add({
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label="Unit"
+                        label='Unit'
                         style={{
                           margin: '0 0 10px 0',
                           maxWidth: 167,
@@ -472,7 +472,7 @@ export default function Add({
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label="Name"
+                        label='Name'
                         style={{
                           margin: '0 0 10px 0',
                           maxWidth: 167,
@@ -493,7 +493,7 @@ export default function Add({
               <TextField
                 id={`ingredients[${index}].alteration`}
                 inputRef={register}
-                label="Alteration"
+                label='Alteration'
                 name={`ingredients[${index}].alteration`}
                 style={{ margin: '0 0 10px 0' }}
               />
@@ -508,7 +508,7 @@ export default function Add({
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        label="Substitutions"
+                        label='Substitutions'
                         style={{
                           margin: '0 0 10px 0',
                           maxWidth: 167,
@@ -537,7 +537,7 @@ export default function Add({
             </div>
           ))}
           <button
-            type="button"
+            type='button'
             onClick={() => ingredientsAppend()}
             style={{ margin: '0 0 40px 0' }}
           >
@@ -546,24 +546,24 @@ export default function Add({
         </div>
         {/* steps */}
         <div>
-          <Typography component="h2" gutterBottom variant="h4">
+          <Typography component='h2' gutterBottom variant='h4'>
             Steps
           </Typography>
           {typeof errors !== 'undefined' &&
             typeof errors.steps !== 'undefined' && (
-            <FormHelperText className="Mui-error">
+            <FormHelperText className='Mui-error'>
                 Please fill out at least one step.
             </FormHelperText>
           )}
           {steps.map((step, index) => (
             <div key={step.id}>
-              <Typography component="h3" gutterBottom variant="h5">
+              <Typography component='h3' gutterBottom variant='h5'>
                 Step {index + 1}
               </Typography>
               <TextField
                 id={`steps[${index}].section`}
                 inputRef={register}
-                label="Section"
+                label='Section'
                 name={`steps[${index}].section`}
                 style={{ margin: '0 0 10px 0' }}
               />
@@ -585,7 +585,7 @@ export default function Add({
                 }
                 id={`steps[${index}].description`}
                 inputRef={register}
-                label="Description"
+                label='Description'
                 name={`steps[${index}].description`}
                 style={{ margin: '0 0 10px 0' }}
               />
@@ -601,7 +601,7 @@ export default function Add({
             </div>
           ))}
           <button
-            type="button"
+            type='button'
             onClick={() => stepsAppend()}
             style={{ margin: '0 0 40px 0' }}
           >
@@ -610,18 +610,18 @@ export default function Add({
         </div>
         {/* notes */}
         <div>
-          <Typography component="h2" gutterBottom variant="h4">
+          <Typography component='h2' gutterBottom variant='h4'>
             Notes
           </Typography>
           {notes.map((note, index) => (
             <div key={note.id}>
-              <Typography component="h3" gutterBottom variant="h5">
+              <Typography component='h3' gutterBottom variant='h5'>
                 Note {index + 1}
               </Typography>
               <TextField
                 id={`notes[${index}].description`}
                 inputRef={register}
-                label="Note"
+                label='Note'
                 name={`notes[${index}].description`}
                 style={{ margin: '0 0 10px 0' }}
               />
@@ -637,7 +637,7 @@ export default function Add({
             </div>
           ))}
           <button
-            type="button"
+            type='button'
             onClick={() => notesAppend()}
             style={{ margin: '0 0 40px 0' }}
           >
@@ -652,28 +652,28 @@ export default function Add({
               ? errors.adminCode?.message
               : 'Only admins can add new recipes at this time.'
           }
-          id="form-adminCode"
+          id='form-adminCode'
           inputRef={register}
-          label="Admin Code"
-          name="adminCode"
+          label='Admin Code'
+          name='adminCode'
           style={{ margin: '0 0 40px 0' }}
-          type="password"
+          type='password'
         />
         <br />
         {/* submit */}
         <div>
           {formError && (
-            <FormHelperText className="Mui-error">{formError}</FormHelperText>
+            <FormHelperText className='Mui-error'>{formError}</FormHelperText>
           )}
           {submitStatus.status === 'error' && (
-            <Alert severity="error">
+            <Alert severity='error'>
               Recipe Not Added To Database | {submitStatus.details}
             </Alert>
           )}
           {submitStatus.status === 'success' && (
-            <Alert severity="success">{submitStatus.details}</Alert>
+            <Alert severity='success'>{submitStatus.details}</Alert>
           )}
-          <input type="submit" />
+          <input type='submit' />
         </div>
       </form>
     </div>

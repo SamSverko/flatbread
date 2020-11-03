@@ -25,7 +25,7 @@ export default async (req, res) => {
 
   // GET A RANDOM RECIPE
   // const recipes = await db
-  //   .collection("recipes")
+  //   .collection('recipes')
   //   .find({})
   //   .toArray();
 

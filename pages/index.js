@@ -65,7 +65,7 @@ export default function Home({ isConnected }) {
 
   if (!isConnected) {
     return (
-      <Alert severity="error">
+      <Alert severity='error'>
         Error connecting to the database, please try again later.
       </Alert>
     )
@@ -76,7 +76,7 @@ export default function Home({ isConnected }) {
       {/* search card */}
       <Card>
         <CardContent>
-          <Typography component="h1" gutterBottom variant="h5">
+          <Typography component='h1' gutterBottom variant='h5'>
             Find a Recipe
           </Typography>
 
@@ -86,17 +86,17 @@ export default function Home({ isConnected }) {
               error={typeof errors.title !== 'undefined'}
               fullWidth
               helperText={errors.title?.message}
-              id="form-title"
+              id='form-title'
               inputRef={register}
-              label="Search by recipe title"
-              name="title"
-              size="small"
-              variant="outlined"
+              label='Search by recipe title'
+              name='title'
+              size='small'
+              variant='outlined'
             />
             {/* submit */}
             <div>
-              {/* <input type="submit" /> */}
-              <Button color="primary" type="submit" variant="contained">
+              {/* <input type='submit' /> */}
+              <Button color='primary' type='submit' variant='contained'>
                 Search
               </Button>
             </div>
@@ -110,7 +110,7 @@ export default function Home({ isConnected }) {
           onClose={() => {
             setHideAlerts(true)
           }}
-          severity="warning"
+          severity='warning'
         >
           No recipes found.
         </Alert>
@@ -120,7 +120,7 @@ export default function Home({ isConnected }) {
           onClose={() => {
             setHideAlerts(true)
           }}
-          severity="success"
+          severity='success'
         >
           {recipes.length} recipe{recipes.length > 1 ? 's' : ''} found!
         </Alert>
@@ -131,17 +131,17 @@ export default function Home({ isConnected }) {
         <div>
           {recipes.map((recipe, index) => (
             <Card key={index}>
-              <Box className="card-recipe-source" boxShadow={1}>
+              <Box className='card-recipe-source' boxShadow={1}>
                 <Typography
-                  className="text-transform-capitalize"
-                  component="h2"
-                  variant="h6"
+                  className='text-transform-capitalize'
+                  component='h2'
+                  variant='h6'
                 >
                   {recipe.source.url && (
                     <Link
                       href={recipe.source.url}
-                      rel="noopener noreferrer"
-                      target="_blank"
+                      rel='noopener noreferrer'
+                      target='_blank'
                       underline='none'
                     >
                       {recipe.source.name}
@@ -153,18 +153,18 @@ export default function Home({ isConnected }) {
 
               <CardContent>
                 <Typography
-                  className="text-transform-capitalize"
-                  component="h3"
+                  className='text-transform-capitalize'
+                  component='h3'
                   gutterBottom
-                  variant="h5"
+                  variant='h5'
                 >
                   {recipe.title}
                 </Typography>
-                <div className="card-recipe-duration-yield">
+                <div className='card-recipe-duration-yield'>
                   <div>
-                    <RestaurantMenuIcon titleAccess="Knife and spoon icon." />
+                    <RestaurantMenuIcon titleAccess='Knife and spoon icon.' />
                     <Typography>
-                      <span className="font-weight-bold">Prep</span>
+                      <span className='font-weight-bold'>Prep</span>
                     </Typography>
                     <Typography>
                       {recipe.duration.prepTime} min
@@ -172,9 +172,9 @@ export default function Home({ isConnected }) {
                     </Typography>
                   </div>
                   <div>
-                    <AccessTimeIcon titleAccess="Clock icon." />
+                    <AccessTimeIcon titleAccess='Clock icon.' />
                     <Typography>
-                      <span className="font-weight-bold">Cook</span>
+                      <span className='font-weight-bold'>Cook</span>
                     </Typography>
                     <Typography>
                       {recipe.duration.cookTime} min
@@ -183,10 +183,10 @@ export default function Home({ isConnected }) {
                   </div>
                   <div>
                     <GroupWorkIcon
-                      titleAccess="Circle with three dots in it."
+                      titleAccess='Circle with three dots in it.'
                     />
                     <Typography>
-                      <span className="font-weight-bold">Yield</span>
+                      <span className='font-weight-bold'>Yield</span>
                     </Typography>
                     <Typography>
                       {recipe.yield.amount} {recipe.yield.unit}
@@ -196,7 +196,7 @@ export default function Home({ isConnected }) {
               </CardContent>
               <CardActions>
                 <Link href={`/recipe/${recipe._id}`} underline='none'>
-                  <Button color="primary" variant="contained">
+                  <Button color='primary' variant='contained'>
                     View Recipe
                   </Button>
                 </Link>
