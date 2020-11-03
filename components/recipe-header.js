@@ -38,8 +38,8 @@ export default function RecipeHeader({ duration, recipeYield, title }) {
       <div className={classes.durationYield}>
         <div>
           <RestaurantMenuIcon titleAccess='Knife and spoon icon.' />
-          <Typography>
-            <span className='font-weight-bold'>Prep</span>
+          <Typography className='font-weight-bold'>
+            Prep
           </Typography>
           <Typography>
             {duration.prepTime} min
@@ -48,8 +48,8 @@ export default function RecipeHeader({ duration, recipeYield, title }) {
         </div>
         <div>
           <AccessTimeIcon titleAccess='Clock icon.' />
-          <Typography>
-            <span className='font-weight-bold'>Cook</span>
+          <Typography className='font-weight-bold'>
+            Cook
           </Typography>
           <Typography>
             {duration.cookTime} min
@@ -60,8 +60,8 @@ export default function RecipeHeader({ duration, recipeYield, title }) {
           <GroupWorkIcon
             titleAccess='Circle with three dots in it.'
           />
-          <Typography>
-            <span className='font-weight-bold'>Yield</span>
+          <Typography className='font-weight-bold'>
+            Yield
           </Typography>
           <Typography>
             {recipeYield.amount} {recipeYield.unit}

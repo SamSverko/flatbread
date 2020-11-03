@@ -1,9 +1,9 @@
 import { Chip, Typography } from '@material-ui/core'
-import { makeStyles, withStyles } from '@material-ui/core/styles'
+import { makeStyles } from '@material-ui/core/styles'
 import PropTypes from 'prop-types'
 import React from 'react'
 
-const useStyles = makeStyles(() => {
+const useStyles = makeStyles((theme) => {
   return {
     tags: {
       '& ul': {
@@ -11,20 +11,13 @@ const useStyles = makeStyles(() => {
         margin: 0,
         padding: 0,
         '& li': {
-          display: 'inline',
+          display: 'inline-block',
+          margin: `${theme.spacing(1)}px`,
         },
       },
     },
   }
 })
-
-const StyledChip = withStyles((theme) => {
-  return {
-    root: {
-      margin: `${theme.spacing(1)}px`,
-    },
-  }
-})(Chip)
 
 const DisplayTags = ({ tags, title }) => {
   const classes = useStyles()
@@ -41,7 +34,7 @@ const DisplayTags = ({ tags, title }) => {
         {tags.map((tag) => {
           return (
             <li key={tag}>
-              <StyledChip
+              <Chip
                 className='text-transform-capitalize'
                 color='primary'
                 label={tag}
