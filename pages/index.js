@@ -1,5 +1,6 @@
 import { yupResolver } from '@hookform/resolvers'
 import {
+  Box,
   Button,
   Card,
   CardActions,
@@ -72,35 +73,39 @@ export default function Home({ isConnected }) {
   return (
     <div className={classes.pageContainer}>
       {/* search card */}
-      <Card>
-        <CardContent>
-          <Typography component='h1' gutterBottom variant='h5'>
+      <Box marginBottom={(recipes) ? 2 : 0}>
+        <Card>
+          <CardContent>
+            <Typography component='h1' gutterBottom variant='h5'>
             Find a Recipe
-          </Typography>
+            </Typography>
 
-          <form onSubmit={handleSubmit(onSubmit)}>
-            {/* title */}
-            <TextField
-              error={typeof errors.title !== 'undefined'}
-              fullWidth
-              helperText={errors.title?.message}
-              id='form-title'
-              inputRef={register}
-              label='Search by recipe title'
-              name='title'
-              size='small'
-              variant='outlined'
-            />
-            {/* submit */}
-            <div>
-              {/* <input type='submit' /> */}
-              <Button color='primary' type='submit' variant='contained'>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              {/* title */}
+              <Box marginBottom={2}>
+                <TextField
+                  error={typeof errors.title !== 'undefined'}
+                  fullWidth
+                  helperText={errors.title?.message}
+                  id='form-title'
+                  inputRef={register}
+                  label='Search by recipe title'
+                  name='title'
+                  size='small'
+                  variant='outlined'
+                />
+              </Box>
+              {/* submit */}
+              <div>
+                {/* <input type='submit' /> */}
+                <Button color='primary' type='submit' variant='contained'>
                 Search
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+                </Button>
+              </div>
+            </form>
+          </CardContent>
+        </Card>
+      </Box>
 
       {/* search alert feedback */}
       {!hideAlerts && recipes && recipes.length === 0 && (
@@ -114,14 +119,16 @@ export default function Home({ isConnected }) {
         </Alert>
       )}
       {!hideAlerts && recipes && recipes.length !== 0 && (
-        <Alert
-          onClose={() => {
-            setHideAlerts(true)
-          }}
-          severity='success'
-        >
-          {recipes.length} recipe{recipes.length > 1 ? 's' : ''} found!
-        </Alert>
+        <Box marginBottom={2}>
+          <Alert
+            onClose={() => {
+              setHideAlerts(true)
+            }}
+            severity='success'
+          >
+            {recipes.length} recipe{recipes.length > 1 ? 's' : ''} found!
+          </Alert>
+        </Box>
       )}
 
       {/* search results */}

@@ -1,9 +1,9 @@
 import {
+  Box,
   Card,
   CardContent,
   Divider,
 } from '@material-ui/core'
-// import { makeStyles } from '@material-ui/core/styles'
 import { Alert } from '@material-ui/lab'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
@@ -12,18 +12,11 @@ import RecipeHeader from '../../components/recipe-header'
 import RecipeSource from '../../components/recipe-source'
 import RecipeTags from '../../components/recipe-tags'
 
-// const useStyles = makeStyles(() => {
-//   return {
-//   }
-// })
-
 export default function Recipe() {
   const router = useRouter()
   const { id } = router.query
 
   const [recipe, setRecipe] = useState(false)
-
-  // const classes = useStyles()
 
   useEffect(() => {
     async function fetchData() {
@@ -84,7 +77,9 @@ export default function Recipe() {
             title={recipe.title}
           />
 
-          <Divider />
+          <Box marginBottom={1}>
+            <Divider />
+          </Box>
 
           <RecipeTags
             courseTypes={recipe.courseTypes}

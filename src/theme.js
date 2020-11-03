@@ -25,15 +25,8 @@ const theme = createMuiTheme({
   },
 })
 
-theme.overrides.MuiAlert = {
-  root: {
-    margin: `0 0 ${theme.spacing(2)}px 0`,
-  },
-}
-
 theme.overrides.MuiCard = {
   root: {
-    margin: `0 auto ${theme.spacing(2)}px auto`,
     textAlign: 'center',
     width: '100%',
     '& .MuiCardActions-root': {
@@ -44,9 +37,6 @@ theme.overrides.MuiCard = {
     },
     '& .MuiCardContent-root': {
       paddingBottom: `${theme.spacing(2)}px !important`,
-    },
-    '& .MuiTextField-root': {
-      margin: `0 0 ${theme.spacing(2)}px 0`,
     },
   },
 }
