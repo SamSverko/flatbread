@@ -26,10 +26,10 @@ const useStyles = makeStyles((theme) => {
     pageContainer: {
       display: 'flex',
       flexDirection: 'column',
-      height: '100%',
       justifyContent: 'center',
       margin: '0 auto',
       maxWidth: `${theme.breakpoints.values.sm}px`,
+      minHeight: '100%',
       width: '100%',
     },
   }

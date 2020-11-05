@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
 
-import PageLayout from '../src/page-layout'
+import PageLayout from '../components/page-layout'
 import theme from '../src/theme'
 
 const NO_FOOTER_ROUTES = ['/', '/add']

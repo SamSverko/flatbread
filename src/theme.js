@@ -5,14 +5,16 @@ const theme = createMuiTheme({
     MuiCssBaseline: {
       '@global': {
         html: {
-          height: '100',
+          height: '100%',
+          margin: 0,
         },
         body: {
-          height: '100vh',
+          height: '100%',
+          margin: 0,
         },
         '#__next': {
-          display: 'flex',
-          minHeight: '100vh',
+          width: '100%',
+          height: '100vh',
         },
         '.font-weight-bold': {
           fontWeight: 'bold !important',

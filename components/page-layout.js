@@ -20,12 +20,9 @@ const useStyles = makeStyles((theme) => {
     pageContainer: {
       display: 'flex',
       flexDirection: 'column',
-      flexWrap: 'nowrap',
-      width: '100%',
+      height: '100%',
     },
     content: {
-      display: 'flex',
-      flexDirection: 'column',
       flexGrow: 1,
       overflow: 'auto',
       padding: theme.spacing(2),
@@ -36,7 +33,6 @@ const useStyles = makeStyles((theme) => {
 const StyledAppBar = withStyles((theme) => {
   return {
     root: {
-      flexShrink: 0,
       '& .MuiTypography-root': {
         color: theme.palette.common.white,
         '&:hover': {
@@ -55,14 +51,6 @@ const StyledToolbar = withStyles(() => {
     },
   }
 })(Toolbar)
-
-const StyledBottomNavigation = withStyles(() => {
-  return {
-    root: {
-      flexShrink: 0,
-    },
-  }
-})(BottomNavigation)
 
 export default function PageLayout(props) {
   const classes = useStyles()
@@ -84,7 +72,7 @@ export default function PageLayout(props) {
 
       {/* footer */}
       {!props.noFooter && (
-        <StyledBottomNavigation
+        <BottomNavigation
           onChange={(event, newValue) => {
             console.log(newValue)
             setValue(newValue)
@@ -97,7 +85,7 @@ export default function PageLayout(props) {
           <BottomNavigationAction label='Steps' icon={<DoneAllIcon />} />
           <BottomNavigationAction label='Notes' icon={<NotesIcon />} />
           <BottomNavigationAction label='Show All' icon={<ViewAgendaIcon />} />
-        </StyledBottomNavigation>
+        </BottomNavigation>
       )}
     </div>
   )
