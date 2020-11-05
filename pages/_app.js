@@ -6,7 +6,7 @@ import PropTypes from 'prop-types'
 import React, { useEffect } from 'react'
 
 import PageLayout from '../components/page-layout'
-import theme from '../src/theme'
+import theme from '../util/theme'
 import Store from '../util/store'
 
 const NO_FOOTER_ROUTES = ['/', '/add']

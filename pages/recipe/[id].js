@@ -32,7 +32,7 @@ export default function Recipe() {
   const classes = useStyles()
 
   const [state, dispatch] = useContext(Context)
-  console.log(state)
+  console.log(state, dispatch)
 
   useEffect(() => {
     async function fetchData() {
