@@ -91,4 +91,4 @@ We're not quite there yet, however we will most likely be deploying this app to 
 
 ## Contribute
 
-If you would like to get involved in any way, feel free to give our [Contributing document](https://github.com/SamSverko/flatbread/blob/main/docs/CONTRIBUTING.md) a visit :blush:
+If you would like to get involved in any way, feel free to give our [Contributing document](https://github.com/SamSverko/flatbread/blob/main/docs/CONTRIBUTING.md) a visit :blush: 
