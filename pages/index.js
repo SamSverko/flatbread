@@ -5,13 +5,13 @@ import {
   Card,
   CardActions,
   CardContent,
-  Link,
   TextField,
   Typography,
 } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { Alert } from '@material-ui/lab'
 import axios from 'axios'
+import Link from 'next/link'
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -147,10 +147,12 @@ export default function Home({ isConnected }) {
 
               </CardContent>
               <CardActions>
-                <Link href={`/recipe/${recipe._id}`} underline='none'>
-                  <Button color='primary' variant='contained'>
+                <Link href={`/recipe/${recipe._id}`}>
+                  <a>
+                    <Button color='primary' variant='contained'>
                     View Recipe
-                  </Button>
+                    </Button>
+                  </a>
                 </Link>
               </CardActions>
             </Card>

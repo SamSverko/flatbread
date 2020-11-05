@@ -27,6 +27,11 @@ const theme = createMuiTheme({
   },
 })
 
+theme.overrides.MuiCssBaseline['@global'].a = {
+  color: theme.palette.primary.main,
+  textDecoration: 'none',
+}
+
 theme.overrides.MuiCard = {
   root: {
     textAlign: 'center',

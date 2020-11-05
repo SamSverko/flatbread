@@ -1,6 +1,7 @@
-import { Box, Link, Typography } from '@material-ui/core'
+import { Box, Typography } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles'
 import { fade } from '@material-ui/core/styles/colorManipulator'
+import Link from 'next/link'
 import PropTypes from 'prop-types'
 import React from 'react'
 
@@ -22,13 +23,8 @@ export default function RecipeSource({ source }) {
         variant='h6'
       >
         {source.url && (
-          <Link
-            href={source.url}
-            rel='noopener noreferrer'
-            target='_blank'
-            underline='none'
-          >
-            {source.name}
+          <Link href={source.url}>
+            <a>{source.name}</a>
           </Link>
         )}
         {!source.url && source.name}

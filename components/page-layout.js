@@ -2,7 +2,6 @@ import {
   AppBar,
   BottomNavigation,
   BottomNavigationAction,
-  Link,
   Toolbar,
   Typography,
 } from '@material-ui/core'
@@ -12,6 +11,7 @@ import InfoIcon from '@material-ui/icons/Info'
 import ListAltIcon from '@material-ui/icons/ListAlt'
 import NotesIcon from '@material-ui/icons/Notes'
 import ViewAgendaIcon from '@material-ui/icons/ViewAgenda'
+import Link from 'next/link'
 import PropTypes from 'prop-types'
 import React, { useState } from 'react'
 
@@ -61,9 +61,11 @@ export default function PageLayout(props) {
       {/* header */}
       <StyledAppBar position='static'>
         <Link href='/'>
-          <StyledToolbar>
-            <Typography variant='h6'>Flatbread</Typography>
-          </StyledToolbar>
+          <a>
+            <StyledToolbar>
+              <Typography variant='h6'>Flatbread</Typography>
+            </StyledToolbar>
+          </a>
         </Link>
       </StyledAppBar>
 
