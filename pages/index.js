@@ -5,10 +5,11 @@ import {
   Card,
   CardActions,
   CardContent,
+  CircularProgress,
   TextField,
   Typography,
 } from '@material-ui/core'
-import { makeStyles } from '@material-ui/core/styles'
+import { makeStyles, withStyles } from '@material-ui/core/styles'
 import { Alert } from '@material-ui/lab'
 import axios from 'axios'
 import Link from 'next/link'
@@ -35,6 +36,14 @@ const useStyles = makeStyles((theme) => {
   }
 })
 
+const StyledCircularProgress = withStyles((theme) => {
+  return {
+    root: {
+      color: theme.palette.common.white,
+    },
+  }
+})(CircularProgress)
+
 export default function Home({ isConnected }) {
   const classes = useStyles()
 
@@ -50,6 +59,7 @@ export default function Home({ isConnected }) {
   })
 
   const onSubmit = (data) => {
+    setRecipes('loading')
     axios
       .post(`/api/recipes?title=${data.title}`, data)
       .then(function (response) {
@@ -99,7 +109,10 @@ export default function Home({ isConnected }) {
               <div>
                 {/* <input type='submit' /> */}
                 <Button color='primary' type='submit' variant='contained'>
-                Search
+                  {recipes === 'loading'
+                    ? <StyledCircularProgress size={24} />
+                    : 'Search'
+                  }
                 </Button>
               </div>
             </form>
@@ -108,57 +121,68 @@ export default function Home({ isConnected }) {
       </Box>
 
       {/* search alert feedback */}
-      {!hideAlerts && recipes && recipes.length === 0 && (
-        <Alert
-          onClose={() => {
-            setHideAlerts(true)
-          }}
-          severity='warning'
-        >
-          No recipes found.
-        </Alert>
-      )}
-      {!hideAlerts && recipes && recipes.length !== 0 && (
-        <Box marginBottom={2}>
+      {!hideAlerts
+        && recipes
+        && recipes !== 'loading'
+        && recipes.length === 0
+        && (
           <Alert
             onClose={() => {
               setHideAlerts(true)
             }}
-            severity='success'
+            severity='warning'
           >
-            {recipes.length} recipe{recipes.length > 1 ? 's' : ''} found!
+          No recipes found.
           </Alert>
-        </Box>
-      )}
+        )}
+      {!hideAlerts
+        && recipes
+        && recipes !== 'loading'
+        && recipes.length !== 0
+        && (
+          <Box marginBottom={2}>
+            <Alert
+              onClose={() => {
+                setHideAlerts(true)
+              }}
+              severity='success'
+            >
+              {recipes.length} recipe{recipes.length > 1 ? 's' : ''} found!
+            </Alert>
+          </Box>
+        )}
 
       {/* search results */}
-      {recipes && recipes.length !== 0 && (
-        <div>
-          {recipes.map((recipe, index) => (
-            <Card key={index}>
-              <RecipeSource source={recipe.source} />
+      {recipes
+        && recipes !== 'loading'
+        && recipes.length !== 0
+        && (
+          <div>
+            {recipes.map((recipe, index) => (
+              <Card key={index}>
+                <RecipeSource source={recipe.source} />
 
-              <CardContent>
-                <RecipeHeader
-                  duration={recipe.duration}
-                  recipeYield={recipe.yield}
-                  title={recipe.title}
-                />
+                <CardContent>
+                  <RecipeHeader
+                    duration={recipe.duration}
+                    recipeYield={recipe.yield}
+                    title={recipe.title}
+                  />
 
-              </CardContent>
-              <CardActions>
-                <Link href={`/recipe/${recipe._id}`}>
-                  <a>
-                    <Button color='primary' variant='contained'>
+                </CardContent>
+                <CardActions>
+                  <Link href={`/recipe/${recipe._id}`}>
+                    <a>
+                      <Button color='primary' variant='contained'>
                     View Recipe
-                    </Button>
-                  </a>
-                </Link>
-              </CardActions>
-            </Card>
-          ))}
-        </div>
-      )}
+                      </Button>
+                    </a>
+                  </Link>
+                </CardActions>
+              </Card>
+            ))}
+          </div>
+        )}
     </div>
   )
 }
