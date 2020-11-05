@@ -5,6 +5,7 @@ import {
   Divider,
 } from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
+import { makeStyles } from '@material-ui/core/styles'
 import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 
@@ -12,11 +13,22 @@ import RecipeHeader from '../../components/recipe-header'
 import RecipeSource from '../../components/recipe-source'
 import RecipeTags from '../../components/recipe-tags'
 
+const useStyles = makeStyles((theme) => {
+  return {
+    pageContainer: {
+      margin: '0 auto',
+      maxWidth: `${theme.breakpoints.values.sm}px`,
+    },
+  }
+})
+
 export default function Recipe() {
   const router = useRouter()
   const { id } = router.query
 
   const [recipe, setRecipe] = useState(false)
+
+  const classes = useStyles()
 
   useEffect(() => {
     async function fetchData() {
@@ -41,7 +53,7 @@ export default function Recipe() {
 
   if (!recipe) {
     return (
-      <Alert severity='info'>
+      <Alert className={classes.pageContainer} severity='info'>
         Loading recipe...
       </Alert>
     )
@@ -49,7 +61,7 @@ export default function Recipe() {
 
   if (recipe === 404) {
     return (
-      <Alert severity='warning'>
+      <Alert className={classes.pageContainer} severity='warning'>
         Recipe not found.
       </Alert>
     )
@@ -57,7 +69,7 @@ export default function Recipe() {
 
   if (recipe === 500) {
     return (
-      <Alert severity='error'>
+      <Alert className={classes.pageContainer} severity='error'>
         A server error occured while loading this recipe.
         This is our bad, not yours!
       </Alert>
@@ -65,7 +77,7 @@ export default function Recipe() {
   }
 
   return (
-    <div>
+    <div className={classes.pageContainer}>
       <Card>
         <RecipeSource source={recipe.source} />
 
