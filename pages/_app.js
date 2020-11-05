@@ -7,6 +7,7 @@ import React, { useEffect } from 'react'
 
 import PageLayout from '../components/page-layout'
 import theme from '../src/theme'
+import Store from '../util/store'
 
 const NO_FOOTER_ROUTES = ['/', '/add']
 
@@ -22,7 +23,7 @@ export default function MyApp(props) {
   }, [])
 
   return (
-    <>
+    <Store>
       <Head>
         <title>Flatbread</title>
         <meta
@@ -36,7 +37,7 @@ export default function MyApp(props) {
           <Component {...pageProps} />
         </PageLayout>
       </ThemeProvider>
-    </>
+    </Store>
   )
 }
 

@@ -155,7 +155,7 @@ export default function Add({
           setSubmitStatus(response.data)
         })
         .catch(function (error) {
-          console.log(error)
+          console.error(error)
         })
     }
   }

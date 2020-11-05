@@ -13,7 +13,9 @@ import NotesIcon from '@material-ui/icons/Notes'
 import ViewAgendaIcon from '@material-ui/icons/ViewAgenda'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
+
+import { Context } from '../util/store'
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -56,6 +58,8 @@ export default function PageLayout(props) {
   const classes = useStyles()
   const [value, setValue] = useState(0)
 
+  const [state, dispatch] = useContext(Context)
+
   return (
     <div className={classes.pageContainer}>
       {/* header */}
@@ -70,14 +74,14 @@ export default function PageLayout(props) {
       </StyledAppBar>
 
       {/* content */}
-      <div className={classes.content}>{props.children}</div>
+      <div className={classes.content} value={value}>{props.children}</div>
 
       {/* footer */}
       {!props.noFooter && (
         <BottomNavigation
           onChange={(event, newValue) => {
-            console.log(newValue)
             setValue(newValue)
+            dispatch({ type: 'SET_BOTTOM_NAV_VALUE', payload: newValue })
           }}
           showLabels
           value={value}

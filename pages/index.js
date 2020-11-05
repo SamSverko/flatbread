@@ -63,12 +63,11 @@ export default function Home({ isConnected }) {
     axios
       .post(`/api/recipes?title=${data.title}`, data)
       .then(function (response) {
-        console.log(response.data)
         setRecipes(response.data)
         setHideAlerts(false)
       })
       .catch(function (error) {
-        console.log(error)
+        console.error(error)
       })
   }
 

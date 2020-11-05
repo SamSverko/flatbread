@@ -7,11 +7,12 @@ import {
 import { Alert } from '@material-ui/lab'
 import { makeStyles } from '@material-ui/core/styles'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 
 import RecipeHeader from '../../components/recipe-header'
 import RecipeSource from '../../components/recipe-source'
 import RecipeTags from '../../components/recipe-tags'
+import { Context } from '../../util/store'
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -29,6 +30,9 @@ export default function Recipe() {
   const [recipe, setRecipe] = useState(false)
 
   const classes = useStyles()
+
+  const [state, dispatch] = useContext(Context)
+  console.log(state)
 
   useEffect(() => {
     async function fetchData() {
