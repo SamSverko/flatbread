@@ -1,17 +1,9 @@
-import {
-  Box,
-  Card,
-  CardContent,
-  Divider,
-} from '@material-ui/core'
 import { Alert } from '@material-ui/lab'
 import { makeStyles } from '@material-ui/core/styles'
 import { useRouter } from 'next/router'
 import React, { useContext, useEffect, useState } from 'react'
 
-import RecipeHeader from '../../components/recipe-header'
-import RecipeSource from '../../components/recipe-source'
-import RecipeTags from '../../components/recipe-tags'
+import ViewInfo from '../../components/view-info'
 import { Context } from '../../util/store'
 
 const useStyles = makeStyles((theme) => {
@@ -31,8 +23,7 @@ export default function Recipe() {
 
   const classes = useStyles()
 
-  const [state, dispatch] = useContext(Context)
-  console.log(state, dispatch)
+  const [state] = useContext(Context)
 
   useEffect(() => {
     async function fetchData() {
@@ -82,30 +73,18 @@ export default function Recipe() {
 
   return (
     <div className={classes.pageContainer}>
-      <Card>
-        <RecipeSource source={recipe.source} />
-
-        <CardContent>
-
-          <RecipeHeader
-            duration={recipe.duration}
-            recipeYield={recipe.yield}
-            title={recipe.title}
-          />
-
-          <Box marginBottom={1}>
-            <Divider />
-          </Box>
-
-          <RecipeTags
-            courseTypes={recipe.courseTypes}
-            cuisines={recipe.cuisines}
-            dishTypes={recipe.dishTypes}
-            dietaryRestrictions={recipe.dietaryRestrictions}
-          />
-
-        </CardContent>
-      </Card>
+      {state.bottomNavValue === 0 && (
+        <ViewInfo
+          courseTypes={recipe.courseTypes}
+          cuisines={recipe.cuisines}
+          duration={recipe.duration}
+          dishTypes={recipe.dishTypes}
+          dietaryRestrictions={recipe.dietaryRestrictions}
+          recipeYield={recipe.yield}
+          source={recipe.source}
+          title={recipe.title}
+        />
+      )}
     </div>
   )
 }
