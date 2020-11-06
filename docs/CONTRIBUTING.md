@@ -25,7 +25,7 @@ Maybe one of the scenarios below describes you. If any are a 'yes' from you, the
 - Do you want to collaborate with others and learn new things?
 - Are you stuck on what to learn or a side project?
 
-We are building Flatbread from the ground up. We are focused on keeping the app as accessible as possible. This we are aiming to maintain the highest level of accessibility possible, currently for [Web Content Accessibility Guidelines (WCAG) 2.1 level AA](https://www.w3.org/TR/WCAG21/) compliancy. If we have the ability to create amazing tools for everyone, we have a duty to make it as accessible to as many people as we possibly can.
+We are building Flatbread from the ground up. We are focused on keeping the website as accessible as possible. This we are aiming to maintain the highest level of accessibility possible, currently for [Web Content Accessibility Guidelines (WCAG) 2.1 level AA](https://www.w3.org/TR/WCAG21/) compliancy. If we have the ability to create amazing tools for everyone, we have a duty to make it as accessible to as many people as we possibly can.
 
 We are building Flatbread for the world, this means that we are putting the needs of the end-user before us developers. We are committed to learning what is required, and implement to best practices whether this is code or design.
 
@@ -55,7 +55,7 @@ Okay, confession time, the back end is currently being developed by beginners. G
 
 ### Reporting bugs
 
-Want to start small, but have a huge impact on the integrity of the Flatbread app? Open it up in your favourite browser, open up the dev-tools, and play around with the functionality. We are always iterating new designs and features, yet want to adhere to accessibility standards. Maybe use this handy [WCAG 2.1 quick reference](https://www.w3.org/WAI/WCAG21/quickref/?currentsidebar=%23col_customize) and audit the site to see if we are fully compliant. If you come across a bug, or something doesn't quite look right, let us know!
+Want to start small, but have a huge impact on the integrity of the Flatbread website? Open it up in your favourite browser, open up the dev-tools, and play around with the functionality. We are always iterating new designs and features, yet want to adhere to accessibility standards. Maybe use this handy [WCAG 2.1 quick reference](https://www.w3.org/WAI/WCAG21/quickref/?currentsidebar=%23col_customize) and audit the site to see if we are fully compliant. If you come across a bug, or something doesn't quite look right, let us know!
 
 The way we track bugs are through [GitHub issues](https://guides.github.com/features/issues/).
 
@@ -101,8 +101,8 @@ Flatbread is committed to comply with [WCAG 2.1 level AA](https://www.w3.org/TR/
   - 💚 - Fix deployment action/pipeline.
   - ✅ - Add tests.
   - 🔒 - Deal with security.
-  - ⬆️ - Upgrade dependencies/app version.
-  - ⬇️ - Downgrade dependencies/app version.
+  - ⬆️ - Upgrade dependencies/project version.
+  - ⬇️ - Downgrade dependencies/project version.
   - 👕 - Remove linter warnings.
 
 ### Elements

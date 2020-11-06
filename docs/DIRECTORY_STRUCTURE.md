@@ -29,6 +29,6 @@ flatbread
 │   api                               # BACK    | Any file here will be treated as an API endpoint instead of a page.
 │
 └───public                            # ALL     | Serve static files, like images.
-└───src                               # ALL     | Source code for the app, including components, theme configuration, and more.
+└───src                               # ALL     | Source code for the application, including components, theme configuration, and more.
 └───util                              # ALL     | Small functions used throughout the application.
 ```

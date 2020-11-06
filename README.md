@@ -23,17 +23,17 @@
 
 ## What is Flatbread?
 
-Flatbread is a **web-based app for recipes**. That's it.
+Flatbread is a **website for recipes**. That's it.
 
-You might be wondering **"why even build this app?"** considering the dozens of already-existing recipes sites ([All Recipes](https://www.allrecipes.com/), [Epicurious](https://www.epicurious.com/), [Tasty](https://tasty.co/), [Yummly](https://www.yummly.com/) and many, many more) that already contain more recipes (and users) than anyone could even count? For us, it all boils down to **simplicity**. Flatbread wants to be as **lean** as you do on the first day of your new years resolution, as **accessible** as possible to work for **everyone**, and **free**. We were going to continue that list with "as free as possible", but while that would keep the list-trend going, it wouldn't be true. We want Flatbread to be free. Period (see the `.` before the word "Period"). There are enough things that you already pay money for, including food. Flatbread doesn't want to be yet another notch on your 'monthly-subscriptions' belt.
+You might be wondering **"why even build this website?"** considering the dozens of already-existing recipes sites ([All Recipes](https://www.allrecipes.com/), [Epicurious](https://www.epicurious.com/), [Tasty](https://tasty.co/), [Yummly](https://www.yummly.com/) and many, many more) that already contain more recipes (and users) than anyone could even count? For us, it all boils down to **simplicity**. Flatbread wants to be as **lean** as you do on the first day of your new years resolution, as **accessible** as possible to work for **everyone**, and **free**. We were going to continue that list with "as free as possible", but while that would keep the list-trend going, it wouldn't be true. We want Flatbread to be free. Period (see the `.` before the word "Period"). There are enough things that you already pay money for, including food. Flatbread doesn't want to be yet another notch on your 'monthly-subscriptions' belt.
 
 Speaking of spending money on food; while most of us spend somewhere around [**11% of our income on groceries**](https://www.thestreet.com/personal-finance/average-cost-of-food-14845479), Flatbread is looking to do something about that. A later phase of this project will be introducing the **Save-O-Matic Recipe Builder 3000** (working title). This feature will scrape the internet for weekly food flyers and pair what's on sale with what recipes are in the Flatbread database. That way you can save money while you meal prep for the week.
 
 Let's peddle back to the lean segment of Flatbread's goals for a moment. It is too common for recipe websites to overload the user with bloat content and endless network requests. As a little experiment, we loaded a generic recipe page from three different recipe websites to test the number of network requests as well as the overall page weight. The results were not pretty:
 
-- App 1 had 162 network requests and loaded 1.0 MB of data! ([screenshot](https://github.com/SamSverko/flatbread/blob/main/docs/img/screenshot-1.png))
-- App 2 had 548 network requests and loaded 3.0 MB of data! ([screenshot](https://github.com/SamSverko/flatbread/blob/main/docs/img/screenshot-2.png))
-- App 3 had 484 network requests and loaded 19.0 MB of data! ([screenshot](https://github.com/SamSverko/flatbread/blob/main/docs/img/screenshot-3.png))
+- Website #1 had 162 network requests and loaded 1.0 MB of data! ([screenshot](https://github.com/SamSverko/flatbread/blob/main/docs/img/screenshot-1.png))
+- Website #2 had 548 network requests and loaded 3.0 MB of data! ([screenshot](https://github.com/SamSverko/flatbread/blob/main/docs/img/screenshot-2.png))
+- Website #3 had 484 network requests and loaded 19.0 MB of data! ([screenshot](https://github.com/SamSverko/flatbread/blob/main/docs/img/screenshot-3.png))
 
 Do not get us started on those lovely full-screen popups that appear after a few seconds asking for you to sign up to their newsletter (we have a screenshot [here](https://github.com/SamSverko/flatbread/blob/main/docs/img/screenshot-4.png) and [here](https://github.com/SamSverko/flatbread/blob/main/docs/img/screenshot-5.png)).
 
@@ -68,7 +68,7 @@ To get the website running locally, please do the following:
 
 ## Production
 
-We're not quite there yet, however we will most likely be deploying this app to [Vercel](https://vercel.com/) due to it's extremely-interoperable nature with Next.js apps. Stay tuned!
+We're not quite there yet, however we will most likely be deploying this website to [Vercel](https://vercel.com/) due to it's extremely-interoperable nature with Next.js projects. Stay tuned!
 
 ---
 
