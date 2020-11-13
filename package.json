@@ -20,17 +20,17 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.56",
     "axios": "^0.20.0",
-    "mongodb": "^3.5.9",
-    "next": "^10.0.0",
+    "mongodb": "^3.6.3",
+    "next": "^10.0.1",
     "prop-types": "^15.7.2",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
-    "react-hook-form": "^6.9.6",
+    "react-hook-form": "^6.11.0",
     "yup": "^0.29.3"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
-    "eslint": "^7.11.0",
+    "eslint": "^7.13.0",
     "eslint-plugin-react": "^7.21.5"
   }
 }
