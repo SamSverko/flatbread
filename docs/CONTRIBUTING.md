@@ -89,21 +89,6 @@ Flatbread is committed to comply with [WCAG 2.1 level AA](https://www.w3.org/TR/
 - Use the imperative mood ("Move cursor to..." not "Moves cursor to...").
 - Limit the first line to 50 characters or less.
 - Reference issues and pull requests liberally after the first line.
-- Consider starting the commit message with an applicable emoji when you:
-  - 🚧 - Create/add work-in-progress feature.
-  - 🎨 - Improve visual appearance/styling.
-  - 🧩 - Improve code format/structure.
-  - 🐎 - Improve performance.
-  - 📝 - Write docs.
-  - 🐛 - Fix bugs.
-  - 🆕 - Add files, dependencies, or code.
-  - 🔥 - Add files, dependencies, or code.
-  - 💚 - Fix deployment action/pipeline.
-  - ✅ - Add tests.
-  - 🔒 - Deal with security.
-  - ⬆️ - Upgrade dependencies/project version.
-  - ⬇️ - Downgrade dependencies/project version.
-  - 👕 - Remove linter warnings.
 
 ### Elements
 
