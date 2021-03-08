@@ -58,7 +58,7 @@ This website is built using the [Next.js](https://nextjs.org/) framework.
 To get the website running locally, please do the following:
 
 1. Ensure your environment has [Git](https://git-scm.com/), [Node.js](https://nodejs.org/en/), and [npm](https://www.npmjs.com/) installed.
-2. Clone repository, run `git clone git@github.com:SamSverko/flatbread.git`.
+2. Clone repository, run `git clone https://github.com/SamSverko/flatbread.git`.
 3. Install dependencies, run `yarn`.
 4. Copy the `.env.local.example` file and rename it to `.env.local`. Update the values to your needs.
 5. Start the website in development mode, run `yarn dev`.
