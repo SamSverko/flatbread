@@ -8,7 +8,7 @@ Here is a breakdown of the process of working on Flatbread. We will assume that:
 
 - You understand the basics of Git.
 - Your local environment has Git, [Node](https://nodejs.org/en/), and [npm](https://www.npmjs.com/) installed.
-- You have cloned the repository (run `git clone git@github.com:SamSverko/flatbread.git`).
+- You have cloned the repository (run `git clone https://github.com/SamSverko/flatbread.git`).
 - You have updated the project dependencies (run `yarn`).
 - You are ready to have fun and write some code for Flatbread!
 
