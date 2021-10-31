@@ -23,7 +23,7 @@
 
 ## What is Flatbread?
 
-Flatbread is a **website for recipes**. That's it.
+Flatbread is a **website for recipes**. That's it!
 
 You might be wondering **"why even build this website?"** considering the dozens of already-existing recipes sites ([All Recipes](https://www.allrecipes.com/), [Epicurious](https://www.epicurious.com/), [Tasty](https://tasty.co/), [Yummly](https://www.yummly.com/) and many, many more) that already contain more recipes (and users) than anyone could even count? For us, it all boils down to **simplicity**. Flatbread wants to be as **lean** as you do on the first day of your new years resolution, as **accessible** as possible to work for **everyone**, and **free**. We were going to continue that list with "as free as possible", but while that would keep the list-trend going, it wouldn't be true. We want Flatbread to be free. Period (see the `.` before the word "Period"). There are enough things that you already pay money for, including food. Flatbread doesn't want to be yet another notch on your 'monthly-subscriptions' belt.
 
