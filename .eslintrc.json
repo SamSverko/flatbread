@@ -1,0 +1,21 @@
+{
+    "extends": [
+        "eslint:recommended",
+        "next/core-web-vitals",
+        "plugin:@typescript-eslint/recommended"
+    ],
+    "parser": "@typescript-eslint/parser",
+    "plugins": [
+        "@typescript-eslint"
+    ],
+    "root": true,
+    "rules": {
+        "@typescript-eslint/no-namespace": "off",
+        "comma-dangle": ["error", "always-multiline"],
+        "eol-last": ["error", "always"],
+        "indent": ["error", 4],
+        "no-param-reassign": "off",
+        "quotes": ["error", "single", { "avoidEscape": true }],
+        "semi": ["error", "always"]
+    }
+}

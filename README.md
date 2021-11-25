@@ -92,3 +92,37 @@ We're not quite there yet, however we will most likely be deploying this website
 ## Contribute
 
 If you would like to get involved in any way, feel free to give our [Contributing document](https://github.com/SamSverko/flatbread/blob/main/docs/CONTRIBUTING.md) a visit :blush:
+
+---
+
+## Commands
+
+- Start by installing the Prisma CLI via npm: `npm install prisma --save-dev`
+- Use the Prisma CLI to bootstrap a basic Prisma setup: `npx prisma init`
+- Create the tables in your database: `npx prisma db push`
+- Go ahead and add some initial dummy data using Prisma Studio: `npx prisma studio`
+- Install Prisma Client: `npm install @prisma/client`
+- Because Prisma Client is tailored to your own schema, you need to update it every time your Prisma schema file is changing by running the following command: `npx prisma generate`.
+- Install the NextAuth.js library in your app: `npm install next-auth`
+
+## Fractions
+
+- ↉ = 0
+- ⅒ = 0.1
+- ⅑ = 0.111
+- ⅛ = 0.125
+- ⅐ = 0.142
+- ⅙ = 0.167
+- ⅕ = 0.2
+- ¼ = 0.25
+- ⅓ = 0.333
+- ⅜ = 0.375
+- ⅖ = 0.4
+- ½ = 0.5
+- ⅗ = 0.6
+- ⅝ = 0.625
+- ⅔ = 0.667
+- ¾ = 0.75
+- ⅘ = 0.8
+- ⅚ = 0.833
+- ⅞ = 0.875

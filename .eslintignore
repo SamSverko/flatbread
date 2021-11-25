@@ -1,6 +1,7 @@
-# directories
 .git
 .github
 .next
+coverage
+dist
 node_modules
 out
