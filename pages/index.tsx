@@ -132,9 +132,13 @@ const Home: NextPage = () => {
                 <input type='submit' value='Search' />
             </form>
 
-            <form onSubmit={handleSubmitGetAllRecipes}>
-                <input disabled={hasAllRecipes} type='submit' value='Get all recipes' />
-            </form>
+            {!hasAllRecipes &&
+                <form onSubmit={handleSubmitGetAllRecipes}>
+                    <input disabled={hasAllRecipes} type='submit' value='Get all recipes' />
+                </form>
+            }
+
+            {hasAllRecipes && <button disabled={status === 'show'} onClick={() => setStatus('show')}>Show all recipes</button>}
 
             <form onSubmit={handleSubmitRandom}>
                 <input type='submit' value='Get a random recipe' />
