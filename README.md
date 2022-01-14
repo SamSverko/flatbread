@@ -1,6 +1,6 @@
-![Main Checks](https://github.com/SamSverko/flatbread/workflows/Main%20Checks/badge.svg?branch=main) [![first-timers-only](https://img.shields.io/badge/first--timers--only-friendly-blue.svg)](https://www.firsttimersonly.com/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
 # Flatbread
+
+![Main Checks](https://github.com/SamSverko/flatbread/workflows/Main%20Checks/badge.svg?branch=main) [![first-timers-only](https://img.shields.io/badge/first--timers--only-friendly-blue.svg)](https://www.firsttimersonly.com/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 > "People who love to eat are always the best people. - Julia Child"
 
@@ -39,7 +39,7 @@ Do not get us started on those lovely full-screen popups that appear after a few
 
 We just wanted waffles people! We can do better.
 
-Thanks for reading this far, friend! If you are interested in this project in any scope, feel free to check out our [Contributing document](https://github.com/SamSverko/flatbread/blob/main/docs/CONTRIBUTING.md), or a message to the project owner (Sam), on Discord (SamTheBigs#3861).
+Thanks for reading this far, friend! If you are interested in this project in any scope, feel free to check out our [Contributing document](https://github.com/SamSverko/flatbread/blob/main/docs/CONTRIBUTING.md).
 
 ---
 
@@ -59,10 +59,10 @@ To get the website running locally, please do the following:
 
 1. Ensure your environment has [Git](https://git-scm.com/), [Node.js](https://nodejs.org/en/), and [npm](https://www.npmjs.com/) installed.
 2. Clone repository, run `git clone https://github.com/SamSverko/flatbread.git`.
-3. Install dependencies, run `yarn`.
+3. Install dependencies, run `npm i`.
 4. Copy the `.env.local.example` file and rename it to `.env.local`. Update the values to your needs.
-5. Start the website in development mode, run `yarn dev`.
-6. View website at http://localhost:3000.
+5. Start the website in development mode, run `npm run dev`.
+6. View website at [http://localhost:3000](http://localhost:3000).
 
 ---
 
@@ -76,53 +76,19 @@ We're not quite there yet, however we will most likely be deploying this website
 
 ### Available scripts
 
-- `yarn build` creates an optimized production build of your application. The output displays information about each route.
-- `yarn dev` starts the application in development mode with hot-code reloading, error reporting, and more.
-- `yarn lint` runs ESLint towards all project directories and files except those specified inside the `.eslintignore` configuration file.
-- `yarn start` starts the application in production mode. The application should be compiled with `yarn build` first.
+- `npm run build` creates an optimized production build of your application. The output displays information about each route.
+- `npm run dev` starts the application in development mode with hot-code reloading, error reporting, and more.
+- `npm run lint` runs ESLint towards all project directories and files except those specified inside the `.eslintignore` configuration file..
+- `npm start` starts the application in production mode. The application should be compiled with `npm run build` first.
 
 ### Tech stack
 
 - **Hosting (TBD):** [Vercel](https://aws.amazon.com/ec2/) - A cloud platform for static sites and Serverless Functions.
 - **Front End Framework:** [Next.js](https://nextjs.org/) - A React framework for developing single page and multi-page JavaScript applications and websites.
-- **Database:** [MongoDB](https://www.mongodb.com/) - MongoDB is a general purpose, document-based, distributed database.
+- **Headless CMS:** [Contentful](https://www.contentful.com/) - More than a headless CMS, Contentful is the API-first content management platform to create, manage and publish content on any digital channel.
 
 ---
 
 ## Contribute
 
 If you would like to get involved in any way, feel free to give our [Contributing document](https://github.com/SamSverko/flatbread/blob/main/docs/CONTRIBUTING.md) a visit :blush:
-
----
-
-## Commands
-
-- Start by installing the Prisma CLI via npm: `npm install prisma --save-dev`
-- Use the Prisma CLI to bootstrap a basic Prisma setup: `npx prisma init`
-- Create the tables in your database: `npx prisma db push`
-- Go ahead and add some initial dummy data using Prisma Studio: `npx prisma studio`
-- Install Prisma Client: `npm install @prisma/client`
-- Because Prisma Client is tailored to your own schema, you need to update it every time your Prisma schema file is changing by running the following command: `npx prisma generate`.
-- Install the NextAuth.js library in your app: `npm install next-auth`
-
-## Fractions
-
-- ↉ = 0
-- ⅒ = 0.1
-- ⅑ = 0.111
-- ⅛ = 0.125
-- ⅐ = 0.142
-- ⅙ = 0.167
-- ⅕ = 0.2
-- ¼ = 0.25
-- ⅓ = 0.333
-- ⅜ = 0.375
-- ⅖ = 0.4
-- ½ = 0.5
-- ⅗ = 0.6
-- ⅝ = 0.625
-- ⅔ = 0.667
-- ¾ = 0.75
-- ⅘ = 0.8
-- ⅚ = 0.833
-- ⅞ = 0.875

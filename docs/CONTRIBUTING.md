@@ -8,7 +8,7 @@ The following is a set of notes for contributing to Flatbread. These are mostly 
 
 ## Code of conduct
 
-This project and everyone participating in it is governed by the [Flatbread Code of Conduct](https://github.com/SamSverko/flatbread/blob/main/docs/CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to the project owner (Sam) with a message on Discord (SamTheBigs#3861).
+This project and everyone participating in it is governed by the [Flatbread Code of Conduct](https://github.com/SamSverko/flatbread/blob/main/docs/CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to the project owner (Sam).
 
 ---
 
@@ -49,7 +49,7 @@ You can be honest, Flatbread could use a makeover. Maybe you're a UI/UX/OP/GG/RR
 
 Know a little HTML/CSS/JS? Know a lot of HTML/CSS, but not so much JS? Know a little HTML/CSS, and a lot of JS? Or something in between? Perfect! You can contribute to the front end portion of Flatbread.
 
-### Back end & api
+### Back end & API
 
 Okay, confession time, the back end is currently being developed by beginners. Good news, that means you're in the right place if you're at or beyond our level. We are always looking for guidance from experienced back-end developers, and support from newcomers.
 
@@ -96,29 +96,24 @@ Flatbread is committed to comply with [WCAG 2.1 level AA](https://www.w3.org/TR/
 
 ### Styling
 
-- Styling for this project is provided by [Material-UI's CSS-in-JS solution](https://material-ui.com/styles/basics/).
-- All class naming must adhere to the [Block Element Modifier (BEM)](http://getbem.com/naming/) methodology.
 - Order selectors alphabetically. For example: `a {} h1 {} p {}`.
 - Order declaration properties alphabetically, but ignore vendor prefixes (`-webkit`, `-moz`, `-o`, `-ms`). Meaning `-webkit-box-shadow` should be treated as starting with the letter `b`.
 - Order action selectors alphabetically.
 - Place `@media` declarations at the end of properties.
 - Example:
 
-```jsx
-const useStyles = makeStyles((theme) => {
-  return {
-    pageContainer: {
-      // declaration-property: declaration-value
-      display: "inline-block",
-      fontFamily: '"FontRobotoBold", sans-serif',
-      textAlign: "center",
-      "&:hover": {
-        backgroundColor: theme.palette.primary.main,
-        color: theme.palette.common.white,
-      },
-    },
-  };
-});
+```scss
+.my-class {
+    display: inline-block;
+    font-family: 'Roboto', sans-serif;
+    text-align: center;
+
+    &:hover {
+        background-color: black;
+        color: white;
+    }
+}
+
 ```
 
 ### Linting
@@ -133,8 +128,8 @@ Many thanks to the [The Atom editor contribution guidelines](https://github.com/
 
 ---
 
-## You have made it this far!
+## You have made it this far
 
 Thank you for taking the time to read through this document (or just scroll down to the bottom to see how long this really was). You might be thinking to yourself, "wow, there are a lot of notes for such a small project!" and you are right! This wasn't meant to scare anyone away, but for contributors of any skill level to feel at ease and a sense of belonging to this project. We are hoping that once the few first contributions make their way into Flatbread, that we all become familiar and even tweak the guidelines to better fit the project.
 
-If after all this reading you are still interested in contributing, feel free to create a [new issue](https://github.com/SamSverko/flatbread/issues) with what you want to contribute with, or hit the project owner (Sam) up on Discord (SamTheBigs#3861). He doesn't bite :blush:
+If after all this reading you are still interested in contributing, feel free to create a [new issue](https://github.com/SamSverko/flatbread/issues) with what you want to contribute :blush:

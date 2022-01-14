@@ -4,13 +4,15 @@ import { client } from '../../util/contentful';
 
 export default async function handler(_: NextApiRequest, res: NextApiResponse) {
     try {
-        const recipes = await client.getEntries({
+        const response = await client.getEntries({
             content_type: 'recipe',
         });
 
-        res.status(200).json(recipes);
+        const randomRecipe = response.items[Math.floor(Math.random() * response.items.length)];
+
+        return res.status(200).json(randomRecipe);
     } catch(error) {
-        res.status(500).json({
+        return res.status(500).json({
             error: (error as Error).message,
         });
     }

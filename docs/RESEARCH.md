@@ -4,34 +4,53 @@
 
 [Inspirational food-related quotes](https://www.huffingtonpost.ca/entry/food-quotes-famous-eating_n_2481583?ri18n=true)
 
+## Fractions
+
+- ↉ = 0
+- ⅒ = 0.1
+- ⅑ = 0.111
+- ⅛ = 0.125
+- ⅐ = 0.142
+- ⅙ = 0.167
+- ⅕ = 0.2
+- ¼ = 0.25
+- ⅓ = 0.333
+- ⅜ = 0.375
+- ⅖ = 0.4
+- ½ = 0.5
+- ⅗ = 0.6
+- ⅝ = 0.625
+- ⅔ = 0.667
+- ¾ = 0.75
+- ⅘ = 0.8
+- ⅚ = 0.833
+- ⅞ = 0.875
+
+↉, ⅒, ⅑, ⅛, ⅐, ⅙, ⅕, ¼, ⅓, ⅜, ⅖, ½, ⅗, ⅝, ⅔, ¾, ⅘, ⅚, ⅞
+
 ## Using Flipp's website to get local flyer data
 
-* Get flyers based on postal code:
-	* https://gateflipp.flippback.com/bf/flipp/data?locale=en-ca&postal_code=L0R2A0
-* Once you have the postal code, use the store id to get that store flyers:
-	* https://gateflipp.flippback.com/bf/flipp/flyers/3278188
-* If you want to look at a flyer on your browser:
-	* https://flipp.com/en-ca/smithville-on/flyer/3278188-fortinos-weekly-flyer?postal_code=L0R2A0
+- [Get flyers based on postal code](https://gateflipp.flippback.com/bf/flipp/data?locale=en-ca&postal_code=M5A3X2)
+- [Once you have the postal code, use the store id to get that store flyers](https://gateflipp.flippback.com/bf/flipp/flyers/3278188)
+- [If you want to look at a flyer on your browser](https://flipp.com/en-ca/smithville-on/flyer/3278188-fortinos-weekly-flyer?postal_code=M5A3X2)
 
 ---
 
 ## Stack overflow
 
-Scraping web flyer data using python: https://stackoverflow.com/questions/46650484/scraping-a-web-flyer
+[Scraping web flyer data using python](https://stackoverflow.com/questions/46650484/scraping-a-web-flyer)
 (Just in case the posts ever gets deleted, I've copied the answer below)
 
-https://backflipp.wishabi.com/flipp/items/search?locale=[Your Language preference here]&postal_code=[Your postal code here]&q=[Your merchant here]
+`https://backflipp.wishabi.com/flipp/items/search?locale=[Your Language preference here]&postal_code=[Your postal code here]&q=[Your merchant here]`
+In this example you will get all items (description, price, image etc..) from all valid flyers from Walmart in in the area of H4A1B9 postal code
 
-//in this example you will get all items (description, price, image etc..) from all valid flyers from Walmart in in the area of H4A1B9 postal code
+`https://backflipp.wishabi.com/flipp/items/search?locale=en-ca&postal_code=H4A1B9&q=Walmart`
+In this example you will search at Walmart for a specific item
 
-https://backflipp.wishabi.com/flipp/items/search?locale=en-ca&postal_code=H4A1B9&q=Walmart
-
-// in this example you will search at Walmart for a specific item
-
-https://backflipp.wishabi.com/flipp/items/search?locale=en-ca&postal_code=H4A1B9&q=Walmart AND milk
+`https://backflipp.wishabi.com/flipp/items/search?locale=en-ca&postal_code=H4A1B9&q=Walmart AND milk`
 
 Looks like this link format could be a great starting point:
-https://backflipp.wishabi.com/flipp/items/search?locale=en&postal_code=H4A1B9&q=walmart
+`https://backflipp.wishabi.com/flipp/items/search?locale=en&postal_code=H4A1B9&q=walmart`
 
 This link returns a nicely formatted json object (we can use JavaScript to manipulate it for the page, no need for Python). We can get the item name, listed price, when the sale takes place, image, etc.
 
@@ -130,7 +149,7 @@ We won't have the information for this, for the first version at least.
 - Brunch
 - Buffet
 
-#### Dish type
+#### Dish types
 
 - Aperitif
 - Biscuit
@@ -191,7 +210,7 @@ We won't have the information for this, for the first version at least.
 - Vegetarian
 - Wheat & gluten-free
 
-#### Ingredient
+#### Ingredients
 
 - List of basic ingredients (chicken, beef, apple, etc.)
 
@@ -261,7 +280,7 @@ We won't have the information for this, for the first version at least.
 
 ### Bon Apetit
 
-#### Meal & course
+#### Meal & courses
 
 - Appetizer
 - Breakfast
@@ -272,13 +291,9 @@ We won't have the information for this, for the first version at least.
 - Lunch
 - Side
 
-####  Dietary concerns
+#### Dietary concern
 
 - Vegetarian
 - Vegan
 - Gluten-free
 - Healthyish
-
-#### Ingredient
-
-- List of basic ingredients (chicken, beef, apple, etc.)
