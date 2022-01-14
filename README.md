@@ -1,6 +1,6 @@
 # Flatbread
 
-![Main Checks](https://github.com/SamSverko/flatbread/workflows/Main%20Checks/badge.svg?branch=main) [![first-timers-only](https://img.shields.io/badge/first--timers--only-friendly-blue.svg)](https://www.firsttimersonly.com/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![first-timers-only](https://img.shields.io/badge/first--timers--only-friendly-blue.svg)](https://www.firsttimersonly.com/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 > "People who love to eat are always the best people. - Julia Child"
 
