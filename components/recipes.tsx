@@ -75,7 +75,7 @@ const Recipes = ({ recipes }: any) => {
                                         </ul>
                                     </li>
                                     {/* dietaryRestrictions */}
-                                    {recipe.fields.hasOwnProperty('dietaryRestrictions') && 
+                                    {Object.prototype.hasOwnProperty.call(recipe.fields, 'dietaryRestrictions') && 
                                         <li>
                                             <b>Dietary Restrictions: </b>
                                             <ul>
@@ -163,7 +163,7 @@ const Recipes = ({ recipes }: any) => {
                                         </ul>
                                     </li>
                                     {/* notes */}
-                                    {recipe.fields.hasOwnProperty('notes') && 
+                                    {Object.prototype.hasOwnProperty.call(recipe.fields, 'notes') && 
                                         <li>
                                             <b>Notes: </b>
                                             <ul>

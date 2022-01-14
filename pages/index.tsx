@@ -16,7 +16,7 @@ const Home: NextPage = () => {
         if (recipes[randomRecipeIndex]) {
             setStatus('random');
         }
-    }, [randomRecipeIndex]);
+    }, [randomRecipeIndex, recipes]);
 
     // event listeners
     function handleChangeSearch(event: React.ChangeEvent) {
@@ -86,7 +86,7 @@ const Home: NextPage = () => {
         } else {
             setStatus('not found');
         }
-    };
+    }
 
     // helpers
     async function getRecipes(query: string) {
