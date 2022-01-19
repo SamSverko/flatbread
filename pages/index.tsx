@@ -6,6 +6,7 @@ import Recipes from '../components/recipes';
 const Home: NextPage = () => {
     const [formError, setFormError] = useState('');
     const [hasAllRecipes, setHasAllRecipes] = useState(false);
+    const [localSearchRecipes, setLocalSearchRecipes] = useState([]);
     const [randomRecipeIndex, setRandomRecipeIndex] = useState(-1);
     const [recipes, setRecipes] = useState([]);
     const [searchValue, setSearchValue] = useState('');
@@ -75,7 +76,7 @@ const Home: NextPage = () => {
         }
 
         if (hasAllRecipes) {
-            console.log('LOCAL SEARCH');
+            localSearch(searchValue);
             return;
         }
 
@@ -89,6 +90,19 @@ const Home: NextPage = () => {
     }
 
     // helpers
+    function localSearch(query: string) {
+        const matchedRecipes = recipes.filter((recipe: any) => {
+            const regex = new RegExp(query, 'i');
+            const search = recipe.fields.title.search(regex);
+            if (search > -1) {
+                return recipe.fields.title;
+            }
+        });
+
+        setLocalSearchRecipes(matchedRecipes);
+        setStatus('search');
+    }
+
     async function getRecipes(query: string) {
         setStatus('searching');
 
@@ -115,6 +129,8 @@ const Home: NextPage = () => {
             return <Recipes recipes={recipes} />;
         } else if (status === 'random') {
             return <Recipes recipes={[recipes[randomRecipeIndex]]} />;
+        } else if (status === 'search') {
+            return <Recipes recipes={localSearchRecipes} />;
         }
     }
 
@@ -138,7 +154,9 @@ const Home: NextPage = () => {
                 </form>
             }
 
-            {hasAllRecipes && <button disabled={status === 'show'} onClick={() => setStatus('show')}>Show all recipes</button>}
+            {hasAllRecipes &&
+                <button disabled={status === 'show'} onClick={() => setStatus('show')}>Show all recipes</button>
+            }
 
             <form onSubmit={handleSubmitRandom}>
                 <input type='submit' value='Get a random recipe' />
