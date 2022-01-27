@@ -4,20 +4,39 @@ import React, { useEffect, useState } from 'react';
 import Recipes from '../components/recipes';
 
 const Home: NextPage = () => {
+    // useState - rendering logic
+    const [status, setStatus] = useState('pending');
+
+    // useState - form
     const [formError, setFormError] = useState('');
     const [hasAllRecipes, setHasAllRecipes] = useState(false);
+    const [searchValue, setSearchValue] = useState('');
+    
+    // useState - recipes
     const [localSearchRecipes, setLocalSearchRecipes] = useState([]);
     const [randomRecipeIndex, setRandomRecipeIndex] = useState(-1);
     const [recipes, setRecipes] = useState([]);
-    const [searchValue, setSearchValue] = useState('');
-    const [status, setStatus] = useState('pending');
 
-    // react
+    // useState - categories
+    // const [categories, setCategories] = useState([]);
+
+    // useEffect - random recipe
     useEffect(() => {
         if (recipes[randomRecipeIndex]) {
             setStatus('random');
         }
     }, [randomRecipeIndex, recipes]);
+
+    // useEffect - categories
+    // useEffect(() => {
+    //     async function fetchCategories() {
+    //         const response = await fetch('${window.location.origin}/api/categories');
+    //         const json = await response.json();
+    //         setCategories(json);
+    //         console.log(json);
+    //     }
+    //     fetchCategories();
+    // }, []);
 
     // event listeners
     function handleChangeSearch(event: React.ChangeEvent) {
@@ -37,7 +56,7 @@ const Home: NextPage = () => {
             return;
         }
 
-        const results = await getRecipes('');
+        const results = await fetchRecipes('');
 
         if (results) {
             setHasAllRecipes(true);
@@ -55,7 +74,7 @@ const Home: NextPage = () => {
             return;
         }
 
-        const results = await getRecipes('');
+        const results = await fetchRecipes('');
 
         if (results) {
             setHasAllRecipes(true);
@@ -80,7 +99,7 @@ const Home: NextPage = () => {
             return;
         }
 
-        const results = await getRecipes(searchValue);
+        const results = await fetchRecipes(searchValue);
 
         if (results) {
             setStatus('show');
@@ -103,10 +122,10 @@ const Home: NextPage = () => {
         setStatus('search');
     }
 
-    async function getRecipes(query: string) {
+    async function fetchRecipes(query: string) {
         setStatus('searching');
 
-        const response = await fetch(`http://localhost:3000/api/search?query=${encodeURIComponent(query)}`);
+        const response = await fetch(`${window.location.origin}/api/search?query=${encodeURIComponent(query)}`);
         const json = await response.json();
 
         if (json.total === 0) {
