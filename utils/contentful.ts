@@ -8,7 +8,54 @@ type recipeQuery = {
     title: string,
 }
 
-export const categories = ['courseType', 'cuisine', 'dietaryRestriction', 'dishType'];
+const categories = ['courseType', 'cuisine', 'dietaryRestriction', 'dishType'];
+
+// these `format` functions reduce the return object size by over 40%!
+function formatCategory(category: any) {
+    return {
+        id: category.sys.id,
+        title: category.fields.title,
+    };
+}
+
+function formatRecipe(recipe: any) {
+    // required fields
+    const mappedRecipe: any = {
+        title: recipe.title,
+        slug: recipe.slug,
+        source: {
+            name: recipe.sourceName,
+        },
+        time: {
+            cook: recipe.cookTime,
+            prep: recipe.prepTime,
+        },
+        yield: {
+            amount: recipe.yieldAmount,
+            unit: (recipe.yieldAmount === 1 ) ? recipe.yieldUnit.fields.title : recipe.yieldUnit.fields.titlePlural,
+        },
+        courseTypes: recipe.courseTypes.map((courseType: any) => courseType.fields.title),
+        cuisines: recipe.cuisines.map((cuisine: any) => cuisine.fields.title),
+        dishTypes: recipe.dishTypes.map((dishType: any) => dishType.fields.title),
+        ingredients: recipe.ingredients,
+        steps: recipe.steps,
+    };
+
+    // optional fields
+    if (recipe.sourceUrl) {
+        mappedRecipe.source.url = recipe.sourceUrl;
+    }
+
+    if (recipe.dietaryRestrictions) {
+        mappedRecipe.dietaryRestriction = recipe.dietaryRestrictions.map((dietaryRestriction: any) => dietaryRestriction.fields.title);
+    }
+
+    if (recipe.notes) {
+        mappedRecipe.notes = recipe.notes;
+    }
+
+    return mappedRecipe;
+}
 
 export function configClient() {
     return createClient({
@@ -22,16 +69,11 @@ export async function getAllCategories() {
 
     await Promise.all(categories.map(async (category) => {
         try {
-            const response: any = await configClient().getEntries({
+            const response = await configClient().getEntries({
                 content_type: category,
             });
 
-            fetchedCategories[category] = response.items.map((item: any) => {
-                return {
-                    id: item.sys.id,
-                    title: item.fields.title,
-                };
-            });
+            fetchedCategories[category] = response.items.map((item) => formatCategory(item));
         } catch(error) {
             throw new Error((error as Error).message);
         }
@@ -48,7 +90,7 @@ export async function getRandomRecipe() {
 
         const randomRecipe = fetchedRecipes.items[Math.floor(Math.random() * fetchedRecipes.items.length)];
 
-        return randomRecipe;
+        return formatRecipe(randomRecipe.fields);
     } catch(error) {
         throw new Error((error as Error).message);
     }
@@ -85,7 +127,7 @@ export async function getRecipesByQuery({
     try {
         const fetchedRecipes = await configClient().getEntries(query);
 
-        return fetchedRecipes;
+        return fetchedRecipes.items.map((recipe) => formatRecipe(recipe.fields));
     } catch(error) {
         throw new Error((error as Error).message);
     }
@@ -98,7 +140,7 @@ export async function getRecipeBySlug(slug: string) {
             'fields.slug': slug,
         });
 
-        return fetchedRecipe;
+        return formatRecipe(fetchedRecipe.items[0].fields);
     } catch(error) {
         throw new Error((error as Error).message);
     }
