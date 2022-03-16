@@ -23,6 +23,7 @@ function formatRecipe(recipe: any) {
     const mappedRecipe: any = {
         title: recipe.title,
         slug: recipe.slug,
+        createdAt: recipe.createdAt,
         source: {
             name: recipe.sourceName,
         },
@@ -71,6 +72,8 @@ export async function getAllCategories() {
         try {
             const response = await configClient().getEntries({
                 content_type: category,
+                limit: 1000,
+                order: 'fields.title',
             });
 
             fetchedCategories[category] = response.items.map((item) => formatCategory(item));
@@ -82,10 +85,23 @@ export async function getAllCategories() {
     return fetchedCategories;
 }
 
+export async function getRecipeCount() {
+    try {
+        const fetchedRecipes = await configClient().getEntries({
+            content_type: 'recipe',
+        });
+
+        return fetchedRecipes.total;
+    } catch(error) {
+        throw new Error((error as Error).message);
+    }
+}
+
 export async function getRandomRecipe() {
     try {
         const fetchedRecipes = await configClient().getEntries({
             content_type: 'recipe',
+            limit: 1000,
         });
 
         const randomRecipe = fetchedRecipes.items[Math.floor(Math.random() * fetchedRecipes.items.length)];
@@ -106,6 +122,8 @@ export async function getRecipesByQuery({
     const query: any = {
         content_type: 'recipe',
         'fields.title[match]': title,
+        limit: 1000,
+        order: '-fields.createdAt',
     };
 
     if (courseTypes) {
