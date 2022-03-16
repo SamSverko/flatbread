@@ -6,19 +6,16 @@ import { getAllCategories, getRecipeCount } from '../utils/contentful';
 import LoadingScreen from '../components/loading-screen/loading-screen';
 import SearchCard from '../components/search-card/search-card';
 
-type pageProps = {
+type props = {
     [key: string]: any
 }
 
-const Home: NextPage = ({ categories, recipeCount }: pageProps) => {
-    console.log(categories);
-
+const Home: NextPage = ({ categories, recipeCount }: props) => {
     const [recipes, setRecipes] = React.useState([]);
 
     // get all recipes on page load, and save it to localStorage
     React.useEffect(() => {
         async function getRecipes() {
-            console.log('Fetching new recipes!');
             const response = await fetch(`${window.location.origin}/api/recipes`);
 
             if (response.status !== 200) {
@@ -30,15 +27,18 @@ const Home: NextPage = ({ categories, recipeCount }: pageProps) => {
             localStorage.setItem('recipes', JSON.stringify(json));
         }
 
-        const localRecipeCount = localStorage.getItem('recipeCount');
         const localRecipes = localStorage.getItem('recipes');
+        let parsedRecipes = [];
 
-        if (!localRecipeCount || parseInt(localRecipeCount) !== recipeCount || !localRecipes) {
-            console.log('Stale local data detected. Saving fresh data....');
-            localStorage.setItem('recipeCount', recipeCount);
+        if (localRecipes) {
+            parsedRecipes = JSON.parse(localRecipes);
+        }
+
+        if (!localRecipes || parsedRecipes.length !== recipeCount) {
+            console.log('Your local recipe book is outdated! Fetching fresh recipes...');
             getRecipes();
         } else {
-            setRecipes(JSON.parse(localStorage.getItem('recipes')!));
+            setRecipes(parsedRecipes);
         }
     }, [recipeCount]);
 
@@ -48,7 +48,7 @@ const Home: NextPage = ({ categories, recipeCount }: pageProps) => {
 
             {recipes.length === 0
                 ? <LoadingScreen recipeCount={recipeCount} />
-                : <SearchCard />
+                : <SearchCard categories={categories} />
             }
         </div>
     );

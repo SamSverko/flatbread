@@ -5,7 +5,7 @@ type componentProps = {
 const LoadingScreen = ({ recipeCount }: componentProps) => {
     return (
         <div>
-            <p>Fetching all <b>{recipeCount}</b> recipes <em>just for you</em>!</p>
+            <h2>Fetching all <b>{recipeCount}</b> recipes <em>just for you</em>!</h2>
         </div>
     );
 };
