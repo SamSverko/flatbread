@@ -1,6 +1,6 @@
 import type { NextApiResponse, NextApiRequest } from 'next';
 
-import { client } from '../../util/contentful';
+import { client } from '../../utils/contentful';
 
 export default async function handler(_: NextApiRequest, res: NextApiResponse) {
     try {

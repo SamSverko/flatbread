@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import React from 'react';
 
-import { configClient } from '../util/contentful';
+import { configClient } from '../utils/contentful';
 
 type fetchedRecipes = {
     [key: string]: any

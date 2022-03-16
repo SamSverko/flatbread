@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import React from 'react';
 
-import { getAllCategories } from '../util/contentful';
+import { getAllCategories } from '../utils/contentful';
 
 // import Recipes from '../components/recipes';
 

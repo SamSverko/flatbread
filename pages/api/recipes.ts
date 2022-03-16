@@ -1,6 +1,6 @@
 import type { NextApiResponse, NextApiRequest } from 'next';
 
-import { getRecipesByQuery } from '../../util/contentful';
+import { getRecipesByQuery } from '../../utils/contentful';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { courseTypes, cuisines, dietaryRestrictions, dishTypes, title } = req.query;
