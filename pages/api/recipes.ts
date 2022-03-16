@@ -1,17 +1,17 @@
 import type { NextApiResponse, NextApiRequest } from 'next';
 
-import { client } from '../../util/contentful';
+import { getRecipesByQuery } from '../../util/contentful';
 
-export default async function handler(_: NextApiRequest, res: NextApiResponse) {
-    try {
-        const recipes = await client.getEntries({
-            content_type: 'recipe',
-        });
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    const { courseTypes, cuisines, dietaryRestrictions, dishTypes, title } = req.query;
 
-        res.status(200).json(recipes);
-    } catch(error) {
-        res.status(500).json({
-            error: (error as Error).message,
-        });
-    }
+    const recipes = await getRecipesByQuery({
+        title: (title) ? title.toString().trim() : '',
+        courseTypes: (courseTypes) ? courseTypes.toString().replace(' ', '').trim() : '',
+        cuisines: (cuisines) ? cuisines.toString().replace(' ', '').trim() : '',
+        dietaryRestrictions: (dietaryRestrictions) ? dietaryRestrictions.toString().replace(' ', '').trim() : '',
+        dishTypes: (dishTypes) ? dishTypes.toString().replace(' ', '').trim() : '',
+    });
+
+    res.status(200).json(recipes);
 }
