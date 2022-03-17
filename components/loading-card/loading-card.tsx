@@ -1,13 +1,15 @@
-type componentProps = {
+type loadingCardProps = {
     recipeCount: number
 }
 
-const LoadingScreen = ({ recipeCount }: componentProps) => {
+const LoadingCard = ({ recipeCount }: loadingCardProps) => {
     return (
         <div>
             <h2>Fetching all <b>{recipeCount}</b> recipes <em>just for you</em>!</h2>
+
+            <hr />
         </div>
     );
 };
 
-export default LoadingScreen;
+export default LoadingCard;

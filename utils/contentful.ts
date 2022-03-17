@@ -47,6 +47,22 @@ function formatRecipe(recipe: any) {
         mappedRecipe.source.url = recipe.sourceUrl;
     }
 
+    if (recipe.imageUrl) {
+        mappedRecipe.image = {
+            url: recipe.imageUrl,
+        };
+    }
+
+    if (recipe.imageAltText) {
+        if (mappedRecipe.image) {
+            mappedRecipe.image.alt = recipe.imageAltText;
+        } else {
+            mappedRecipe.image = {
+                alt: recipe.imageAltText,
+            };
+        }
+    }
+
     if (recipe.dietaryRestrictions) {
         mappedRecipe.dietaryRestriction = recipe.dietaryRestrictions.map((dietaryRestriction: any) => dietaryRestriction.fields.title);
     }

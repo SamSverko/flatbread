@@ -3,17 +3,25 @@ import * as React from 'react';
 
 import { getAllCategories, getRecipeCount } from '../utils/contentful';
 
-import LoadingScreen from '../components/loading-screen/loading-screen';
+import LoadingCard from '../components/loading-card/loading-card';
+import RecipeCard from '../components/recipe-card/recipe-card';
 import SearchCard from '../components/search-card/search-card';
+import SearchResultsCard from '../components/search-results-card/search-results-card';
 
-type props = {
+type searchQueryProps = {
+    title: string
+}
+
+type indexProps = {
     [key: string]: any
 }
 
-const Home: NextPage = ({ categories, recipeCount }: props) => {
+const Index: NextPage = ({ categories, recipeCount }: indexProps) => {
     const [recipes, setRecipes] = React.useState([]);
+    const [searchedRecipes, setSearchedRecipes] = React.useState([]);
 
     // get all recipes on page load, and save it to localStorage
+    // TODO - set a TTL for the localStorage or a button to fetch new data: https://www.sohamkamani.com/blog/javascript-localstorage-with-ttl-expiry/
     React.useEffect(() => {
         async function getRecipes() {
             const response = await fetch(`${window.location.origin}/api/recipes`);
@@ -42,19 +50,44 @@ const Home: NextPage = ({ categories, recipeCount }: props) => {
         }
     }, [recipeCount]);
 
+    function handleRandomSubmit() {
+        setSearchedRecipes([recipes[Math.floor(Math.random() * recipes.length)]]);
+    }
+
+    function handleSearchSubmit(searchQuery: searchQueryProps) {
+        const matchedRecipes = recipes.filter((recipe: any) => {
+            const titleRegex = new RegExp(searchQuery.title, 'i');
+            const titleSearch = recipe.title.search(titleRegex);
+            if (titleSearch > -1) {
+                return recipe.title;
+            }
+        });
+
+        setSearchedRecipes(matchedRecipes);
+    }
+
     return (
         <div>
             <h1>Flatbread</h1>
 
             {recipes.length === 0
-                ? <LoadingScreen recipeCount={recipeCount} />
-                : <SearchCard categories={categories} />
+                ? <LoadingCard recipeCount={recipeCount} />
+                : <SearchCard categories={categories} handleRandomSubmit={handleRandomSubmit} handleSearchSubmit={handleSearchSubmit} />
+            }
+            {searchedRecipes.length > 0 && recipes.length > 0 &&
+                <>
+                    <SearchResultsCard numberOfRecipes={searchedRecipes.length} />
+
+                    {searchedRecipes.map((recipe: any, index: number) => {
+                        return <RecipeCard key={index} recipe={recipe} />;
+                    })}
+                </>
             }
         </div>
     );
 };
 
-export default Home;
+export default Index;
 
 export async function getStaticProps() {
     const categories = await getAllCategories();

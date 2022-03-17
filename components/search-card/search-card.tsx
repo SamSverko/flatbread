@@ -1,18 +1,41 @@
-type props = {
+import * as React from 'react';
+
+type searchCardProps = {
     [key: string]: any
 }
 
-export const SearchCard = ({ categories }: props) => {
+export const SearchCard = ({ categories, handleRandomSubmit, handleSearchSubmit }: searchCardProps) => {
     console.log(categories);
+
+    const inputTitleRef = React.useRef(null);
+
+    function onRandomSubmit(event: React.FormEvent) {
+        event.preventDefault();
+
+        handleRandomSubmit();
+    }
+
+    function onSearchSubmit(event: React.FormEvent) {
+        event.preventDefault();
+
+        let titleQuery = '';
+        if (inputTitleRef.current) {
+            titleQuery = (inputTitleRef.current as HTMLInputElement).value;
+        }
+
+        handleSearchSubmit({
+            title: titleQuery,
+        });
+    }
 
     return (
         <div>
             <h2>Search for recipes</h2>
 
-            <form>
+            <form onSubmit={onSearchSubmit}>
                 <label htmlFor='recipe-title'>Title</label>
                 <br />
-                <input id='recipe-title' type='search' />
+                <input ref={inputTitleRef} id='recipe-title' name='title' type='search' />
 
                 <details>
                     <summary>Advanced options</summary>
@@ -25,34 +48,37 @@ export const SearchCard = ({ categories }: props) => {
                     <div>
                         <label htmlFor='recipe-course-types'>Course types</label>
                         <br />
-                        <input id='recipe-course-types' type='text' />
+                        <input id='recipe-course-types' name='course-types' type='text' />
                     </div>
 
                     <div>
                         <label htmlFor='recipe-cuisines'>Cuisines</label>
                         <br />
-                        <input id='recipe-cuisines' type='text' />
+                        <input id='recipe-cuisines' name='cuisines' type='text' />
                     </div>
 
                     <div>
                         <label htmlFor='recipe-dietary-restrictions'>Dietary Restrictions</label>
                         <br />
-                        <input id='recipe-dietary-restrictions' type='text' />
+                        <input id='recipe-dietary-restrictions' name='dietary-restrictions' type='text' />
                     </div>
 
                     <div>
                         <label htmlFor='recipe-dish-types'>Dish Types</label>
                         <br />
-                        <input id='recipe-dish-types' type='text' />
+                        <input id='recipe-dish-types' name='dish-types' type='text' />
                     </div>
                 </details>
 
-                <div>
-                    <input type='submit' value='Search' />
-                    <span>or</span>
-                    <input type='submit' value='Get a random recipe' />
-                </div>
+                <input type='submit' value='Search' />
             </form>
+
+            <form onSubmit={onRandomSubmit}>
+                <span>or</span>
+                <input type='submit' value='Get a random recipe' />
+            </form>
+
+            <hr />
         </div>
     );
 };
