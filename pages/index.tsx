@@ -30,7 +30,6 @@ const Index: NextPage = ({ categories, recipeCount }: indexProps) => {
     const [recipesPerPage] = React.useState(10);
 
     // get all recipes on page load, and save it to localStorage
-    // TODO - set a TTL for the localStorage or a button to fetch new data: https://www.sohamkamani.com/blog/javascript-localstorage-with-ttl-expiry/
     React.useEffect(() => {
         async function getRecipes() {
             const response = await fetch(`${window.location.origin}/api/recipes`);
