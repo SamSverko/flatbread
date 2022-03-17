@@ -84,6 +84,7 @@ const Index: NextPage = ({ categories, recipeCount }: indexProps) => {
             }
         });
 
+        setPaginationPage(0);
         setSearchedRecipes(matchedRecipes);
     }
 
