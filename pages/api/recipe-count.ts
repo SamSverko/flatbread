@@ -1,9 +1,9 @@
 import type { NextApiResponse, NextApiRequest } from 'next';
 
-import { getAllCategories } from '../../utils/contentful';
+import { getRecipeCount } from '../../utils/contentful';
 
 export default async function handler(_: NextApiRequest, res: NextApiResponse) {
-    const categories = await getAllCategories();
+    const count = await getRecipeCount();
 
-    res.status(200).json(categories);
+    res.status(200).json(count);
 }
