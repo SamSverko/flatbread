@@ -1,9 +1,11 @@
 import type { NextPage } from 'next';
+import { useRouter } from 'next/router';
 import * as React from 'react';
 
 import { getAllCategories, getRecipeCount } from '../utils/contentful';
 
 import LoadingCard from '../components/loading-card/loading-card';
+import Pagination from '../components/pagination/pagination';
 import RecipeCard from '../components/recipe-card/recipe-card';
 import SearchCard from '../components/search-card/search-card';
 import SearchResultsCard from '../components/search-results-card/search-results-card';
@@ -17,8 +19,15 @@ type indexProps = {
 }
 
 const Index: NextPage = ({ categories, recipeCount }: indexProps) => {
+    const router = useRouter();
+
+    // recipes
     const [recipes, setRecipes] = React.useState([]);
     const [searchedRecipes, setSearchedRecipes] = React.useState([]);
+
+    // pagination
+    const [paginationPage, setPaginationPage] = React.useState(0);
+    const [recipesPerPage] = React.useState(10);
 
     // get all recipes on page load, and save it to localStorage
     // TODO - set a TTL for the localStorage or a button to fetch new data: https://www.sohamkamani.com/blog/javascript-localstorage-with-ttl-expiry/
@@ -50,6 +59,18 @@ const Index: NextPage = ({ categories, recipeCount }: indexProps) => {
         }
     }, [recipeCount]);
 
+    // render recipe if `recipe` param is present in URL
+    React.useEffect(() => {
+        const { recipe } = router.query;
+
+        if (recipe && recipes.length > 0) {
+            const matchedRecipe = recipes.find((recipeItem: any) => recipeItem.slug === recipe);
+            if (matchedRecipe) {
+                setSearchedRecipes([matchedRecipe]);
+            }
+        }
+    }, [recipes, router]);
+
     function handleRandomSubmit() {
         setSearchedRecipes([recipes[Math.floor(Math.random() * recipes.length)]]);
     }
@@ -67,7 +88,7 @@ const Index: NextPage = ({ categories, recipeCount }: indexProps) => {
     }
 
     return (
-        <div>
+        <>
             <h1>Flatbread</h1>
 
             {recipes.length === 0
@@ -76,14 +97,23 @@ const Index: NextPage = ({ categories, recipeCount }: indexProps) => {
             }
             {searchedRecipes.length > 0 && recipes.length > 0 &&
                 <>
-                    <SearchResultsCard numberOfRecipes={searchedRecipes.length} />
+                    <SearchResultsCard recipeCount={searchedRecipes.length} />
 
-                    {searchedRecipes.map((recipe: any, index: number) => {
+                    {searchedRecipes.slice(paginationPage * recipesPerPage, (paginationPage * recipesPerPage) + recipesPerPage).map((recipe: any, index: number) => {
                         return <RecipeCard key={index} recipe={recipe} />;
                     })}
+
+                    {searchedRecipes.length >= recipesPerPage &&
+                        <Pagination
+                            currentPage={paginationPage}
+                            recipeCount={searchedRecipes.length}
+                            recipesPerPage={recipesPerPage}
+                            setPaginationPage={setPaginationPage}
+                        />
+                    }
                 </>
             }
-        </div>
+        </>
     );
 };
 

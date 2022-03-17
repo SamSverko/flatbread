@@ -1,12 +1,12 @@
 type searchResultsProps = {
-    numberOfRecipes: number
+    recipeCount: number
 }
 
-const SearchResultsCard = ({ numberOfRecipes }: searchResultsProps) => {
+const SearchResultsCard = ({ recipeCount }: searchResultsProps) => {
     return (
         <div>
             <h2>Search results</h2>
-            <p>{numberOfRecipes} {numberOfRecipes === 1 ? 'recipe' : 'recipes'} found</p>
+            <p>{recipeCount} {recipeCount === 1 ? 'recipe' : 'recipes'} found.</p>
 
             <hr />
         </div>

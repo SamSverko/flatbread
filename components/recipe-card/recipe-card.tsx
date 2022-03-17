@@ -9,29 +9,41 @@ const RecipeCard = ({ recipe }: recipeCardProps) => {
     return (
         <div>
             {/* title */}
-            <h3>{recipe.title}</h3>
+            <div>
+                <Link href={`/?recipe=${recipe.slug}`}>
+                    <a><b>{recipe.title}</b></a>
+                </Link>
+            </div>
 
             {/* source */}
-            {recipe.source.url
-                ? <Link href={recipe.source.url}><a rel='noreferrer' target='_blank'>{recipe.source.name}</a></Link>
-                : <p>{recipe.source.name}</p>
-            }
+            <div>
+                {recipe.source.url
+                    ? <Link href={recipe.source.url}><a rel='noreferrer' target='_blank'>{recipe.source.name}</a></Link>
+                    : <p>{recipe.source.name}</p>
+                }
+            </div>
 
             {/* image */}
-            {recipe.image && recipe.image.alt && recipe.image.url &&
-                <Image
-                    alt={recipe.image.alt}
-                    height={100}
-                    src={`/api/image-proxy?url=${encodeURIComponent(recipe.image.url)}`}
-                    width={100}
-                />
-            }
+            <div>
+                {recipe.image && recipe.image.alt && recipe.image.url &&
+                    <Image
+                        alt={recipe.image.alt}
+                        height={100}
+                        src={`/api/image-proxy?url=${encodeURIComponent(recipe.image.url)}`}
+                        width={100}
+                    />
+                }
+            </div>
 
             {/* time */}
-            <p>🕓 <b>{(recipe.time.prep + recipe.time.cook)} mins</b> ({recipe.time.prep} mins prep + {recipe.time.cook} mins cook)</p>
+            <div>
+                <p>🕓 <b>{(recipe.time.prep + recipe.time.cook)} mins</b> ({recipe.time.prep} mins prep + {recipe.time.cook} mins cook)</p>
+            </div>
 
             {/* yield */}
-            <p>🍴 <b>{recipe.yield.amount} {recipe.yield.unit}</b></p>
+            <div>
+                <p>🍴 <b>{recipe.yield.amount} {recipe.yield.unit}</b></p>
+            </div>
 
             {/* categories */}
             <details>
