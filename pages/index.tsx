@@ -26,7 +26,7 @@ const Index: NextPage = ({ categories, recipeCount }: indexProps) => {
     const [searchedRecipes, setSearchedRecipes] = React.useState([]);
 
     // pagination
-    const [paginationPage, setPaginationPage] = React.useState(0);
+    const [currentPaginationPage, setPaginationPage] = React.useState(0);
     const [recipesPerPage] = React.useState(10);
 
     // get all recipes on page load, and save it to localStorage
@@ -71,6 +71,7 @@ const Index: NextPage = ({ categories, recipeCount }: indexProps) => {
     }, [recipes, router]);
 
     function handleRandomSubmit() {
+        setPaginationPage(0);
         setSearchedRecipes([recipes[Math.floor(Math.random() * recipes.length)]]);
     }
 
@@ -98,13 +99,13 @@ const Index: NextPage = ({ categories, recipeCount }: indexProps) => {
                 <>
                     <SearchResultsCard recipeCount={searchedRecipes.length} />
 
-                    {searchedRecipes.slice(paginationPage * recipesPerPage, (paginationPage * recipesPerPage) + recipesPerPage).map((recipe: any, index: number) => {
+                    {searchedRecipes.slice(currentPaginationPage * recipesPerPage, (currentPaginationPage * recipesPerPage) + recipesPerPage).map((recipe: any, index: number) => {
                         return <RecipeCard key={index} recipe={recipe} />;
                     })}
 
                     {searchedRecipes.length >= recipesPerPage &&
                         <Pagination
-                            currentPage={paginationPage}
+                            currentPage={currentPaginationPage}
                             recipeCount={searchedRecipes.length}
                             recipesPerPage={recipesPerPage}
                             setPaginationPage={setPaginationPage}
