@@ -47,23 +47,23 @@ const RecipeCard = ({ recipe }: recipeCardProps) => {
 
             {/* categories */}
             <details>
-                <summary>Categories</summary>
+                <summary><b>Categories</b></summary>
 
-                <p>Cuisines</p>
+                <p><b>Cuisines</b></p>
                 <ul>
                     {recipe.cuisines.map((cuisine: any, index: number) => {
                         return <li key={index}>{cuisine}</li>;
                     })}
                 </ul>
 
-                <p>Dish types</p>
+                <p><b>Dish types</b></p>
                 <ul>
                     {recipe.dishTypes.map((dishType: any, index: number) => {
                         return <li key={index}>{dishType}</li>;
                     })}
                 </ul>
 
-                <p>Course types</p>
+                <p><b>Course types</b></p>
                 <ul>
                     {recipe.courseTypes.map((courseType: any, index: number) => {
                         return <li key={index}>{courseType}</li>;
@@ -72,7 +72,7 @@ const RecipeCard = ({ recipe }: recipeCardProps) => {
 
                 {recipe.dietaryRestrictions &&
                     <>
-                        <p>Dietary Restrictions</p>
+                        <p><b>Dietary Restrictions</b></p>
                         <ul>
                             {recipe.dietaryRestrictions.map((dietaryRestriction: any, index: number) => {
                                 return <li key={index}>{dietaryRestriction}</li>;
@@ -84,7 +84,7 @@ const RecipeCard = ({ recipe }: recipeCardProps) => {
 
             {/* ingredients */}
             <details>
-                <summary>Ingredients</summary>
+                <summary><b>Ingredients</b></summary>
 
                 <ul>
                     {recipe.ingredients.map((ingredient: any, index: number) => {
@@ -95,19 +95,19 @@ const RecipeCard = ({ recipe }: recipeCardProps) => {
 
             {/* steps */}
             <details>
-                <summary>Steps</summary>
+                <summary><b>Steps</b></summary>
 
-                <ul>
+                <ol>
                     {recipe.steps.map((step: any, index: number) => {
                         return <li key={index}>{step}</li>;
                     })}
-                </ul>
+                </ol>
             </details>
 
             {/* notes */}
             {recipe.notes &&
                 <details>
-                    <summary>Notes</summary>
+                    <summary><b>Notes</b></summary>
 
                     <ul>
                         {recipe.notes.map((note: any, index: number) => {
