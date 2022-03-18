@@ -1,0 +1,22 @@
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    padding: 0;
+    margin: 0;
+    font-family: 'Spartan', sans-serif;
+}
+
+p {
+    font-weight: 400;
+}
+
+p.font-medium {
+    font-weight: 500;
+}
+
+p.font-bold {
+    font-weight: 600;
+}
