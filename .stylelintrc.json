@@ -1,0 +1,25 @@
+{
+    "extends": "stylelint-config-standard-scss",
+    "plugins": [
+        "stylelint-order"
+    ],
+    "rules": {
+        "comment-empty-line-before": ["always", { "ignore": ["after-comment"] }],
+        "indentation": 4,
+        "no-descending-specificity": null,
+        "order/order": [
+            "at-rules",
+            "dollar-variables",
+            "custom-properties",
+            "declarations",
+            "rules"
+        ],
+        "order/properties-alphabetical-order": true,
+        "selector-class-pattern": "^([a-z][a-z0-9]*)(-[a-z0-9]+|--[a-z0-9]+|__[a-z0-9]+)*$",
+        "scss/at-import-partial-extension": "always",
+        "scss/at-mixin-argumentless-call-parentheses": "always",
+        "scss/dollar-variable-pattern": "^([a-z][a-z0-9]*)(-[a-z0-9]+|--[a-z0-9]+)*$",
+        "scss/double-slash-comment-empty-line-before": ["always", { "ignore": ["between-comments", "inside-block", "stylelint-commands"] }],
+        "string-quotes": "single"
+    }
+}

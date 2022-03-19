@@ -4,6 +4,7 @@ import type { NextApiResponse, NextApiRequest } from 'next';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const url = decodeURIComponent(req.query.url.toString());
     const result = await fetch(url);
-    const body: any = await result.body;
-    body.pipe(res);
+    const body = await result.body;
+    // body.pipe(res); // this line works, but TS isn't happy
+    res.send(body);
 }

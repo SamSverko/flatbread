@@ -7,7 +7,7 @@ import NavBar from '../components/nav-bar/nav-bar';
 
 import '../styles/global.css';
 
-type route = {
+type Route = {
     path: string
     title: string
 }
@@ -19,7 +19,7 @@ const routes = [
 
 function App({ Component, pageProps }: AppProps) {
     const router = useRouter();
-    const matchedRoute = routes.find((route: route) => route.path === router.pathname);
+    const matchedRoute = routes.find((route: Route) => route.path === router.pathname);
 
     return (
         <>

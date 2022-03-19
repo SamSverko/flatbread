@@ -1,10 +1,10 @@
 import * as React from 'react';
 
-type paginationProps = {
+type PaginationProps = {
     currentPage: number
     recipeCount: number
     recipesPerPage: number
-    setPaginationPage: any
+    setPaginationPage: (prop: number) => void
 }
 
 export const Pagination = ({
@@ -12,11 +12,11 @@ export const Pagination = ({
     recipeCount,
     recipesPerPage, 
     setPaginationPage,
-}: paginationProps) => {
+}: PaginationProps) => {
     const buttonCount = Math.ceil(recipeCount / recipesPerPage);
 
-    function handleButtonClick(event: any) {
-        setPaginationPage(parseInt(event.target.value));
+    function handleButtonClick(event: React.MouseEvent<HTMLButtonElement>) {
+        setPaginationPage(parseInt((event.target as HTMLButtonElement).value));
     }
 
     function handlePreviousNextButton(type: 'previous' | 'next') {

@@ -4,9 +4,9 @@
 
 html,
 body {
-    padding: 0;
+    font-family: Spartan, sans-serif;
     margin: 0;
-    font-family: 'Spartan', sans-serif;
+    padding: 0;
 }
 
 p {

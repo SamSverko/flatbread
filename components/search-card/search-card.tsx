@@ -1,10 +1,14 @@
 import * as React from 'react';
 
-type searchCardProps = {
-    [key: string]: any
+import type { FetchedCategories, SearchQueryProps } from '../../utils/types';
+
+type SearchCardProps = {
+    categories: FetchedCategories
+    handleRandomSubmit: () => void
+    handleSearchSubmit: (prop: SearchQueryProps) => void
 }
 
-export const SearchCard = ({ categories, handleRandomSubmit, handleSearchSubmit }: searchCardProps) => {
+export const SearchCard = ({ categories, handleRandomSubmit, handleSearchSubmit }: SearchCardProps) => {
     console.log(categories);
 
     const inputTitleRef = React.useRef(null);

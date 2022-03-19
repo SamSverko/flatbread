@@ -1,6 +1,7 @@
-import type { NextPage } from 'next';
 import Link from 'next/link';
 import * as React from 'react';
+
+import type { NextPage } from 'next';
 
 const Settings: NextPage = () => {
     const [localStorageDeleted, setLocalStorageDeleted] = React.useState(false);
