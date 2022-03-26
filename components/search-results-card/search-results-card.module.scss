@@ -1,0 +1,9 @@
+@use '../../styles/mixins.scss';
+@use '../../styles/variables.scss' as var;
+
+.container {
+    @include mixins.card-layout;
+
+    gap: var.$spacing-2;
+    text-align: center;
+}

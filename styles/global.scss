@@ -5,7 +5,7 @@
     box-sizing: border-box;
 }
 
-// PAGE =======================================================================
+// HTML =======================================================================
 html {
     background-color: var.$color-grey-100;
     font-family: Spartan, sans-serif;
@@ -13,12 +13,20 @@ html {
     font-weight: var.$font-weight-medium;
     margin: 0;
     padding: 0;
-}
 
-body {
-    margin: 0;
-    padding: var.$spacing-5;
-    text-align: center;
+    body {
+        margin: 0;
+        padding: var.$spacing-5;
+        text-align: center;
+
+        // stylelint-disable-next-line selector-id-pattern
+        #__next {
+            display: flex;
+            flex-direction: column;
+            gap: var.$spacing-5;
+            width: 100%;
+        }
+    }
 }
 
 // ELEMENTS ===================================================================

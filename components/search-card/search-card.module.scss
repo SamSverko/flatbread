@@ -1,16 +1,8 @@
+@use '../../styles/mixins.scss';
 @use '../../styles/variables.scss' as var;
 
 .container {
-    background-color: white;
-    border-radius: var.$border-radius;
-    display: flex;
-    flex-direction: column;
-    gap: var.$spacing-5;
-    margin: 0 auto;
-    max-width: var.$card-max-width;
-    padding: var.$spacing-5;
-    text-align: left;
-    width: 100%;
+    @include mixins.card-layout;
 
     h2 {
         text-align: center;
