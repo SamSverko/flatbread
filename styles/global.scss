@@ -30,6 +30,20 @@ html {
 }
 
 // ELEMENTS ===================================================================
+a {
+    color: var.$color-secondary-main;
+    font-weight: var.$font-weight-medium;
+    text-decoration: none;
+
+    &:hover {
+        color: var.$color-secondary-dark;
+    }
+
+    &:active {
+        color: var.$color-secondary-light;
+    }
+}
+
 button,
 input[type='submit'] {
     @include mixins.transition(background-color);
@@ -119,7 +133,7 @@ input {
 
 input[type='search'],
 input[type='text'] {
-    border: var.$spacing-1 solid grey;
+    border: var.$spacing-1 solid var.$color-grey-500;
     border-radius: var.$border-radius;
     font-family: Spartan, sans-serif;
     font-size: 1em;

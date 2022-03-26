@@ -26,6 +26,7 @@
         "@types/react": "17.0.37",
         "@typescript-eslint/eslint-plugin": "^5.7.0",
         "@typescript-eslint/parser": "^5.7.0",
+        "babel-plugin-inline-react-svg": "^2.0.1",
         "contentful-ts-type-generator": "github:arimkevi/contentful-ts-type-generator",
         "eslint": "^7.32.0",
         "eslint-config-next": "12.0.7",

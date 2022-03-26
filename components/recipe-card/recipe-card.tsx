@@ -1,42 +1,77 @@
-import Image from 'next/image';
 import Link from 'next/link';
 import * as React from 'react';
 
 import type { FormattedRecipe } from '../../utils/types';
+
+import ExternalLinkIcon from '../../public/icons/bx-link-external.svg';
+
+import styles from './recipe-card.module.scss';
 
 type RecipeCardProps = {
     recipe: FormattedRecipe
 }
 
 const RecipeCard = ({ recipe }: RecipeCardProps) => {
-    return (
-        <div>
-            {/* title */}
-            <div>
-                <Link href={`/?recipe=${recipe.slug}`}>
-                    <a><b>{recipe.title}</b></a>
-                </Link>
-            </div>
+    const [doesImageExist, setDoesImageExist] = React.useState(false);
 
-            {/* source */}
-            <div>
+    React.useEffect(() => {
+        if (recipe.image && recipe.image.alt && recipe.image.url) {
+            checkIfImageExists(recipe.image.url, (exists) => {
+                if (exists) {
+                    setDoesImageExist(true);
+                }
+            });
+        }
+    }, []);
+
+    const checkIfImageExists = (url: string, callback: (exists: boolean) => void) => {
+        const img = new Image();
+        img.src = url;
+      
+        if (img.complete) {
+            callback(true);
+        } else {
+            img.onload = () => {
+                callback(true);
+            };
+      
+            img.onerror = () => {
+                callback(false);
+            };
+        }
+    };
+
+    return (
+        <div className={styles.container}>
+            {/* title & source */}
+            <div className={styles['title-source-container']}>
+                <div>
+                    <Link href={`/?recipe=${recipe.slug}`}>
+                        <a className={styles['recipe-link']}>{recipe.title}</a>
+                    </Link>
+                </div>
+
                 {recipe.source.url
-                    ? <Link href={recipe.source.url}><a rel='noreferrer' target='_blank'>{recipe.source.name}</a></Link>
+                    ? <div>
+                        <Link href={recipe.source.url}>
+                            <a className={styles['source-link']} rel='noreferrer' target='_blank'>
+                                {recipe.source.name}
+                                {/* <ExternalLinkIcon fill={'red'} /> */}
+                                <ExternalLinkIcon aria-hidden='true' role='img' viewBox='0 0 24 24' />
+                            </a>
+                        </Link>
+                    </div>
                     : <p>{recipe.source.name}</p>
                 }
             </div>
 
             {/* image */}
-            <div>
-                {recipe.image && recipe.image.alt && recipe.image.url &&
-                    <Image
-                        alt={recipe.image.alt}
-                        height={100}
-                        src={`/api/image-proxy?url=${encodeURIComponent(recipe.image.url)}`}
-                        width={100}
-                    />
-                }
-            </div>
+            {doesImageExist && recipe?.image?.url &&
+                <div
+                    className={styles['image-container']}
+                    style={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${recipe.image.url})` }}
+                ></div>
+            }
 
             {/* time */}
             <div>
