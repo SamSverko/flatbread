@@ -5,7 +5,7 @@ import * as React from 'react';
 
 import NavBar from '../components/nav-bar/nav-bar';
 
-import '../styles/global.css';
+import '../styles/global.scss';
 
 type Route = {
     path: string

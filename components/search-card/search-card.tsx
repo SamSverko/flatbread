@@ -2,6 +2,8 @@ import * as React from 'react';
 
 import type { FetchedCategories, SearchQueryProps } from '../../utils/types';
 
+import styles from './search-card.module.scss';
+
 type SearchCardProps = {
     categories: FetchedCategories
     handleRandomSubmit: () => void
@@ -13,15 +15,11 @@ export const SearchCard = ({ categories, handleRandomSubmit, handleSearchSubmit 
 
     const inputTitleRef = React.useRef(null);
 
-    function onRandomSubmit(event: React.FormEvent) {
+    function handleFormSubmit(event: React.FormEvent) {
         event.preventDefault();
-
-        handleRandomSubmit();
     }
 
-    function onSearchSubmit(event: React.FormEvent) {
-        event.preventDefault();
-
+    function handleSearchClick() {
         let titleQuery = '';
         if (inputTitleRef.current) {
             titleQuery = (inputTitleRef.current as HTMLInputElement).value;
@@ -33,56 +31,54 @@ export const SearchCard = ({ categories, handleRandomSubmit, handleSearchSubmit 
     }
 
     return (
-        <div>
+        <div className={styles.container}>
             <h2>Search for recipes</h2>
 
-            <form onSubmit={onSearchSubmit}>
-                <label htmlFor='recipe-title'>Title</label>
-                <br />
-                <input ref={inputTitleRef} id='recipe-title' name='title' type='search' />
+            <form className={styles['search-form']} onSubmit={handleFormSubmit}>
+                <div className={styles['input-group']}>
+                    <label htmlFor='recipe-title'>Title</label>
+                    <input ref={inputTitleRef} id='recipe-title' name='title' type='search' />
+                </div>
 
                 <details>
                     <summary>Advanced options</summary>
 
-                    <h3>Filter by categories</h3>
+                    <div className={styles['details-content']}>
+                        <h3>Filter by categories</h3>
 
-                    <p>By default, all recipe categories are selected.</p>
-                    <p>To refine your search results, select only the categories needed.</p>
+                        <div className={styles['input-group']}>
+                            <p>By default, all recipe categories are&nbsp;selected.</p>
+                            <p>To refine your search results, select only the categories&nbsp;needed.</p>
+                        </div>
 
-                    <div>
-                        <label htmlFor='recipe-course-types'>Course types</label>
-                        <br />
-                        <input id='recipe-course-types' name='course-types' type='text' />
-                    </div>
+                        <div className={styles['input-group']}>
+                            <label htmlFor='recipe-course-types'>Course types</label>
+                            <input id='recipe-course-types' name='course-types' type='text' />
+                        </div>
 
-                    <div>
-                        <label htmlFor='recipe-cuisines'>Cuisines</label>
-                        <br />
-                        <input id='recipe-cuisines' name='cuisines' type='text' />
-                    </div>
+                        <div className={styles['input-group']}>
+                            <label htmlFor='recipe-cuisines'>Cuisines</label>
+                            <input id='recipe-cuisines' name='cuisines' type='text' />
+                        </div>
 
-                    <div>
-                        <label htmlFor='recipe-dietary-restrictions'>Dietary Restrictions</label>
-                        <br />
-                        <input id='recipe-dietary-restrictions' name='dietary-restrictions' type='text' />
-                    </div>
+                        <div className={styles['input-group']}>
+                            <label htmlFor='recipe-dietary-restrictions'>Dietary Restrictions</label>
+                            <input id='recipe-dietary-restrictions' name='dietary-restrictions' type='text' />
+                        </div>
 
-                    <div>
-                        <label htmlFor='recipe-dish-types'>Dish Types</label>
-                        <br />
-                        <input id='recipe-dish-types' name='dish-types' type='text' />
+                        <div className={styles['input-group']}>
+                            <label htmlFor='recipe-dish-types'>Dish Types</label>
+                            <input id='recipe-dish-types' name='dish-types' type='text' />
+                        </div>
                     </div>
                 </details>
 
-                <input type='submit' value='Search' />
+                <div className={styles['submit-group']}>
+                    <input name='search-recipes' onClick={handleSearchClick} type='submit' value='Search' />
+                    <span>or</span>
+                    <input className='text' name='get-random-recipe' onClick={handleRandomSubmit} type='submit' value='Get a random recipe' />
+                </div>
             </form>
-
-            <form onSubmit={onRandomSubmit}>
-                <span>or</span>
-                <input type='submit' value='Get a random recipe' />
-            </form>
-
-            <hr />
         </div>
     );
 };

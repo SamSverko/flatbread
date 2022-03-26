@@ -89,8 +89,6 @@ const Index: NextPage<IndexProps> = ({ categories, recipeCount }: IndexProps) =>
 
     return (
         <>
-            <h1>Flatbread</h1>
-
             {recipes.length === 0
                 ? <LoadingCard recipeCount={recipeCount} />
                 : <SearchCard

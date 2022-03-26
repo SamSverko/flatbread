@@ -1,0 +1,15 @@
+@use './variables.scss' as var;
+
+@mixin focus-outline {
+    outline: var.$spacing-1 solid var.$color-info-main;
+    outline-offset: 2px;
+}
+
+@mixin transition(
+    $property: all,
+    $duration: var.$transition-duration,
+    $timing-function: var.$transition-timing-function,
+    $delay: var.$transition-delay,
+) {
+    transition: $property $duration $timing-function $delay;
+}

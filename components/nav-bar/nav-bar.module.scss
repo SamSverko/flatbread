@@ -1,0 +1,8 @@
+@use '../../styles/variables.scss' as var;
+
+.container {
+    h1 {
+        color: var.$color-grey-900;
+        margin: 0 0 var.$spacing-5;
+    }
+}
