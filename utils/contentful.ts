@@ -90,19 +90,19 @@ function formatRecipe(recipe: ContentfulRecipe) {
             amount: recipe.yieldAmount,
             unit: (recipe.yieldAmount === 1 ) ? recipe.yieldUnit.fields.title : recipe.yieldUnit.fields.titlePlural,
         },
-        courseTypes: recipe.courseTypes.map((courseType: Entry<ContentfulCategory>) => courseType.fields.title),
-        dishTypes: recipe.dishTypes.map((dishType: Entry<ContentfulCategory>) => dishType.fields.title),
+        courseTypes: recipe.courseTypes.map((courseType: Entry<ContentfulCategory>) => courseType.fields.title).sort(),
+        dishTypes: recipe.dishTypes.map((dishType: Entry<ContentfulCategory>) => dishType.fields.title).sort(),
         ingredients: [...recipe.ingredients],
         steps: [...recipe.steps],
     };
 
     // optional fields
     if (recipe.cuisines) {
-        formattedRecipe.cuisines = recipe.cuisines.map((cuisine: Entry<ContentfulCategory>) => cuisine.fields.title);
+        formattedRecipe.cuisines = recipe.cuisines.map((cuisine: Entry<ContentfulCategory>) => cuisine.fields.title).sort();
     }
 
     if (recipe.dietaryRestrictions) {
-        formattedRecipe.dietaryRestrictions = recipe.dietaryRestrictions.map((dietaryRestriction: Entry<ContentfulCategory>) => dietaryRestriction.fields.title);
+        formattedRecipe.dietaryRestrictions = recipe.dietaryRestrictions.map((dietaryRestriction: Entry<ContentfulCategory>) => dietaryRestriction.fields.title).sort();
     }
 
     if (recipe.sourceUrl) {
