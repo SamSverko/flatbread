@@ -82,7 +82,7 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
                 {doesImageExist && recipe?.image?.url
                     ? <div
                         className={styles['image']}
-                        style={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${recipe.image.url})` }}
+                        style={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)), url(${recipe.image.url})` }}
                     ></div>
                     : <hr />
                 }
@@ -155,7 +155,7 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
                 </details>
 
                 {/* ingredients */}
-                <details className={styles['ingredients-container']} open>
+                <details className={styles['ingredients-steps-notes-container']}>
                     <summary>Ingredients</summary>
 
                     <ul>
@@ -171,19 +171,24 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
                 </details>
 
                 {/* steps */}
-                <details>
+                <details className={styles['ingredients-steps-notes-container']}>
                     <summary>Steps</summary>
 
                     <ol>
                         {recipe.steps.map((step: string, index: number) => {
-                            return <li key={index}>{step}</li>;
+                            const inputId = `${recipe.slug}-step-${index}`;
+
+                            return <li key={index}>
+                                <input id={inputId} onClick={handleIngredientClick} type='checkbox' />
+                                <label htmlFor={inputId}>{step}</label>
+                            </li>;
                         })}
                     </ol>
                 </details>
 
                 {/* notes */}
                 {recipe.notes &&
-                    <details>
+                    <details className={styles['ingredients-steps-notes-container']}>
                         <summary>Notes</summary>
 
                         <ul>

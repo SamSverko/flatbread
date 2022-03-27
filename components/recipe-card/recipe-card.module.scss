@@ -103,6 +103,7 @@
 
                 ul {
                     display: flex;
+                    flex-wrap: wrap;
                     gap: var.$spacing-3;
                     list-style-type: none;
                     margin: 0;
@@ -115,12 +116,15 @@
                         display: inline-block;
                         font-size: 0.9rem;
                         padding: var.$spacing-1 var.$spacing-2;
+                        // word-break: keep-all;
+                        white-space: nowrap;
                     }
                 }
             }
         }
 
-        .ingredients-container {
+        .ingredients-steps-notes-container {
+            ol,
             ul {
                 display: flex;
                 flex-direction: column;
@@ -129,13 +133,13 @@
 
                 li {
                     display: flex;
+                    line-height: 1.25rem;
                     list-style-type: none;
 
                     label {
                         cursor: pointer;
                         font-weight: var.$font-weight-medium;
                         padding: 0 0 0 var.$spacing-2;
-                        // text-decoration: line-through;
 
                         &.checked {
                             text-decoration: line-through;
