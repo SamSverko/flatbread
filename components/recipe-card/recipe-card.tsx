@@ -68,13 +68,15 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
             </div>
 
             {/* image */}
-            {doesImageExist && recipe?.image?.url
-                ? <div
-                    className={styles['image-container']}
-                    style={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${recipe.image.url})` }}
-                ></div>
-                : <hr className={styles['image-divider']} />
-            }
+            <div className={styles['image-container']}>
+                {doesImageExist && recipe?.image?.url
+                    ? <div
+                        className={styles['image']}
+                        style={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${recipe.image.url})` }}
+                    ></div>
+                    : <hr />
+                }
+            </div>
 
             <div className={styles['info-container']}>
                 {/* time */}
@@ -96,49 +98,55 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
                 <hr />
 
                 {/* categories */}
-                <details>
-                    <summary><b>Categories</b></summary>
+                <details className={styles['categories-container']} open>
+                    <summary>Categories</summary>
 
-                    {recipe.cuisines &&
-                        <>
-                            <p><b>Cuisines</b></p>
+                    <div>
+                        {recipe.cuisines &&
+                            <div>
+                                <p>Cuisines</p>
+                                <ul>
+                                    {recipe.cuisines.map((cuisine: string, index: number) => {
+                                        return <li key={index}>{cuisine}</li>;
+                                    })}
+                                </ul>
+                            </div>
+                        }
+
+                        <div>
+                            <p>Dish types</p>
                             <ul>
-                                {recipe.cuisines.map((cuisine: string, index: number) => {
-                                    return <li key={index}>{cuisine}</li>;
+                                {recipe.dishTypes.map((dishType: string, index: number) => {
+                                    return <li key={index}>{dishType}</li>;
                                 })}
                             </ul>
-                        </>
-                    }
+                        </div>
 
-                    <p><b>Dish types</b></p>
-                    <ul>
-                        {recipe.dishTypes.map((dishType: string, index: number) => {
-                            return <li key={index}>{dishType}</li>;
-                        })}
-                    </ul>
-
-                    <p><b>Course types</b></p>
-                    <ul>
-                        {recipe.courseTypes.map((courseType: string, index: number) => {
-                            return <li key={index}>{courseType}</li>;
-                        })}
-                    </ul>                
-
-                    {recipe.dietaryRestrictions &&
-                        <>
-                            <p><b>Dietary Restrictions</b></p>
+                        <div>
+                            <p>Course types</p>
                             <ul>
-                                {recipe.dietaryRestrictions.map((dietaryRestriction: string, index: number) => {
-                                    return <li key={index}>{dietaryRestriction}</li>;
+                                {recipe.courseTypes.map((courseType: string, index: number) => {
+                                    return <li key={index}>{courseType}</li>;
                                 })}
-                            </ul>
-                        </>
-                    }
+                            </ul> 
+                        </div>               
+
+                        {recipe.dietaryRestrictions &&
+                            <div>
+                                <p>Dietary Restrictions</p>
+                                <ul>
+                                    {recipe.dietaryRestrictions.map((dietaryRestriction: string, index: number) => {
+                                        return <li key={index}>{dietaryRestriction}</li>;
+                                    })}
+                                </ul>
+                            </div>
+                        }
+                    </div>                    
                 </details>
 
                 {/* ingredients */}
                 <details>
-                    <summary><b>Ingredients</b></summary>
+                    <summary>Ingredients</summary>
 
                     <ul>
                         {recipe.ingredients.map((ingredient: string, index: number) => {
@@ -149,7 +157,7 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
 
                 {/* steps */}
                 <details>
-                    <summary><b>Steps</b></summary>
+                    <summary>Steps</summary>
 
                     <ol>
                         {recipe.steps.map((step: string, index: number) => {
@@ -161,7 +169,7 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
                 {/* notes */}
                 {recipe.notes &&
                     <details>
-                        <summary><b>Notes</b></summary>
+                        <summary>Notes</summary>
 
                         <ul>
                             {recipe.notes.map((note: string, index: number) => {

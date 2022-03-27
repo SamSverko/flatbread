@@ -42,6 +42,12 @@ a {
     &:active {
         color: var.$color-secondary-light;
     }
+
+    &:focus {
+        @include mixins.focus-outline;
+
+        border-radius: var.$border-radius;
+    }
 }
 
 button,
@@ -97,7 +103,6 @@ input[type='submit'] {
 
 details {
     summary {
-        border-radius: var.$border-radius;
         color: var.$color-primary-main;
         cursor: pointer;
         font-size: 1em;
@@ -115,6 +120,8 @@ details {
 
         &:focus {
             @include mixins.focus-outline;
+
+            border-radius: var.$border-radius;
         }
     }
 
