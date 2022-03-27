@@ -117,6 +117,10 @@ details {
             @include mixins.focus-outline;
         }
     }
+
+    & > :nth-child(2) {
+        margin: var.$spacing-5 0 0;
+    }
 }
 
 h1,
@@ -124,6 +128,15 @@ h2,
 h3 {
     margin: 0;
     padding: 0;
+}
+
+hr {
+    border: none;
+    border-top: var.$spacing-1 solid var.$color-grey-900;
+    height: var.$spacing-1;
+    margin: 0;
+    padding: 0;
+    width: 100%;
 }
 
 input {

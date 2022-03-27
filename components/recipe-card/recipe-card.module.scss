@@ -50,4 +50,42 @@
         height: 150px;
         width: 100%;
     }
+
+    .image-divider {
+        margin: 0 auto;
+        width: calc(100% - (var.$spacing-5 * 2));
+    }
+
+    .info-container {
+        display: flex;
+        flex-direction: column;
+        gap: var.$spacing-5;
+        padding: 0 var.$spacing-5;
+
+        .time-yield-container {
+            align-items: center;
+            display: flex;
+            gap: var.$spacing-2;
+
+            > div {
+                display: flex;
+            }
+
+            svg {
+                $size: 24px;
+
+                fill: var.$color-grey-900;
+                height: $size;
+                width: $size;
+            }
+
+            p {
+                font-weight: var.$font-weight-bold;
+            }
+
+            span {
+                font-size: 0.9em;
+            }
+        }
+    }
 }
