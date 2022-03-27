@@ -43,6 +43,16 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
         }
     };
 
+    function handleIngredientClick(event: React.MouseEvent<HTMLInputElement>) {
+        const target = event.target as HTMLInputElement;
+        const label = target.nextElementSibling as HTMLLabelElement;
+        if (target.checked && label) {
+            label.className = styles.checked;
+        } else {
+            label.className = '';
+        }
+    }
+
     return (
         <div className={styles.container}>
             <div className={styles['title-source-container']}>
@@ -98,7 +108,7 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
                 <hr />
 
                 {/* categories */}
-                <details className={styles['categories-container']} open>
+                <details className={styles['categories-container']}>
                     <summary>Categories</summary>
 
                     <div>
@@ -145,12 +155,17 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
                 </details>
 
                 {/* ingredients */}
-                <details>
+                <details className={styles['ingredients-container']} open>
                     <summary>Ingredients</summary>
 
                     <ul>
                         {recipe.ingredients.map((ingredient: string, index: number) => {
-                            return <li key={index}>{ingredient}</li>;
+                            const inputId = `${recipe.slug}-ingredient-${index}`;
+ 
+                            return <li key={index}>
+                                <input id={inputId} onClick={handleIngredientClick} type='checkbox' />
+                                <label htmlFor={inputId}>{ingredient}</label>
+                            </li>;
                         })}
                     </ul>
                 </details>

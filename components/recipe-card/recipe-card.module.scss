@@ -13,7 +13,7 @@
         padding: 0 var.$spacing-5;
 
         .recipe-link {
-            font-size: 1.25em;
+            font-size: 1.25rem;
             font-weight: var.$font-weight-bold;
         }
 
@@ -86,7 +86,7 @@
             }
 
             span {
-                font-size: 0.9em;
+                font-size: 0.9rem;
             }
         }
 
@@ -113,8 +113,33 @@
                         border-radius: var.$border-radius;
                         color: var.$color-info-contrast-text;
                         display: inline-block;
-                        font-size: 0.9em;
+                        font-size: 0.9rem;
                         padding: var.$spacing-1 var.$spacing-2;
+                    }
+                }
+            }
+        }
+
+        .ingredients-container {
+            ul {
+                display: flex;
+                flex-direction: column;
+                gap: var.$spacing-2;
+                padding: 0;
+
+                li {
+                    display: flex;
+                    list-style-type: none;
+
+                    label {
+                        cursor: pointer;
+                        font-weight: var.$font-weight-medium;
+                        padding: 0 0 0 var.$spacing-2;
+                        // text-decoration: line-through;
+
+                        &.checked {
+                            text-decoration: line-through;
+                        }
                     }
                 }
             }
