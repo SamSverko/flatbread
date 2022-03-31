@@ -1,0 +1,11 @@
+@use '../../styles/mixins.scss';
+
+.container {
+    @include mixins.card-layout;
+
+    h2 {
+        margin: 0 auto;
+        max-width: 350px;
+        text-align: center;
+    }
+}
