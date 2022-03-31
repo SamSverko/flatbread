@@ -40,8 +40,8 @@ export const SearchCard = ({ categories, handleRandomSubmit, handleSearchSubmit 
                     <input ref={inputTitleRef} id='recipe-title' name='title' type='search' />
                 </div>
 
-                <details>
-                    <summary>Advanced options</summary>
+                <details aria-disabled={true} tabIndex={-1}>
+                    <summary onClick={(event: React.MouseEvent<HTMLInputElement>) => event.preventDefault() }>Advanced options (coming soon)</summary>
 
                     <div className={styles['details-content']}>
                         <h3>Filter by categories</h3>
