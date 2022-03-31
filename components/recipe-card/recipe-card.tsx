@@ -1,123 +1,204 @@
-import Image from 'next/image';
 import Link from 'next/link';
+import * as React from 'react';
 
-type recipeCardProps = {
-    recipe: any
+import type { FormattedRecipe } from '../../utils/types';
+
+import BowlHotIcon from '../../public/icons/bxs-bowl-hot.svg';
+import ExternalLinkIcon from '../../public/icons/bx-link-external.svg';
+import TimeFiveIcon from '../../public/icons/bxs-time-five.svg';
+
+import styles from './recipe-card.module.scss';
+
+type RecipeCardProps = {
+    recipe: FormattedRecipe
 }
 
-const RecipeCard = ({ recipe }: recipeCardProps) => {
-    return (
-        <div>
-            {/* title */}
-            <div>
-                <Link href={`/?recipe=${recipe.slug}`}>
-                    <a><b>{recipe.title}</b></a>
-                </Link>
-            </div>
+const RecipeCard = ({ recipe }: RecipeCardProps) => {
+    const [doesImageExist, setDoesImageExist] = React.useState(false);
 
-            {/* source */}
-            <div>
+    React.useEffect(() => {
+        if (recipe.image && recipe.image.alt && recipe.image.url) {
+            checkIfImageExists(recipe.image.url, (exists) => {
+                if (exists) {
+                    setDoesImageExist(true);
+                }
+            });
+        }
+    }, []);
+
+    const checkIfImageExists = (url: string, callback: (exists: boolean) => void) => {
+        const img = new Image();
+        img.src = url;
+      
+        if (img.complete) {
+            callback(true);
+        } else {
+            img.onload = () => {
+                callback(true);
+            };
+      
+            img.onerror = () => {
+                callback(false);
+            };
+        }
+    };
+
+    function handleIngredientClick(event: React.MouseEvent<HTMLInputElement>) {
+        const target = event.target as HTMLInputElement;
+        const label = target.nextElementSibling as HTMLLabelElement;
+        if (target.checked && label) {
+            label.className = styles.checked;
+        } else {
+            label.className = '';
+        }
+    }
+
+    return (
+        <div className={styles.container}>
+            <div className={styles['title-source-container']}>
+                {/* title */}
+                <div>
+                    <Link href={`/?recipe=${recipe.slug}`}>
+                        <a className={styles['recipe-link']}>{recipe.title}</a>
+                    </Link>
+                </div>
+
+                {/* source */}
                 {recipe.source.url
-                    ? <Link href={recipe.source.url}><a rel='noreferrer' target='_blank'>{recipe.source.name}</a></Link>
+                    ? <div>
+                        <Link href={recipe.source.url}>
+                            <a className={styles['source-link']} rel='noreferrer' target='_blank'>
+                                {recipe.source.name}
+                                <ExternalLinkIcon alt='external link' role='img' viewBox='0 0 24 24' />
+                            </a>
+                        </Link>
+                    </div>
                     : <p>{recipe.source.name}</p>
                 }
             </div>
 
             {/* image */}
-            <div>
-                {recipe.image && recipe.image.alt && recipe.image.url &&
-                    <Image
-                        alt={recipe.image.alt}
-                        height={100}
-                        src={`/api/image-proxy?url=${encodeURIComponent(recipe.image.url)}`}
-                        width={100}
-                    />
+            <div className={styles['image-container']}>
+                {doesImageExist && recipe?.image?.url
+                    ? <div
+                        className={styles['image']}
+                        style={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)), url(${recipe.image.url})` }}
+                    ></div>
+                    : <hr />
                 }
             </div>
 
-            {/* time */}
-            <div>
-                <p>🕓 <b>{(recipe.time.prep + recipe.time.cook)} mins</b> ({recipe.time.prep} mins prep + {recipe.time.cook} mins cook)</p>
-            </div>
+            <div className={styles['info-container']}>
+                {/* time */}
+                <div className={styles['time-yield-container']}>
+                    <div>
+                        <TimeFiveIcon aria-hidden='true' role='img' viewBox='0 0 24 24' />
+                    </div>
+                    <p>{(recipe.time.prep + recipe.time.cook)} mins <span>({recipe.time.prep} mins prep + {recipe.time.cook} mins cook)</span></p>
+                </div>
 
-            {/* yield */}
-            <div>
-                <p>🍴 <b>{recipe.yield.amount} {recipe.yield.unit}</b></p>
-            </div>
+                {/* yield */}
+                <div className={styles['time-yield-container']}>
+                    <div>
+                        <BowlHotIcon aria-hidden='true' role='img' viewBox='0 0 24 24' />
+                    </div>
+                    <p>{recipe.yield.amount} {recipe.yield.unit}</p>
+                </div>
 
-            {/* categories */}
-            <details>
-                <summary><b>Categories</b></summary>
+                <hr />
 
-                <p><b>Cuisines</b></p>
-                <ul>
-                    {recipe.cuisines.map((cuisine: any, index: number) => {
-                        return <li key={index}>{cuisine}</li>;
-                    })}
-                </ul>
+                {/* categories */}
+                <details className={styles['categories-container']}>
+                    <summary>Categories</summary>
 
-                <p><b>Dish types</b></p>
-                <ul>
-                    {recipe.dishTypes.map((dishType: any, index: number) => {
-                        return <li key={index}>{dishType}</li>;
-                    })}
-                </ul>
+                    <div>
+                        {recipe.cuisines &&
+                            <div>
+                                <p>Cuisines</p>
+                                <ul>
+                                    {recipe.cuisines.map((cuisine: string, index: number) => {
+                                        return <li key={index}>{cuisine}</li>;
+                                    })}
+                                </ul>
+                            </div>
+                        }
 
-                <p><b>Course types</b></p>
-                <ul>
-                    {recipe.courseTypes.map((courseType: any, index: number) => {
-                        return <li key={index}>{courseType}</li>;
-                    })}
-                </ul>                
+                        <div>
+                            <p>Dish types</p>
+                            <ul>
+                                {recipe.dishTypes.map((dishType: string, index: number) => {
+                                    return <li key={index}>{dishType}</li>;
+                                })}
+                            </ul>
+                        </div>
 
-                {recipe.dietaryRestrictions &&
-                    <>
-                        <p><b>Dietary Restrictions</b></p>
-                        <ul>
-                            {recipe.dietaryRestrictions.map((dietaryRestriction: any, index: number) => {
-                                return <li key={index}>{dietaryRestriction}</li>;
-                            })}
-                        </ul>
-                    </>
-                }
-            </details>
+                        <div>
+                            <p>Course types</p>
+                            <ul>
+                                {recipe.courseTypes.map((courseType: string, index: number) => {
+                                    return <li key={index}>{courseType}</li>;
+                                })}
+                            </ul> 
+                        </div>               
 
-            {/* ingredients */}
-            <details>
-                <summary><b>Ingredients</b></summary>
+                        {recipe.dietaryRestrictions &&
+                            <div>
+                                <p>Dietary Restrictions</p>
+                                <ul>
+                                    {recipe.dietaryRestrictions.map((dietaryRestriction: string, index: number) => {
+                                        return <li key={index}>{dietaryRestriction}</li>;
+                                    })}
+                                </ul>
+                            </div>
+                        }
+                    </div>                    
+                </details>
 
-                <ul>
-                    {recipe.ingredients.map((ingredient: any, index: number) => {
-                        return <li key={index}>{ingredient}</li>;
-                    })}
-                </ul>
-            </details>
-
-            {/* steps */}
-            <details>
-                <summary><b>Steps</b></summary>
-
-                <ol>
-                    {recipe.steps.map((step: any, index: number) => {
-                        return <li key={index}>{step}</li>;
-                    })}
-                </ol>
-            </details>
-
-            {/* notes */}
-            {recipe.notes &&
-                <details>
-                    <summary><b>Notes</b></summary>
+                {/* ingredients */}
+                <details className={styles['ingredients-steps-notes-container']}>
+                    <summary>Ingredients</summary>
 
                     <ul>
-                        {recipe.notes.map((note: any, index: number) => {
-                            return <li key={index}>{note}</li>;
+                        {recipe.ingredients.map((ingredient: string, index: number) => {
+                            const inputId = `${recipe.slug}-ingredient-${index}`;
+ 
+                            return <li key={index}>
+                                <input id={inputId} onClick={handleIngredientClick} type='checkbox' />
+                                <label htmlFor={inputId}>{ingredient}</label>
+                            </li>;
                         })}
                     </ul>
                 </details>
-            }
 
-            <hr />
+                {/* steps */}
+                <details className={styles['ingredients-steps-notes-container']}>
+                    <summary>Steps</summary>
+
+                    <ol>
+                        {recipe.steps.map((step: string, index: number) => {
+                            const inputId = `${recipe.slug}-step-${index}`;
+
+                            return <li key={index}>
+                                <input id={inputId} onClick={handleIngredientClick} type='checkbox' />
+                                <label htmlFor={inputId}>{step}</label>
+                            </li>;
+                        })}
+                    </ol>
+                </details>
+
+                {/* notes */}
+                {recipe.notes &&
+                    <details className={styles['ingredients-steps-notes-container']}>
+                        <summary>Notes</summary>
+
+                        <ul>
+                            {recipe.notes.map((note: string, index: number) => {
+                                return <li key={index}>{note}</li>;
+                            })}
+                        </ul>
+                    </details>
+                }
+            </div>
         </div>
     );
 };

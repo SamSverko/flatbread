@@ -1,24 +1,23 @@
-import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 
 import { getAllCategories, getRecipeCount } from '../utils/contentful';
 
 import LoadingCard from '../components/loading-card/loading-card';
-import Pagination from '../components/pagination/pagination';
+import PaginationCard from '../components/pagination-card/pagination-card';
 import RecipeCard from '../components/recipe-card/recipe-card';
 import SearchCard from '../components/search-card/search-card';
 import SearchResultsCard from '../components/search-results-card/search-results-card';
 
-type searchQueryProps = {
-    title: string
+import type { NextPage } from 'next';
+import type { FetchedCategories, FormattedRecipe, SearchQueryProps } from '../utils/types';
+
+type IndexProps = {
+    categories: FetchedCategories
+    recipeCount: number
 }
 
-type indexProps = {
-    [key: string]: any
-}
-
-const Index: NextPage = ({ categories, recipeCount }: indexProps) => {
+const Index: NextPage<IndexProps> = ({ categories, recipeCount }: IndexProps) => {
     const router = useRouter();
 
     // recipes
@@ -63,7 +62,7 @@ const Index: NextPage = ({ categories, recipeCount }: indexProps) => {
         const { recipe } = router.query;
 
         if (recipe && recipes.length > 0) {
-            const matchedRecipe = recipes.find((recipeItem: any) => recipeItem.slug === recipe);
+            const matchedRecipe = recipes.find((recipeItem: FormattedRecipe) => recipeItem.slug === recipe);
             if (matchedRecipe) {
                 setSearchedRecipes([matchedRecipe]);
             }
@@ -75,8 +74,8 @@ const Index: NextPage = ({ categories, recipeCount }: indexProps) => {
         setSearchedRecipes([recipes[Math.floor(Math.random() * recipes.length)]]);
     }
 
-    function handleSearchSubmit(searchQuery: searchQueryProps) {
-        const matchedRecipes = recipes.filter((recipe: any) => {
+    function handleSearchSubmit(searchQuery: SearchQueryProps) {
+        const matchedRecipes = recipes.filter((recipe: FormattedRecipe) => {
             const titleRegex = new RegExp(searchQuery.title, 'i');
             const titleSearch = recipe.title.search(titleRegex);
             if (titleSearch > -1) {
@@ -90,22 +89,26 @@ const Index: NextPage = ({ categories, recipeCount }: indexProps) => {
 
     return (
         <>
-            <h1>Flatbread</h1>
-
             {recipes.length === 0
                 ? <LoadingCard recipeCount={recipeCount} />
-                : <SearchCard categories={categories} handleRandomSubmit={handleRandomSubmit} handleSearchSubmit={handleSearchSubmit} />
+                : <SearchCard
+                    categories={categories}
+                    handleRandomSubmit={handleRandomSubmit}
+                    handleSearchSubmit={handleSearchSubmit}
+                />
             }
             {searchedRecipes.length > 0 && recipes.length > 0 &&
                 <>
                     <SearchResultsCard recipeCount={searchedRecipes.length} />
 
-                    {searchedRecipes.slice(currentPaginationPage * recipesPerPage, (currentPaginationPage * recipesPerPage) + recipesPerPage).map((recipe: any, index: number) => {
-                        return <RecipeCard key={index} recipe={recipe} />;
-                    })}
+                    {searchedRecipes
+                        .slice(currentPaginationPage * recipesPerPage, (currentPaginationPage * recipesPerPage) + recipesPerPage)
+                        .map((recipe: FormattedRecipe, index: number) => {
+                            return <RecipeCard key={index} recipe={recipe} />;
+                        })}
 
                     {searchedRecipes.length >= recipesPerPage &&
-                        <Pagination
+                        <PaginationCard
                             currentPage={currentPaginationPage}
                             recipeCount={searchedRecipes.length}
                             recipesPerPage={recipesPerPage}

@@ -1,6 +1,54 @@
-import { createClient } from 'contentful';
+import { createClient, Entry, EntryCollection } from 'contentful';
 
-type recipeQuery = {
+import type { FetchedCategories, FormattedRecipe } from '../utils/types';
+
+type ContentfulCategory = {
+    readonly title: string
+}
+
+type ContentfulRecipe = {
+    readonly cookTime: number
+    readonly courseTypes: ReadonlyArray<Entry<ContentfulCategory>>
+    readonly createdAt: string
+    readonly cuisines?: ReadonlyArray<Entry<ContentfulCategory>>
+    readonly dietaryRestrictions?: ReadonlyArray<Entry<ContentfulCategory>>
+    readonly dishTypes: ReadonlyArray<Entry<ContentfulCategory>>
+    readonly imageAltText?: string
+    readonly imageUrl?: string
+    readonly ingredients: ReadonlyArray<string>
+    readonly notes?: ReadonlyArray<string>
+    readonly prepTime: number
+    readonly slug: string
+    readonly sourceName: string
+    readonly sourceUrl?: string
+    readonly steps: ReadonlyArray<string>
+    readonly title: string
+    readonly yieldAmount: number
+    readonly yieldUnit: Entry<ContentfulYieldUnit>
+}
+
+type ContentfulYieldUnit = {
+    readonly title: string
+    readonly titlePlural: string
+}
+
+type FormattedCategory = {
+    id: string,
+    title: string,
+}
+
+type RecipeQuery = {
+    content_type: string
+    'fields.title[match]': string
+    limit: number
+    order: string
+    'fields.courseTypes.sys.id[in]'?: string
+    'fields.cuisines.sys.id[in]'?: string
+    'fields.dishTypes.sys.id[in]'?: string
+    'fields.dietaryRestrictions.sys.id[in]'?: string
+}
+
+type RecipeQueryProps = {
     courseTypes: string,
     cuisines: string,
     dietaryRestrictions: string,
@@ -8,19 +56,26 @@ type recipeQuery = {
     title: string,
 }
 
-const categories = ['courseType', 'cuisine', 'dietaryRestriction', 'dishType'];
+const categories = [
+    'courseType' as const,
+    'cuisine' as const,
+    'dietaryRestriction' as const,
+    'dishType' as const,
+];
 
 // these `format` functions reduce the return object size by over 40%!
-function formatCategory(category: any) {
-    return {
+function formatCategory(category: Entry<ContentfulCategory>) {
+    const formattedCategory: FormattedCategory = {
         id: category.sys.id,
         title: category.fields.title,
     };
+
+    return formattedCategory;
 }
 
-function formatRecipe(recipe: any) {
+function formatRecipe(recipe: ContentfulRecipe) {
     // required fields
-    const mappedRecipe: any = {
+    const formattedRecipe: FormattedRecipe = {
         title: recipe.title,
         slug: recipe.slug,
         createdAt: recipe.createdAt,
@@ -35,58 +90,66 @@ function formatRecipe(recipe: any) {
             amount: recipe.yieldAmount,
             unit: (recipe.yieldAmount === 1 ) ? recipe.yieldUnit.fields.title : recipe.yieldUnit.fields.titlePlural,
         },
-        courseTypes: recipe.courseTypes.map((courseType: any) => courseType.fields.title),
-        cuisines: recipe.cuisines.map((cuisine: any) => cuisine.fields.title),
-        dishTypes: recipe.dishTypes.map((dishType: any) => dishType.fields.title),
-        ingredients: recipe.ingredients,
-        steps: recipe.steps,
+        courseTypes: recipe.courseTypes.map((courseType: Entry<ContentfulCategory>) => courseType.fields.title).sort(),
+        dishTypes: recipe.dishTypes.map((dishType: Entry<ContentfulCategory>) => dishType.fields.title).sort(),
+        ingredients: [...recipe.ingredients],
+        steps: [...recipe.steps],
     };
 
     // optional fields
+    if (recipe.cuisines) {
+        formattedRecipe.cuisines = recipe.cuisines.map((cuisine: Entry<ContentfulCategory>) => cuisine.fields.title).sort();
+    }
+
+    if (recipe.dietaryRestrictions) {
+        formattedRecipe.dietaryRestrictions = recipe.dietaryRestrictions.map((dietaryRestriction: Entry<ContentfulCategory>) => dietaryRestriction.fields.title).sort();
+    }
+
     if (recipe.sourceUrl) {
-        mappedRecipe.source.url = recipe.sourceUrl;
+        formattedRecipe.source.url = recipe.sourceUrl;
     }
 
     if (recipe.imageUrl) {
-        mappedRecipe.image = {
+        formattedRecipe.image = {
             url: recipe.imageUrl,
         };
     }
 
     if (recipe.imageAltText) {
-        if (mappedRecipe.image) {
-            mappedRecipe.image.alt = recipe.imageAltText;
+        if (formattedRecipe.image) {
+            formattedRecipe.image.alt = recipe.imageAltText;
         } else {
-            mappedRecipe.image = {
+            formattedRecipe.image = {
                 alt: recipe.imageAltText,
             };
         }
     }
 
-    if (recipe.dietaryRestrictions) {
-        mappedRecipe.dietaryRestriction = recipe.dietaryRestrictions.map((dietaryRestriction: any) => dietaryRestriction.fields.title);
-    }
-
     if (recipe.notes) {
-        mappedRecipe.notes = recipe.notes;
+        formattedRecipe.notes = [...recipe.notes];
     }
 
-    return mappedRecipe;
+    return formattedRecipe;
 }
 
 export function configClient() {
     return createClient({
-        space: process.env.CONTENTFUL_SPACE_ID!,
-        accessToken: process.env.CONTENTFUL_ACCESS_TOKEN!,
+        space: process.env.CONTENTFUL_SPACE_ID || '',
+        accessToken: process.env.CONTENTFUL_ACCESS_TOKEN || '',
     });
 }
 
 export async function getAllCategories() {
-    const fetchedCategories: any = {};
+    const fetchedCategories: FetchedCategories = {
+        courseType: [],
+        cuisine: [],
+        dietaryRestriction: [],
+        dishType: [],
+    };
 
     await Promise.all(categories.map(async (category) => {
         try {
-            const response = await configClient().getEntries({
+            const response: EntryCollection<ContentfulCategory> = await configClient().getEntries({
                 content_type: category,
                 limit: 1000,
                 order: 'fields.title',
@@ -103,7 +166,7 @@ export async function getAllCategories() {
 
 export async function getRecipeCount() {
     try {
-        const fetchedRecipes = await configClient().getEntries({
+        const fetchedRecipes: EntryCollection<ContentfulRecipe> = await configClient().getEntries({
             content_type: 'recipe',
         });
 
@@ -115,7 +178,7 @@ export async function getRecipeCount() {
 
 export async function getRandomRecipe() {
     try {
-        const fetchedRecipes = await configClient().getEntries({
+        const fetchedRecipes: EntryCollection<ContentfulRecipe> = await configClient().getEntries({
             content_type: 'recipe',
             limit: 1000,
         });
@@ -134,8 +197,8 @@ export async function getRecipesByQuery({
     dietaryRestrictions,
     dishTypes,
     title,
-}: recipeQuery) {
-    const query: any = {
+}: RecipeQueryProps) {
+    const query: RecipeQuery = {
         content_type: 'recipe',
         'fields.title[match]': title,
         limit: 1000,
@@ -159,7 +222,7 @@ export async function getRecipesByQuery({
     }
 
     try {
-        const fetchedRecipes = await configClient().getEntries(query);
+        const fetchedRecipes: EntryCollection<ContentfulRecipe> = await configClient().getEntries(query);
 
         return fetchedRecipes.items.map((recipe) => formatRecipe(recipe.fields));
     } catch(error) {
@@ -169,7 +232,7 @@ export async function getRecipesByQuery({
 
 export async function getRecipeBySlug(slug: string) {
     try {
-        const fetchedRecipe = await configClient().getEntries({
+        const fetchedRecipe: EntryCollection<ContentfulRecipe> = await configClient().getEntries({
             content_type: 'recipe',
             'fields.slug': slug,
         });

@@ -1,0 +1,7 @@
+@use '../../styles/variables.scss' as var;
+
+.container {
+    h1 {
+        color: var.$color-grey-900;
+    }
+}

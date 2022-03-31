@@ -1,14 +1,17 @@
-type searchResultsProps = {
+import * as React from 'react';
+
+
+import styles from './search-results-card.module.scss';
+
+type SearchResultsProps = {
     recipeCount: number
 }
 
-const SearchResultsCard = ({ recipeCount }: searchResultsProps) => {
+const SearchResultsCard = ({ recipeCount }: SearchResultsProps) => {
     return (
-        <div>
+        <div className={styles.container}>
             <h2>Search results</h2>
-            <p>{recipeCount} {recipeCount === 1 ? 'recipe' : 'recipes'} found.</p>
-
-            <hr />
+            <p>{recipeCount} {recipeCount === 1 ? 'recipe' : 'recipes'} found</p>
         </div>
     );
 };
