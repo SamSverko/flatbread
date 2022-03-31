@@ -158,6 +158,7 @@ input {
         }
     }
 
+    &[type='number'],
     &[type='search'],
     &[type='text'] {
         border: var.$spacing-1 solid var.$color-grey-500;
@@ -177,6 +178,10 @@ input {
         &:focus {
             @include mixins.focus-outline;
         }
+    }
+
+    &[type='number'] {
+        width: 5.5rem;
     }
 }
 

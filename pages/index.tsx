@@ -4,7 +4,7 @@ import * as React from 'react';
 import { getAllCategories, getRecipeCount } from '../utils/contentful';
 
 import LoadingCard from '../components/loading-card/loading-card';
-import Pagination from '../components/pagination/pagination';
+import PaginationCard from '../components/pagination-card/pagination-card';
 import RecipeCard from '../components/recipe-card/recipe-card';
 import SearchCard from '../components/search-card/search-card';
 import SearchResultsCard from '../components/search-results-card/search-results-card';
@@ -108,7 +108,7 @@ const Index: NextPage<IndexProps> = ({ categories, recipeCount }: IndexProps) =>
                         })}
 
                     {searchedRecipes.length >= recipesPerPage &&
-                        <Pagination
+                        <PaginationCard
                             currentPage={currentPaginationPage}
                             recipeCount={searchedRecipes.length}
                             recipesPerPage={recipesPerPage}
