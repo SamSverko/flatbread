@@ -73,7 +73,7 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
                             </a>
                         </Link>
                     </div>
-                    : <p>{recipe.source.name}</p>
+                    : <p className={styles['source-name']}>{recipe.source.name}</p>
                 }
             </div>
 

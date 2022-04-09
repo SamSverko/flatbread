@@ -37,7 +37,7 @@ export const SearchCard = ({ categories, handleRandomSubmit, handleSearchSubmit 
             <form className={styles['search-form']} onSubmit={handleFormSubmit}>
                 <div className={styles['input-group']}>
                     <label htmlFor='recipe-title'>Title</label>
-                    <input ref={inputTitleRef} id='recipe-title' name='title' type='search' />
+                    <input ref={inputTitleRef} id='recipe-title' enterKeyHint='search' name='title' type='search' />
                 </div>
 
                 <details aria-disabled={true} tabIndex={-1}>
