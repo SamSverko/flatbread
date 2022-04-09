@@ -158,14 +158,61 @@ input {
     padding: 0;
 
     &[type='checkbox'] {
+        // unchecked state
+        appearance: none;
+        background-color: white;
+        border: 1px solid var.$color-grey-500;
         border-radius: var.$border-radius;
         cursor: pointer;
+        display: inline-grid;
+        font: inherit;
         height: 1rem;
-        min-height: 1rem;
-        min-width: 1rem;
+        place-content: center;
+        transition:
+            background-color 0.1s var.$transition-timing-function,
+            border 0.1s var.$transition-timing-function;
         width: 1rem;
 
-        &:focus {
+        // checked state
+        &::before {
+            background-color: white;
+            box-shadow: inset 1em 1em white;
+            clip-path: polygon(12% 51.5%, 22.5% 42%, 40.5% 60%, 76.5% 24%, 86.5% 34%, 40.5% 80%);
+            content: '';
+            height: calc(1rem - 2px);
+            transform: scale(0);
+            width: calc(1rem - 2px);
+        }
+
+        // checked state
+        &:checked {
+            background-color: var.$color-primary-main;
+            border: 1px solid var.$color-primary-main;
+
+            &::before {
+                transform: scale(1);
+            }
+
+            &:hover:enabled {
+                background-color: var.$color-primary-dark;
+                border: 1px solid var.$color-primary-dark;
+            }
+
+            &:active:enabled {
+                background-color: var.$color-primary-light;
+                border: 1px solid var.$color-primary-light;
+            }
+        }
+
+        &:hover:enabled:not(:checked) {
+            border: 1px solid var.$color-grey-600;
+        }
+
+        &:active:enabled:not(:checked) {
+            border: 1px solid var.$color-grey-400;
+        }
+
+        &:focus-visible {
             @include mixins.focus-outline;
         }
     }
@@ -173,6 +220,8 @@ input {
     &[type='number'],
     &[type='search'],
     &[type='text'] {
+        @include mixins.transition(border);
+
         border: var.$spacing-1 solid var.$color-grey-500;
         border-radius: var.$border-radius;
         font-family: spartan-medium, sans-serif;
@@ -183,6 +232,10 @@ input {
         &::placeholder {
             color: var.$color-grey-600;
             font-family: spartan-medium, sans-serif;
+        }
+
+        &:hover {
+            border: var.$spacing-1 solid var.$color-grey-600;
         }
 
         &:focus {
