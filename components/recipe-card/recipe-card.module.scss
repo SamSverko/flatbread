@@ -69,13 +69,15 @@
         gap: var.$spacing-5;
         padding: 0 var.$spacing-5;
 
-        .time-yield-container {
-            align-items: flex-center;
+        .time-container {
+            align-items: center;
             display: flex;
             gap: var.$spacing-2;
 
             > div {
+                align-items: center;
                 display: flex;
+                justify-content: center;
             }
 
             svg {
@@ -93,6 +95,22 @@
             span {
                 font-family: spartan-regular, sans-serif;
                 font-size: 0.75rem;
+            }
+        }
+
+        .yield-container {
+            align-items: flex-end;
+            display: flex;
+            gap: var.$spacing-2;
+
+            > div {
+                align-items: center;
+                display: flex;
+                justify-content: center;
+            }
+
+            p {
+                font-family: spartan-bold, sans-serif;
             }
         }
 

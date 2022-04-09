@@ -90,7 +90,7 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
 
             <div className={styles['info-container']}>
                 {/* time */}
-                <div className={styles['time-yield-container']}>
+                <div className={styles['time-container']}>
                     <div>
                         <TimeFiveIcon aria-hidden='true' role='img' viewBox='0 0 24 24' />
                     </div>
@@ -98,7 +98,7 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
                 </div>
 
                 {/* yield */}
-                <div className={styles['time-yield-container']}>
+                <div className={styles['yield-container']}>
                     <div>
                         <BowlHotIcon aria-hidden='true' role='img' viewBox='0 0 24 24' />
                     </div>
