@@ -13,13 +13,14 @@
         padding: 0 var.$spacing-5;
 
         .recipe-link {
+            font-family: spartan-bold, sans-serif;
             font-size: 1.25rem;
-            font-weight: var.$font-weight-bold;
         }
 
         .source-link {
             align-items: center;
             display: inline-flex;
+            font-family: spartan-bold, sans-serif;
             gap: var.$spacing-1;
 
             &:hover {
@@ -39,6 +40,10 @@
                 height: $size;
                 width: $size;
             }
+        }
+
+        .source-name {
+            font-family: spartan-bold, sans-serif;
         }
     }
 
@@ -64,13 +69,15 @@
         gap: var.$spacing-5;
         padding: 0 var.$spacing-5;
 
-        .time-yield-container {
+        .time-container {
             align-items: center;
             display: flex;
             gap: var.$spacing-2;
 
             > div {
+                align-items: center;
                 display: flex;
+                justify-content: center;
             }
 
             svg {
@@ -82,11 +89,28 @@
             }
 
             p {
-                font-weight: var.$font-weight-bold;
+                font-family: spartan-bold, sans-serif;
             }
 
             span {
-                font-size: 0.9rem;
+                font-family: spartan-regular, sans-serif;
+                font-size: 0.75rem;
+            }
+        }
+
+        .yield-container {
+            align-items: flex-end;
+            display: flex;
+            gap: var.$spacing-2;
+
+            > div {
+                align-items: center;
+                display: flex;
+                justify-content: center;
+            }
+
+            p {
+                font-family: spartan-bold, sans-serif;
             }
         }
 
@@ -97,7 +121,7 @@
                 gap: var.$spacing-5;
 
                 p {
-                    font-weight: var.$font-weight-bold;
+                    font-family: spartan-bold, sans-serif;
                     margin-bottom: var.$spacing-2;
                 }
 
@@ -111,11 +135,12 @@
 
                     li {
                         background-color: var.$color-info-main;
-                        border-radius: var.$border-radius;
+                        border-radius: var.$border-radius-chip;
                         color: var.$color-info-contrast-text;
                         display: inline-block;
-                        font-size: 0.9rem;
-                        padding: var.$spacing-1 var.$spacing-2;
+                        font-family: spartan-bold, sans-serif;
+                        font-size: 0.75rem;
+                        padding: var.$spacing-2 var.$spacing-3 var.$spacing-1;
                         // word-break: keep-all;
                         white-space: nowrap;
                     }
@@ -138,7 +163,7 @@
 
                     label {
                         cursor: pointer;
-                        font-weight: var.$font-weight-medium;
+                        font-family: spartan-regular, sans-serif;
                         padding: 0 0 0 var.$spacing-2;
 
                         &.checked {

@@ -55,11 +55,6 @@ $color-success-light: #448345;
 $color-success-dark: #3d763e;
 $color-success-contrast-text: white;
 
-// FONT WEIGHT ================================================================
-$font-weight-regular: 400;
-$font-weight-medium: 500;
-$font-weight-bold: 700;
-
 // LAYOUT =====================================================================
 $card-max-width: 400px;
 
@@ -70,4 +65,5 @@ $transition-delay: 0s;
 
 // MISC =======================================================================
 $border-radius: $spacing-1;
+$border-radius-chip: 2rem;
 $opacity-disabled: 0.5;

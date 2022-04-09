@@ -105,7 +105,7 @@ Flatbread is committed to comply with [WCAG 2.1 level AA](https://www.w3.org/TR/
 ```scss
 .my-class {
     display: inline-block;
-    font-family: 'Roboto', sans-serif;
+    font-family: spartan-regular, sans-serif;
     text-align: center;
 
     &:hover {

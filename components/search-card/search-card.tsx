@@ -37,7 +37,7 @@ export const SearchCard = ({ categories, handleRandomSubmit, handleSearchSubmit 
             <form className={styles['search-form']} onSubmit={handleFormSubmit}>
                 <div className={styles['input-group']}>
                     <label htmlFor='recipe-title'>Title</label>
-                    <input ref={inputTitleRef} id='recipe-title' name='title' type='search' />
+                    <input ref={inputTitleRef} id='recipe-title' enterKeyHint='search' name='title' type='search' />
                 </div>
 
                 <details aria-disabled={true} tabIndex={-1}>
@@ -75,8 +75,10 @@ export const SearchCard = ({ categories, handleRandomSubmit, handleSearchSubmit 
 
                 <div className={styles['submit-group']}>
                     <input name='search-recipes' onClick={handleSearchClick} type='submit' value='Search' />
-                    <span>or</span>
-                    <input className='text' name='get-random-recipe' onClick={handleRandomSubmit} type='submit' value='Get a random recipe' />
+                    <div className={styles['random-container']}>
+                        <span>or</span>
+                        <input className='text' name='get-random-recipe' onClick={handleRandomSubmit} type='submit' value='Get a random recipe' />
+                    </div>
                 </div>
             </form>
         </div>
