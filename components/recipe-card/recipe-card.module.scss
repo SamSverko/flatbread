@@ -14,7 +14,6 @@
 
         .recipe-link {
             font-size: 1.25rem;
-            font-weight: var.$font-weight-bold;
         }
 
         .source-link {
@@ -81,10 +80,6 @@
                 width: $size;
             }
 
-            p {
-                font-weight: var.$font-weight-bold;
-            }
-
             span {
                 font-size: 0.9rem;
             }
@@ -97,7 +92,6 @@
                 gap: var.$spacing-5;
 
                 p {
-                    font-weight: var.$font-weight-bold;
                     margin-bottom: var.$spacing-2;
                 }
 
@@ -138,7 +132,6 @@
 
                     label {
                         cursor: pointer;
-                        font-weight: var.$font-weight-medium;
                         padding: 0 0 0 var.$spacing-2;
 
                         &.checked {

@@ -26,6 +26,10 @@
         details {
             width: 100%;
 
+            summary {
+                font-size: 0.75rem;
+            }
+
             // delete this block when advanced search works
             &[aria-disabled='true'] {
                 opacity: 0.5;
@@ -62,6 +66,22 @@
             gap: var.$spacing-3;
             justify-content: space-between;
             width: 100%;
+
+            .random-container {
+                align-items: center;
+                display: flex;
+                gap: var.$spacing-2;
+            }
+
+            span {
+                color: var.$color-grey-700;
+                font-family: spartan-bold, sans-serif;
+            }
+
+            span,
+            [name='get-random-recipe'] {
+                font-size: 0.75rem;
+            }
         }
     }
 }

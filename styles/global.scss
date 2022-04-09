@@ -1,3 +1,4 @@
+@use './fonts.scss';
 @use './mixins.scss';
 @use './variables.scss' as var;
 
@@ -8,9 +9,8 @@
 // HTML =======================================================================
 html {
     background-color: var.$color-grey-100;
-    font-family: Spartan, sans-serif;
-    font-size: 16px;
-    font-weight: var.$font-weight-medium;
+    font-family: spartan-regular, sans-serif;
+    font-size: 16px; // 12px = 0.75rem | 24px = 1.5rem | 32px = 2rem
     margin: 0;
     padding: 0;
 
@@ -32,7 +32,6 @@ html {
 // ELEMENTS ===================================================================
 a {
     color: var.$color-secondary-main;
-    font-weight: var.$font-weight-medium;
     text-decoration: none;
 
     &:hover {
@@ -59,9 +58,8 @@ input[type='submit'] {
     border-radius: var.$spacing-1;
     color: white;
     cursor: pointer;
-    font-family: Spartan, sans-serif;
+    font-family: spartan-bold, sans-serif;
     font-size: 1rem;
-    font-weight: var.$font-weight-medium;
     line-height: 2rem;
     margin: 0;
     padding: var.$spacing-1 var.$spacing-5;
@@ -85,7 +83,7 @@ input[type='submit'] {
     &.text {
         background-color: transparent;
         color: var.$color-primary-main;
-        font-weight: var.$font-weight-bold;
+        font-family: spartan-bold, sans-serif;
         line-height: normal;
         padding: 0;
 
@@ -105,8 +103,8 @@ details {
     summary {
         color: var.$color-primary-main;
         cursor: pointer;
+        font-family: spartan-bold, sans-serif;
         font-size: 1rem;
-        font-weight: var.$font-weight-bold;
         margin: 0;
         padding: 0;
 
@@ -133,8 +131,17 @@ details {
 h1,
 h2,
 h3 {
+    font-family: spartan-bold, sans-serif;
     margin: 0;
     padding: 0;
+}
+
+h1 {
+    font-size: 2rem;
+}
+
+h2 {
+    font-size: 1.5rem;
 }
 
 hr {
@@ -163,16 +170,14 @@ input {
     &[type='text'] {
         border: var.$spacing-1 solid var.$color-grey-500;
         border-radius: var.$border-radius;
-        font-family: Spartan, sans-serif;
+        font-family: spartan-medium, sans-serif;
         font-size: 1rem;
-        font-weight: var.$font-weight-medium;
         padding: var.$spacing-2;
         width: 100%;
 
         &::placeholder {
             color: var.$color-grey-600;
-            font-family: Spartan, sans-serif;
-            font-weight: var.$font-weight-medium;
+            font-family: spartan-medium, sans-serif;
         }
 
         &:focus {
@@ -186,14 +191,13 @@ input {
 }
 
 label {
+    font-family: spartan-bold, sans-serif;
     font-size: 1rem;
-    font-weight: var.$font-weight-bold;
 }
 
 p,
 span {
     font-size: 1rem;
-    font-weight: var.$font-weight-medium;
     margin: 0;
     padding: 0;
 }

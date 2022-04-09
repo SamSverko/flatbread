@@ -75,8 +75,10 @@ export const SearchCard = ({ categories, handleRandomSubmit, handleSearchSubmit 
 
                 <div className={styles['submit-group']}>
                     <input name='search-recipes' onClick={handleSearchClick} type='submit' value='Search' />
-                    <span>or</span>
-                    <input className='text' name='get-random-recipe' onClick={handleRandomSubmit} type='submit' value='Get a random recipe' />
+                    <div className={styles['random-container']}>
+                        <span>or</span>
+                        <input className='text' name='get-random-recipe' onClick={handleRandomSubmit} type='submit' value='Get a random recipe' />
+                    </div>
                 </div>
             </form>
         </div>

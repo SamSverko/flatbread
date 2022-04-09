@@ -6,15 +6,15 @@ class MyDocument extends Document {
         return (
             <Html>
                 <Head>
-                    {/* spartan - regular (400) + medium (500) + bold (700) */}
-                    <link href='https://fonts.googleapis.com' rel='preconnect' />
-                    <link
-                        as='font'
-                        crossOrigin=''
-                        href='https://fonts.gstatic.com/s/spartan/v10/l7gfbjR61M69yt8Z2QKtlAXJExs.woff2'
-                        rel='preconnect'
-                        type='font/woff2'
-                    />
+                    <link as='font' crossOrigin='' href='/fonts/spartan-regular.woff2' rel='preload' />
+                    <link as='font' crossOrigin='' href='/fonts/spartan-regular.woff' rel='preload' />
+                    <link as='font' crossOrigin='' href='/fonts/spartan-regular.ttf' rel='preload' />
+                    <link as='font' crossOrigin='' href='/fonts/spartan-medium.woff2' rel='preload' />
+                    <link as='font' crossOrigin='' href='/fonts/spartan-medium.woff' rel='preload' />
+                    <link as='font' crossOrigin='' href='/fonts/spartan-medium.ttf' rel='preload' />
+                    <link as='font' crossOrigin='' href='/fonts/spartan-bold.woff2' rel='preload' />
+                    <link as='font' crossOrigin='' href='/fonts/spartan-bold.woff' rel='preload' />
+                    <link as='font' crossOrigin='' href='/fonts/spartan-bold.ttf' rel='preload' />
                 </Head>
                 <body>
                     <Main />
