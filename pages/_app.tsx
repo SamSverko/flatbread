@@ -24,7 +24,9 @@ function App({ Component, pageProps }: AppProps) {
     return (
         <>
             <Head>
+                <meta content='A blazingly-fast website to search and follow tasty recipes.' name='description' />
                 <meta content='width=device-width, initial-scale=1.0' name='viewport' />
+
                 <title>Flatbread{matchedRoute ? ` - ${matchedRoute.title}` : ''}</title>
             </Head>
             <NavBar />

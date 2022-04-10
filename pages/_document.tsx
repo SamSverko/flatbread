@@ -4,7 +4,7 @@ import * as React from 'react';
 class AppDocument extends Document {
     render() {
         return (
-            <Html>
+            <Html lang='en'>
                 <Head>
                     <link as='font' crossOrigin='' href='/fonts/spartan-regular.woff2' rel='preload' />
                     <link as='font' crossOrigin='' href='/fonts/spartan-regular.woff' rel='preload' />
