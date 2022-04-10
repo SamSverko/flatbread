@@ -111,7 +111,7 @@ const Index: NextPage<IndexProps> = ({ categories, recipeCount }: IndexProps) =>
                     {searchedRecipes
                         .slice(currentPaginationPage * recipesPerPage, (currentPaginationPage * recipesPerPage) + recipesPerPage)
                         .map((recipe: FormattedRecipe) => {
-                            return <RecipeCard key={recipe.slug} recipe={recipe} />;
+                            return <RecipeCard key={`${recipe.slug}-${new Date().getSeconds()}`} recipe={recipe} />;
                         })}
 
                     {searchedRecipes.length >= recipesPerPage &&
