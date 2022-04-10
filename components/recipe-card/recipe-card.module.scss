@@ -148,7 +148,7 @@
             ul {
                 display: flex;
                 flex-direction: column;
-                gap: var.$spacing-3;
+                gap: var.$spacing-4;
                 padding: 0;
 
                 li {
@@ -160,6 +160,7 @@
                         cursor: pointer;
                         font-family: spartan-regular, sans-serif;
                         padding: 0 0 0 var.$spacing-2;
+                        width: 100%;
 
                         &.checked {
                             text-decoration: line-through;
