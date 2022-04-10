@@ -22,6 +22,7 @@ const Index: NextPage<IndexProps> = ({ categories, recipeCount }: IndexProps) =>
 
     // recipes
     const [recipes, setRecipes] = React.useState([]);
+    const [searchPerformed, setSearchedPerformed] = React.useState(false);
     const [searchedRecipes, setSearchedRecipes] = React.useState([]);
 
     // pagination
@@ -64,6 +65,7 @@ const Index: NextPage<IndexProps> = ({ categories, recipeCount }: IndexProps) =>
         if (recipe && recipes.length > 0) {
             const matchedRecipe = recipes.find((recipeItem: FormattedRecipe) => recipeItem.slug === recipe);
             if (matchedRecipe) {
+                setSearchedPerformed(true);
                 setSearchedRecipes([matchedRecipe]);
             }
         }
@@ -71,6 +73,7 @@ const Index: NextPage<IndexProps> = ({ categories, recipeCount }: IndexProps) =>
 
     function handleRandomSubmit() {
         setPaginationPage(0);
+        setSearchedPerformed(true);
         setSearchedRecipes([recipes[Math.floor(Math.random() * recipes.length)]]);
     }
 
@@ -84,6 +87,7 @@ const Index: NextPage<IndexProps> = ({ categories, recipeCount }: IndexProps) =>
         });
 
         setPaginationPage(0);
+        setSearchedPerformed(true);
         setSearchedRecipes(matchedRecipes);
     }
 
@@ -97,7 +101,8 @@ const Index: NextPage<IndexProps> = ({ categories, recipeCount }: IndexProps) =>
                     handleSearchSubmit={handleSearchSubmit}
                 />
             }
-            {searchedRecipes.length > 0 && recipes.length > 0 &&
+
+            {searchPerformed && recipes.length > 0 &&
                 <>
                     <SearchResultsCard recipeCount={searchedRecipes.length} />
 

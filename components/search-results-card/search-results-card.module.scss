@@ -6,4 +6,12 @@
 
     gap: var.$spacing-2;
     text-align: center;
+
+    p {
+        border-radius: var.$spacing-1;
+
+        &:focus {
+            @include mixins.focus-outline;
+        }
+    }
 }

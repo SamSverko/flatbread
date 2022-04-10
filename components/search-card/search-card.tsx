@@ -31,7 +31,7 @@ export const SearchCard = ({ categories, handleRandomSubmit, handleSearchSubmit 
     }
 
     return (
-        <div className={styles.container}>
+        <section className={styles.container}>
             <h2>Search for recipes</h2>
 
             <form className={styles['search-form']} onSubmit={handleFormSubmit}>
@@ -81,7 +81,7 @@ export const SearchCard = ({ categories, handleRandomSubmit, handleSearchSubmit 
                     </div>
                 </div>
             </form>
-        </div>
+        </section>
     );
 };
 

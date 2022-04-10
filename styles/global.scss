@@ -9,6 +9,7 @@
 // HTML =======================================================================
 html {
     background-color: var.$color-grey-100;
+    color: var.$color-grey-900;
     font-family: spartan-regular, sans-serif;
     font-size: 16px; // 12px = 0.75rem | 20px = 1.25rem | 24px = 1.5rem | 32px = 2rem
     margin: 0;
@@ -36,16 +37,32 @@ a {
 
     &:hover {
         color: var.$color-secondary-dark;
+
+        svg {
+            fill: var.$color-secondary-dark;
+        }
     }
 
     &:active {
         color: var.$color-secondary-light;
+
+        svg {
+            fill: var.$color-secondary-light;
+        }
     }
 
     &:focus {
         @include mixins.focus-outline;
 
         border-radius: var.$border-radius;
+    }
+
+    svg {
+        fill: var.$color-secondary-main;
+        height: 1rem;
+        margin-left: var.$spacing-1;
+        vertical-align: top;
+        width: 1rem;
     }
 }
 
@@ -224,6 +241,7 @@ input {
 
         border: var.$spacing-1 solid var.$color-grey-500;
         border-radius: var.$border-radius;
+        color: var.$color-grey-900;
         font-family: spartan-medium, sans-serif;
         font-size: 1rem;
         padding: var.$spacing-2;

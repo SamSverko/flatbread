@@ -1,6 +1,5 @@
 import * as React from 'react';
 
-
 import styles from './search-results-card.module.scss';
 
 type SearchResultsProps = {
@@ -8,11 +7,21 @@ type SearchResultsProps = {
 }
 
 const SearchResultsCard = ({ recipeCount }: SearchResultsProps) => {
+    const resultsParagraphRef = React.useRef(null);
+
+    React.useEffect(() => {
+        if (resultsParagraphRef.current) {
+            (resultsParagraphRef.current as HTMLParagraphElement).focus();
+        }
+    });
+
     return (
-        <div className={styles.container}>
+        <section className={styles.container}>
             <h2>Search results</h2>
-            <p>{recipeCount} {recipeCount === 1 ? 'recipe' : 'recipes'} found</p>
-        </div>
+            <p ref={resultsParagraphRef} tabIndex={-1}>
+                {recipeCount} {recipeCount === 1 ? 'recipe' : 'recipes'} found
+            </p>
+        </section>
     );
 };
 

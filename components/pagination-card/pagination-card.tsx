@@ -40,7 +40,7 @@ export const Pagination = ({
     }
 
     return (
-        <div className={styles.container}>
+        <section className={styles.container}>
             <h2>Search results pages</h2>
 
             <div className={styles['buttons-container']}>
@@ -64,7 +64,7 @@ export const Pagination = ({
                 <input max={buttonCount} min={1} name='pagination-page' onChange={handleInputChange} type='number' value={inputValue} />
                 <input name='jump-to-page' type='submit' value='Go' />
             </form>
-        </div>
+        </section>
     );
 };
 
