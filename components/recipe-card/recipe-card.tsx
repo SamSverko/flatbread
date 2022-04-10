@@ -5,6 +5,7 @@ import type { FormattedRecipe } from '../../utils/types';
 
 import BowlHotIcon from '../../public/icons/bxs-bowl-hot.svg';
 import ExternalLinkIcon from '../../public/icons/bx-link-external.svg';
+import IdCardIcon from '../../public/icons/bxs-id-card.svg';
 import TimeFiveIcon from '../../public/icons/bxs-time-five.svg';
 
 import styles from './recipe-card.module.scss';
@@ -54,28 +55,13 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
     }
 
     return (
-        <div className={styles.container}>
-            <div className={styles['title-source-container']}>
-                {/* title */}
-                <div>
-                    <Link href={`/?recipe=${recipe.slug}`}>
-                        <a className={styles['recipe-link']}>{recipe.title}</a>
-                    </Link>
-                </div>
-
-                {/* source */}
-                {recipe.source.url
-                    ? <div>
-                        <Link href={recipe.source.url}>
-                            <a className={styles['source-link']} rel='noreferrer' target='_blank'>
-                                {recipe.source.name}
-                                <ExternalLinkIcon alt='external link' role='img' viewBox='0 0 24 24' />
-                            </a>
-                        </Link>
-                    </div>
-                    : <p className={styles['source-name']}>{recipe.source.name}</p>
-                }
-            </div>
+        <section className={styles.container}>
+            {/* title */}
+            <h2>
+                <Link href={`/?recipe=${recipe.slug}`}>
+                    <a className={styles['recipe-link']}>{recipe.title}</a>
+                </Link>
+            </h2>
 
             {/* image */}
             <div className={styles['image-container']}>
@@ -89,23 +75,44 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
             </div>
 
             <div className={styles['info-container']}>
-                {/* time */}
-                <div className={styles['time-container']}>
-                    <div>
-                        <TimeFiveIcon aria-hidden='true' role='img' viewBox='0 0 24 24' />
+                <div className={styles['source-time-yield-container']}>
+                    {/* source */}
+                    <div className={styles.row}>
+                        <div className={styles.icon}>
+                            <IdCardIcon aria-label='Source' role='img' viewBox='0 0 24 24' />
+                        </div>
+
+                        <p>
+                            {recipe.source.url
+                                ? <Link href={recipe.source.url}>
+                                    <a rel='noreferrer' target='_blank'>
+                                        {recipe.source.name}
+                                        <ExternalLinkIcon aria-label='External link' role='img' viewBox='0 0 24 24' />
+                                    </a>
+                                </Link>
+                                : recipe.source.name
+                            }
+                        </p>
                     </div>
-                    <p>{(recipe.time.prep + recipe.time.cook)} mins <span>({recipe.time.prep} mins prep + {recipe.time.cook} mins cook)</span></p>
+
+                    {/* time */}
+                    <div className={styles.row}>
+                        <div className={styles.icon}>
+                            <TimeFiveIcon aria-label='Total time' role='img' viewBox='0 0 24 24' />
+                        </div>
+                        <p>{(recipe.time.prep + recipe.time.cook)} mins <span>({recipe.time.prep} mins prep + {recipe.time.cook} mins cook)</span></p>
+                    </div>
+
+                    {/* yield */}
+                    <div className={styles.row}>
+                        <div className={styles.icon}>
+                            <BowlHotIcon aria-label='Yield amount' role='img' viewBox='0 0 24 24' />
+                        </div>
+                        <p>{recipe.yield.amount} {recipe.yield.unit}</p>
+                    </div>
                 </div>
 
-                {/* yield */}
-                <div className={styles['yield-container']}>
-                    <div>
-                        <BowlHotIcon aria-hidden='true' role='img' viewBox='0 0 24 24' />
-                    </div>
-                    <p>{recipe.yield.amount} {recipe.yield.unit}</p>
-                </div>
-
-                <hr />
+                <hr aria-hidden='true' />
 
                 {/* categories */}
                 <details className={styles['categories-container']}>
@@ -199,7 +206,7 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
                     </details>
                 }
             </div>
-        </div>
+        </section>
     );
 };
 

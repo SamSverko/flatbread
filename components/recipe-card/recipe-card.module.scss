@@ -6,15 +6,22 @@
 
     padding: var.$spacing-5 0;
 
+    h2 {
+        font-family: spartan-bold, sans-serif;
+        font-size: 1.25rem;
+        padding: 0 var.$spacing-5;
+    }
+
     .title-source-container {
         display: flex;
         flex-direction: column;
         gap: var.$spacing-2;
         padding: 0 var.$spacing-5;
 
-        .recipe-link {
-            font-family: spartan-bold, sans-serif;
-            font-size: 1.25rem;
+        .source-container {
+            align-items: center;
+            display: flex;
+            gap: var.$spacing-2;
         }
 
         .source-link {
@@ -69,48 +76,34 @@
         gap: var.$spacing-5;
         padding: 0 var.$spacing-5;
 
-        .time-container {
-            align-items: center;
+        .source-time-yield-container {
+            align-items: flex-start;
             display: flex;
-            gap: var.$spacing-2;
+            flex-direction: column;
+            gap: var.$spacing-3;
 
-            > div {
-                align-items: center;
+            .row {
+                align-items: flex-start;
                 display: flex;
-                justify-content: center;
-            }
+                gap: var.$spacing-2;
 
-            svg {
-                $size: 24px;
+                .icon {
+                    svg {
+                        height: 1.5rem;
+                        width: 1.5rem;
+                    }
+                }
 
-                fill: var.$color-grey-900;
-                height: $size;
-                width: $size;
-            }
+                p {
+                    font-family: spartan-bold, sans-serif;
+                    margin: 5px 0 0;
+                    vertical-align: top;
 
-            p {
-                font-family: spartan-bold, sans-serif;
-            }
-
-            span {
-                font-family: spartan-regular, sans-serif;
-                font-size: 0.75rem;
-            }
-        }
-
-        .yield-container {
-            align-items: flex-end;
-            display: flex;
-            gap: var.$spacing-2;
-
-            > div {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
-
-            p {
-                font-family: spartan-bold, sans-serif;
+                    span {
+                        font-family: spartan-regular, sans-serif;
+                        font-size: 0.75rem;
+                    }
+                }
             }
         }
 
@@ -153,7 +146,7 @@
             ul {
                 display: flex;
                 flex-direction: column;
-                gap: var.$spacing-2;
+                gap: var.$spacing-3;
                 padding: 0;
 
                 li {

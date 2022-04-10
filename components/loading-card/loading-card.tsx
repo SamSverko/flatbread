@@ -8,9 +8,9 @@ type LoadingCardProps = {
 
 const LoadingCard = ({ recipeCount }: LoadingCardProps) => {
     return (
-        <div className={styles.container}>
+        <section className={styles.container}>
             <h2>Fetching all <b>{recipeCount}</b> recipes <em>just for you</em>!</h2>
-        </div>
+        </section>
     );
 };
 

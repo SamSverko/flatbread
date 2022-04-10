@@ -16,12 +16,12 @@ const SearchResultsCard = ({ recipeCount }: SearchResultsProps) => {
     });
 
     return (
-        <div className={styles.container}>
+        <section className={styles.container}>
             <h2>Search results</h2>
             <p ref={resultsParagraphRef} tabIndex={-1}>
                 {recipeCount} {recipeCount === 1 ? 'recipe' : 'recipes'} found
             </p>
-        </div>
+        </section>
     );
 };
 

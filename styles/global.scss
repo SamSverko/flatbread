@@ -36,16 +36,32 @@ a {
 
     &:hover {
         color: var.$color-secondary-dark;
+
+        svg {
+            fill: var.$color-secondary-dark;
+        }
     }
 
     &:active {
         color: var.$color-secondary-light;
+
+        svg {
+            fill: var.$color-secondary-light;
+        }
     }
 
     &:focus {
         @include mixins.focus-outline;
 
         border-radius: var.$border-radius;
+    }
+
+    svg {
+        fill: var.$color-secondary-main;
+        height: 1rem;
+        margin-left: var.$spacing-1;
+        vertical-align: top;
+        width: 1rem;
     }
 }
 
