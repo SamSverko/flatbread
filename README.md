@@ -1,6 +1,6 @@
 # Flatbread
 
-[![first-timers-only](https://img.shields.io/badge/first--timers--only-friendly-blue.svg)](https://www.firsttimersonly.com/) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![first-timers-only](https://img.shields.io/badge/first--timers--only-friendly-blue.svg)](https://www.firsttimersonly.com/) [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT) [![CalVer](https://img.shields.io/badge/CalVer-YYYY.0M.0D__MICRO-blue)](https://calver.org/)
 
 > "People who love to eat are always the best people. - Julia Child"
 
@@ -32,6 +32,17 @@ To get the website running locally, please do the following:
 - This website is hosted by [Vercel](https://vercel.com/).
 - Every push to the `main` branch will deploy a new build to production.
 - The production website can be viewed at `https://www.flatbread.app`.
+
+---
+
+## Versioning
+
+- This project uses [CalVer](https://calver.org/) as the project versioning convention.
+- CalVer scheme: `YYYY.0M.0D_MICRO`:
+  - `YYYY` - Full year (e.g. `2022` = 2022).
+  - `0M` - Zero-padded month (e.g. `09` = September).
+  - `0D` - Zero-padded day (e.g. `02` = Second day of the month).
+  - `_MICRO` - Version released (e.g. `_2` = second release under the same `YYYY.0M.0D` version).
 
 ---
 
