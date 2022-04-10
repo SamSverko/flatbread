@@ -87,7 +87,7 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
                                 ? <Link href={recipe.source.url}>
                                     <a rel='noreferrer' target='_blank'>
                                         {recipe.source.name}
-                                        <ExternalLinkIcon aria-label='External link' role='img' viewBox='0 0 24 24' />
+                                        <ExternalLinkIcon aria-label='external link' role='img' viewBox='0 0 24 24' />
                                     </a>
                                 </Link>
                                 : recipe.source.name
