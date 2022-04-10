@@ -19,8 +19,6 @@ What types of changes does your code introduce to Flatbread? Put an `x` in the b
 
 ## Checklist to ace this pull request
 
-- [ ] I have read the [guidelines for contributing](https://github.com/SamSverko/flatbread/blob/main/CONTRIBUTING.md).
-- [ ] This PR is requesting to pull a topic/feature/bugfix branch and not the main branch itself.
-- [ ] My code adheres code adheres to our [style guides](https://github.com/SamSverko/flatbread/blob/main/CONTRIBUTING.md#style-guides).
+- [ ] If merging into the `main` branch, I updated the `package.json` version.
 - [ ] I have added necessary documentation (where appropriate).
 - [ ] To the best of my abilities, I learned something new, and had fun along the way.

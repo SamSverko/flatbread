@@ -37,6 +37,7 @@ To get the website running locally, please do the following:
 
 ## Versioning
 
+- The project version is updated whenever code is pushed to the `main` branch.
 - This project uses [CalVer](https://calver.org/) as the project versioning convention.
 - CalVer scheme: `YYYY.0M.0D_MICRO`:
   - `YYYY` - Full year (e.g. `2022` = 2022).

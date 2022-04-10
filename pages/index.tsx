@@ -62,6 +62,8 @@ const Index: NextPage<IndexProps> = ({ categories, recipeCount }: IndexProps) =>
     React.useEffect(() => {
         const { recipe } = router.query;
 
+        setPaginationPage(0);
+
         if (recipe && recipes.length > 0) {
             const matchedRecipe = recipes.find((recipeItem: FormattedRecipe) => recipeItem.slug === recipe);
             if (matchedRecipe) {
@@ -108,8 +110,8 @@ const Index: NextPage<IndexProps> = ({ categories, recipeCount }: IndexProps) =>
 
                     {searchedRecipes
                         .slice(currentPaginationPage * recipesPerPage, (currentPaginationPage * recipesPerPage) + recipesPerPage)
-                        .map((recipe: FormattedRecipe, index: number) => {
-                            return <RecipeCard key={index} recipe={recipe} />;
+                        .map((recipe: FormattedRecipe) => {
+                            return <RecipeCard key={`${recipe.slug}-${new Date().getSeconds()}`} recipe={recipe} />;
                         })}
 
                     {searchedRecipes.length >= recipesPerPage &&
