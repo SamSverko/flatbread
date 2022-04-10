@@ -48,5 +48,6 @@ If applicable, add screenshots to help explain your problem.
 
 ---
 
-**Additional context**
+## Additional context
+
 Add any other context about the problem here.
