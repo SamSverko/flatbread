@@ -17,6 +17,7 @@ type RecipeCardProps = {
 const RecipeCard = ({ recipe }: RecipeCardProps) => {
     const [doesImageExist, setDoesImageExist] = React.useState(false);
 
+    // check if image url loads properly
     React.useEffect(() => {
         if (recipe.image && recipe.image.alt && recipe.image.url) {
             checkIfImageExists(recipe.image.url, (exists) => {
