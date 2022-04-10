@@ -2,17 +2,22 @@
     "name": "flatbread",
     "version": "2022.04.10_2",
     "description": "\"People who love to eat are always the best people. - Julia Child\" - Flatbread",
-    "keywords": ["food", "hobby-project", "open-source", "recipes"],
+    "keywords": [
+        "food",
+        "hobby-project",
+        "open-source",
+        "recipes"
+    ],
     "homepage": "https://github.com/SamSverko/flatbread",
     "bugs": {
-        "url" : "https://github.com/SamSverko/flatbread/issues",
-        "email" : "sam.sverko@gmail.com"
+        "url": "https://github.com/SamSverko/flatbread/issues",
+        "email": "sam.sverko@gmail.com"
     },
     "license": "MIT",
     "author": {
-        "name" : "Sam Sverko",
-        "email" : "sam.sverko@gmail.com",
-        "url" : "https://github.com/SamSverko"
+        "name": "Sam Sverko",
+        "email": "sam.sverko@gmail.com",
+        "url": "https://github.com/SamSverko"
     },
     "repository": {
         "type": "git",
