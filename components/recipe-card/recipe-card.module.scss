@@ -89,6 +89,7 @@
 
                 .icon {
                     svg {
+                        fill: var.$color-grey-900;
                         height: 1.5rem;
                         width: 1.5rem;
                     }
@@ -102,6 +103,7 @@
                     span {
                         font-family: spartan-regular, sans-serif;
                         font-size: 0.75rem;
+                        vertical-align: middle;
                     }
                 }
             }

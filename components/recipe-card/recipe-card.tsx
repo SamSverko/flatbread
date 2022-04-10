@@ -70,7 +70,7 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
                         className={styles['image']}
                         style={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)), url(${recipe.image.url})` }}
                     ></div>
-                    : <hr />
+                    : <hr aria-hidden='true' />
                 }
             </div>
 
@@ -79,7 +79,7 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
                     {/* source */}
                     <div className={styles.row}>
                         <div className={styles.icon}>
-                            <IdCardIcon aria-label='Source' role='img' viewBox='0 0 24 24' />
+                            <IdCardIcon aria-label='Recipe source' role='img' viewBox='0 0 24 24' />
                         </div>
 
                         <p>
@@ -98,7 +98,7 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
                     {/* time */}
                     <div className={styles.row}>
                         <div className={styles.icon}>
-                            <TimeFiveIcon aria-label='Total time' role='img' viewBox='0 0 24 24' />
+                            <TimeFiveIcon aria-label='Recipe total time' role='img' viewBox='0 0 24 24' />
                         </div>
                         <p>{(recipe.time.prep + recipe.time.cook)} mins <span>({recipe.time.prep} mins prep + {recipe.time.cook} mins cook)</span></p>
                     </div>
@@ -106,7 +106,7 @@ const RecipeCard = ({ recipe }: RecipeCardProps) => {
                     {/* yield */}
                     <div className={styles.row}>
                         <div className={styles.icon}>
-                            <BowlHotIcon aria-label='Yield amount' role='img' viewBox='0 0 24 24' />
+                            <BowlHotIcon aria-label='Recipe yield amount' role='img' viewBox='0 0 24 24' />
                         </div>
                         <p>{recipe.yield.amount} {recipe.yield.unit}</p>
                     </div>
