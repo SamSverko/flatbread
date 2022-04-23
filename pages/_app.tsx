@@ -1,4 +1,3 @@
-import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import * as React from 'react';
@@ -7,13 +6,16 @@ import NavBar from '../components/nav-bar/nav-bar';
 
 import '../styles/global.scss';
 
+import type { AppProps } from 'next/app';
+
 type Route = {
     path: string
     title: string
 }
 
-const routes = [
-    { path: '/', title: 'Home' },
+const routes: Route[] = [
+    { path: '/', title: 'Search' },
+    { path: '/about', title: 'About' },
     { path: '/settings', title: 'Settings' },
 ];
 
@@ -39,7 +41,7 @@ function App({ Component, pageProps }: AppProps) {
 
                 <title>Flatbread{matchedRoute ? ` - ${matchedRoute.title}` : ''}</title>
             </Head>
-            <NavBar />
+            <NavBar activeRoute={(matchedRoute) ? matchedRoute.path : '/'} />
             <Component {...pageProps} />
         </>
     );
