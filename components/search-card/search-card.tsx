@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import type { FetchedCategories, SearchQueryProps } from '../../utils/types';
-
 import styles from './search-card.module.scss';
+
+import type { FetchedCategories, SearchQueryProps } from '../../utils/types';
 
 type SearchCardProps = {
     categories: FetchedCategories

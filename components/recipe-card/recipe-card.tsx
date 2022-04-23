@@ -1,14 +1,14 @@
 import Link from 'next/link';
 import * as React from 'react';
 
-import type { FormattedRecipe } from '../../utils/types';
-
 import BowlHotIcon from '../../public/icons/bxs-bowl-hot.svg';
 import ExternalLinkIcon from '../../public/icons/bx-link-external.svg';
 import IdCardIcon from '../../public/icons/bxs-id-card.svg';
 import TimeFiveIcon from '../../public/icons/bxs-time-five.svg';
 
 import styles from './recipe-card.module.scss';
+
+import type { FormattedRecipe } from '../../utils/types';
 
 type RecipeCardProps = {
     recipe: FormattedRecipe
