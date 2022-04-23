@@ -32,7 +32,7 @@ function App({ Component, pageProps }: AppProps) {
 
                 <meta content='Flatbread' name='apple-mobile-web-app-title' />
                 <meta content='Flatbread' name='application-name' />
-                <meta content='A blazingly-fast website to search and follow tasty recipes.' name='description' />
+                <meta content='A blazingly-fast website to find tasty recipes.' name='description' />
                 <meta content='#dd2e44' name='msapplication-TileColor' />
                 <meta content='#ffffff' name='theme-color' />
                 <meta content='width=device-width, initial-scale=1.0' name='viewport' />
