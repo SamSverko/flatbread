@@ -17,7 +17,7 @@ html {
 
     body {
         margin: 0;
-        padding: var.$spacing-5;
+        padding: var.$spacing-5 var.$spacing-5 calc(var.$navbar-height + var.$spacing-5);
         text-align: center;
 
         // stylelint-disable-next-line selector-id-pattern

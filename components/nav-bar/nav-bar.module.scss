@@ -1,7 +1,70 @@
+@use '../../styles/mixins.scss';
 @use '../../styles/variables.scss' as var;
 
 .container {
-    h1 {
-        color: var.$color-grey-900;
+    background-color: var.$color-secondary-main;
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    width: 100%;
+    z-index: var.$navbar-z-index;
+
+    ul {
+        list-style-type: none;
+        margin: 0 auto;
+        max-width: var.$card-max-width;
+        padding: 0;
+
+        li {
+            align-items: center;
+            display: flex;
+            justify-content: space-evenly;
+
+            a {
+                @include mixins.transition(background-color);
+
+                align-items: center;
+                background-color: var.$color-secondary-main;
+                color: white;
+                display: flex;
+                flex-direction: column;
+                font-family: spartan-medium, sans-serif;
+                font-size: 0.75rem;
+                gap: var.$spacing-1;
+                padding: var.$spacing-1 0;
+                width: 100%;
+
+                &:hover {
+                    background-color: var.$color-grey-700;
+                }
+
+                &:active {
+                    background-color: var.$color-grey-600;
+                }
+
+                &:focus {
+                    border-radius: 0;
+                    outline: none;
+                }
+
+                &:focus-visible {
+                    background-color: var.$color-grey-700;
+                }
+
+                &.active {
+                    background-color: var.$color-grey-900;
+                    font-family: spartan-bold, sans-serif;
+                }
+
+                svg {
+                    --size: 1.5rem;
+
+                    fill: white;
+                    height: var(--size);
+                    margin: 0;
+                    width: var(--size);
+                }
+            }
+        }
     }
 }
