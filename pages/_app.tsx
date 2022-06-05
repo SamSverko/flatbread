@@ -2,6 +2,8 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 
+import { formatPageTitle } from '../utils/functions';
+
 import NavBar from '../components/nav-bar/nav-bar';
 
 import '../styles/global.scss';
@@ -39,7 +41,7 @@ function App({ Component, pageProps }: AppProps) {
                 <meta content='#ffffff' name='theme-color' />
                 <meta content='width=device-width, initial-scale=1.0' name='viewport' />
 
-                <title>Flatbread{matchedRoute ? ` - ${matchedRoute.title}` : ''}</title>
+                <title>{matchedRoute ? formatPageTitle(matchedRoute.title) : ''}</title>
             </Head>
             <NavBar activeRoute={(matchedRoute) ? matchedRoute.path : '/'} />
             <Component {...pageProps} />
