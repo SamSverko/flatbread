@@ -7,8 +7,9 @@
     padding: var.$spacing-5 0;
 
     h2 {
-        font-family: spartan-bold, sans-serif;
+        font-family: spartan, sans-serif;
         font-size: 1.25rem;
+        font-weight: 700;
         padding: 0 var.$spacing-5;
     }
 
@@ -27,7 +28,8 @@
         .source-link {
             align-items: center;
             display: inline-flex;
-            font-family: spartan-bold, sans-serif;
+            font-family: spartan, sans-serif;
+            font-weight: 700;
             gap: var.$spacing-1;
 
             &:hover {
@@ -50,7 +52,8 @@
         }
 
         .source-name {
-            font-family: spartan-bold, sans-serif;
+            font-family: spartan, sans-serif;
+            font-weight: 700;
         }
     }
 
@@ -96,13 +99,14 @@
                 }
 
                 p {
-                    font-family: spartan-bold, sans-serif;
+                    font-family: spartan, sans-serif;
+                    font-weight: 700;
                     margin: 5px 0 0;
-                    vertical-align: top;
 
                     span {
-                        font-family: spartan-regular, sans-serif;
+                        font-family: spartan, sans-serif;
                         font-size: 0.75rem;
+                        font-weight: 400;
                         vertical-align: middle;
                     }
                 }
@@ -116,7 +120,8 @@
                 gap: var.$spacing-5;
 
                 p {
-                    font-family: spartan-bold, sans-serif;
+                    font-family: spartan, sans-serif;
+                    font-weight: 700;
                     margin-bottom: var.$spacing-2;
                 }
 
@@ -133,8 +138,9 @@
                         border-radius: var.$border-radius-chip;
                         color: var.$color-info-contrast-text;
                         display: inline-block;
-                        font-family: spartan-bold, sans-serif;
+                        font-family: spartan, sans-serif;
                         font-size: 0.75rem;
+                        font-weight: 700;
                         padding: var.$spacing-2 var.$spacing-3 var.$spacing-1;
                         // word-break: keep-all;
                         white-space: nowrap;
@@ -153,12 +159,12 @@
 
                 li {
                     display: flex;
-                    line-height: 1.25rem;
                     list-style-type: none;
 
                     label {
                         cursor: pointer;
-                        font-family: spartan-regular, sans-serif;
+                        font-family: spartan, sans-serif;
+                        font-weight: 400;
                         padding: 0 0 0 var.$spacing-2;
                         width: 100%;
 
