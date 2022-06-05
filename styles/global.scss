@@ -104,7 +104,6 @@ input[type='submit'] {
         color: var.$color-primary-main;
         font-family: spartan, sans-serif;
         font-weight: 700;
-        line-height: normal;
         padding: 0;
 
         &:hover:enabled {
@@ -166,6 +165,10 @@ h2 {
     font-size: 1.5rem;
 }
 
+h3 {
+    font-size: 1.25rem;
+}
+
 hr {
     border: none;
     border-top: var.$spacing-1 solid var.$color-grey-900;
@@ -176,6 +179,7 @@ hr {
 }
 
 input {
+    color: var.$color-grey-900;
     margin: 0;
     padding: 0;
 
@@ -185,6 +189,7 @@ input {
         background-color: white;
         border: 2px solid var.$color-grey-500;
         border-radius: var.$border-radius;
+        color: var.$color-grey-900;
         cursor: pointer;
         display: inline-grid;
         font: inherit;
@@ -277,6 +282,10 @@ label {
     font-family: spartan, sans-serif;
     font-size: 1rem;
     font-weight: 700;
+}
+
+li {
+    line-height: 140%;
 }
 
 p,
