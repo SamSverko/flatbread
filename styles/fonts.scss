@@ -1,7 +1,6 @@
 @font-face {
     font-display: swap;
-    font-family: spartan-regular;
-    font-style: regular;
+    font-family: spartan;
     font-weight: 400;
     src:
         url('/fonts/spartan-regular.woff2') format('woff2'),
@@ -11,8 +10,7 @@
 
 @font-face {
     font-display: swap;
-    font-family: spartan-medium;
-    font-style: medium;
+    font-family: spartan;
     font-weight: 500;
     src:
         url('/fonts/spartan-medium.woff2') format('woff2'),
@@ -22,8 +20,7 @@
 
 @font-face {
     font-display: swap;
-    font-family: spartan-bold;
-    font-style: bold;
+    font-family: spartan;
     font-weight: 700;
     src:
         url('/fonts/spartan-bold.woff2') format('woff2'),

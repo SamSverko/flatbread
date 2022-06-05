@@ -10,8 +10,9 @@
 html {
     background-color: var.$color-grey-100;
     color: var.$color-grey-900;
-    font-family: spartan-regular, sans-serif;
+    font-family: spartan, sans-serif;
     font-size: 16px; // 12px = 0.75rem | 20px = 1.25rem | 24px = 1.5rem | 32px = 2rem
+    font-weight: 400;
     margin: 0;
     padding: 0;
 
@@ -76,8 +77,9 @@ input[type='submit'] {
     border-radius: var.$border-radius;
     color: white;
     cursor: pointer;
-    font-family: spartan-bold, sans-serif;
+    font-family: spartan, sans-serif;
     font-size: 1rem;
+    font-weight: 700;
     margin: 0;
     padding: var.$spacing-3 var.$spacing-5 var.$spacing-2;
 
@@ -100,7 +102,8 @@ input[type='submit'] {
     &.text {
         background-color: transparent;
         color: var.$color-primary-main;
-        font-family: spartan-bold, sans-serif;
+        font-family: spartan, sans-serif;
+        font-weight: 700;
         line-height: normal;
         padding: 0;
 
@@ -120,8 +123,9 @@ details {
     summary {
         color: var.$color-primary-main;
         cursor: pointer;
-        font-family: spartan-bold, sans-serif;
+        font-family: spartan, sans-serif;
         font-size: 1rem;
+        font-weight: 700;
         margin: 0;
         padding: 0;
 
@@ -148,7 +152,8 @@ details {
 h1,
 h2,
 h3 {
-    font-family: spartan-bold, sans-serif;
+    font-family: spartan, sans-serif;
+    font-weight: 700;
     margin: 0;
     padding: 0;
 }
@@ -242,14 +247,16 @@ input {
         border: var.$spacing-1 solid var.$color-grey-500;
         border-radius: var.$border-radius;
         color: var.$color-grey-900;
-        font-family: spartan-medium, sans-serif;
+        font-family: spartan, sans-serif;
         font-size: 1rem;
+        font-weight: 500;
         padding: var.$spacing-2;
         width: 100%;
 
         &::placeholder {
             color: var.$color-grey-600;
-            font-family: spartan-medium, sans-serif;
+            font-family: spartan, sans-serif;
+            font-weight: 500;
         }
 
         &:hover {
@@ -267,8 +274,9 @@ input {
 }
 
 label {
-    font-family: spartan-bold, sans-serif;
+    font-family: spartan, sans-serif;
     font-size: 1rem;
+    font-weight: 700;
 }
 
 p,
