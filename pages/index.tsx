@@ -1,7 +1,9 @@
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 
 import { getAllCategories, getRecipeCount } from '../utils/contentful';
+import { formatPageTitle } from '../utils/functions';
 
 import LoadingCard from '../components/loading-card/loading-card';
 import PaginationCard from '../components/pagination-card/pagination-card';
@@ -28,6 +30,9 @@ const Index: NextPage<IndexProps> = ({ categories, recipeCount }: IndexProps) =>
     // pagination
     const [currentPaginationPage, setPaginationPage] = React.useState(0);
     const [recipesPerPage] = React.useState(10);
+
+    // page title
+    const [pageTitle, setPageTitle] = React.useState('');
 
     // get all recipes on page load, and save it to localStorage
     React.useEffect(() => {
@@ -66,28 +71,35 @@ const Index: NextPage<IndexProps> = ({ categories, recipeCount }: IndexProps) =>
 
         if (recipe && recipes.length > 0) {
             const matchedRecipe = recipes.find((recipeItem: FormattedRecipe) => recipeItem.slug === recipe);
+
             if (matchedRecipe) {
                 setSearchedPerformed(true);
                 setSearchedRecipes([matchedRecipe]);
+                setPageTitle((matchedRecipe as FormattedRecipe).title);
             }
         }
     }, [recipes, router]);
 
     function handleRandomSubmit() {
+        const randomRecipe = recipes[Math.floor(Math.random() * recipes.length)];
+
+        setPageTitle((randomRecipe as FormattedRecipe).title);
         setPaginationPage(0);
         setSearchedPerformed(true);
-        setSearchedRecipes([recipes[Math.floor(Math.random() * recipes.length)]]);
+        setSearchedRecipes([randomRecipe]);
     }
 
     function handleSearchSubmit(searchQuery: SearchQueryProps) {
         const matchedRecipes = recipes.filter((recipe: FormattedRecipe) => {
             const titleRegex = new RegExp(searchQuery.title, 'i');
             const titleSearch = recipe.title.search(titleRegex);
+            
             if (titleSearch > -1) {
                 return recipe.title;
             }
         });
 
+        setPageTitle('');
         setPaginationPage(0);
         setSearchedPerformed(true);
         setSearchedRecipes(matchedRecipes);
@@ -95,6 +107,12 @@ const Index: NextPage<IndexProps> = ({ categories, recipeCount }: IndexProps) =>
 
     return (
         <>
+            {pageTitle &&
+                <Head>
+                    <title>{formatPageTitle(`Recipe: ${pageTitle}`)}</title>
+                </Head>
+            }
+
             <h1>Flatbread</h1>
 
             {recipes.length === 0
