@@ -17,6 +17,7 @@ const InputCombobox = ({ handleUpdate, id, items, label, name }: InputComboboxPr
     const inputRef = React.useRef(null);
     const listboxRef = React.useRef(null);
 
+    const [filteredItems, setFilteredItems] = React.useState<Array<FormattedCategory>>(items);
     const [selectedItems, setSelectedItems] = React.useState<Array<string>>([]);
 
     function inputOnBlurFocus(event: React.FocusEvent<HTMLInputElement, Element>, type: 'blur' | 'focus') {
@@ -37,6 +38,17 @@ const InputCombobox = ({ handleUpdate, id, items, label, name }: InputComboboxPr
 
             updateAriaLive(`${label}, list box pop up, Menu pop-up combo box. ${items.length} options available`);
         }
+    }
+
+    function handleInput(event: React.KeyboardEvent<HTMLInputElement>) {
+        const inputValue = (event.target as HTMLInputElement).value;
+        const regex = new RegExp(inputValue, 'i');
+
+        setFilteredItems(
+            items.filter((item: FormattedCategory) => {
+                return (item.title.search(regex) !== -1);
+            }),
+        );
     }
 
     function handleOnClick(event: React.MouseEvent<HTMLLIElement>) {
@@ -167,13 +179,14 @@ const InputCombobox = ({ handleUpdate, id, items, label, name }: InputComboboxPr
                     name={name}
                     onBlur={(event) => inputOnBlurFocus(event, 'blur')}
                     onFocus={(event) => inputOnBlurFocus(event, 'focus')}
+                    onInput={handleInput}
                     onKeyDown={handleKeydown}
                     role='combobox'
                     type='text'
                 />
 
                 <ul ref={listboxRef} aria-label={label} id={`${id}-controls`} role='listbox'>
-                    {items.map((item: FormattedCategory) => {
+                    {filteredItems.map((item: FormattedCategory) => {
                         return (
                             <li
                                 aria-selected='false'
