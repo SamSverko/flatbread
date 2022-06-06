@@ -1,3 +1,5 @@
+import type { FormattedCategory } from './contentful';
+
 export type FetchedCategories = {
     courseType: FormattedCategory[]
     cuisine: FormattedCategory[]
