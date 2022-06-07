@@ -80,6 +80,7 @@ const Index: NextPage<IndexProps> = ({ categories, recipeCount }: IndexProps) =>
         }
     }, [recipes, router]);
 
+    // EVENT LISTENERS
     function handleRandomSubmit() {
         const randomRecipe = recipes[Math.floor(Math.random() * recipes.length)];
 
@@ -94,14 +95,36 @@ const Index: NextPage<IndexProps> = ({ categories, recipeCount }: IndexProps) =>
             const titleRegex = new RegExp(searchQuery.title, 'i');
             const titleSearch = recipe.title.search(titleRegex);
 
-            if (titleSearch > -1) {
-                if (searchQuery.courseTypes.length > 0) {
-                    if (recipe.courseTypes.findIndex((courseType) => searchQuery.courseTypes.includes(courseType)) > -1) {
-                        return recipe;
-                    }
-                } else {
-                    return recipe;
-                }
+            // simple search - match title, ignore categories
+            const titleMatch = (titleSearch > -1);
+
+            // advanced search - check if any category matches any search category || otherwise default to `true` to revert to simple search
+            const courseTypeMatch = (searchQuery.courseTypes.length > 0)
+                ? recipe.courseTypes.findIndex((courseType) => searchQuery.courseTypes.includes(courseType)) > -1
+                : true;
+
+            // this breakdown is needed for optional recipe categories
+            let cuisineMatch = true;
+            if (!recipe.cuisines && searchQuery.cuisines.length > 0) {
+                cuisineMatch = false;
+            } else if (recipe.cuisines && searchQuery.cuisines.length > 0) {
+                cuisineMatch = recipe.cuisines.findIndex((cuisine) => searchQuery.cuisines.includes(cuisine)) > -1;
+            }
+
+            let dietaryRestrictionMatch = true;
+            if (!recipe.dietaryRestrictions && searchQuery.dietaryRestrictions.length > 0) {
+                dietaryRestrictionMatch = false;
+            } else if (recipe.dietaryRestrictions && searchQuery.dietaryRestrictions.length > 0) {
+                dietaryRestrictionMatch = recipe.dietaryRestrictions.findIndex((dietaryRestriction) => searchQuery.dietaryRestrictions.includes(dietaryRestriction)) > -1;
+            }
+
+            const dishTypeMatch = (searchQuery.dishTypes.length > 0)
+                ? recipe.dishTypes.findIndex((dishType) => searchQuery.dishTypes.includes(dishType)) > -1
+                : true;
+
+            // return recipe when all items are matched
+            if (titleMatch && courseTypeMatch && cuisineMatch && dietaryRestrictionMatch && dishTypeMatch) {
+                return recipe;
             }
         });
 

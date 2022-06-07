@@ -9,7 +9,7 @@ import type { FetchedCategories, SearchQueryProps } from '../../utils/types';
 type SearchCardProps = {
     categories: FetchedCategories
     handleRandomSubmit: () => void
-    handleSearchSubmit: (prop: SearchQueryProps) => void
+    handleSearchSubmit: (searchQuery: SearchQueryProps) => void
 }
 
 export const SearchCard = ({ categories, handleRandomSubmit, handleSearchSubmit }: SearchCardProps) => {
@@ -17,14 +17,25 @@ export const SearchCard = ({ categories, handleRandomSubmit, handleSearchSubmit 
 
     // advanced search
     const [searchCourseTypes, setSearchCourseTypes] = React.useState<Array<string>>([]);
+    const [searchCuisines, setSearchCuisines] = React.useState<Array<string>>([]);
+    const [searchDietaryRestrictions, setSearchDietaryRestrictions] = React.useState<Array<string>>([]);
+    const [searchDishTypes, setSearchDishTypes] = React.useState<Array<string>>([]);
 
     // EVENT HANDLERS
     function handleFormSubmit(event: React.FormEvent) {
         event.preventDefault();
     }
 
-    function handleCourseTypesUpdate(prop: string[]) {
-        setSearchCourseTypes(prop);
+    function handleCategoryUpdate(categories: string[], type: 'course-types' | 'cuisines' | 'dietary-restrictions' | 'dish-types') {
+        if (type === 'course-types') {
+            setSearchCourseTypes(categories);
+        } else if (type === 'cuisines') {
+            setSearchCuisines(categories);
+        } else if (type === 'dietary-restrictions') {
+            setSearchDietaryRestrictions(categories);
+        } else if (type === 'dish-types') {
+            setSearchDishTypes(categories);
+        }
     }
 
     function handleSearchClick() {
@@ -35,6 +46,9 @@ export const SearchCard = ({ categories, handleRandomSubmit, handleSearchSubmit 
         handleSearchSubmit({
             title: titleQuery,
             courseTypes: searchCourseTypes,
+            cuisines: searchCuisines,
+            dietaryRestrictions: searchDietaryRestrictions,
+            dishTypes: searchDishTypes,
         });
     }
 
@@ -61,7 +75,7 @@ export const SearchCard = ({ categories, handleRandomSubmit, handleSearchSubmit 
 
                         <div className={styles['input-group']}>
                             <InputCombobox
-                                handleUpdate={handleCourseTypesUpdate}
+                                handleUpdate={(categories) => handleCategoryUpdate(categories, 'course-types')}
                                 id='recipe-course-types'
                                 items={categories.courseType}
                                 label='Course types'
@@ -70,18 +84,33 @@ export const SearchCard = ({ categories, handleRandomSubmit, handleSearchSubmit 
                         </div>
 
                         <div className={styles['input-group']}>
-                            <label htmlFor='recipe-cuisines'>Cuisines</label>
-                            <input id='recipe-cuisines' name='cuisines' type='text' />
+                            <InputCombobox
+                                handleUpdate={(categories) => handleCategoryUpdate(categories, 'cuisines')}
+                                id='recipe-cuisines'
+                                items={categories.cuisine}
+                                label='Cuisines'
+                                name='cuisines'
+                            />
                         </div>
 
                         <div className={styles['input-group']}>
-                            <label htmlFor='recipe-dietary-restrictions'>Dietary Restrictions</label>
-                            <input id='recipe-dietary-restrictions' name='dietary-restrictions' type='text' />
+                            <InputCombobox
+                                handleUpdate={(categories) => handleCategoryUpdate(categories, 'dietary-restrictions')}
+                                id='recipe-dietary-restrictions'
+                                items={categories.dietaryRestriction}
+                                label='Dietary Restrictions'
+                                name='dietary-restrictions'
+                            />
                         </div>
 
                         <div className={styles['input-group']}>
-                            <label htmlFor='recipe-dish-types'>Dish Types</label>
-                            <input id='recipe-dish-types' name='dish-types' type='text' />
+                            <InputCombobox
+                                handleUpdate={(categories) => handleCategoryUpdate(categories, 'dish-types')}
+                                id='recipe-dish-types'
+                                items={categories.dishType}
+                                label='Dish Types'
+                                name='dish-types'
+                            />
                         </div>
                     </div>
                 </details>

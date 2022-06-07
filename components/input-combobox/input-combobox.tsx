@@ -5,7 +5,7 @@ import styles from './input-combobox.module.scss';
 import type { FormattedCategory } from '../../utils/contentful';
 
 type InputComboboxProps = {
-    handleUpdate: (prop: string[]) => void
+    handleUpdate: (categories: string[]) => void
     id: string
     items: FormattedCategory[]
     label: string

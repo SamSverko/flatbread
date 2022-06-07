@@ -47,4 +47,7 @@ type FormattedRecipeYield = {
 export type SearchQueryProps = {
     title: string
     courseTypes: string[]
+    cuisines: string[]
+    dietaryRestrictions: string[]
+    dishTypes: string[]
 }
