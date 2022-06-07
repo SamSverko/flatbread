@@ -32,7 +32,7 @@ type ContentfulYieldUnit = {
     readonly titlePlural: string
 }
 
-type FormattedCategory = {
+export type FormattedCategory = {
     id: string,
     title: string,
 }

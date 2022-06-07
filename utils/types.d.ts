@@ -1,3 +1,5 @@
+import type { FormattedCategory } from './contentful';
+
 export type FetchedCategories = {
     courseType: FormattedCategory[]
     cuisine: FormattedCategory[]
@@ -44,4 +46,8 @@ type FormattedRecipeYield = {
 
 export type SearchQueryProps = {
     title: string
+    courseTypes: string[]
+    cuisines: string[]
+    dietaryRestrictions: string[]
+    dishTypes: string[]
 }
