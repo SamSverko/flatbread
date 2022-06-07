@@ -58,12 +58,15 @@ const InputCombobox = ({ handleUpdate, id, items, label, name }: InputComboboxPr
             // reset all hide classes
             element.classList.remove(styles.hide);
 
-            // hide all list items that don't match id
-            const id = element.getAttribute('data-id');
-            if (id && !filteredItems.map((item) => item.id).includes(id)) {
+            // hide all list items that don't match category title
+            const title = element.getAttribute('data-title');
+            if (title && !filteredItems.map((item) => item.title).includes(title)) {
                 element.classList.add(styles.hide);
             }
         });
+
+        // remove all active classes
+        removeAllActiveClasses();
 
         // display 'No results found' if none found
         if (filteredItems.length === 0) {
@@ -155,22 +158,21 @@ const InputCombobox = ({ handleUpdate, id, items, label, name }: InputComboboxPr
     }
 
     function toggleListitemElementSelect(element: Element) {
-        const listItemName = element.innerHTML.trim();
-        const listItemId = element.getAttribute('data-id');
+        const listItemTitle = element.getAttribute('data-title');
 
-        if (!listItemId) return;
+        if (!listItemTitle) return;
         if (!inputRef.current) return;
 
         // if item is already selected remove+unselect it || otherwise add+select it
         const updatedSelectedItems = [...selectedItems];
-        if (selectedItems.includes(listItemId)) {
-            updatedSelectedItems.splice(updatedSelectedItems.findIndex((item) => item === listItemId), 1);
+        if (selectedItems.includes(listItemTitle)) {
+            updatedSelectedItems.splice(updatedSelectedItems.findIndex((item) => item === listItemTitle), 1);
             element.setAttribute('aria-selected', 'false');
-            updateAriaLive(element.innerHTML);
+            updateAriaLive(listItemTitle);
         } else {
-            updatedSelectedItems.push(listItemId);
+            updatedSelectedItems.push(listItemTitle);
             element.setAttribute('aria-selected', 'true');
-            updateAriaLive(`${element.innerHTML}, selected`);
+            updateAriaLive(`${listItemTitle}, selected`);
         }
 
         // update input element placeholder with selected values
@@ -179,7 +181,7 @@ const InputCombobox = ({ handleUpdate, id, items, label, name }: InputComboboxPr
             inputElement.setAttribute('placeholder', '');
         }
         if (updatedSelectedItems.length === 1) {
-            inputElement.setAttribute('placeholder', listItemName);
+            inputElement.setAttribute('placeholder', listItemTitle);
         } else if (updatedSelectedItems.length > 1) {
             inputElement.setAttribute('placeholder', `${updatedSelectedItems.length} items`);
         }
@@ -225,7 +227,7 @@ const InputCombobox = ({ handleUpdate, id, items, label, name }: InputComboboxPr
                         return (
                             <li
                                 aria-selected='false'
-                                data-id={item.id}
+                                data-title={item.title}
                                 id={`${item.title}-option`}
                                 key={item.title}
                                 onClick={handleListItemClick}

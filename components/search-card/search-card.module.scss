@@ -30,28 +30,6 @@
                 font-size: 0.75rem;
             }
 
-            // delete this block when advanced search works
-            &[aria-disabled='true'] {
-                opacity: 0.5;
-
-                summary {
-                    cursor: not-allowed;
-                    user-select: none;
-
-                    &:hover {
-                        color: var.$color-primary-main;
-                    }
-
-                    &:active {
-                        color: var.$color-primary-main;
-                    }
-
-                    &:focus {
-                        outline: none;
-                    }
-                }
-            }
-
             .details-content {
                 display: flex;
                 flex-direction: column;

@@ -2,6 +2,8 @@ import * as React from 'react';
 
 import styles from './search-card.module.scss';
 
+import InputCombobox from '../input-combobox/input-combobox';
+
 import type { FetchedCategories, SearchQueryProps } from '../../utils/types';
 
 type SearchCardProps = {
@@ -11,22 +13,28 @@ type SearchCardProps = {
 }
 
 export const SearchCard = ({ categories, handleRandomSubmit, handleSearchSubmit }: SearchCardProps) => {
-    console.log(categories);
-
     const inputTitleRef = React.useRef(null);
 
+    // advanced search
+    const [searchCourseTypes, setSearchCourseTypes] = React.useState<Array<string>>([]);
+
+    // EVENT HANDLERS
     function handleFormSubmit(event: React.FormEvent) {
         event.preventDefault();
     }
 
+    function handleCourseTypesUpdate(prop: string[]) {
+        setSearchCourseTypes(prop);
+    }
+
     function handleSearchClick() {
-        let titleQuery = '';
-        if (inputTitleRef.current) {
-            titleQuery = (inputTitleRef.current as HTMLInputElement).value;
-        }
+        if (!inputTitleRef.current) return;
+
+        const titleQuery = (inputTitleRef.current as HTMLInputElement).value;
 
         handleSearchSubmit({
             title: titleQuery,
+            courseTypes: searchCourseTypes,
         });
     }
 
@@ -40,8 +48,8 @@ export const SearchCard = ({ categories, handleRandomSubmit, handleSearchSubmit 
                     <input ref={inputTitleRef} id='recipe-title' enterKeyHint='search' name='title' type='search' />
                 </div>
 
-                <details aria-disabled={true} tabIndex={-1}>
-                    <summary onClick={(event: React.MouseEvent<HTMLInputElement>) => event.preventDefault() }>Advanced options (coming soon)</summary>
+                <details>
+                    <summary>Advanced options</summary>
 
                     <div className={styles['details-content']}>
                         <h3>Filter by categories</h3>
@@ -52,8 +60,13 @@ export const SearchCard = ({ categories, handleRandomSubmit, handleSearchSubmit 
                         </div>
 
                         <div className={styles['input-group']}>
-                            <label htmlFor='recipe-course-types'>Course types</label>
-                            <input id='recipe-course-types' name='course-types' type='text' />
+                            <InputCombobox
+                                handleUpdate={handleCourseTypesUpdate}
+                                id='recipe-course-types'
+                                items={categories.courseType}
+                                label='Course types'
+                                name='course-types'
+                            />
                         </div>
 
                         <div className={styles['input-group']}>

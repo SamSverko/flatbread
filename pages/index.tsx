@@ -93,9 +93,15 @@ const Index: NextPage<IndexProps> = ({ categories, recipeCount }: IndexProps) =>
         const matchedRecipes = recipes.filter((recipe: FormattedRecipe) => {
             const titleRegex = new RegExp(searchQuery.title, 'i');
             const titleSearch = recipe.title.search(titleRegex);
-            
+
             if (titleSearch > -1) {
-                return recipe.title;
+                if (searchQuery.courseTypes.length > 0) {
+                    if (recipe.courseTypes.findIndex((courseType) => searchQuery.courseTypes.includes(courseType)) > -1) {
+                        return recipe;
+                    }
+                } else {
+                    return recipe;
+                }
             }
         });
 
