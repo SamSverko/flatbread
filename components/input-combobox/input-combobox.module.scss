@@ -24,7 +24,7 @@
         position: absolute;
         transform: translate(0, -4px);
         width: 100%;
-        z-index: calc(var.$navbar-z-index - 1);
+        z-index: calc(var.$navbar-z-index + 1); // solution could be better
 
         &.show {
             display: flex;
