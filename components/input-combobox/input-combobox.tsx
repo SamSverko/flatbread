@@ -194,7 +194,7 @@ const InputCombobox = ({ handleUpdate, id, items, label, name }: InputComboboxPr
             inputElement.setAttribute('placeholder', '');
         }
         if (updatedSelectedItems.length === 1) {
-            inputElement.setAttribute('placeholder', listItemTitle);
+            inputElement.setAttribute('placeholder', updatedSelectedItems[0]);
         } else if (updatedSelectedItems.length > 1) {
             inputElement.setAttribute('placeholder', `${updatedSelectedItems.length} items`);
         }
