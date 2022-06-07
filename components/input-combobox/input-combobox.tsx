@@ -17,152 +17,187 @@ const InputCombobox = ({ handleUpdate, id, items, label, name }: InputComboboxPr
     const inputRef = React.useRef(null);
     const listboxRef = React.useRef(null);
 
-    const [filteredItems, setFilteredItems] = React.useState<Array<FormattedCategory>>(items);
     const [selectedItems, setSelectedItems] = React.useState<Array<string>>([]);
+    const [noResults, setNoResults] = React.useState(false);
 
-    function inputOnBlurFocus(event: React.FocusEvent<HTMLInputElement, Element>, type: 'blur' | 'focus') {
-        event.preventDefault();
+    // EVENT HANDLERS
+    function handleInputBlur() {
+        if (!listboxRef.current) return;
+        
+        // hide listbox
+        (listboxRef.current as HTMLUListElement).classList.remove(styles.show);
 
-        const inputElement = inputRef.current;
-        const listboxElement = listboxRef.current;
-        const ariaLiveElement = ariaLiveRef.current;
-
-        if (!inputElement || !listboxElement || !ariaLiveElement) return;
-
-        if (type === 'blur') {
-            (inputElement as HTMLInputElement).setAttribute('aria-expanded', 'false');
-            (listboxElement as HTMLUListElement).classList.remove(styles.show);
-        } else if (type === 'focus') {
-            (inputElement as HTMLInputElement).setAttribute('aria-expanded', 'true');
-            (listboxElement as HTMLUListElement).classList.add(styles.show);
-
-            updateAriaLive(`${label}, list box pop up, Menu pop-up combo box. ${items.length} options available`);
-        }
+        // remove all active classes
+        removeAllActiveClasses();
     }
 
-    function handleInput(event: React.KeyboardEvent<HTMLInputElement>) {
+    function handleInputFocus() {
+        if (!listboxRef.current) return;
+
+        // display listbox
+        (listboxRef.current as HTMLUListElement).classList.add(styles.show);
+        updateAriaLive(`${label}, list box pop up, Menu pop-up combo box. ${items.length} options available`);
+    }
+
+    function handleInputInput(event: React.KeyboardEvent<HTMLInputElement>) {
+        if (!listboxRef.current) return;
+
         const inputValue = (event.target as HTMLInputElement).value;
-        const regex = new RegExp(inputValue, 'i');
+        const searchRegex = new RegExp(inputValue, 'i');
 
-        setFilteredItems(
-            items.filter((item: FormattedCategory) => {
-                return (item.title.search(regex) !== -1);
-            }),
-        );
-    }
+        // filter out items that do not match searchRegex
+        const filteredItems = items.filter((item: FormattedCategory) => {
+            return (item.title.search(searchRegex) !== -1);
+        });
 
-    function handleOnClick(event: React.MouseEvent<HTMLLIElement>) {
-        const selectedElement = event.target as HTMLLIElement;
-        const selectedId = selectedElement.getAttribute('data-id');
+        const listItemElements = getListItemElements();
+        if (!listItemElements) return;
 
-        if (selectedId) {
-            toggleListItem(selectedElement, selectedId);
+        // loop through all list items
+        listItemElements.forEach((element) => {
+            // reset all hide classes
+            element.classList.remove(styles.hide);
+
+            // hide all list items that don't match id
+            const id = element.getAttribute('data-id');
+            if (id && !filteredItems.map((item) => item.id).includes(id)) {
+                element.classList.add(styles.hide);
+            }
+        });
+
+        // display 'No results found' if none found
+        if (filteredItems.length === 0) {
+            setNoResults(true);
+        } else {
+            setNoResults(false);
         }
     }
 
-    function handleOnMouseEnter(event: React.MouseEvent<HTMLLIElement>) {
-        (event.target as HTMLLIElement).classList.add(styles.active);
-    }
+    function handleInputKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+        // save list of visible list item elements
+        const listItemElements = getVisibleListItemElements();
+        if (!listItemElements) return;
 
-    function handleOnMouseLeave(event: React.MouseEvent<HTMLLIElement>) {
-        (event.target as HTMLLIElement).classList.remove(styles.active);
-    }
+        let activeListitemIndex = getActiveListItemElementIndex(listItemElements);
 
-    function handleKeydown(event: React.KeyboardEvent<HTMLInputElement>) {
-        const listboxElement = listboxRef.current;
-
-        if (!listboxElement) return;
-
-        const items = Array.from((listboxElement as HTMLUListElement).children);
-        const activeElementIndex = items.findIndex(element => element.classList.contains(styles.active));
-
+        // determine next active list item element
         if (event.key === 'ArrowDown') {
-            if (activeElementIndex === -1) {
-                items[0].classList.add(styles.active);
-                updateAriaLive(`${items[0].innerHTML}${items[0].getAttribute('aria-selected') === 'true' ? ', selected' : ''}`);
-            } else if (activeElementIndex !== items.length - 1) {
-                items[activeElementIndex].classList.remove(styles.active);
-                items[activeElementIndex + 1].classList.add(styles.active);
-                updateAriaLive(`${items[activeElementIndex + 1].innerHTML}${items[activeElementIndex + 1].getAttribute('aria-selected') === 'true' ? ', selected' : ''}`);
+            // if no list item is active, then set the first one to be active, otherwise increment by one (but contain to list length).
+            if (activeListitemIndex === -1) {
+                activeListitemIndex = 0;
+            } else if (activeListitemIndex < listItemElements.length - 1) {
+                activeListitemIndex++;
             }
         } else if (event.key === 'ArrowUp') {
-            if (activeElementIndex > 0) {
-                items[activeElementIndex].classList.remove(styles.active);
-                items[activeElementIndex - 1].classList.add(styles.active);
-                updateAriaLive(`${items[activeElementIndex - 1].innerHTML}${items[activeElementIndex - 1].getAttribute('aria-selected') === 'true' ? ', selected' : ''}`);
+            // if any item except the first one is active, reduce by one
+            if (activeListitemIndex > 0) {
+                activeListitemIndex--;
             }
+        }
+
+        // update next active list item element
+        if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+            toggleListItemElementActive(listItemElements[activeListitemIndex]);
         }
 
         if (event.key === 'Enter') {
-            event.preventDefault(); // do not submit form when using 'Enter' key
+            event.preventDefault(); // prevent form from submitting on 'Enter' key
 
-            const activeElementIndex = items.findIndex(element => element.classList.contains(styles.active));
-            const selectedId = items[activeElementIndex]?.getAttribute('data-id');
-
-            if (selectedId) {
-                toggleListItem(items[activeElementIndex] as HTMLLIElement, selectedId);
+            if (activeListitemIndex > -1) {
+                toggleListitemElementSelect(listItemElements[activeListitemIndex]);
             }
         }
     }
 
-    function toggleListItem(selectedElement: HTMLLIElement, listItemId: string) {
-        // if item is not selected, add it
-        if (selectedItems.indexOf(listItemId) === -1) {
-            selectedElement.setAttribute('aria-selected', 'true');
-            updateAriaLive(`${selectedElement.innerHTML}, selected`);
+    function handleListItemClick(event: React.MouseEvent<HTMLLIElement>) {
+        toggleListitemElementSelect(event.target as HTMLLIElement);
+    }
 
-            const updatedSelectedItems = [...selectedItems, listItemId];
-            setSelectedItems(updatedSelectedItems);
-            handleUpdate(updatedSelectedItems);
-            updateInputValue(updatedSelectedItems);
-        } else {
-            selectedElement.setAttribute('aria-selected', 'false');
-            updateAriaLive(selectedElement.innerHTML);
+    function handleListItemMouseEnter(event: React.MouseEvent<HTMLLIElement>) {
+        (event.target as HTMLLIElement).classList.add(styles.active);
+    }
 
-            const updatedSelectedItems = [...selectedItems];
+    function handleListItemMouseLeave(event: React.MouseEvent<HTMLLIElement>) {
+        (event.target as HTMLLIElement).classList.remove(styles.active);
+    }
+
+    // HELPERS
+    function getListItemElements() {
+        if (!listboxRef.current) return;
+
+        return Array.from((listboxRef.current as HTMLUListElement).children);
+    }
+
+    function getActiveListItemElementIndex(listItemElements: Element[]) {
+        return listItemElements.findIndex(element => element.classList.contains(styles.active) && !element.classList.contains(styles.hide));
+    }
+
+    function getVisibleListItemElements() {
+        if (!listboxRef.current) return;
+
+        return Array.from((listboxRef.current as HTMLUListElement).children)
+            .filter(element => !element.classList.contains(styles.hide));
+    }
+
+    function removeAllActiveClasses() {
+        const listItemElements = getListItemElements();
+        if (!listItemElements) return;
+
+        listItemElements.forEach((element) => {
+            element.classList.remove(styles.active);
+        });
+    }
+
+    function toggleListItemElementActive(element: Element) {
+        removeAllActiveClasses();
+        element.classList.add(styles.active);
+        updateAriaLive(`${element.innerHTML}${element.getAttribute('aria-selected') === 'true' ? ', selected' : ''}`);
+    }
+
+    function toggleListitemElementSelect(element: Element) {
+        const listItemName = element.innerHTML.trim();
+        const listItemId = element.getAttribute('data-id');
+
+        if (!listItemId) return;
+        if (!inputRef.current) return;
+
+        // if item is already selected remove+unselect it || otherwise add+select it
+        const updatedSelectedItems = [...selectedItems];
+        if (selectedItems.includes(listItemId)) {
             updatedSelectedItems.splice(updatedSelectedItems.findIndex((item) => item === listItemId), 1);
-            setSelectedItems(updatedSelectedItems);
-            handleUpdate(updatedSelectedItems);
-            updateInputValue(updatedSelectedItems);
+            element.setAttribute('aria-selected', 'false');
+            updateAriaLive(element.innerHTML);
+        } else {
+            updatedSelectedItems.push(listItemId);
+            element.setAttribute('aria-selected', 'true');
+            updateAriaLive(`${element.innerHTML}, selected`);
         }
-    }
 
-    function updateInputValue(selectedItems: string[]) {
-        const inputElement = inputRef.current;
-
-        if (inputElement) {
-            const input: HTMLInputElement = inputElement;
-
-            if (selectedItems.length === 0) {
-                input.placeholder = '';
-            } else if (selectedItems.length === 1) {
-                const listboxElement = listboxRef.current;
-
-                if (!listboxElement) return;
-
-                const selectedItemName = Array
-                    .from((listboxElement as HTMLUListElement).children)
-                    .find((element) => element.getAttribute('data-id') === selectedItems[0])?.innerHTML;
-
-                if (selectedItemName) {
-                    input.placeholder = selectedItemName;
-                }
-            } else {
-                input.placeholder = `${selectedItems.length} selected`;
-            }
+        // update input element placeholder with selected values
+        const inputElement = (inputRef.current as HTMLInputElement);
+        if (updatedSelectedItems.length === 0) {
+            inputElement.setAttribute('placeholder', '');
         }
+        if (updatedSelectedItems.length === 1) {
+            inputElement.setAttribute('placeholder', listItemName);
+        } else if (updatedSelectedItems.length > 1) {
+            inputElement.setAttribute('placeholder', `${updatedSelectedItems.length} items`);
+        }
+
+        setSelectedItems(updatedSelectedItems);
+        handleUpdate(updatedSelectedItems);
     }
 
     function updateAriaLive(string: string) {
-        const ariaLiveElement = ariaLiveRef.current;
+        if (!ariaLiveRef.current) return;
 
-        if (ariaLiveElement) {
-            (ariaLiveElement as HTMLDivElement).innerHTML = string;
+        const ariaLiveElement = ariaLiveRef.current as HTMLDivElement;
 
-            window.setTimeout(() => {
-                (ariaLiveElement as HTMLDivElement).innerHTML = '';
-            }, 250);
-        }
+        (ariaLiveElement as HTMLDivElement).innerHTML = string;
+
+        window.setTimeout(() => {
+            (ariaLiveElement as HTMLDivElement).innerHTML = '';
+        }, 250);
     }
 
     return (
@@ -177,30 +212,34 @@ const InputCombobox = ({ handleUpdate, id, items, label, name }: InputComboboxPr
                     aria-owns={`${id}-controls`}
                     id={id}
                     name={name}
-                    onBlur={(event) => inputOnBlurFocus(event, 'blur')}
-                    onFocus={(event) => inputOnBlurFocus(event, 'focus')}
-                    onInput={handleInput}
-                    onKeyDown={handleKeydown}
+                    onBlur={handleInputBlur}
+                    onFocus={handleInputFocus}
+                    onInput={handleInputInput}
+                    onKeyDown={handleInputKeyDown}
                     role='combobox'
                     type='text'
                 />
 
                 <ul ref={listboxRef} aria-label={label} id={`${id}-controls`} role='listbox'>
-                    {filteredItems.map((item: FormattedCategory) => {
+                    {items.map((item: FormattedCategory) => {
                         return (
                             <li
                                 aria-selected='false'
                                 data-id={item.id}
                                 id={`${item.title}-option`}
                                 key={item.title}
-                                onClick={handleOnClick}
+                                onClick={handleListItemClick}
                                 onMouseDown={(event) => event.preventDefault()}
-                                onMouseEnter={handleOnMouseEnter}
-                                onMouseLeave={handleOnMouseLeave}
+                                onMouseEnter={handleListItemMouseEnter}
+                                onMouseLeave={handleListItemMouseLeave}
                                 role='option'
                             >{item.title}</li>
                         );
                     })}
+
+                    {noResults && 
+                        <li id={`${id}-no-results`}>No results found</li>
+                    }
                 </ul>
             </div>
 
