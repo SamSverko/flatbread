@@ -16,18 +16,25 @@
         flex-direction: column;
         list-style-type: none;
         margin: 0;
+        max-height: 180px;
+        overflow-y: scroll;
         padding: 0;
         position: absolute;
         transform: translate(0, -4px);
         width: 100%;
+        z-index: calc(var.$navbar-z-index - 1);
 
         &.show {
             display: flex;
         }
 
         li {
+            align-items: center;
             background-color: white;
             cursor: pointer;
+            display: flex;
+            justify-content: flex-start;
+            min-height: 40px;
             padding: var.$spacing-2;
             transition: none;
 

@@ -93,7 +93,9 @@ const InputCombobox = ({ handleUpdate, id, items, label, name }: InputComboboxPr
             }
         } else if (event.key === 'ArrowUp') {
             // if any item except the first one is active, reduce by one
-            if (activeListitemIndex > 0) {
+            if (activeListitemIndex === -1) {
+                return;
+            } else if (activeListitemIndex > 0) {
                 activeListitemIndex--;
             }
         }
@@ -152,9 +154,20 @@ const InputCombobox = ({ handleUpdate, id, items, label, name }: InputComboboxPr
     }
 
     function toggleListItemElementActive(element: Element) {
+        if (!listboxRef.current) return;
+
+        // update list item active class
         removeAllActiveClasses();
         element.classList.add(styles.active);
         updateAriaLive(`${element.innerHTML}${element.getAttribute('aria-selected') === 'true' ? ', selected' : ''}`);
+
+        // keep element visible in listbox container
+        const listboxElementRect = (listboxRef.current as HTMLUListElement).getBoundingClientRect();
+        const listItemElementRect = element.getBoundingClientRect();
+
+        if (listItemElementRect.bottom > listboxElementRect.bottom || listItemElementRect.top < listboxElementRect.top) {
+            element.scrollIntoView();
+        }
     }
 
     function toggleListitemElementSelect(element: Element) {
