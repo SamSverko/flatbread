@@ -52,3 +52,9 @@ To get the website running locally, please do the following:
 - **Front End Framework:** [Next.js](https://nextjs.org/) - A React framework for developing single page and multi-page JavaScript applications and websites.
 - **Headless CMS:** [Contentful](https://www.contentful.com/) - An API-first content management platform to create, manage and publish content on any digital channel.
 - **Hosting:** [Vercel](https://aws.amazon.com/ec2/) - A cloud platform for static sites and serverless functions.
+
+---
+
+## Notes
+
+- The `package.json` `version` value was (temporarily?) changed to basic SemVer format to be compatible with Prisma.

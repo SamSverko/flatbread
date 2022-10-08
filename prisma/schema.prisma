@@ -1,0 +1,111 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// Model field scalar types: https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#model-field-scalar-types
+// Relations: https://www.prisma.io/docs/concepts/components/prisma-schema/relations
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("PRISMA_DATABASE_URL")
+}
+
+// RECIPE =====================================================================
+model Recipe {
+    id            Int                @id @unique @default(autoincrement())
+    createdAt     DateTime           @default(now())
+    title         String
+    sourceName    String
+    sourceURL     String?
+    prepTimeMin   Int
+    cookTimeMin   Int
+    servingAmount Int
+    servingUnit   RecipeServingUnit  @relation(fields: [servingUnitId], references: [id])
+    servingUnitId Int
+    categories    RecipeCategory[]
+    ingredients   RecipeIngredient[]
+    methods       RecipeMethod[]
+
+    @@unique([title, sourceName])
+}
+
+// RECIPE / SERVING UNIT ======================================================
+model RecipeServingUnit {
+    id         Int      @id @unique @default(autoincrement())
+    createdAt  DateTime @default(now())
+    name       String   @unique
+    namePlural String   @unique
+    recipes    Recipe[]
+}
+
+// RECIPE / CATETORY ==========================================================
+enum RecipeCategoryType {
+    CourseType
+    Cuisine
+    DietaryRestriction
+    DishType
+}
+
+model RecipeCategory {
+    id        Int                @id @unique @default(autoincrement())
+    createdAt DateTime           @default(now())
+    type      RecipeCategoryType
+    name      String             @unique
+    recipes   Recipe[]
+}
+
+// RECIPE / INGREDIENT ========================================================
+model RecipeIngredient {
+    id            Int                    @id @unique @default(autoincrement())
+    createdAt     DateTime               @default(now())
+    order         Int
+    section       String?
+    amount        String
+    amountValue   Decimal
+    unit          RecipeIngredientUnit?  @relation(fields: [unitId], references: [id])
+    unitId        Int?
+    name          RecipeIngredientName   @relation("name", fields: [nameId], references: [id])
+    nameId        Int
+    alteration    String?
+    isOptional    Boolean                @default(false)
+    substitutions RecipeIngredientName[] @relation("substitutions")
+    recipes       Recipe[]
+}
+
+model RecipeIngredientUnit {
+    id                Int                @id @unique @default(autoincrement())
+    createdAt         DateTime           @default(now())
+    name              String             @unique
+    nameAbbr          String             @unique
+    namePlural        String             @unique
+    namePluralAbbr    String             @unique
+    recipeIngredients RecipeIngredient[]
+}
+
+model RecipeIngredientName {
+    id                             Int                @id @unique @default(autoincrement())
+    createdAt                      DateTime           @default(now())
+    name                           String             @unique
+    namePlural                     String             @unique
+    RecipeIngredientName           RecipeIngredient[] @relation("name")
+    RecipeIngredientSubstitution   RecipeIngredient?  @relation("substitutions", fields: [RecipeIngredientSubstitutionId], references: [id])
+    RecipeIngredientSubstitutionId Int?
+}
+
+// RECIPE / METHOD ============================================================
+enum RecipeMethodType {
+    Step
+    Note
+}
+
+model RecipeMethod {
+    id        Int              @id @unique @default(autoincrement())
+    createdAt DateTime         @default(now())
+    type      RecipeMethodType
+    order     Int
+    section   String?
+    details   String
+    recipes   Recipe[]
+}
