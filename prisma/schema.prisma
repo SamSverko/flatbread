@@ -62,8 +62,8 @@ model RecipeIngredient {
     createdAt     DateTime               @default(now())
     order         Int
     section       String?
-    amount        String
-    amountValue   Decimal
+    amount        RecipeIngredientAmount @relation(fields: [amountId], references: [id])
+    amountId      Int
     unit          RecipeIngredientUnit?  @relation(fields: [unitId], references: [id])
     unitId        Int?
     name          RecipeIngredientName   @relation("name", fields: [nameId], references: [id])
@@ -72,6 +72,14 @@ model RecipeIngredient {
     isOptional    Boolean                @default(false)
     substitutions RecipeIngredientName[] @relation("substitutions")
     recipes       Recipe[]
+}
+
+model RecipeIngredientAmount {
+    id               Int                @id @unique @default(autoincrement())
+    createdAt        DateTime           @default(now())
+    name             String             @unique
+    value            Decimal            @unique
+    RecipeIngredient RecipeIngredient[]
 }
 
 model RecipeIngredientUnit {
