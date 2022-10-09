@@ -14,7 +14,7 @@ datasource db {
 
 // RECIPE =====================================================================
 model Recipe {
-    id            Int                @id @unique @default(autoincrement())
+    id            String             @id @default(uuid())
     createdAt     DateTime           @default(now())
     title         String
     sourceName    String
@@ -28,7 +28,7 @@ model Recipe {
     ingredients   RecipeIngredient[]
     methods       RecipeMethod[]
 
-    @@unique([title, sourceName])
+    @@unique(fields: [title, sourceName], name: "recipe_identifier")
 }
 
 // RECIPE / SERVING UNIT ======================================================
@@ -115,5 +115,8 @@ model RecipeMethod {
     order     Int
     section   String?
     details   String
-    recipes   Recipe[]
+    recipe    Recipe           @relation(fields: [recipeId], references: [id])
+    recipeId  String
+
+    @@unique(fields: [order, recipeId], name: "recipe_method_identifier")
 }

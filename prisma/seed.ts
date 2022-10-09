@@ -1,4 +1,5 @@
 import { Prisma, PrismaClient } from '@prisma/client';
+import { v4 } from 'uuid';
 
 const prisma = new PrismaClient();
 
@@ -164,8 +165,38 @@ const recipeIngredientNames: Prisma.RecipeIngredientNameCreateInput[] = [
     { name: 'zucchini', namePlural: 'zucchini' },
 ];
 
+// https://www.flatbread.app/?recipe=nanaimo-bars
+const recipeNanaimoBars = {
+    title: 'Nanaimo Bars',
+    sourceName: 'Mary-Ann Derocher',
+    prepTimeMin: 30,
+    cookTimeMin: 10,
+    servingAmount: 25,
+    servingUnit: {
+        name: 'square',
+        namePlural: 'squares',
+    },
+    categories: [
+        { type: 'CourseType', name: 'Dessert' },
+        { type: 'CourseType', name: 'Snack' },
+        { type: 'Cuisine', name: 'Canadian' },
+        { type: 'DietaryRestriction', name: 'Vegetarian' },
+        { type: 'DishType', name: 'Confection' },
+    ],
+    ingredients: [ // ⅒ ⅑ ⅛ ⅐ ⅙ ⅕ ¼ ⅓ ⅜ ⅖ ½ ⅗ ⅝ ⅔ ¾ ⅘ ⅚ ⅞
+        { order: 1, section: '1st Layer', amount: '¼', amountValue: 0.25 },
+    ],
+    methods: [
+        { type: 'Step', order: 1, section: '1st Layer', details: 'Melt chocolate chips and butter over low heat, cool slightly. Add remaining ingredients and mix well. Press into 8-inch greased pan.' },
+        { type: 'Step', order: 2, section: '2nd Layer', details: '2nd Layer: Mix well and spread over 1st Layer.' },
+        { type: 'Step', order: 3, section: '3rd Layer', details: 'Melt chocolate chips and butter. Spread over 2nd Layer and swirl.' },
+        { type: 'Step', order: 4, details: 'Cool in fridge, then cut in squares, and store in fridge.' },
+    ],
+};
+
 async function seedDB() {
-    const seedRecipeCategory = await prisma.$transaction(
+    // seedRecipeCategory
+    await prisma.$transaction(
         recipeCategories.map(category =>
             prisma.recipeCategory.upsert({
                 where: {
@@ -180,7 +211,8 @@ async function seedDB() {
         ),
     );
 
-    const seedRecipeServingUnit = await prisma.$transaction(
+    // seedRecipeServingUnit
+    await prisma.$transaction(
         recipeServingUnits.map(servingUnit =>
             prisma.recipeServingUnit.upsert({
                 where: {
@@ -195,7 +227,8 @@ async function seedDB() {
         ),
     );
 
-    const seedRecipeIngredientAmount = await prisma.$transaction(
+    // seedRecipeIngredientAmount
+    await prisma.$transaction(
         recipeIngredientAmounts.map(ingredientAmount =>
             prisma.recipeIngredientAmount.upsert({
                 where: {
@@ -210,7 +243,8 @@ async function seedDB() {
         ),
     );
 
-    const seedRecipeIngredientUnit = await prisma.$transaction(
+    // seedRecipeIngredientUnit
+    await prisma.$transaction(
         recipeIngredientUnits.map(ingredientUnit =>
             prisma.recipeIngredientUnit.upsert({
                 where: {
@@ -227,7 +261,8 @@ async function seedDB() {
         ),
     );
 
-    const seedRecipeIngredientName = await prisma.$transaction(
+    // seedRecipeIngredientName
+    await prisma.$transaction(
         recipeIngredientNames.map(ingredientName =>
             prisma.recipeIngredientName.upsert({
                 where: {
@@ -242,288 +277,168 @@ async function seedDB() {
         ),
     );
 
-    // https://www.flatbread.app/?recipe=nanaimo-bars
-    const recipeNanaimoBars = {
-        title: 'Nanaimo Bars',
-        sourceName: 'Mary-Ann Derocher',
-        prepTimeMin: 30,
-        cookTimeMin: 10,
-        servingAmount: 25,
-        servingUnit: {
-            name: 'square',
-            namePlural: 'squares',
+    // seedNanaimoBarsRecipe
+    const DoesRecipeNanaimoBarsExist = await prisma.recipe.findUnique({
+        where: {
+            recipe_identifier: {
+                title: recipeNanaimoBars.title,
+                sourceName: recipeNanaimoBars.sourceName,
+            },
         },
-        categories: [
-            { type: 'CourseType', name: 'Dessert' },
-            { type: 'CourseType', name: 'Snack' },
-            { type: 'Cuisine', name: 'Canadian' },
-            { type: 'DietaryRestriction', name: 'Vegetarian' },
-            { type: 'DishType', name: 'Confection' },
-        ],
-        // ingredients
-        // ⅒ ⅑ ⅛ ⅐ ⅙ ⅕ ¼ ⅓ ⅜ ⅖ ½ ⅗ ⅝ ⅔ ¾ ⅘ ⅚ ⅞
-        ingredients: [
-            { order: 1, section: '1st Layer', amount: '¼', amountValue: 0.25 },
-        ],
-        methods: [
-            { type: 'Step', order: 1, section: '1st Layer', details: 'Melt chocolate chips and butter over low heat, cool slightly. Add remaining ingredients and mix well. Press into 8-inch greased pan.' },
-            { type: 'Step', order: 2, section: '2nd Layer', details: '2nd Layer: Mix well and spread over 1st Layer.' },
-            { type: 'Step', order: 3, section: '3rd Layer', details: 'Melt chocolate chips and butter. Spread over 2nd Layer and swirl.' },
-            { type: 'Step', order: 4, details: 'Cool in fridge, then cut in squares, and store in fridge.' },
-        ],
-    };
+        select: {
+            id: true,
+        },
+    });
 
-    // const seedNanaimoBarsRecipe = await prisma.recipe.upsert({
-    //     where: {
-    //         title_sourceName: {
-    //             title: recipeNanaimoBars.title,
-    //             sourceName: recipeNanaimoBars.sourceName,
-    //         },
-    //     },
-    //     update: {
-    //         title: recipeNanaimoBars.sourceName,
-    //         sourceName: recipeNanaimoBars.sourceName,
-    //         prepTimeMin: recipeNanaimoBars.prepTimeMin,
-    //         cookTimeMin: recipeNanaimoBars.cookTimeMin,
-    //         servingAmount: recipeNanaimoBars.servingAmount,
-    //         servingUnit: {
-    //             connectOrCreate: {
-    //                 where: {
-    //                     name: recipeNanaimoBars.servingUnit.name,
-    //                 },
-    //                 create: {
-    //                     name: recipeNanaimoBars.servingUnit.name,
-    //                     namePlural: recipeNanaimoBars.servingUnit.namePlural,
+    const nanaimoBarsRecipeId = (DoesRecipeNanaimoBarsExist) ? DoesRecipeNanaimoBarsExist.id : v4();
+
+    const seedNanaimoBarsRecipe = await prisma.recipe.upsert({
+        where: {
+            id: nanaimoBarsRecipeId,
+        },
+        update: {
+            title: recipeNanaimoBars.title,
+            sourceName: recipeNanaimoBars.sourceName,
+            prepTimeMin: recipeNanaimoBars.prepTimeMin,
+            cookTimeMin: recipeNanaimoBars.cookTimeMin,
+            servingAmount: recipeNanaimoBars.servingAmount,
+            servingUnit: {
+                connectOrCreate: {
+                    where: {
+                        name: recipeNanaimoBars.servingUnit.name,
+                    },
+                    create: {
+                        name: recipeNanaimoBars.servingUnit.name,
+                        namePlural: recipeNanaimoBars.servingUnit.namePlural,
+                    },
+                },
+            },
+            categories: {
+                connectOrCreate: (recipeNanaimoBars.categories as Prisma.RecipeCategoryCreateInput[]).map((recipeCategory) => {
+                    return {
+                        where: {
+                            name: recipeCategory.name,
+                        },
+                        create: {
+                            name: recipeCategory.name,
+                            type: recipeCategory.type,
+                        },
+                    };
+                }),
+            },
+            // ingredients & methods - can't get due to no unique identifier at this stage
+            // methods: {
+            //     create: recipeNanaimoBars.methods as Prisma.RecipeMethodCreateInput[],
+            // },
+            methods: {
+                connectOrCreate: (recipeNanaimoBars.methods as Prisma.RecipeMethodCreateInput[]).map((recipeMethod) => {
+                    return {
+                        where: {
+                            recipe_method_identifier: {
+                                order: recipeMethod.order,
+                                recipeId: nanaimoBarsRecipeId,
+                            },
+                        },
+                        create: {
+                            type: recipeMethod.type,
+                            order: recipeMethod.order,
+                            section: recipeMethod.section,
+                            details: recipeMethod.details,
+                        },
+                    };
+                }),
+            },
+        },
+        create: {
+            title: recipeNanaimoBars.title,
+            sourceName: recipeNanaimoBars.sourceName,
+            prepTimeMin: recipeNanaimoBars.prepTimeMin,
+            cookTimeMin: recipeNanaimoBars.cookTimeMin,
+            servingAmount: recipeNanaimoBars.servingAmount,
+            servingUnit: {
+                connectOrCreate: {
+                    where: {
+                        name: recipeNanaimoBars.servingUnit.name,
+                    },
+                    create: {
+                        name: recipeNanaimoBars.servingUnit.name,
+                        namePlural: recipeNanaimoBars.servingUnit.namePlural,
+                    },
+                },
+            },
+            categories: {
+                connectOrCreate: (recipeNanaimoBars.categories as Prisma.RecipeCategoryCreateInput[]).map((recipeCategory) => {
+                    return {
+                        where: {
+                            name: recipeCategory.name,
+                        },
+                        create: {
+                            name: recipeCategory.name,
+                            type: recipeCategory.type,
+                        },
+                    };
+                }),
+            },
+            // ingredients & methods - can't get due to no unique identifier at this stage
+            // methods: {
+            //     create: recipeNanaimoBars.methods as Prisma.RecipeMethodCreateInput[],
+            // },
+            methods: {
+                connectOrCreate: (recipeNanaimoBars.methods as Prisma.RecipeMethodCreateInput[]).map((recipeMethod) => {
+                    return {
+                        where: {
+                            recipe_method_identifier: {
+                                order: recipeMethod.order,
+                                recipeId: nanaimoBarsRecipeId,
+                            },
+                        },
+                        create: {
+                            type: recipeMethod.type,
+                            order: recipeMethod.order,
+                            section: recipeMethod.section,
+                            details: recipeMethod.details,
+                        },
+                    };
+                }),
+            },
+        },
+        include: {
+            servingUnit: true,
+            categories: true,
+        },
+    });
+
+    // seedNanaimoBarRecipe Methods
+    // await prisma.$transaction(
+    //     (recipeNanaimoBars.methods as Prisma.RecipeMethodCreateInput[]).map(recipeMethod => {
+    //         const data = {
+    //             type: recipeMethod.type,
+    //             order: recipeMethod.order,
+    //             section: recipeMethod.section,
+    //             details: recipeMethod.details,
+    //             recipeId: seedNanaimoBarsRecipe.id,
+    //         };
+
+    //         return prisma.recipeMethod.upsert({
+    //             where: {
+    //                 recipe_method_identifier: {
+    //                     order: data.order,
+    //                     recipeId: data.recipeId,
     //                 },
     //             },
-    //         },
-    //         categories: {
-    //             connectOrCreate: (recipeNanaimoBars.categories as Prisma.RecipeCategoryCreateInput[]).map((recipeCategory) => {
-    //                 return {
-    //                     where: {
-    //                         name: recipeCategory.name,
-    //                     },
-    //                     create: {
-    //                         name: recipeCategory.name,
-    //                         type: recipeCategory.type,
-    //                     },
-    //                 };
-    //             }),
-    //         },
-    //         ingredients: {
-    //             create: [
-    //                 {
-    //                     order: 1,
-    //                     section: '2nd Layer',
-    //                     amount: '⅔',
-    //                     amountValue: 0.667,
-    //                     unit: {
-    //                         connectOrCreate: {
-    //                             where: {
-    //                                 name: 'cup',
-    //                             },
-    //                             create: {
-    //                                 name: 'cup',
-    //                                 nameAbbr: 'c',
-    //                                 namePlural: 'cups',
-    //                                 namePluralAbbr: 'cs',
-    //                             },
-    //                         },
-    //                     },
-    //                     name: {
-    //                         connectOrCreate: {
-    //                             where: {
-    //                                 name: 'unsalted butter',
-    //                             },
-    //                             create: {
-    //                                 name: 'unsalted butter',
-    //                                 namePlural: 'unsalted butter',
-    //                             },
-    //                         },
-    //                     },
-    //                     isOptional: false,
-    //                 } as Prisma.RecipeIngredientCreateInput,
-    //             ],
-    //         },
-    //         methods: {
-    //             create: recipeNanaimoBars.methods as Prisma.RecipeMethodCreateInput[],
-    //         },
-    //     },
-    //     create: {
-    //         title: recipeNanaimoBars.sourceName,
-    //         sourceName: recipeNanaimoBars.sourceName,
-    //         prepTimeMin: recipeNanaimoBars.prepTimeMin,
-    //         cookTimeMin: recipeNanaimoBars.cookTimeMin,
-    //         servingAmount: recipeNanaimoBars.servingAmount,
-    //         servingUnit: {
-    //             connectOrCreate: {
-    //                 where: {
-    //                     name: recipeNanaimoBars.servingUnit.name,
-    //                 },
-    //                 create: {
-    //                     name: recipeNanaimoBars.servingUnit.name,
-    //                     namePlural: recipeNanaimoBars.servingUnit.namePlural,
-    //                 },
-    //             },
-    //         },
-    //         categories: {
-    //             connectOrCreate: (recipeNanaimoBars.categories as Prisma.RecipeCategoryCreateInput[]).map((recipeCategory) => {
-    //                 return {
-    //                     where: {
-    //                         name: recipeCategory.name,
-    //                     },
-    //                     create: {
-    //                         name: recipeCategory.name,
-    //                         type: recipeCategory.type,
-    //                     },
-    //                 };
-    //             }),
-    //         },
-    //         ingredients: {
-    //             create: [
-    //                 {
-    //                     order: 1,
-    //                     section: '2nd Layer',
-    //                     amount: '⅔',
-    //                     amountValue: 0.667,
-    //                     unit: {
-    //                         connectOrCreate: {
-    //                             where: {
-    //                                 name: 'cup',
-    //                             },
-    //                             create: {
-    //                                 name: 'cup',
-    //                                 nameAbbr: 'c',
-    //                                 namePlural: 'cups',
-    //                                 namePluralAbbr: 'cs',
-    //                             },
-    //                         },
-    //                     },
-    //                     name: {
-    //                         connectOrCreate: {
-    //                             where: {
-    //                                 name: 'unsalted butter',
-    //                             },
-    //                             create: {
-    //                                 name: 'unsalted butter',
-    //                                 namePlural: 'unsalted butter',
-    //                             },
-    //                         },
-    //                     },
-    //                     isOptional: false,
-    //                 } as Prisma.RecipeIngredientCreateInput,
-    //             ],
-    //         },
-    //         methods: {
-    //             create: recipeNanaimoBars.methods as Prisma.RecipeMethodCreateInput[],
-    //         },
-    //     },
-    //     include: {
-    //         servingUnit: true,
-    //         categories: true,
-    //         ingredients: true,
-    //         methods: true,
-    //     },
-    // });
+    //             update: data,
+    //             create: data,
+    //         });
+    //     }),
+    // );
 
-    // const seedNanaimoBarsRecipe = await prisma.recipe.create({
-    //     data: {
-    //         title: recipeNanaimoBars.title,
-    //         sourceName: recipeNanaimoBars.sourceName,
-    //         prepTimeMin: recipeNanaimoBars.prepTimeMin,
-    //         cookTimeMin: recipeNanaimoBars.cookTimeMin,
-    //         servingAmount: recipeNanaimoBars.servingAmount,
-    //         servingUnit: {
-    //             connectOrCreate: {
-    //                 where: {
-    //                     name: recipeNanaimoBars.servingUnit.name,
-    //                 },
-    //                 create: {
-    //                     name: recipeNanaimoBars.servingUnit.name,
-    //                     namePlural: recipeNanaimoBars.servingUnit.namePlural,
-    //                 }
-    //             }
-    //         },
-    //         categories: {
-    //             connectOrCreate: (recipeNanaimoBars.categories as Prisma.RecipeCategoryCreateInput[]).map((recipeCategory) => {
-    //                 return {
-    //                     where: {
-    //                         name: recipeCategory.name,
-    //                     },
-    //                     create: {
-    //                         name: recipeCategory.name,
-    //                         type: recipeCategory.type,
-    //                     }
-    //                 };
-    //             }),
-    //         },
-    //         ingredients: {
-    //             create: [
-    //                 {
-    //                     order: 1,
-    //                     section: '1st Layer',
-    //                     amount: '¼',
-    //                     amountValue: 0.25,
-    //                     unit: {
-    //                         connectOrCreate: {
-    //                             where: {
-    //                                 name: 'cup',
-    //                             },
-    //                             create: {
-    //                                 name: 'cup',
-    //                                 nameAbbr: 'c',
-    //                                 namePlural: 'cups',
-    //                                 namePluralAbbr: 'cs',
-    //                             },
-    //                         },
-    //                     },
-    //                     name: {
-    //                         connectOrCreate: {
-    //                             where: {
-    //                                 name: 'unsalted butter',
-    //                             },
-    //                             create: {
-    //                                 name: 'unsalted butter',
-    //                                 namePlural: 'unsalted butter',
-    //                             },
-    //                         },
-    //                     },
-    //                     isOptional: false,
-    //                 } as Prisma.RecipeIngredientCreateInput,
-    //             ],
-    //         },
-    //         methods: {
-    //             create: recipeNanaimoBars.methods as Prisma.RecipeMethodCreateInput[],
-    //         }
-    //         // methods: {
-    //         //     create: (recipeNanaimoBars.methods as Prisma.RecipeMethodCreateInput[]).map((recipeMethod) => {
-    //         //         return {
-    //         //             where: {
-    //         //                 details: recipeMethod.details,
-    //         //             },
-    //         //             create: {
-    //         //                 type: recipeMethod.type,
-    //         //                 order: recipeMethod.order,
-    //         //                 section: recipeMethod.section,
-    //         //                 details: recipeMethod.details,
-    //         //             }
-    //         //         };
-    //         //     }),
-    //         // },
-    //     },
-    //     include: {
-    //         servingUnit: true,
-    //         categories: true,
-    //         ingredients: true,
-    //         methods: true,
-    //     },
-    // });
+    // console.log(seedNanaimoBarsRecipe.id);
 
-    console.log('seedRecipeCategory:', seedRecipeCategory);
-    console.log('seedRecipeServingUnit:', seedRecipeServingUnit);
-    console.log('seedRecipeIngredientAmount:', seedRecipeIngredientAmount);
-    console.log('seedRecipeIngredientUnit:', seedRecipeIngredientUnit);
-    console.log('seedRecipeIngredientName:', seedRecipeIngredientName);
+    // console.log('seedRecipeCategory:', seedRecipeCategory);
+    // console.log('seedRecipeServingUnit:', seedRecipeServingUnit);
+    // console.log('seedRecipeIngredientAmount:', seedRecipeIngredientAmount);
+    // console.log('seedRecipeIngredientUnit:', seedRecipeIngredientUnit);
+    // console.log('seedRecipeIngredientName:', seedRecipeIngredientName);
     // console.log('seedNanaimoBarsRecipe:', seedNanaimoBarsRecipe);
 }
 
