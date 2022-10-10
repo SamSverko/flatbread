@@ -1,6 +1,34 @@
 import { Prisma, PrismaClient } from '@prisma/client';
 import { v4 } from 'uuid';
 
+interface RecipeToSeed {
+    title: string;
+    sourceName: string;
+    prepTimeMin: number;
+    cookTimeMin: number;
+    servingAmount: number;
+    servingUnit: {
+        name: string;
+        namePlural: string;
+    };
+    categories: {
+        type: string;
+        name: string;
+    }[];
+    ingredients: {
+        order: number;
+        section?: string;
+        amount: string;
+        amountValue: number;
+    }[];
+    methods: {
+        type: 'Step' | 'Note';
+        order: number;
+        section?: string;
+        details: string;
+    }[];
+}
+
 const prisma = new PrismaClient();
 
 const recipeCategories: Prisma.RecipeCategoryCreateInput[] = [
@@ -166,7 +194,7 @@ const recipeIngredientNames: Prisma.RecipeIngredientNameCreateInput[] = [
 ];
 
 // https://www.flatbread.app/?recipe=nanaimo-bars
-const recipeNanaimoBars = {
+const recipeNanaimoBars: RecipeToSeed = {
     title: 'Nanaimo Bars',
     sourceName: 'Mary-Ann Derocher',
     prepTimeMin: 30,
@@ -194,90 +222,152 @@ const recipeNanaimoBars = {
     ],
 };
 
+function formatRecipeUpsert(recipeId: string, recipe: RecipeToSeed) {
+    return {
+        title: recipe.title,
+        sourceName: recipe.sourceName,
+        prepTimeMin: recipe.prepTimeMin,
+        cookTimeMin: recipe.cookTimeMin,
+        servingAmount: recipe.servingAmount,
+        servingUnit: {
+            connectOrCreate: {
+                where: {
+                    name: recipe.servingUnit.name,
+                },
+                create: {
+                    name: recipe.servingUnit.name,
+                    namePlural: recipe.servingUnit.namePlural,
+                },
+            },
+        },
+        categories: {
+            connectOrCreate: (recipe.categories as Prisma.RecipeCategoryCreateInput[]).map((category) => {
+                return {
+                    where: {
+                        name: category.name,
+                    },
+                    create: {
+                        name: category.name,
+                        type: category.type,
+                    },
+                };
+            }),
+        },
+        methods: {
+            connectOrCreate: (recipe.methods as Prisma.RecipeMethodCreateInput[]).map((recipeMethod) => {
+                return {
+                    where: {
+                        recipe_method_identifier: {
+                            order: recipeMethod.order,
+                            recipeId: recipeId,
+                        },
+                    },
+                    create: {
+                        type: recipeMethod.type,
+                        order: recipeMethod.order,
+                        section: recipeMethod.section,
+                        details: recipeMethod.details,
+                    },
+                };
+            }),
+        },
+    };
+}
+
 async function seedDB() {
     // seedRecipeCategory
     await prisma.$transaction(
-        recipeCategories.map(category =>
-            prisma.recipeCategory.upsert({
+        recipeCategories.map(category => {
+            const recipeCategory = {
+                type: category.type,
+                name: category.name,
+            };
+
+            return prisma.recipeCategory.upsert({
                 where: {
                     name: category.name,
                 },
-                update: {},
-                create: {
-                    type: category.type,
-                    name: category.name,
-                },
-            }),
-        ),
+                update: recipeCategory,
+                create: recipeCategory,
+            });
+        }),
     );
 
     // seedRecipeServingUnit
     await prisma.$transaction(
-        recipeServingUnits.map(servingUnit =>
-            prisma.recipeServingUnit.upsert({
+        recipeServingUnits.map(servingUnit => {
+            const recipeServingUnit = {
+                name: servingUnit.name,
+                namePlural: servingUnit.namePlural,
+            };
+
+            return prisma.recipeServingUnit.upsert({
                 where: {
                     name: servingUnit.name,
                 },
-                update: {},
-                create: {
-                    name: servingUnit.name,
-                    namePlural: servingUnit.namePlural,
-                },
-            }),
-        ),
+                update: recipeServingUnit,
+                create: recipeServingUnit,
+            });
+        }),
     );
 
     // seedRecipeIngredientAmount
     await prisma.$transaction(
-        recipeIngredientAmounts.map(ingredientAmount =>
-            prisma.recipeIngredientAmount.upsert({
+        recipeIngredientAmounts.map(ingredientAmount => {
+            const recipeIngredientAmount = {
+                name: ingredientAmount.name,
+                value: ingredientAmount.value,
+            };
+
+            return prisma.recipeIngredientAmount.upsert({
                 where: {
                     name: ingredientAmount.name,
                 },
-                update: {},
-                create: {
-                    name: ingredientAmount.name,
-                    value: ingredientAmount.value,
-                },
-            }),
-        ),
+                update: recipeIngredientAmount,
+                create: recipeIngredientAmount,
+            });
+        }),
     );
 
     // seedRecipeIngredientUnit
     await prisma.$transaction(
-        recipeIngredientUnits.map(ingredientUnit =>
-            prisma.recipeIngredientUnit.upsert({
+        recipeIngredientUnits.map(ingredientUnit => {
+            const recipeIngredientUnit = {
+                name: ingredientUnit.name,
+                nameAbbr: ingredientUnit.nameAbbr,
+                namePlural: ingredientUnit.namePlural,
+                namePluralAbbr: ingredientUnit.namePluralAbbr,
+            };
+
+            return prisma.recipeIngredientUnit.upsert({
                 where: {
                     name: ingredientUnit.name,
                 },
-                update: {},
-                create: {
-                    name: ingredientUnit.name,
-                    nameAbbr: ingredientUnit.nameAbbr,
-                    namePlural: ingredientUnit.namePlural,
-                    namePluralAbbr: ingredientUnit.namePluralAbbr,
-                },
-            }),
-        ),
+                update: recipeIngredientUnit,
+                create: recipeIngredientUnit,
+            });
+        }),
     );
 
     // seedRecipeIngredientName
     await prisma.$transaction(
-        recipeIngredientNames.map(ingredientName =>
-            prisma.recipeIngredientName.upsert({
+        recipeIngredientNames.map(ingredientName => {
+            const recipeIngredient = {
+                name: ingredientName.name,
+                namePlural: ingredientName.namePlural,
+            };
+
+            return prisma.recipeIngredientName.upsert({
                 where: {
                     name: ingredientName.name,
                 },
-                update: {},
-                create: {
-                    name: ingredientName.name,
-                    namePlural: ingredientName.namePlural,
-                },
-            }),
-        ),
+                update: recipeIngredient,
+                create: recipeIngredient,
+            });
+        }),
     );
 
-    // seedNanaimoBarsRecipe
+    // seedNanaimoBarsRecipe - https://www.flatbread.app/?recipe=nanaimo-bars
     const DoesRecipeNanaimoBarsExist = await prisma.recipe.findUnique({
         where: {
             recipe_identifier: {
@@ -290,156 +380,15 @@ async function seedDB() {
         },
     });
 
-    const nanaimoBarsRecipeId = (DoesRecipeNanaimoBarsExist) ? DoesRecipeNanaimoBarsExist.id : v4();
+    const nanaimoBarsRecipeId: string = (DoesRecipeNanaimoBarsExist) ? DoesRecipeNanaimoBarsExist.id : v4();
 
-    const seedNanaimoBarsRecipe = await prisma.recipe.upsert({
+    await prisma.recipe.upsert({
         where: {
             id: nanaimoBarsRecipeId,
         },
-        update: {
-            title: recipeNanaimoBars.title,
-            sourceName: recipeNanaimoBars.sourceName,
-            prepTimeMin: recipeNanaimoBars.prepTimeMin,
-            cookTimeMin: recipeNanaimoBars.cookTimeMin,
-            servingAmount: recipeNanaimoBars.servingAmount,
-            servingUnit: {
-                connectOrCreate: {
-                    where: {
-                        name: recipeNanaimoBars.servingUnit.name,
-                    },
-                    create: {
-                        name: recipeNanaimoBars.servingUnit.name,
-                        namePlural: recipeNanaimoBars.servingUnit.namePlural,
-                    },
-                },
-            },
-            categories: {
-                connectOrCreate: (recipeNanaimoBars.categories as Prisma.RecipeCategoryCreateInput[]).map((recipeCategory) => {
-                    return {
-                        where: {
-                            name: recipeCategory.name,
-                        },
-                        create: {
-                            name: recipeCategory.name,
-                            type: recipeCategory.type,
-                        },
-                    };
-                }),
-            },
-            // ingredients & methods - can't get due to no unique identifier at this stage
-            // methods: {
-            //     create: recipeNanaimoBars.methods as Prisma.RecipeMethodCreateInput[],
-            // },
-            methods: {
-                connectOrCreate: (recipeNanaimoBars.methods as Prisma.RecipeMethodCreateInput[]).map((recipeMethod) => {
-                    return {
-                        where: {
-                            recipe_method_identifier: {
-                                order: recipeMethod.order,
-                                recipeId: nanaimoBarsRecipeId,
-                            },
-                        },
-                        create: {
-                            type: recipeMethod.type,
-                            order: recipeMethod.order,
-                            section: recipeMethod.section,
-                            details: recipeMethod.details,
-                        },
-                    };
-                }),
-            },
-        },
-        create: {
-            title: recipeNanaimoBars.title,
-            sourceName: recipeNanaimoBars.sourceName,
-            prepTimeMin: recipeNanaimoBars.prepTimeMin,
-            cookTimeMin: recipeNanaimoBars.cookTimeMin,
-            servingAmount: recipeNanaimoBars.servingAmount,
-            servingUnit: {
-                connectOrCreate: {
-                    where: {
-                        name: recipeNanaimoBars.servingUnit.name,
-                    },
-                    create: {
-                        name: recipeNanaimoBars.servingUnit.name,
-                        namePlural: recipeNanaimoBars.servingUnit.namePlural,
-                    },
-                },
-            },
-            categories: {
-                connectOrCreate: (recipeNanaimoBars.categories as Prisma.RecipeCategoryCreateInput[]).map((recipeCategory) => {
-                    return {
-                        where: {
-                            name: recipeCategory.name,
-                        },
-                        create: {
-                            name: recipeCategory.name,
-                            type: recipeCategory.type,
-                        },
-                    };
-                }),
-            },
-            // ingredients & methods - can't get due to no unique identifier at this stage
-            // methods: {
-            //     create: recipeNanaimoBars.methods as Prisma.RecipeMethodCreateInput[],
-            // },
-            methods: {
-                connectOrCreate: (recipeNanaimoBars.methods as Prisma.RecipeMethodCreateInput[]).map((recipeMethod) => {
-                    return {
-                        where: {
-                            recipe_method_identifier: {
-                                order: recipeMethod.order,
-                                recipeId: nanaimoBarsRecipeId,
-                            },
-                        },
-                        create: {
-                            type: recipeMethod.type,
-                            order: recipeMethod.order,
-                            section: recipeMethod.section,
-                            details: recipeMethod.details,
-                        },
-                    };
-                }),
-            },
-        },
-        include: {
-            servingUnit: true,
-            categories: true,
-        },
+        update: formatRecipeUpsert(nanaimoBarsRecipeId, recipeNanaimoBars),
+        create: formatRecipeUpsert(nanaimoBarsRecipeId, recipeNanaimoBars),
     });
-
-    // seedNanaimoBarRecipe Methods
-    // await prisma.$transaction(
-    //     (recipeNanaimoBars.methods as Prisma.RecipeMethodCreateInput[]).map(recipeMethod => {
-    //         const data = {
-    //             type: recipeMethod.type,
-    //             order: recipeMethod.order,
-    //             section: recipeMethod.section,
-    //             details: recipeMethod.details,
-    //             recipeId: seedNanaimoBarsRecipe.id,
-    //         };
-
-    //         return prisma.recipeMethod.upsert({
-    //             where: {
-    //                 recipe_method_identifier: {
-    //                     order: data.order,
-    //                     recipeId: data.recipeId,
-    //                 },
-    //             },
-    //             update: data,
-    //             create: data,
-    //         });
-    //     }),
-    // );
-
-    // console.log(seedNanaimoBarsRecipe.id);
-
-    // console.log('seedRecipeCategory:', seedRecipeCategory);
-    // console.log('seedRecipeServingUnit:', seedRecipeServingUnit);
-    // console.log('seedRecipeIngredientAmount:', seedRecipeIngredientAmount);
-    // console.log('seedRecipeIngredientUnit:', seedRecipeIngredientUnit);
-    // console.log('seedRecipeIngredientName:', seedRecipeIngredientName);
-    // console.log('seedNanaimoBarsRecipe:', seedNanaimoBarsRecipe);
 }
 
 seedDB()
