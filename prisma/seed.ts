@@ -1,6 +1,8 @@
 import { Prisma, PrismaClient } from '@prisma/client';
 import { v4 } from 'uuid';
 
+// TO DO: handle all lowercase data?
+
 interface RecipeToSeed {
     title: string;
     sourceName: string;
@@ -18,8 +20,25 @@ interface RecipeToSeed {
     ingredients: {
         order: number;
         section?: string;
-        amount: string;
-        amountValue: number;
+        amount: {
+            name: string;
+            value: number;
+        };
+        unit: {
+            name: string,
+            nameAbbr: string,
+            namePlural: string,
+        };
+        name: {
+            name: string,
+            namePlural: string,
+        };
+        alteration?: string;
+        isOptional: boolean;
+        // substitutions: {
+        //     name: string;
+        //     namePlural: string;
+        // }[];
     }[];
     methods: {
         type: 'Step' | 'Note';
@@ -33,6 +52,7 @@ const prisma = new PrismaClient();
 
 const recipeCategories: Prisma.RecipeCategoryCreateInput[] = [
     // COURSE TYPES
+    { type: 'CourseType', name: 'Breakfast' },
     { type: 'CourseType', name: 'Breakfast' },
     { type: 'CourseType', name: 'Brunch' },
     { type: 'CourseType', name: 'Dessert' },
@@ -141,13 +161,13 @@ const recipeIngredientAmounts: Prisma.RecipeIngredientAmountCreateInput[] = [
 ];
 
 const recipeIngredientUnits: Prisma.RecipeIngredientUnitCreateInput[] = [
-    { name: 'cup', nameAbbr: 'c', namePlural: 'cups', namePluralAbbr: 'cs' },
-    { name: 'gram', nameAbbr: 'g', namePlural: 'grams', namePluralAbbr: 'g' },
-    { name: 'litre', nameAbbr: 'L', namePlural: 'litres', namePluralAbbr: 'L' },
-    { name: 'millilitre', nameAbbr: 'mL', namePlural: 'millilitres', namePluralAbbr: 'mL' },
-    { name: 'pound', nameAbbr: 'lb', namePlural: 'pounds', namePluralAbbr: 'lbs' },
-    { name: 'tablespoon', nameAbbr: 'tbsp', namePlural: 'tablespoons', namePluralAbbr: 'tbsps' },
-    { name: 'teaspoon', nameAbbr: 'tsp', namePlural: 'teaspoons', namePluralAbbr: 'tsps' },
+    { name: 'cup', nameAbbr: 'c', namePlural: 'cups' },
+    { name: 'gram', nameAbbr: 'g', namePlural: 'grams' },
+    { name: 'litre', nameAbbr: 'L', namePlural: 'litres' },
+    { name: 'millilitre', nameAbbr: 'mL', namePlural: 'millilitres' },
+    { name: 'pound', nameAbbr: 'lb', namePlural: 'pounds' },
+    { name: 'tablespoon', nameAbbr: 'tbsp', namePlural: 'tablespoons' },
+    { name: 'teaspoon', nameAbbr: 'tsp', namePlural: 'teaspoons' },
 ];
 
 /* recipes used:
@@ -212,7 +232,27 @@ const recipeNanaimoBars: RecipeToSeed = {
         { type: 'DishType', name: 'Confection' },
     ],
     ingredients: [ // ⅒ ⅑ ⅛ ⅐ ⅙ ⅕ ¼ ⅓ ⅜ ⅖ ½ ⅗ ⅝ ⅔ ¾ ⅘ ⅚ ⅞
-        { order: 1, section: '1st Layer', amount: '¼', amountValue: 0.25 },
+        {
+            order: 1,
+            section: '1st Layer',
+            amount: {
+                name: '¼',
+                value: 0.25,
+            },
+            unit: {
+                name: 'cup',
+                nameAbbr: 'c',
+                namePlural: 'cups',
+            },
+            name: {
+                name: 'unsalted butter',
+                namePlural: 'unsalted butter',
+            },
+            isOptional: false,
+            // substitutions: [
+            //     { name: 'butter', namePlural: 'butter' },
+            // ],
+        },
     ],
     methods: [
         { type: 'Step', order: 1, section: '1st Layer', details: 'Melt chocolate chips and butter over low heat, cool slightly. Add remaining ingredients and mix well. Press into 8-inch greased pan.' },
@@ -274,8 +314,12 @@ function formatRecipeUpsert(recipeId: string, recipe: RecipeToSeed) {
     };
 }
 
+function logCompletedSeed(tableName: string) {
+    console.log(`🌱 table: ${tableName}`);
+}
+
 async function seedDB() {
-    // seedRecipeCategory
+    // RecipeCategory
     await prisma.$transaction(
         recipeCategories.map(category => {
             const recipeCategory = {
@@ -292,8 +336,9 @@ async function seedDB() {
             });
         }),
     );
+    logCompletedSeed('RecipeCategory');
 
-    // seedRecipeServingUnit
+    // RecipeServingUnit
     await prisma.$transaction(
         recipeServingUnits.map(servingUnit => {
             const recipeServingUnit = {
@@ -310,8 +355,9 @@ async function seedDB() {
             });
         }),
     );
+    logCompletedSeed('RecipeServingUnit');
 
-    // seedRecipeIngredientAmount
+    // RecipeIngredientAmount
     await prisma.$transaction(
         recipeIngredientAmounts.map(ingredientAmount => {
             const recipeIngredientAmount = {
@@ -328,15 +374,15 @@ async function seedDB() {
             });
         }),
     );
+    logCompletedSeed('RecipeIngredientAmount');
 
-    // seedRecipeIngredientUnit
+    // RecipeIngredientUnit
     await prisma.$transaction(
         recipeIngredientUnits.map(ingredientUnit => {
             const recipeIngredientUnit = {
                 name: ingredientUnit.name,
                 nameAbbr: ingredientUnit.nameAbbr,
                 namePlural: ingredientUnit.namePlural,
-                namePluralAbbr: ingredientUnit.namePluralAbbr,
             };
 
             return prisma.recipeIngredientUnit.upsert({
@@ -348,8 +394,9 @@ async function seedDB() {
             });
         }),
     );
+    logCompletedSeed('RecipeIngredientUnit');
 
-    // seedRecipeIngredientName
+    // RecipeIngredientName
     await prisma.$transaction(
         recipeIngredientNames.map(ingredientName => {
             const recipeIngredient = {
@@ -366,6 +413,7 @@ async function seedDB() {
             });
         }),
     );
+    logCompletedSeed('RecipeIngredientName');
 
     // seedNanaimoBarsRecipe - https://www.flatbread.app/?recipe=nanaimo-bars
     const DoesRecipeNanaimoBarsExist = await prisma.recipe.findUnique({
@@ -387,7 +435,74 @@ async function seedDB() {
             id: nanaimoBarsRecipeId,
         },
         update: formatRecipeUpsert(nanaimoBarsRecipeId, recipeNanaimoBars),
-        create: formatRecipeUpsert(nanaimoBarsRecipeId, recipeNanaimoBars),
+        create: {
+            ...formatRecipeUpsert(nanaimoBarsRecipeId, recipeNanaimoBars),
+            ingredients: {
+                connectOrCreate: (recipeNanaimoBars.ingredients).map((recipeIngredient) => {
+                    return {
+                        where: {
+                            recipe_ingredient_identifier: {
+                                order: recipeIngredient.order,
+                                recipeId: nanaimoBarsRecipeId,
+                            },
+                        },
+                        create: {
+                            order: recipeIngredient.order,
+                            section: recipeIngredient.section,
+                            amount: {
+                                connectOrCreate: {
+                                    where: {
+                                        name: recipeIngredient.amount.name,
+                                    },
+                                    create: {
+                                        name: recipeIngredient.amount.name,
+                                        value: recipeIngredient.amount.value,
+                                    },
+                                },
+                            },
+                            unit: {
+                                connectOrCreate: {
+                                    where: {
+                                        name: recipeIngredient.unit.name,
+                                    },
+                                    create: {
+                                        name: recipeIngredient.unit.name,
+                                        nameAbbr: recipeIngredient.unit.nameAbbr,
+                                        namePlural: recipeIngredient.unit.namePlural,
+                                    },
+                                },
+                            },
+                            name: {
+                                connectOrCreate: {
+                                    where: {
+                                        name: recipeIngredient.name.name,
+                                    },
+                                    create: {
+                                        name: recipeIngredient.name.name,
+                                        namePlural: recipeIngredient.name.namePlural,
+                                    },
+                                },
+                            },
+                            alteration: recipeIngredient.alteration,
+                            isOptional: recipeIngredient.isOptional,
+                            // substitutions: {
+                            //     connectOrCreate: (recipeIngredient.substitutions).map((substitution) => {
+                            //         return {
+                            //             where: {
+                            //                 name: substitution.name,
+                            //             },
+                            //             create: {
+                            //                 name: substitution.name,
+                            //                 namePlural: substitution.namePlural,
+                            //             },
+                            //         };
+                            //     }),
+                            // },
+                        },
+                    };
+                }),
+            },
+        },
     });
 }
 

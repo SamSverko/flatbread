@@ -71,7 +71,10 @@ model RecipeIngredient {
     alteration    String?
     isOptional    Boolean                @default(false)
     substitutions RecipeIngredientName[] @relation("substitutions")
-    recipes       Recipe[]
+    recipe        Recipe                 @relation(fields: [recipeId], references: [id])
+    recipeId      String
+
+    @@unique(fields: [order, recipeId], name: "recipe_ingredient_identifier")
 }
 
 model RecipeIngredientAmount {
@@ -88,18 +91,16 @@ model RecipeIngredientUnit {
     name              String             @unique
     nameAbbr          String             @unique
     namePlural        String             @unique
-    namePluralAbbr    String             @unique
     recipeIngredients RecipeIngredient[]
 }
 
 model RecipeIngredientName {
-    id                             Int                @id @unique @default(autoincrement())
-    createdAt                      DateTime           @default(now())
-    name                           String             @unique
-    namePlural                     String             @unique
-    RecipeIngredientName           RecipeIngredient[] @relation("name")
-    RecipeIngredientSubstitution   RecipeIngredient?  @relation("substitutions", fields: [RecipeIngredientSubstitutionId], references: [id])
-    RecipeIngredientSubstitutionId Int?
+    id                            Int                @id @unique @default(autoincrement())
+    createdAt                     DateTime           @default(now())
+    name                          String             @unique
+    namePlural                    String             @unique
+    RecipeIngredientName          RecipeIngredient[] @relation("name")
+    RecipeIngredientSubstitutions RecipeIngredient[] @relation("substitutions")
 }
 
 // RECIPE / METHOD ============================================================
