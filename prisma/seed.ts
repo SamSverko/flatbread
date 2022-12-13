@@ -1,8 +1,6 @@
 import { Prisma, PrismaClient } from '@prisma/client';
 import { v4 } from 'uuid';
 
-// TO DO: handle all lowercase data?
-
 interface RecipeToSeed {
     title: string;
     sourceName: string;
@@ -20,7 +18,8 @@ interface RecipeToSeed {
     ingredients: {
         order: number;
         section?: string;
-        amount: {
+        quantityWhole: number;
+        quantityFraction: {
             name: string;
             value: number;
         };
@@ -139,25 +138,26 @@ const recipeServingUnits: Prisma.RecipeServingUnitCreateInput[] = [
     { name: 'Tortilla', namePlural: 'Tortillas' },
 ];
 
-const recipeIngredientAmounts: Prisma.RecipeIngredientAmountCreateInput[] = [
-    { name: '⅒', value: new Prisma.Decimal(0.1) },
-    { name: '⅑', value: new Prisma.Decimal(0.111) },
-    { name: '⅛', value: new Prisma.Decimal(0.125) },
-    { name: '⅐', value: new Prisma.Decimal(0.143) },
-    { name: '⅙', value: new Prisma.Decimal(0.167) },
-    { name: '⅕', value: new Prisma.Decimal(0.2) },
-    { name: '¼', value: new Prisma.Decimal(0.25) },
-    { name: '⅓', value: new Prisma.Decimal(0.333) },
-    { name: '⅜', value: new Prisma.Decimal(0.375) },
-    { name: '⅖', value: new Prisma.Decimal(0.4) },
-    { name: '½', value: new Prisma.Decimal(0.5) },
-    { name: '⅗', value: new Prisma.Decimal(0.6) },
-    { name: '⅝', value: new Prisma.Decimal(0.625) },
-    { name: '⅔', value: new Prisma.Decimal(0.667) },
-    { name: '¾', value: new Prisma.Decimal(0.75) },
-    { name: '⅘', value: new Prisma.Decimal(0.8) },
-    { name: '⅚', value: new Prisma.Decimal(0.833) },
-    { name: '⅞', value: new Prisma.Decimal(0.875) },
+const recipeIngredientQuantityFractions: Prisma.RecipeIngredientQuantityFractionCreateInput[] = [
+    { name: '0', value: 0 },
+    { name: '⅒', value: 0.1 },
+    { name: '⅑', value: 0.111 },
+    { name: '⅛', value: 0.125 },
+    { name: '⅐', value: 0.143 },
+    { name: '⅙', value: 0.167 },
+    { name: '⅕', value: 0.2 },
+    { name: '¼', value: 0.25 },
+    { name: '⅓', value: 0.333 },
+    { name: '⅜', value: 0.375 },
+    { name: '⅖', value: 0.4 },
+    { name: '½', value: 0.5 },
+    { name: '⅗', value: 0.6 },
+    { name: '⅝', value: 0.625 },
+    { name: '⅔', value: 0.667 },
+    { name: '¾', value: 0.75 },
+    { name: '⅘', value: 0.8 },
+    { name: '⅚', value: 0.833 },
+    { name: '⅞', value: 0.875 },
 ];
 
 const recipeIngredientUnits: Prisma.RecipeIngredientUnitCreateInput[] = [
@@ -235,7 +235,8 @@ const recipeNanaimoBars: RecipeToSeed = {
         {
             order: 1,
             section: '1st Layer',
-            amount: {
+            quantityWhole: 0,
+            quantityFraction: {
                 name: '¼',
                 value: 0.25,
             },
@@ -357,24 +358,24 @@ async function seedDB() {
     );
     logCompletedSeed('RecipeServingUnit');
 
-    // RecipeIngredientAmount
+    // RecipeIngredientQuantityFraction
     await prisma.$transaction(
-        recipeIngredientAmounts.map(ingredientAmount => {
-            const recipeIngredientAmount = {
-                name: ingredientAmount.name,
-                value: ingredientAmount.value,
+        recipeIngredientQuantityFractions.map(ingredientQuantityFraction => {
+            const recipeIngredientQuantityFraction = {
+                name: ingredientQuantityFraction.name,
+                value: ingredientQuantityFraction.value,
             };
 
-            return prisma.recipeIngredientAmount.upsert({
+            return prisma.recipeIngredientQuantityFraction.upsert({
                 where: {
-                    name: ingredientAmount.name,
+                    name: ingredientQuantityFraction.name,
                 },
-                update: recipeIngredientAmount,
-                create: recipeIngredientAmount,
+                update: recipeIngredientQuantityFraction,
+                create: recipeIngredientQuantityFraction,
             });
         }),
     );
-    logCompletedSeed('RecipeIngredientAmount');
+    logCompletedSeed('RecipeIngredientQuantityFraction');
 
     // RecipeIngredientUnit
     await prisma.$transaction(
@@ -449,14 +450,15 @@ async function seedDB() {
                         create: {
                             order: recipeIngredient.order,
                             section: recipeIngredient.section,
-                            amount: {
+                            quantityWhole: recipeIngredient.quantityWhole,
+                            quantityFraction:  {
                                 connectOrCreate: {
                                     where: {
-                                        name: recipeIngredient.amount.name,
+                                        name: recipeIngredient.quantityFraction.name,
                                     },
                                     create: {
-                                        name: recipeIngredient.amount.name,
-                                        value: recipeIngredient.amount.value,
+                                        name: recipeIngredient.quantityFraction.name,
+                                        value: recipeIngredient.quantityFraction.value,
                                     },
                                 },
                             },

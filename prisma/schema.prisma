@@ -58,31 +58,32 @@ model RecipeCategory {
 
 // RECIPE / INGREDIENT ========================================================
 model RecipeIngredient {
-    id            Int                    @id @unique @default(autoincrement())
-    createdAt     DateTime               @default(now())
-    order         Int
-    section       String?
-    amount        RecipeIngredientAmount @relation(fields: [amountId], references: [id])
-    amountId      Int
-    unit          RecipeIngredientUnit?  @relation(fields: [unitId], references: [id])
-    unitId        Int?
-    name          RecipeIngredientName   @relation("name", fields: [nameId], references: [id])
-    nameId        Int
-    alteration    String?
-    isOptional    Boolean                @default(false)
-    substitutions RecipeIngredientName[] @relation("substitutions")
-    recipe        Recipe                 @relation(fields: [recipeId], references: [id])
-    recipeId      String
+    id                 Int                              @id @unique @default(autoincrement())
+    createdAt          DateTime                         @default(now())
+    order              Int
+    section            String?
+    quantityWhole      Int
+    quantityFraction   RecipeIngredientQuantityFraction @relation(fields: [quantityFractionId], references: [id])
+    quantityFractionId Int
+    unit               RecipeIngredientUnit             @relation(fields: [unitId], references: [id])
+    unitId             Int
+    name               RecipeIngredientName             @relation("name", fields: [nameId], references: [id])
+    nameId             Int
+    alteration         String?
+    isOptional         Boolean                          @default(false)
+    substitutions      RecipeIngredientName[]           @relation("substitutions")
+    recipe             Recipe                           @relation(fields: [recipeId], references: [id])
+    recipeId           String
 
     @@unique(fields: [order, recipeId], name: "recipe_ingredient_identifier")
 }
 
-model RecipeIngredientAmount {
-    id               Int                @id @unique @default(autoincrement())
-    createdAt        DateTime           @default(now())
-    name             String             @unique
-    value            Decimal            @unique
-    RecipeIngredient RecipeIngredient[]
+model RecipeIngredientQuantityFraction {
+    id                Int                @id @unique @default(autoincrement())
+    createdAt         DateTime           @default(now())
+    name              String             @unique
+    value             Decimal            @unique
+    recipeIngredients RecipeIngredient[]
 }
 
 model RecipeIngredientUnit {
