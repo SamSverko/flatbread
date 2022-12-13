@@ -34,10 +34,10 @@ interface RecipeToSeed {
         };
         alteration?: string;
         isOptional: boolean;
-        // substitutions: {
-        //     name: string;
-        //     namePlural: string;
-        // }[];
+        substitutions: {
+            name: string;
+            namePlural: string;
+        }[];
     }[];
     methods: {
         type: 'Step' | 'Note';
@@ -250,9 +250,9 @@ const recipeNanaimoBars: RecipeToSeed = {
                 namePlural: 'unsalted butter',
             },
             isOptional: false,
-            // substitutions: [
-            //     { name: 'butter', namePlural: 'butter' },
-            // ],
+            substitutions: [
+                { name: 'butter', namePlural: 'butter' },
+            ],
         },
     ],
     methods: [
@@ -487,19 +487,19 @@ async function seedDB() {
                             },
                             alteration: recipeIngredient.alteration,
                             isOptional: recipeIngredient.isOptional,
-                            // substitutions: {
-                            //     connectOrCreate: (recipeIngredient.substitutions).map((substitution) => {
-                            //         return {
-                            //             where: {
-                            //                 name: substitution.name,
-                            //             },
-                            //             create: {
-                            //                 name: substitution.name,
-                            //                 namePlural: substitution.namePlural,
-                            //             },
-                            //         };
-                            //     }),
-                            // },
+                            substitutions: {
+                                connectOrCreate: (recipeIngredient.substitutions).map((substitution) => {
+                                    return {
+                                        where: {
+                                            name: substitution.name,
+                                        },
+                                        create: {
+                                            name: substitution.name,
+                                            namePlural: substitution.namePlural,
+                                        },
+                                    };
+                                }),
+                            },
                         },
                     };
                 }),
