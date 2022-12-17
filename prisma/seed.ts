@@ -16,7 +16,6 @@ interface RecipeToSeed {
         name: string;
     }[];
     ingredients: {
-        order: number;
         section?: string;
         quantityWhole: number;
         quantityFraction: {
@@ -221,7 +220,7 @@ const recipeNanaimoBars: RecipeToSeed = {
     cookTimeMin: 10,
     servingAmount: 25,
     servingUnit: {
-        name: 'square',
+        name: 'square', // Purposely using lowercase to test for it to not create a duplicate.
         namePlural: 'squares',
     },
     categories: [
@@ -233,7 +232,6 @@ const recipeNanaimoBars: RecipeToSeed = {
     ],
     ingredients: [ // ⅒ ⅑ ⅛ ⅐ ⅙ ⅕ ¼ ⅓ ⅜ ⅖ ½ ⅗ ⅝ ⅔ ¾ ⅘ ⅚ ⅞
         {
-            order: 1,
             section: '1st Layer',
             quantityWhole: 0,
             quantityFraction: {
@@ -254,6 +252,25 @@ const recipeNanaimoBars: RecipeToSeed = {
                 { name: 'butter', namePlural: 'butter' },
             ],
         },
+        {
+            section: '1st Layer',
+            quantityWhole: 0,
+            quantityFraction: {
+                name: '⅔',
+                value: 0.667,
+            },
+            unit: {
+                name: 'cup',
+                nameAbbr: 'c',
+                namePlural: 'cups',
+            },
+            name: {
+                name: 'semi-sweet chocolate chips',
+                namePlural: 'semi-sweet chocolate chips',
+            },
+            isOptional: false,
+            substitutions: [],
+        },
     ],
     methods: [
         { type: 'Step', order: 1, section: '1st Layer', details: 'Melt chocolate chips and butter over low heat, cool slightly. Add remaining ingredients and mix well. Press into 8-inch greased pan.' },
@@ -271,7 +288,7 @@ function formatRecipeUpsert(recipeId: string, recipe: RecipeToSeed) {
         cookTimeMin: recipe.cookTimeMin,
         servingAmount: recipe.servingAmount,
         servingUnit: {
-            connectOrCreate: {
+            connectOrCreate: { // SHOULD BE CONNECT ONLY
                 where: {
                     name: recipe.servingUnit.name,
                 },
@@ -281,7 +298,7 @@ function formatRecipeUpsert(recipeId: string, recipe: RecipeToSeed) {
                 },
             },
         },
-        categories: {
+        categories: {  // SHOULD BE CONNECT ONLY
             connectOrCreate: (recipe.categories as Prisma.RecipeCategoryCreateInput[]).map((category) => {
                 return {
                     where: {
@@ -294,7 +311,7 @@ function formatRecipeUpsert(recipeId: string, recipe: RecipeToSeed) {
                 };
             }),
         },
-        methods: {
+        methods: { // SHOULD BE CREATE ONLY??
             connectOrCreate: (recipe.methods as Prisma.RecipeMethodCreateInput[]).map((recipeMethod) => {
                 return {
                     where: {
@@ -438,21 +455,21 @@ async function seedDB() {
         update: formatRecipeUpsert(nanaimoBarsRecipeId, recipeNanaimoBars),
         create: {
             ...formatRecipeUpsert(nanaimoBarsRecipeId, recipeNanaimoBars),
-            ingredients: {
-                connectOrCreate: (recipeNanaimoBars.ingredients).map((recipeIngredient) => {
+            ingredients: { // SHOULD BE UPSERT??
+                connectOrCreate: (recipeNanaimoBars.ingredients).map((recipeIngredient, index) => {
                     return {
                         where: {
                             recipe_ingredient_identifier: {
-                                order: recipeIngredient.order,
+                                order: index,
                                 recipeId: nanaimoBarsRecipeId,
                             },
                         },
                         create: {
-                            order: recipeIngredient.order,
+                            order: index,
                             section: recipeIngredient.section,
                             quantityWhole: recipeIngredient.quantityWhole,
                             quantityFraction:  {
-                                connectOrCreate: {
+                                connectOrCreate: { // SHOULD BE CONNECT
                                     where: {
                                         name: recipeIngredient.quantityFraction.name,
                                     },
@@ -463,7 +480,7 @@ async function seedDB() {
                                 },
                             },
                             unit: {
-                                connectOrCreate: {
+                                connectOrCreate: { // SHOULD BE CONNECT
                                     where: {
                                         name: recipeIngredient.unit.name,
                                     },
@@ -475,7 +492,7 @@ async function seedDB() {
                                 },
                             },
                             name: {
-                                connectOrCreate: {
+                                connectOrCreate: { // SHOULD BE CONNECT
                                     where: {
                                         name: recipeIngredient.name.name,
                                     },
@@ -487,7 +504,7 @@ async function seedDB() {
                             },
                             alteration: recipeIngredient.alteration,
                             isOptional: recipeIngredient.isOptional,
-                            substitutions: {
+                            substitutions: { // SHOULD BE CONNECT
                                 connectOrCreate: (recipeIngredient.substitutions).map((substitution) => {
                                     return {
                                         where: {
