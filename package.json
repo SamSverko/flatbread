@@ -23,7 +23,6 @@
         "type": "git",
         "url": "https://github.com/SamSverko/flatbread.git"
     },
-    "type": "module",
     "prisma": {
         "seed": "ts-node --esm prisma/seed.ts"
     },
