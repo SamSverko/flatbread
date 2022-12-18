@@ -235,6 +235,7 @@ const recipeIngredientNames: Prisma.RecipeIngredientNameCreateInput[] = [
 const recipeNanaimoBars: RecipeToSeed = {
     title: 'Nanaimo Bars',
     sourceName: 'Mary-Ann Derocher',
+    // sourceUrl: 'hey',
     prepTimeMin: 30,
     cookTimeMin: 10,
     servingAmount: 25,
@@ -300,7 +301,7 @@ const recipeNanaimoBars: RecipeToSeed = {
         },
     ],
     steps: [
-        { order: 1, section: '1st Layer', details: 'AAAMelt chocolate chips and butter over low heat, cool slightly. Add remaining ingredients and mix well. Press into 8-inch greased pan.' },
+        { order: 1, section: '1st Layer', details: 'Melt chocolate chips and butter over low heat, cool slightly. Add remaining ingredients and mix well. Press into 8-inch greased pan.' },
         { order: 2, section: '2nd Layer', details: '2nd Layer: Mix well and spread over 1st Layer.' },
         { order: 3, section: '3rd Layer', details: 'Melt chocolate chips and butter. Spread over 2nd Layer and swirl.' },
         { order: 4, details: 'Cool in fridge, then cut in squares, and store in fridge.' },
@@ -483,18 +484,63 @@ async function seedDB() {
         where: {
             id: nanaimoBarsRecipeId,
         },
-        update: {
-            title: recipeNanaimoBars.title,
-            sourceName: recipeNanaimoBars.sourceName,
-            sourceURL: recipeNanaimoBars.sourceUrl,
-            prepTimeMin: recipeNanaimoBars.prepTimeMin,
-            cookTimeMin: recipeNanaimoBars.cookTimeMin,
-            servingAmount: recipeNanaimoBars.servingAmount,
-            servingUnit: {
-                connect: {
-                    name: recipeNanaimoBars.servingUnit.name,
-                },
-            },
+        update: { // Will always reset db before seed, at least until I better understand Prisma/Postgres/Seeding.
+            // title: recipeNanaimoBars.title, // Unable to test, since part of "recipe_identifier".
+            // sourceName: recipeNanaimoBars.sourceName, // Unable to test, since part of "recipe_identifier".
+            // sourceURL: recipeNanaimoBars.sourceUrl ? recipeNanaimoBars.sourceUrl : null, // Tested.
+            // prepTimeMin: recipeNanaimoBars.prepTimeMin, // Tested.
+            // cookTimeMin: recipeNanaimoBars.cookTimeMin, // Tested.
+            // servingAmount: recipeNanaimoBars.servingAmount, // Tested.
+            // servingUnit: { // Tested.
+            //     connect: {
+            //         name: recipeNanaimoBars.servingUnit.name,
+            //     },
+            // },
+            // courseTypes: { // Tested.
+            //     set: (recipeNanaimoBars.courseTypes as Prisma.RecipeCourseTypeCreateInput[]).map((courseType) => {
+            //         return {
+            //             name: courseType.name,
+            //         };
+            //     }),
+            // },
+            // cuisines: { // Tested.
+            //     set: (recipeNanaimoBars.cuisines as Prisma.RecipeCuisineCreateInput[]).map((cuisine) => {
+            //         return {
+            //             name: cuisine.name,
+            //         };
+            //     }),
+            // },
+            // dietaryRestrictions: { // Tested.
+            //     set: (recipeNanaimoBars.dietaryRestrictions as Prisma.RecipeCuisineCreateInput[]).map((dietaryRestriction) => {
+            //         return {
+            //             name: dietaryRestriction.name,
+            //         };
+            //     }),
+            // },
+            // dishTypes: { // Tested.
+            //     set: (recipeNanaimoBars.dishTypes as Prisma.RecipeCuisineCreateInput[]).map((dishType) => {
+            //         return {
+            //             name: dishType.name,
+            //         };
+            //     }),
+            // },
+            // steps: { // Unable to fully test, since part of "recipe_step_identifier". `section` and `details` column tested.
+            //     update: (recipeNanaimoBars.steps as Prisma.RecipeStepCreateInput[]).map((recipeStep) => {
+            //         return {
+            //             where: {
+            //                 recipe_step_identifier: {
+            //                     recipeId: nanaimoBarsRecipeId,
+            //                     order: recipeStep.order,
+            //                 },
+            //             },
+            //             data: {
+            //                 order: recipeStep.order,
+            //                 section: recipeStep.section,
+            //                 details: recipeStep.details,
+            //             },
+            //         };
+            //     }),
+            // },
         },
         create: {
             title: recipeNanaimoBars.title,
@@ -536,68 +582,35 @@ async function seedDB() {
                     };
                 }),
             },
-            ingredients: { // SHOULD BE UPSERT??
-                connectOrCreate: (recipeNanaimoBars.ingredients).map((recipeIngredient, index) => {
+            ingredients: {
+                create: (recipeNanaimoBars.ingredients).map((recipeIngredient) => {
                     return {
-                        where: {
-                            recipe_ingredient_identifier: {
-                                order: index,
-                                recipeId: nanaimoBarsRecipeId,
+                        order: recipeIngredient.order,
+                        section: recipeIngredient.section,
+                        quantityWhole: recipeIngredient.quantityWhole,
+                        quantityFraction:  {
+                            connect: {
+                                name: recipeIngredient.quantityFraction.name,
                             },
                         },
-                        create: {
-                            order: index,
-                            section: recipeIngredient.section,
-                            quantityWhole: recipeIngredient.quantityWhole,
-                            quantityFraction:  {
-                                connectOrCreate: { // SHOULD BE CONNECT
-                                    where: {
-                                        name: recipeIngredient.quantityFraction.name,
-                                    },
-                                    create: {
-                                        name: recipeIngredient.quantityFraction.name,
-                                        value: recipeIngredient.quantityFraction.value,
-                                    },
-                                },
+                        unit: {
+                            connect: {
+                                name: recipeIngredient.unit.name,
                             },
-                            unit: {
-                                connectOrCreate: { // SHOULD BE CONNECT
-                                    where: {
-                                        name: recipeIngredient.unit.name,
-                                    },
-                                    create: {
-                                        name: recipeIngredient.unit.name,
-                                        nameAbbr: recipeIngredient.unit.nameAbbr,
-                                        namePlural: recipeIngredient.unit.namePlural,
-                                    },
-                                },
+                        },
+                        name: {
+                            connect: {
+                                name: recipeIngredient.name.name,
                             },
-                            name: {
-                                connectOrCreate: { // SHOULD BE CONNECT
-                                    where: {
-                                        name: recipeIngredient.name.name,
-                                    },
-                                    create: {
-                                        name: recipeIngredient.name.name,
-                                        namePlural: recipeIngredient.name.namePlural,
-                                    },
-                                },
-                            },
-                            alteration: recipeIngredient.alteration,
-                            isOptional: recipeIngredient.isOptional,
-                            substitutions: { // SHOULD BE CONNECT
-                                connectOrCreate: (recipeIngredient.substitutions).map((substitution) => {
-                                    return {
-                                        where: {
-                                            name: substitution.name,
-                                        },
-                                        create: {
-                                            name: substitution.name,
-                                            namePlural: substitution.namePlural,
-                                        },
-                                    };
-                                }),
-                            },
+                        },
+                        alteration: recipeIngredient.alteration,
+                        isOptional: recipeIngredient.isOptional,
+                        substitutions: {
+                            connect: (recipeIngredient.substitutions).map((substitution) => {
+                                return {
+                                    name: substitution.name,
+                                };
+                            }),
                         },
                     };
                 }),

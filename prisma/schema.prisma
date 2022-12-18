@@ -84,11 +84,11 @@ model RecipeIngredient {
     quantityFractionId Int
     unit               RecipeIngredientUnit             @relation(fields: [unitId], references: [id])
     unitId             Int
-    name               RecipeIngredientName             @relation("name", fields: [nameId], references: [id])
+    name               RecipeIngredientName             @relation("recipe_ingredient_name", fields: [nameId], references: [id])
     nameId             Int
     alteration         String?
     isOptional         Boolean                          @default(false)
-    substitutions      RecipeIngredientName[]           @relation("substitutions")
+    substitutions      RecipeIngredientName[]           @relation("recipe_ingredient_substitutions")
 
     @@unique(fields: [recipeId, order], name: "recipe_ingredient_identifier")
 }
@@ -115,8 +115,8 @@ model RecipeIngredientName {
     createdAt                     DateTime           @default(now())
     name                          String             @unique
     namePlural                    String             @unique
-    RecipeIngredientName          RecipeIngredient[] @relation("name")
-    RecipeIngredientSubstitutions RecipeIngredient[] @relation("substitutions")
+    RecipeIngredientName          RecipeIngredient[] @relation("recipe_ingredient_name")
+    RecipeIngredientSubstitutions RecipeIngredient[] @relation("recipe_ingredient_substitutions")
 }
 
 // RECIPE / STEP ==============================================================
