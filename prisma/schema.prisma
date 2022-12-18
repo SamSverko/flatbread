@@ -17,6 +17,7 @@ model Recipe {
     id                  String                     @id @default(uuid())
     createdAt           DateTime                   @default(now())
     title               String
+    slug                String                     @unique
     sourceName          String
     sourceURL           String?
     prepTimeMin         Int

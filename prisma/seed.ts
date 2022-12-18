@@ -3,6 +3,7 @@ import { v4 } from 'uuid';
 
 interface RecipeToSeed {
     title: string;
+    slug: string;
     sourceName: string;
     sourceUrl?: string;
     prepTimeMin: number;
@@ -211,6 +212,7 @@ const recipeIngredientNames: Prisma.RecipeIngredientNameCreateInput[] = [
 
 const recipeNanaimoBars: RecipeToSeed = {
     title: 'Nanaimo Bars',
+    slug: 'nanaimo-bars',
     sourceName: 'Mary-Ann Derocher',
     prepTimeMin: 30,
     cookTimeMin: 10,
@@ -355,9 +357,18 @@ const recipeNanaimoBars: RecipeToSeed = {
         { details: 'Squares should last a week in the fridge. Always keep refrigerated.' },
     ],
 };
+validateRecipe(recipeNanaimoBars);
 
 function logCompletedSeed(tableName: string) {
     console.log(`🌱 table: ${tableName}`);
+}
+
+function validateRecipe(recipe: RecipeToSeed) {
+    const slugRegex = new RegExp(/^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$/);
+
+    if (!slugRegex.test(recipe.slug)) {
+        throw `Recipe '${recipe.title}' slug format is invalid.`;
+    }
 }
 
 async function seedDB() {
@@ -510,8 +521,8 @@ async function seedDB() {
     );
     logCompletedSeed('RecipeIngredientName');
 
-    // Recipe - https://www.flatbread.app/?recipe=nanaimo-bars
-    const DoesRecipeNanaimoBarsExist = await prisma.recipe.findUnique({
+    // Recipe 
+    const doesRecipeNanaimoBarsExist = await prisma.recipe.findUnique({
         where: {
             recipe_identifier: {
                 title: recipeNanaimoBars.title,
@@ -523,7 +534,7 @@ async function seedDB() {
         },
     });
 
-    const nanaimoBarsRecipeId: string = (DoesRecipeNanaimoBarsExist) ? DoesRecipeNanaimoBarsExist.id : v4();
+    const nanaimoBarsRecipeId: string = (doesRecipeNanaimoBarsExist) ? doesRecipeNanaimoBarsExist.id : v4();
 
     await prisma.recipe.upsert({
         where: {
@@ -532,6 +543,7 @@ async function seedDB() {
         update: {},
         create: {
             title: recipeNanaimoBars.title,
+            slug: recipeNanaimoBars.slug,
             sourceName: recipeNanaimoBars.sourceName,
             sourceURL: recipeNanaimoBars.sourceUrl,
             prepTimeMin: recipeNanaimoBars.prepTimeMin,
