@@ -73,32 +73,40 @@ model RecipeDishType {
 
 // RECIPE / INGREDIENT ========================================================
 model RecipeIngredient {
-    id                 Int                               @id @unique @default(autoincrement())
-    createdAt          DateTime                          @default(now())
-    recipe             Recipe                            @relation(fields: [recipeId], references: [id])
-    recipeId           String
-    order              Int
-    section            String?
-    quantityWhole      Int?
-    quantityFraction   RecipeIngredientQuantityFraction? @relation(fields: [quantityFractionId], references: [id])
-    quantityFractionId Int?
-    unit               RecipeIngredientUnit?             @relation(fields: [unitId], references: [id])
-    unitId             Int?
-    name               RecipeIngredientName              @relation("recipe_ingredient_name", fields: [nameId], references: [id])
-    nameId             Int
-    alteration         String?
-    isOptional         Boolean                           @default(false)
-    substitutions      RecipeIngredientName[]            @relation("recipe_ingredient_substitutions")
+    id                    Int                               @id @unique @default(autoincrement())
+    createdAt             DateTime                          @default(now())
+    recipe                Recipe                            @relation(fields: [recipeId], references: [id])
+    recipeId              String
+    order                 Int
+    section               String?
+    quantityWhole         Int?
+    quantityFraction      RecipeIngredientQuantityFraction? @relation("recipe_ingredient_quantity_fraction", fields: [quantityFractionId], references: [id])
+    quantityFractionId    Int?
+    quantityMinWhole      Int?
+    quantityMinFraction   RecipeIngredientQuantityFraction? @relation("recipe_ingredient_quantity_fraction_min", fields: [quantityMinFractionId], references: [id])
+    quantityMinFractionId Int?
+    quantityMaxWhole      Int?
+    quantityMaxFraction   RecipeIngredientQuantityFraction? @relation("recipe_ingredient_quantity_fraction_max", fields: [quantityMaxFractionId], references: [id])
+    quantityMaxFractionId Int?
+    unit                  RecipeIngredientUnit?             @relation(fields: [unitId], references: [id])
+    unitId                Int?
+    name                  RecipeIngredientName              @relation("recipe_ingredient_name", fields: [nameId], references: [id])
+    nameId                Int
+    alteration            String?
+    isOptional            Boolean                           @default(false)
+    substitutions         RecipeIngredientName[]            @relation("recipe_ingredient_substitutions")
 
     @@unique(fields: [recipeId, order], name: "recipe_ingredient_identifier")
 }
 
 model RecipeIngredientQuantityFraction {
-    id                Int                @id @unique @default(autoincrement())
-    createdAt         DateTime           @default(now())
-    name              String             @unique
-    value             Decimal            @unique
-    recipeIngredients RecipeIngredient[]
+    id                           Int                @id @unique @default(autoincrement())
+    createdAt                    DateTime           @default(now())
+    name                         String             @unique
+    value                        Decimal            @unique
+    recipeIngredientsQuantity    RecipeIngredient[] @relation("recipe_ingredient_quantity_fraction")
+    recipeIngredientsQuantityMin RecipeIngredient[] @relation("recipe_ingredient_quantity_fraction_min")
+    recipeIngredientsQuantityMax RecipeIngredient[] @relation("recipe_ingredient_quantity_fraction_max")
 }
 
 model RecipeIngredientUnit {

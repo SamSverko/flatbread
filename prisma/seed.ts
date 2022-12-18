@@ -17,6 +17,10 @@ interface RecipeToSeed {
         section?: string;
         quantityWhole?: number;
         quantityFraction?: string;
+        quantityMinWhole?: number;
+        quantityMinFraction?: string;
+        quantityMaxWhole?: number;
+        quantityMaxFraction?: string;
         unit?: string;
         name: string;
         alteration?: string;
@@ -190,6 +194,7 @@ const recipeIngredientNames: Prisma.RecipeIngredientNameCreateInput[] = [
     { name: 'green pepper', namePlural: 'green peppers' },
     { name: 'icing sugar', namePlural: 'icing sugar' },
     { name: 'milk', namePlural: 'milk' },
+    { name: 'nuts', namePlural: 'nuts' },
     { name: 'olive oil', namePlural: 'olive oil' },
     { name: 'onion', namePlural: 'onions' },
     { name: 'pepper', namePlural: 'pepper' },
@@ -204,7 +209,6 @@ const recipeIngredientNames: Prisma.RecipeIngredientNameCreateInput[] = [
     { name: 'zucchini', namePlural: 'zucchini' },
 ];
 
-// https://www.flatbread.app/?recipe=nanaimo-bars
 const recipeNanaimoBars: RecipeToSeed = {
     title: 'Nanaimo Bars',
     sourceName: 'Mary-Ann Derocher',
@@ -245,6 +249,98 @@ const recipeNanaimoBars: RecipeToSeed = {
             section: '1st Layer',
             quantityWhole: 1,
             name: 'egg',
+            isOptional: false,
+            substitutions: [],
+        },
+        {
+            section: '1st Layer',
+            quantityFraction: '¼',
+            unit: 'teaspoon',
+            name: 'salt',
+            isOptional: false,
+            substitutions: [],
+        },
+        {
+            section: '1st Layer',
+            quantityWhole: 1,
+            unit: 'cup',
+            name: 'sweetened shredded coconut',
+            isOptional: false,
+            substitutions: [],
+        },
+        {
+            section: '1st Layer',
+            quantityWhole: 2,
+            unit: 'cup',
+            name: 'graham cracker crumbs',
+            isOptional: false,
+            substitutions: [],
+        },
+        {
+            section: '1st Layer',
+            quantityWhole: 1,
+            unit: 'cup',
+            name: 'nuts',
+            alteration: 'chopped',
+            isOptional: true,
+            substitutions: [],
+        },
+        {
+            section: '2nd Layer',
+            quantityWhole: 3,
+            unit: 'tablespoon',
+            name: 'unsalted butter',
+            alteration: 'softened',
+            isOptional: false,
+            substitutions: [],
+        },
+        {
+            section: '2nd Layer',
+            quantityWhole: 1,
+            unit: 'cup',
+            name: 'icing sugar',
+            isOptional: false,
+            substitutions: [],
+        },
+        {
+            section: '2nd Layer',
+            quantityWhole: 3,
+            unit: 'tablespoon',
+            name: 'custard powder',
+            isOptional: false,
+            substitutions: [],
+        },
+        {
+            section: '2nd Layer',
+            quantityFraction: '½',
+            unit: 'teaspoon',
+            name: 'vanilla extract',
+            isOptional: false,
+            substitutions: [],
+        },
+        {
+            section: '2nd Layer',
+            quantityMinWhole: 2,
+            quantityMaxWhole: 3,
+            unit: 'tablespoon',
+            name: 'milk',
+            isOptional: false,
+            substitutions: [],
+        },
+        {
+            section: '3nd Layer',
+            quantityFraction: '⅔',
+            unit: 'cup',
+            name: 'semi-sweet chocolate chips',
+            isOptional: false,
+            substitutions: [],
+        },
+        {
+            section: '3rd Layer',
+            quantityMinWhole: 2,
+            quantityMaxWhole: 3,
+            unit: 'tablespoon',
+            name: 'milk',
             isOptional: false,
             substitutions: [],
         },
@@ -433,64 +529,7 @@ async function seedDB() {
         where: {
             id: nanaimoBarsRecipeId,
         },
-        update: { // Will always reset db before seed, at least until I better understand Prisma/Postgres/Seeding.
-            // title: recipeNanaimoBars.title, // Unable to test, since part of "recipe_identifier".
-            // sourceName: recipeNanaimoBars.sourceName, // Unable to test, since part of "recipe_identifier".
-            // sourceURL: recipeNanaimoBars.sourceUrl ? recipeNanaimoBars.sourceUrl : null, // Tested.
-            // prepTimeMin: recipeNanaimoBars.prepTimeMin, // Tested.
-            // cookTimeMin: recipeNanaimoBars.cookTimeMin, // Tested.
-            // servingAmount: recipeNanaimoBars.servingAmount, // Tested.
-            // servingUnit: { // Tested.
-            //     connect: {
-            //         name: recipeNanaimoBars.servingUnit.name,
-            //     },
-            // },
-            // courseTypes: { // Tested.
-            //     set: (recipeNanaimoBars.courseTypes as Prisma.RecipeCourseTypeCreateInput[]).map((courseType) => {
-            //         return {
-            //             name: courseType.name,
-            //         };
-            //     }),
-            // },
-            // cuisines: { // Tested.
-            //     set: (recipeNanaimoBars.cuisines as Prisma.RecipeCuisineCreateInput[]).map((cuisine) => {
-            //         return {
-            //             name: cuisine.name,
-            //         };
-            //     }),
-            // },
-            // dietaryRestrictions: { // Tested.
-            //     set: (recipeNanaimoBars.dietaryRestrictions as Prisma.RecipeCuisineCreateInput[]).map((dietaryRestriction) => {
-            //         return {
-            //             name: dietaryRestriction.name,
-            //         };
-            //     }),
-            // },
-            // dishTypes: { // Tested.
-            //     set: (recipeNanaimoBars.dishTypes as Prisma.RecipeCuisineCreateInput[]).map((dishType) => {
-            //         return {
-            //             name: dishType.name,
-            //         };
-            //     }),
-            // },
-            // steps: { // Unable to fully test, since part of "recipe_step_identifier". `section` and `details` column tested.
-            //     update: (recipeNanaimoBars.steps as Prisma.RecipeStepCreateInput[]).map((recipeStep) => {
-            //         return {
-            //             where: {
-            //                 recipe_step_identifier: {
-            //                     recipeId: nanaimoBarsRecipeId,
-            //                     order: recipeStep.order,
-            //                 },
-            //             },
-            //             data: {
-            //                 order: recipeStep.order,
-            //                 section: recipeStep.section,
-            //                 details: recipeStep.details,
-            //             },
-            //         };
-            //     }),
-            // },
-        },
+        update: {},
         create: {
             title: recipeNanaimoBars.title,
             sourceName: recipeNanaimoBars.sourceName,
@@ -540,6 +579,18 @@ async function seedDB() {
                         quantityFraction: recipeIngredient.quantityFraction ? {
                             connect: {
                                 name: recipeIngredient.quantityFraction,
+                            },
+                        } : undefined,
+                        quantityMinWhole: recipeIngredient.quantityMinWhole,
+                        quantityMinFraction: recipeIngredient.quantityMinFraction ? {
+                            connect: {
+                                name: recipeIngredient.quantityMinFraction,
+                            },
+                        } : undefined,
+                        quantityMaxWhole: recipeIngredient.quantityMaxWhole,
+                        quantityMaxFraction: recipeIngredient.quantityMaxFraction ? {
+                            connect: {
+                                name: recipeIngredient.quantityMaxFraction,
                             },
                         } : undefined,
                         unit: recipeIngredient.unit ? {
