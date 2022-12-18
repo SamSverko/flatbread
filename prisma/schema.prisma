@@ -14,24 +14,27 @@ datasource db {
 
 // RECIPE =====================================================================
 model Recipe {
-    id            String             @id @default(uuid())
-    createdAt     DateTime           @default(now())
-    title         String
-    sourceName    String
-    sourceURL     String?
-    prepTimeMin   Int
-    cookTimeMin   Int
-    servingAmount Int
-    servingUnit   RecipeServingUnit  @relation(fields: [servingUnitId], references: [id])
-    servingUnitId Int
-    categories    RecipeCategory[]
-    ingredients   RecipeIngredient[]
-    methods       RecipeMethod[]
+    id                  String                     @id @default(uuid())
+    createdAt           DateTime                   @default(now())
+    title               String
+    sourceName          String
+    sourceURL           String?
+    prepTimeMin         Int
+    cookTimeMin         Int
+    servingAmount       Int
+    servingUnit         RecipeServingUnit          @relation(fields: [servingUnitId], references: [id])
+    servingUnitId       Int
+    courseTypes         RecipeCourseType[]
+    cuisines            RecipeCuisine[]
+    dietaryRestrictions RecipeDietaryRestriction[]
+    dishTypes           RecipeDishType[]
+    ingredients         RecipeIngredient[]
+    steps               RecipeStep[]
+    notes               RecipeNote[]
 
     @@unique(fields: [title, sourceName], name: "recipe_identifier")
 }
 
-// RECIPE / SERVING UNIT ======================================================
 model RecipeServingUnit {
     id         Int      @id @unique @default(autoincrement())
     createdAt  DateTime @default(now())
@@ -40,19 +43,31 @@ model RecipeServingUnit {
     recipes    Recipe[]
 }
 
-// RECIPE / CATETORY ==========================================================
-enum RecipeCategoryType {
-    CourseType
-    Cuisine
-    DietaryRestriction
-    DishType
+model RecipeCourseType {
+    id        Int      @id @unique @default(autoincrement())
+    createdAt DateTime @default(now())
+    name      String   @unique
+    recipes   Recipe[]
 }
 
-model RecipeCategory {
-    id        Int                @id @unique @default(autoincrement())
-    createdAt DateTime           @default(now())
-    type      RecipeCategoryType
-    name      String             @unique
+model RecipeCuisine {
+    id        Int      @id @unique @default(autoincrement())
+    createdAt DateTime @default(now())
+    name      String   @unique
+    recipes   Recipe[]
+}
+
+model RecipeDietaryRestriction {
+    id        Int      @id @unique @default(autoincrement())
+    createdAt DateTime @default(now())
+    name      String   @unique
+    recipes   Recipe[]
+}
+
+model RecipeDishType {
+    id        Int      @id @unique @default(autoincrement())
+    createdAt DateTime @default(now())
+    name      String   @unique
     recipes   Recipe[]
 }
 
@@ -60,6 +75,8 @@ model RecipeCategory {
 model RecipeIngredient {
     id                 Int                              @id @unique @default(autoincrement())
     createdAt          DateTime                         @default(now())
+    recipe             Recipe                           @relation(fields: [recipeId], references: [id])
+    recipeId           String
     order              Int
     section            String?
     quantityWhole      Int
@@ -72,10 +89,8 @@ model RecipeIngredient {
     alteration         String?
     isOptional         Boolean                          @default(false)
     substitutions      RecipeIngredientName[]           @relation("substitutions")
-    recipe             Recipe                           @relation(fields: [recipeId], references: [id])
-    recipeId           String
 
-    @@unique(fields: [order, recipeId], name: "recipe_ingredient_identifier")
+    @@unique(fields: [recipeId, order], name: "recipe_ingredient_identifier")
 }
 
 model RecipeIngredientQuantityFraction {
@@ -104,21 +119,28 @@ model RecipeIngredientName {
     RecipeIngredientSubstitutions RecipeIngredient[] @relation("substitutions")
 }
 
-// RECIPE / METHOD ============================================================
-enum RecipeMethodType {
-    Step
-    Note
-}
-
-model RecipeMethod {
-    id        Int              @id @unique @default(autoincrement())
-    createdAt DateTime         @default(now())
-    type      RecipeMethodType
+// RECIPE / STEP ==============================================================
+model RecipeStep {
+    id        Int      @id @unique @default(autoincrement())
+    createdAt DateTime @default(now())
+    recipe    Recipe   @relation(fields: [recipeId], references: [id])
+    recipeId  String
     order     Int
     section   String?
     details   String
-    recipe    Recipe           @relation(fields: [recipeId], references: [id])
-    recipeId  String
 
-    @@unique(fields: [order, recipeId], name: "recipe_method_identifier")
+    @@unique(fields: [recipeId, order], name: "recipe_step_identifier")
+}
+
+// RECIPE / NOTE ==============================================================
+model RecipeNote {
+    id        Int      @id @unique @default(autoincrement())
+    createdAt DateTime @default(now())
+    recipe    Recipe   @relation(fields: [recipeId], references: [id])
+    recipeId  String
+    order     Int
+    section   String?
+    details   String
+
+    @@unique(fields: [recipeId, order], name: "recipe_note_identifier")
 }

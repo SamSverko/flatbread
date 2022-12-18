@@ -4,6 +4,7 @@ import { v4 } from 'uuid';
 interface RecipeToSeed {
     title: string;
     sourceName: string;
+    sourceUrl?: string;
     prepTimeMin: number;
     cookTimeMin: number;
     servingAmount: number;
@@ -11,11 +12,20 @@ interface RecipeToSeed {
         name: string;
         namePlural: string;
     };
-    categories: {
-        type: string;
+    courseTypes: {
+        name: string;
+    }[];
+    cuisines: {
+        name: string;
+    }[];
+    dietaryRestrictions: {
+        name: string;
+    }[];
+    dishTypes: {
         name: string;
     }[];
     ingredients: {
+        order: number;
         section?: string;
         quantityWhole: number;
         quantityFraction: {
@@ -38,8 +48,12 @@ interface RecipeToSeed {
             namePlural: string;
         }[];
     }[];
-    methods: {
-        type: 'Step' | 'Note';
+    steps: {
+        order: number;
+        section?: string;
+        details: string;
+    }[];
+    notes: {
         order: number;
         section?: string;
         details: string;
@@ -48,93 +62,98 @@ interface RecipeToSeed {
 
 const prisma = new PrismaClient();
 
-const recipeCategories: Prisma.RecipeCategoryCreateInput[] = [
-    // COURSE TYPES
-    { type: 'CourseType', name: 'Breakfast' },
-    { type: 'CourseType', name: 'Breakfast' },
-    { type: 'CourseType', name: 'Brunch' },
-    { type: 'CourseType', name: 'Dessert' },
-    { type: 'CourseType', name: 'Dinner' },
-    { type: 'CourseType', name: 'Homemade' },
-    { type: 'CourseType', name: 'Lunch' },
-    { type: 'CourseType', name: 'Side' },
-    { type: 'CourseType', name: 'Snack' },
-    // CUISINES
-    { type: 'Cuisine', name: 'American' },
-    { type: 'Cuisine', name: 'Asian' },
-    { type: 'Cuisine', name: 'Belgian' },
-    { type: 'Cuisine', name: 'Cajun' },
-    { type: 'Cuisine', name: 'Canadian' },
-    { type: 'Cuisine', name: 'Chinese' },
-    { type: 'Cuisine', name: 'English' },
-    { type: 'Cuisine', name: 'Filipino' },
-    { type: 'Cuisine', name: 'French' },
-    { type: 'Cuisine', name: 'German' },
-    { type: 'Cuisine', name: 'Greek' },
-    { type: 'Cuisine', name: 'Hawaiian' },
-    { type: 'Cuisine', name: 'Indian' },
-    { type: 'Cuisine', name: 'Irish' },
-    { type: 'Cuisine', name: 'Italian' },
-    { type: 'Cuisine', name: 'Japanese' },
-    { type: 'Cuisine', name: 'Korean' },
-    { type: 'Cuisine', name: 'Lebanese' },
-    { type: 'Cuisine', name: 'Mediterranean' },
-    { type: 'Cuisine', name: 'Mexican' },
-    { type: 'Cuisine', name: 'Scottish' },
-    { type: 'Cuisine', name: 'Syrian' },
-    { type: 'Cuisine', name: 'Taiwanese' },
-    { type: 'Cuisine', name: 'Thai' },
-    { type: 'Cuisine', name: 'Tunisian' },
-    { type: 'Cuisine', name: 'Turkish' },
-    // DIETARY RESTRICTIONS
-    { type: 'DietaryRestriction', name: 'Dairy-Free' },
-    { type: 'DietaryRestriction', name: 'Gluten-Free' },
-    { type: 'DietaryRestriction', name: 'Nut-Free' },
-    { type: 'DietaryRestriction', name: 'Vegan' },
-    { type: 'DietaryRestriction', name: 'Vegetarian' },
-    // DISH TYPES
-    { type: 'DishType', name: 'Bread' },
-    { type: 'DishType', name: 'Cake' },
-    { type: 'DishType', name: 'Confection' },
-    { type: 'DishType', name: 'Cookie' },
-    { type: 'DishType', name: 'Dip' },
-    { type: 'DishType', name: 'Dough' },
-    { type: 'DishType', name: 'Drink' },
-    { type: 'DishType', name: 'Main' },
-    { type: 'DishType', name: 'Meat' },
-    { type: 'DishType', name: 'Muffin' },
-    { type: 'DishType', name: 'Pasta' },
-    { type: 'DishType', name: 'Pastry' },
-    { type: 'DishType', name: 'Pie' },
-    { type: 'DishType', name: 'Pizza' },
-    { type: 'DishType', name: 'Potato' },
-    { type: 'DishType', name: 'Salad' },
-    { type: 'DishType', name: 'Sandwich' },
-    { type: 'DishType', name: 'Sauce' },
-    { type: 'DishType', name: 'Seafood' },
-    { type: 'DishType', name: 'Soup' },
-    { type: 'DishType', name: 'Stir Fry' },
-    { type: 'DishType', name: 'Vegetable' },
-    { type: 'DishType', name: 'Wrap' },
+const recipeServingUnits: Prisma.RecipeServingUnitCreateInput[] = [
+    { name: 'bun', namePlural: 'buns' },
+    { name: 'cake', namePlural: 'cakes' },
+    { name: 'cookie', namePlural: 'cookies' },
+    { name: 'cup', namePlural: 'cups' },
+    { name: 'dumpling', namePlural: 'dumplings' },
+    { name: 'fritter', namePlural: 'fritters' },
+    { name: 'loaf', namePlural: 'loaves' },
+    { name: 'mini pudding', namePlural: 'mini puddings' },
+    { name: 'muffin', namePlural: 'muffins' },
+    { name: 'pastry', namePlural: 'pastries' },
+    { name: 'pie', namePlural: 'pies' },
+    { name: 'pizza', namePlural: 'pizzas' },
+    { name: 'scone', namePlural: 'scones' },
+    { name: 'serving', namePlural: 'servings' },
+    { name: 'square', namePlural: 'squares' },
+    { name: 'tortilla', namePlural: 'tortillas' },
 ];
 
-const recipeServingUnits: Prisma.RecipeServingUnitCreateInput[] = [
-    { name: 'Bun', namePlural: 'Buns' },
-    { name: 'Cake', namePlural: 'Cakes' },
-    { name: 'Cookie', namePlural: 'Cookies' },
-    { name: 'Cup', namePlural: 'Cups' },
-    { name: 'Dumpling', namePlural: 'Dumplings' },
-    { name: 'Fritter', namePlural: 'Fritters' },
-    { name: 'Loaf', namePlural: 'Loaves' },
-    { name: 'Mini Pudding', namePlural: 'Mini Puddings' },
-    { name: 'Muffin', namePlural: 'Muffins' },
-    { name: 'Pastry', namePlural: 'Pastries' },
-    { name: 'Pie', namePlural: 'Pies' },
-    { name: 'Pizza', namePlural: 'Pizzas' },
-    { name: 'Scone', namePlural: 'Scones' },
-    { name: 'Serving', namePlural: 'Servings' },
-    { name: 'Square', namePlural: 'Squares' },
-    { name: 'Tortilla', namePlural: 'Tortillas' },
+const recipeCourseTypes: Prisma.RecipeCourseTypeCreateInput[] = [
+    { name: 'breakfast' },
+    { name: 'breakfast' },
+    { name: 'brunch' },
+    { name: 'dessert' },
+    { name: 'dinner' },
+    { name: 'homemade' },
+    { name: 'lunch' },
+    { name: 'side' },
+    { name: 'snack' },
+];
+
+const recipeCuisines: Prisma.RecipeCuisineCreateInput[] = [
+    { name: 'american' },
+    { name: 'asian' },
+    { name: 'belgian' },
+    { name: 'cajun' },
+    { name: 'canadian' },
+    { name: 'chinese' },
+    { name: 'english' },
+    { name: 'filipino' },
+    { name: 'french' },
+    { name: 'german' },
+    { name: 'greek' },
+    { name: 'hawaiian' },
+    { name: 'indian' },
+    { name: 'irish' },
+    { name: 'italian' },
+    { name: 'japanese' },
+    { name: 'korean' },
+    { name: 'lebanese' },
+    { name: 'mediterranean' },
+    { name: 'mexican' },
+    { name: 'scottish' },
+    { name: 'syrian' },
+    { name: 'taiwanese' },
+    { name: 'thai' },
+    { name: 'tunisian' },
+    { name: 'turkish' },
+];
+
+const recipeDietaryRestrictions: Prisma.RecipeDietaryRestrictionCreateInput[] = [
+    { name: 'dairy-free' },
+    { name: 'gluten-free' },
+    { name: 'nut-free' },
+    { name: 'vegan' },
+    { name: 'vegetarian' },
+];
+
+const recipeDishTypes: Prisma.RecipeDishTypeCreateInput[] = [
+    { name: 'bread' },
+    { name: 'cake' },
+    { name: 'confection' },
+    { name: 'cookie' },
+    { name: 'dip' },
+    { name: 'dough' },
+    { name: 'drink' },
+    { name: 'main' },
+    { name: 'meat' },
+    { name: 'muffin' },
+    { name: 'pasta' },
+    { name: 'pastry' },
+    { name: 'pie' },
+    { name: 'pizza' },
+    { name: 'potato' },
+    { name: 'salad' },
+    { name: 'sandwich' },
+    { name: 'sauce' },
+    { name: 'seafood' },
+    { name: 'soup' },
+    { name: 'stir Fry' },
+    { name: 'vegetable' },
+    { name: 'wrap' },
 ];
 
 const recipeIngredientQuantityFractions: Prisma.RecipeIngredientQuantityFractionCreateInput[] = [
@@ -220,18 +239,25 @@ const recipeNanaimoBars: RecipeToSeed = {
     cookTimeMin: 10,
     servingAmount: 25,
     servingUnit: {
-        name: 'square', // Purposely using lowercase to test for it to not create a duplicate.
+        name: 'square',
         namePlural: 'squares',
     },
-    categories: [
-        { type: 'CourseType', name: 'Dessert' },
-        { type: 'CourseType', name: 'Snack' },
-        { type: 'Cuisine', name: 'Canadian' },
-        { type: 'DietaryRestriction', name: 'Vegetarian' },
-        { type: 'DishType', name: 'Confection' },
+    courseTypes: [
+        { name: 'dessert' },
+        { name: 'snack' },
+    ],
+    cuisines: [
+        { name: 'canadian' },
+    ],
+    dietaryRestrictions: [
+        { name: 'vegetarian' },
+    ],
+    dishTypes: [
+        { name: 'confection' },
     ],
     ingredients: [ // ⅒ ⅑ ⅛ ⅐ ⅙ ⅕ ¼ ⅓ ⅜ ⅖ ½ ⅗ ⅝ ⅔ ¾ ⅘ ⅚ ⅞
         {
+            order: 1,
             section: '1st Layer',
             quantityWhole: 0,
             quantityFraction: {
@@ -253,6 +279,7 @@ const recipeNanaimoBars: RecipeToSeed = {
             ],
         },
         {
+            order: 2,
             section: '1st Layer',
             quantityWhole: 0,
             quantityFraction: {
@@ -272,89 +299,93 @@ const recipeNanaimoBars: RecipeToSeed = {
             substitutions: [],
         },
     ],
-    methods: [
-        { type: 'Step', order: 1, section: '1st Layer', details: 'Melt chocolate chips and butter over low heat, cool slightly. Add remaining ingredients and mix well. Press into 8-inch greased pan.' },
-        { type: 'Step', order: 2, section: '2nd Layer', details: '2nd Layer: Mix well and spread over 1st Layer.' },
-        { type: 'Step', order: 3, section: '3rd Layer', details: 'Melt chocolate chips and butter. Spread over 2nd Layer and swirl.' },
-        { type: 'Step', order: 4, details: 'Cool in fridge, then cut in squares, and store in fridge.' },
+    steps: [
+        { order: 1, section: '1st Layer', details: 'AAAMelt chocolate chips and butter over low heat, cool slightly. Add remaining ingredients and mix well. Press into 8-inch greased pan.' },
+        { order: 2, section: '2nd Layer', details: '2nd Layer: Mix well and spread over 1st Layer.' },
+        { order: 3, section: '3rd Layer', details: 'Melt chocolate chips and butter. Spread over 2nd Layer and swirl.' },
+        { order: 4, details: 'Cool in fridge, then cut in squares, and store in fridge.' },
+    ],
+    notes: [
+        { order: 1, details: 'Squares should last a week in the fridge. Always keep refrigerated.' },
     ],
 };
-
-function formatRecipeUpsert(recipeId: string, recipe: RecipeToSeed) {
-    return {
-        title: recipe.title,
-        sourceName: recipe.sourceName,
-        prepTimeMin: recipe.prepTimeMin,
-        cookTimeMin: recipe.cookTimeMin,
-        servingAmount: recipe.servingAmount,
-        servingUnit: {
-            connectOrCreate: { // SHOULD BE CONNECT ONLY
-                where: {
-                    name: recipe.servingUnit.name,
-                },
-                create: {
-                    name: recipe.servingUnit.name,
-                    namePlural: recipe.servingUnit.namePlural,
-                },
-            },
-        },
-        categories: {  // SHOULD BE CONNECT ONLY
-            connectOrCreate: (recipe.categories as Prisma.RecipeCategoryCreateInput[]).map((category) => {
-                return {
-                    where: {
-                        name: category.name,
-                    },
-                    create: {
-                        name: category.name,
-                        type: category.type,
-                    },
-                };
-            }),
-        },
-        methods: { // SHOULD BE CREATE ONLY??
-            connectOrCreate: (recipe.methods as Prisma.RecipeMethodCreateInput[]).map((recipeMethod) => {
-                return {
-                    where: {
-                        recipe_method_identifier: {
-                            order: recipeMethod.order,
-                            recipeId: recipeId,
-                        },
-                    },
-                    create: {
-                        type: recipeMethod.type,
-                        order: recipeMethod.order,
-                        section: recipeMethod.section,
-                        details: recipeMethod.details,
-                    },
-                };
-            }),
-        },
-    };
-}
 
 function logCompletedSeed(tableName: string) {
     console.log(`🌱 table: ${tableName}`);
 }
 
 async function seedDB() {
-    // RecipeCategory
+    // RecipeCourseType
     await prisma.$transaction(
-        recipeCategories.map(category => {
-            const recipeCategory = {
-                type: category.type,
-                name: category.name,
+        recipeCourseTypes.map(courseType => {
+            const recipeCourseType = {
+                name: courseType.name,
             };
 
-            return prisma.recipeCategory.upsert({
+            return prisma.recipeCourseType.upsert({
                 where: {
-                    name: category.name,
+                    name: recipeCourseType.name,
                 },
-                update: recipeCategory,
-                create: recipeCategory,
+                update: recipeCourseType,
+                create: recipeCourseType,
             });
         }),
     );
-    logCompletedSeed('RecipeCategory');
+    logCompletedSeed('RecipeCourseType');
+
+    // RecipeCuisine
+    await prisma.$transaction(
+        recipeCuisines.map(cuisine => {
+            const recipeCuisine = {
+                name: cuisine.name,
+            };
+
+            return prisma.recipeCuisine.upsert({
+                where: {
+                    name: recipeCuisine.name,
+                },
+                update: recipeCuisine,
+                create: recipeCuisine,
+            });
+        }),
+    );
+    logCompletedSeed('RecipeCuisine');
+
+    // RecipeDietaryRestriction
+    await prisma.$transaction(
+        recipeDietaryRestrictions.map(dietaryRestriction => {
+            const recipeDietaryRestriction = {
+                name: dietaryRestriction.name,
+            };
+
+            return prisma.recipeDietaryRestriction.upsert({
+                where: {
+                    name: recipeDietaryRestriction.name,
+                },
+                update: recipeDietaryRestriction,
+                create: recipeDietaryRestriction,
+            });
+        }),
+    );
+    logCompletedSeed('RecipeDietaryRestriction');
+
+    // RecipeDishType
+    await prisma.$transaction(
+        recipeDishTypes.map(dishType => {
+            const recipeDishType = {
+                name: dishType.name,
+            };
+
+            return prisma.recipeDishType.upsert({
+                where: {
+                    name: recipeDishType.name,
+                },
+                update: recipeDishType,
+                create: recipeDishType,
+            });
+        }),
+    );
+    logCompletedSeed('RecipeDishType');
 
     // RecipeServingUnit
     await prisma.$transaction(
@@ -433,7 +464,7 @@ async function seedDB() {
     );
     logCompletedSeed('RecipeIngredientName');
 
-    // seedNanaimoBarsRecipe - https://www.flatbread.app/?recipe=nanaimo-bars
+    // Recipe - https://www.flatbread.app/?recipe=nanaimo-bars
     const DoesRecipeNanaimoBarsExist = await prisma.recipe.findUnique({
         where: {
             recipe_identifier: {
@@ -452,9 +483,59 @@ async function seedDB() {
         where: {
             id: nanaimoBarsRecipeId,
         },
-        update: formatRecipeUpsert(nanaimoBarsRecipeId, recipeNanaimoBars),
+        update: {
+            title: recipeNanaimoBars.title,
+            sourceName: recipeNanaimoBars.sourceName,
+            sourceURL: recipeNanaimoBars.sourceUrl,
+            prepTimeMin: recipeNanaimoBars.prepTimeMin,
+            cookTimeMin: recipeNanaimoBars.cookTimeMin,
+            servingAmount: recipeNanaimoBars.servingAmount,
+            servingUnit: {
+                connect: {
+                    name: recipeNanaimoBars.servingUnit.name,
+                },
+            },
+        },
         create: {
-            ...formatRecipeUpsert(nanaimoBarsRecipeId, recipeNanaimoBars),
+            title: recipeNanaimoBars.title,
+            sourceName: recipeNanaimoBars.sourceName,
+            sourceURL: recipeNanaimoBars.sourceUrl,
+            prepTimeMin: recipeNanaimoBars.prepTimeMin,
+            cookTimeMin: recipeNanaimoBars.cookTimeMin,
+            servingAmount: recipeNanaimoBars.servingAmount,
+            servingUnit: {
+                connect: {
+                    name: recipeNanaimoBars.servingUnit.name,
+                },
+            },
+            courseTypes: {
+                connect: (recipeNanaimoBars.courseTypes as Prisma.RecipeCourseTypeCreateInput[]).map((courseType) => {
+                    return {
+                        name: courseType.name,
+                    };
+                }),
+            },
+            cuisines: {
+                connect: (recipeNanaimoBars.cuisines as Prisma.RecipeCuisineCreateInput[]).map((cuisine) => {
+                    return {
+                        name: cuisine.name,
+                    };
+                }),
+            },
+            dietaryRestrictions: {
+                connect: (recipeNanaimoBars.dietaryRestrictions as Prisma.RecipeCuisineCreateInput[]).map((dietaryRestriction) => {
+                    return {
+                        name: dietaryRestriction.name,
+                    };
+                }),
+            },
+            dishTypes: {
+                connect: (recipeNanaimoBars.dishTypes as Prisma.RecipeCuisineCreateInput[]).map((dishType) => {
+                    return {
+                        name: dishType.name,
+                    };
+                }),
+            },
             ingredients: { // SHOULD BE UPSERT??
                 connectOrCreate: (recipeNanaimoBars.ingredients).map((recipeIngredient, index) => {
                     return {
@@ -521,8 +602,31 @@ async function seedDB() {
                     };
                 }),
             },
+            steps: {
+                createMany: {
+                    data: (recipeNanaimoBars.steps as Prisma.RecipeStepCreateInput[]).map((recipeStep) => {
+                        return {
+                            order: recipeStep.order,
+                            section: recipeStep.section,
+                            details: recipeStep.details,
+                        };
+                    }),
+                },
+            },
+            notes: {
+                createMany: {
+                    data: (recipeNanaimoBars.notes as Prisma.RecipeNoteCreateInput[]).map((recipeNote) => {
+                        return {
+                            order: recipeNote.order,
+                            section: recipeNote.section,
+                            details: recipeNote.details,
+                        };
+                    }),
+                },
+            },
         },
     });
+    logCompletedSeed('Recipe');
 }
 
 seedDB()
