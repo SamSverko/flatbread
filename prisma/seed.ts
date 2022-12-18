@@ -173,9 +173,6 @@ const recipeIngredientUnits: Prisma.RecipeIngredientUnitCreateInput[] = [
 - https://www.flatbread.app/?recipe=slow-cooker-ratatouille
 */
 const recipeIngredientNames: Prisma.RecipeIngredientNameCreateInput[] = [
-    { name: '(900 mL package) sodium-reduced chicken broth', namePlural: '(900 mL package) sodium-reduced chicken broth' },
-    { name: '(175 mL can) pitted ripe olives', namePlural: '(175 mL can) pitted ripe olives' },
-    { name: '(175 mL can) tomato paste', namePlural: '(175 mL can) tomato paste' },
     { name: 'all-purpose flour', namePlural: 'all-purpose flour' },
     { name: 'almonds', namePlural: 'almonds' },
     { name: 'boneless skinless chicken breast', namePlural: 'boneless skinless chicken breasts' },
@@ -186,6 +183,7 @@ const recipeIngredientNames: Prisma.RecipeIngredientNameCreateInput[] = [
     { name: 'custard powder', namePlural: 'custard powder' },
     { name: 'egg', namePlural: 'eggs' },
     { name: 'eggplant', namePlural: 'eggplants' },
+    { name: 'extra-virgin olive oil', namePlural: 'extra-virgin olive oil' },
     { name: 'fresh basil', namePlural: 'fresh basil' },
     { name: 'fresh parsley', namePlural: 'fresh parsley' },
     { name: 'fresh thyme', namePlural: 'fresh thyme' },
@@ -199,10 +197,13 @@ const recipeIngredientNames: Prisma.RecipeIngredientNameCreateInput[] = [
     { name: 'olive oil', namePlural: 'olive oil' },
     { name: 'onion', namePlural: 'onions' },
     { name: 'pepper', namePlural: 'pepper' },
+    { name: 'pitted ripe olives', namePlural: 'pitted ripe olives' },
     { name: 'salt', namePlural: 'salt' },
     { name: 'semi-sweet chocolate chips', namePlural: 'semi-sweet chocolate chips' },
+    { name: 'sodium-reduced chicken broth', namePlural: 'sodium-reduced chicken broth' },
     { name: 'sweetened shredded coconut', namePlural: 'sweetened shredded coconut' },
     { name: 'tomato', namePlural: 'tomatoes' },
+    { name: 'tomato paste', namePlural: 'tomato paste' },
     { name: 'unsalted butter', namePlural: 'unsalted butter' },
     { name: 'vanilla extract', namePlural: 'vanilla extract' },
     { name: 'whipping cream (35%)', namePlural: 'whipping cream (35%)' },
@@ -229,7 +230,7 @@ const recipeNanaimoBars: RecipeToSeed = {
             unit: 'cup',
             name: 'unsalted butter',
             isOptional: false,
-            substitutions: ['butter'],
+            substitutions: [],
         },
         {
             section: '1st Layer',
@@ -358,6 +359,139 @@ const recipeNanaimoBars: RecipeToSeed = {
     ],
 };
 validateRecipe(recipeNanaimoBars);
+
+const recipeChickenNoodleSoup: RecipeToSeed = {
+    title: 'Thick and Creamy Chicken Noodle Soup',
+    slug: 'thick-and-creamy-chicken-noodle-soup',
+    sourceName: 'Canadian Living',
+    sourceUrl: 'https://www.canadianliving.com/food/lunch-and-dinner/recipe/thick-and-creamy-chicken-noodle-soup',
+    prepTimeMin: 30,
+    cookTimeMin: 30,
+    servingAmount: 4,
+    servingUnit: 'serving',
+    courseTypes: ['dinner', 'lunch'],
+    cuisines: ['canadian'],
+    dietaryRestrictions: ['nut-free'],
+    dishTypes: ['soup'],
+    ingredients: [ // ⅒ ⅑ ⅛ ⅐ ⅙ ⅕ ¼ ⅓ ⅜ ⅖ ½ ⅗ ⅝ ⅔ ¾ ⅘ ⅚ ⅞
+        {
+            quantityWhole: 2,
+            unit: 'teaspoon',
+            name: 'olive oil',
+            isOptional: false,
+            substitutions: ['extra-virgin olive oil'],
+        },
+        {
+            quantityWhole: 1,
+            name: 'onion',
+            alteration: 'diced',
+            isOptional: false,
+            substitutions: [],
+        },
+        {
+            quantityWhole: 1,
+            name: 'carrot',
+            alteration: 'halved lengthwise and thinly sliced crosswise',
+            isOptional: false,
+            substitutions: [],
+        },
+        {
+            quantityWhole: 1,
+            name: 'celery rib',
+            alteration: 'chopped',
+            isOptional: false,
+            substitutions: [],
+        },
+        {
+            quantityWhole: 1,
+            name: 'garlic clove',
+            alteration: 'minced',
+            isOptional: false,
+            substitutions: [],
+        },
+        {
+            quantityWhole: 1,
+            unit: 'teaspoon',
+            name: 'fresh thyme',
+            alteration: 'chopped',
+            isOptional: false,
+            substitutions: [],
+        },
+        {
+            quantityFraction: '¼',
+            unit: 'teaspoon',
+            name: 'salt',
+            isOptional: false,
+            substitutions: [],
+        },
+        {
+            quantityFraction: '¼',
+            unit: 'teaspoon',
+            name: 'pepper',
+            isOptional: false,
+            substitutions: [],
+        },
+        {
+            quantityWhole: 900,
+            unit: 'millilitre',
+            name: 'sodium-reduced chicken broth',
+            isOptional: false,
+            substitutions: [],
+        },
+        {
+            quantityWhole: 2,
+            name: 'boneless skinless chicken breast',
+            isOptional: false,
+            substitutions: [],
+        },
+        {
+            quantityWhole: 2,
+            unit: 'cup',
+            name: 'broad egg noodles',
+            isOptional: false,
+            substitutions: [],
+        },
+        {
+            quantityFraction: '¼',
+            unit: 'cup',
+            name: 'whipping cream (35%)',
+            isOptional: false,
+            substitutions: [],
+        },
+        {
+            quantityWhole: 3,
+            unit: 'tablespoon',
+            name: 'all-purpose flour',
+            isOptional: false,
+            substitutions: [],
+        },
+        {
+            quantityWhole: 1,
+            unit: 'cup',
+            name: 'frozen peas',
+            isOptional: false,
+            substitutions: [],
+        },
+        {
+            quantityWhole: 3,
+            unit: 'tablespoon',
+            name: 'fresh parsley',
+            alteration: 'chopped',
+            isOptional: false,
+            substitutions: [],
+        },
+    ],
+    steps: [
+        { details: 'In Dutch oven or large heavy-bottomed saucepan, heat oil over medium heat; cook onion, carrot, celery, garlic, thyme, salt and pepper, stirring occasionally, until softened, about 8 minutes.' },
+        { details: 'Add broth and chicken; bring to boil. Reduce heat, cover and simmer for 2 minutes. Stir in noodles; cover and simmer until chicken is no longer pink inside and noodles are al dente, about 9 minutes.' },
+        { details: 'Remove chicken breasts to cutting board. Using 2 forks, shred into bite-size pieces.' },
+        { details: 'In small bowl, whisk together cream, flour and 1 cup water until smooth. Whisk into soup; bring to boil. Reduce heat and simmer until slightly thickened, about 2 minutes. Stir in chicken and peas; simmer for 1 minute. Stir in parsley.' },
+    ],
+    notes: [
+        { details: 'Read the package instructions when buying the egg noodles. You\'ll want noodles that take about 12 minutes to cook so that they\'re done at the same time as the chicken.' },
+    ],
+};
+validateRecipe(recipeChickenNoodleSoup);
 
 function logCompletedSeed(tableName: string) {
     console.log(`🌱 table: ${tableName}`);
@@ -651,7 +785,138 @@ async function seedDB() {
             },
         },
     });
-    logCompletedSeed('Recipe');
+    logCompletedSeed(`Recipe - ${recipeNanaimoBars.title}`);
+
+    const doesRecipeChickenNoodleSoup = await prisma.recipe.findUnique({
+        where: {
+            recipe_identifier: {
+                title: recipeChickenNoodleSoup.title,
+                sourceName: recipeChickenNoodleSoup.sourceName,
+            },
+        },
+        select: {
+            id: true,
+        },
+    });
+
+    const recipeChickenNoodleSoupId: string = (doesRecipeChickenNoodleSoup) ? doesRecipeChickenNoodleSoup.id : v4();
+
+    await prisma.recipe.upsert({
+        where: {
+            id: recipeChickenNoodleSoupId,
+        },
+        update: {},
+        create: {
+            title: recipeChickenNoodleSoup.title,
+            slug: recipeChickenNoodleSoup.slug,
+            sourceName: recipeChickenNoodleSoup.sourceName,
+            sourceURL: recipeChickenNoodleSoup.sourceUrl,
+            prepTimeMin: recipeChickenNoodleSoup.prepTimeMin,
+            cookTimeMin: recipeChickenNoodleSoup.cookTimeMin,
+            servingAmount: recipeChickenNoodleSoup.servingAmount,
+            servingUnit: {
+                connect: {
+                    name: recipeChickenNoodleSoup.servingUnit,
+                },
+            },
+            courseTypes: {
+                connect: (recipeChickenNoodleSoup.courseTypes).map((courseType) => {
+                    return {
+                        name: courseType,
+                    };
+                }),
+            },
+            cuisines: {
+                connect: (recipeChickenNoodleSoup.cuisines).map((cuisine) => {
+                    return {
+                        name: cuisine,
+                    };
+                }),
+            },
+            dietaryRestrictions: {
+                connect: (recipeChickenNoodleSoup.dietaryRestrictions).map((dietaryRestriction) => {
+                    return {
+                        name: dietaryRestriction,
+                    };
+                }),
+            },
+            dishTypes: {
+                connect: (recipeChickenNoodleSoup.dishTypes).map((dishType) => {
+                    return {
+                        name: dishType,
+                    };
+                }),
+            },
+            ingredients: {
+                create: (recipeChickenNoodleSoup.ingredients).map((recipeIngredient, index) => {
+                    return {
+                        order: index,
+                        section: recipeIngredient.section,
+                        quantityWhole: recipeIngredient.quantityWhole,
+                        quantityFraction: recipeIngredient.quantityFraction ? {
+                            connect: {
+                                name: recipeIngredient.quantityFraction,
+                            },
+                        } : undefined,
+                        quantityMinWhole: recipeIngredient.quantityMinWhole,
+                        quantityMinFraction: recipeIngredient.quantityMinFraction ? {
+                            connect: {
+                                name: recipeIngredient.quantityMinFraction,
+                            },
+                        } : undefined,
+                        quantityMaxWhole: recipeIngredient.quantityMaxWhole,
+                        quantityMaxFraction: recipeIngredient.quantityMaxFraction ? {
+                            connect: {
+                                name: recipeIngredient.quantityMaxFraction,
+                            },
+                        } : undefined,
+                        unit: recipeIngredient.unit ? {
+                            connect: {
+                                name: recipeIngredient?.unit,
+                            },
+                        } : undefined,
+                        name: {
+                            connect: {
+                                name: recipeIngredient.name,
+                            },
+                        },
+                        alteration: recipeIngredient.alteration,
+                        isOptional: recipeIngredient.isOptional,
+                        substitutions: {
+                            connect: (recipeIngredient.substitutions).map((substitution) => {
+                                return {
+                                    name: substitution,
+                                };
+                            }),
+                        },
+                    };
+                }),
+            },
+            steps: {
+                createMany: {
+                    data: (recipeChickenNoodleSoup.steps as Prisma.RecipeStepCreateInput[]).map((recipeStep, index) => {
+                        return {
+                            order: index,
+                            section: recipeStep.section,
+                            details: recipeStep.details,
+                        };
+                    }),
+                },
+            },
+            notes: {
+                createMany: {
+                    data: (recipeChickenNoodleSoup.notes as Prisma.RecipeNoteCreateInput[]).map((recipeNote, index) => {
+                        return {
+                            order: index,
+                            section: recipeNote.section,
+                            details: recipeNote.details,
+                        };
+                    }),
+                },
+            },
+        },
+    });
+    logCompletedSeed(`Recipe - ${recipeChickenNoodleSoup.title}`);
 }
 
 seedDB()
