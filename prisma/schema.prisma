@@ -73,22 +73,22 @@ model RecipeDishType {
 
 // RECIPE / INGREDIENT ========================================================
 model RecipeIngredient {
-    id                 Int                              @id @unique @default(autoincrement())
-    createdAt          DateTime                         @default(now())
-    recipe             Recipe                           @relation(fields: [recipeId], references: [id])
+    id                 Int                               @id @unique @default(autoincrement())
+    createdAt          DateTime                          @default(now())
+    recipe             Recipe                            @relation(fields: [recipeId], references: [id])
     recipeId           String
     order              Int
     section            String?
-    quantityWhole      Int
-    quantityFraction   RecipeIngredientQuantityFraction @relation(fields: [quantityFractionId], references: [id])
-    quantityFractionId Int
-    unit               RecipeIngredientUnit             @relation(fields: [unitId], references: [id])
-    unitId             Int
-    name               RecipeIngredientName             @relation("recipe_ingredient_name", fields: [nameId], references: [id])
+    quantityWhole      Int?
+    quantityFraction   RecipeIngredientQuantityFraction? @relation(fields: [quantityFractionId], references: [id])
+    quantityFractionId Int?
+    unit               RecipeIngredientUnit?             @relation(fields: [unitId], references: [id])
+    unitId             Int?
+    name               RecipeIngredientName              @relation("recipe_ingredient_name", fields: [nameId], references: [id])
     nameId             Int
     alteration         String?
-    isOptional         Boolean                          @default(false)
-    substitutions      RecipeIngredientName[]           @relation("recipe_ingredient_substitutions")
+    isOptional         Boolean                           @default(false)
+    substitutions      RecipeIngredientName[]            @relation("recipe_ingredient_substitutions")
 
     @@unique(fields: [recipeId, order], name: "recipe_ingredient_identifier")
 }

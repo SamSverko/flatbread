@@ -8,53 +8,26 @@ interface RecipeToSeed {
     prepTimeMin: number;
     cookTimeMin: number;
     servingAmount: number;
-    servingUnit: {
-        name: string;
-        namePlural: string;
-    };
-    courseTypes: {
-        name: string;
-    }[];
-    cuisines: {
-        name: string;
-    }[];
-    dietaryRestrictions: {
-        name: string;
-    }[];
-    dishTypes: {
-        name: string;
-    }[];
+    servingUnit: string;
+    courseTypes: string[];
+    cuisines: string[];
+    dietaryRestrictions: string[];
+    dishTypes: string[];
     ingredients: {
-        order: number;
         section?: string;
-        quantityWhole: number;
-        quantityFraction: {
-            name: string;
-            value: number;
-        };
-        unit: {
-            name: string,
-            nameAbbr: string,
-            namePlural: string,
-        };
-        name: {
-            name: string,
-            namePlural: string,
-        };
+        quantityWhole?: number;
+        quantityFraction?: string;
+        unit?: string;
+        name: string;
         alteration?: string;
         isOptional: boolean;
-        substitutions: {
-            name: string;
-            namePlural: string;
-        }[];
+        substitutions: string[];
     }[];
     steps: {
-        order: number;
         section?: string;
         details: string;
     }[];
     notes: {
-        order: number;
         section?: string;
         details: string;
     }[];
@@ -151,7 +124,7 @@ const recipeDishTypes: Prisma.RecipeDishTypeCreateInput[] = [
     { name: 'sauce' },
     { name: 'seafood' },
     { name: 'soup' },
-    { name: 'stir Fry' },
+    { name: 'stir fry' },
     { name: 'vegetable' },
     { name: 'wrap' },
 ];
@@ -235,79 +208,55 @@ const recipeIngredientNames: Prisma.RecipeIngredientNameCreateInput[] = [
 const recipeNanaimoBars: RecipeToSeed = {
     title: 'Nanaimo Bars',
     sourceName: 'Mary-Ann Derocher',
-    // sourceUrl: 'hey',
     prepTimeMin: 30,
     cookTimeMin: 10,
     servingAmount: 25,
-    servingUnit: {
-        name: 'square',
-        namePlural: 'squares',
-    },
-    courseTypes: [
-        { name: 'dessert' },
-        { name: 'snack' },
-    ],
-    cuisines: [
-        { name: 'canadian' },
-    ],
-    dietaryRestrictions: [
-        { name: 'vegetarian' },
-    ],
-    dishTypes: [
-        { name: 'confection' },
-    ],
+    servingUnit: 'square',
+    courseTypes: ['dessert', 'snack'],
+    cuisines: ['canadian'],
+    dietaryRestrictions: ['vegetarian'],
+    dishTypes: ['confection'],
     ingredients: [ // ⅒ ⅑ ⅛ ⅐ ⅙ ⅕ ¼ ⅓ ⅜ ⅖ ½ ⅗ ⅝ ⅔ ¾ ⅘ ⅚ ⅞
         {
-            order: 1,
             section: '1st Layer',
-            quantityWhole: 0,
-            quantityFraction: {
-                name: '¼',
-                value: 0.25,
-            },
-            unit: {
-                name: 'cup',
-                nameAbbr: 'c',
-                namePlural: 'cups',
-            },
-            name: {
-                name: 'unsalted butter',
-                namePlural: 'unsalted butter',
-            },
+            quantityFraction: '¼',
+            unit: 'cup',
+            name: 'unsalted butter',
             isOptional: false,
-            substitutions: [
-                { name: 'butter', namePlural: 'butter' },
-            ],
+            substitutions: ['butter'],
         },
         {
-            order: 2,
             section: '1st Layer',
-            quantityWhole: 0,
-            quantityFraction: {
-                name: '⅔',
-                value: 0.667,
-            },
-            unit: {
-                name: 'cup',
-                nameAbbr: 'c',
-                namePlural: 'cups',
-            },
-            name: {
-                name: 'semi-sweet chocolate chips',
-                namePlural: 'semi-sweet chocolate chips',
-            },
+            quantityFraction: '⅔',
+            unit: 'cup',
+            name: 'semi-sweet chocolate chips',
+            isOptional: false,
+            substitutions: [],
+        },
+        {
+            section: '1st Layer',
+            quantityWhole: 1,
+            unit: 'teaspoon',
+            name: 'vanilla extract',
+            isOptional: false,
+            substitutions: [],
+        },
+        {
+            section: '1st Layer',
+            quantityWhole: 1,
+            name: 'egg',
             isOptional: false,
             substitutions: [],
         },
     ],
     steps: [
-        { order: 1, section: '1st Layer', details: 'Melt chocolate chips and butter over low heat, cool slightly. Add remaining ingredients and mix well. Press into 8-inch greased pan.' },
-        { order: 2, section: '2nd Layer', details: '2nd Layer: Mix well and spread over 1st Layer.' },
-        { order: 3, section: '3rd Layer', details: 'Melt chocolate chips and butter. Spread over 2nd Layer and swirl.' },
-        { order: 4, details: 'Cool in fridge, then cut in squares, and store in fridge.' },
+        { section: '1st Layer', details: 'Melt chocolate chips and butter over low heat, cool slightly. Add remaining ingredients and mix well. Press into 8-inch greased pan.' },
+        { section: '2nd Layer', details: '2nd Layer: Mix well and spread over 1st Layer.' },
+        { section: '3rd Layer', details: 'Melt chocolate chips and butter. Spread over 2nd Layer and swirl.' },
+        { details: 'Cool in fridge, then cut in squares, and store in fridge.' },
     ],
     notes: [
-        { order: 1, details: 'Squares should last a week in the fridge. Always keep refrigerated.' },
+        { details: 'Squares should last a week in the fridge. Always keep refrigerated.' },
     ],
 };
 
@@ -551,56 +500,56 @@ async function seedDB() {
             servingAmount: recipeNanaimoBars.servingAmount,
             servingUnit: {
                 connect: {
-                    name: recipeNanaimoBars.servingUnit.name,
+                    name: recipeNanaimoBars.servingUnit,
                 },
             },
             courseTypes: {
-                connect: (recipeNanaimoBars.courseTypes as Prisma.RecipeCourseTypeCreateInput[]).map((courseType) => {
+                connect: (recipeNanaimoBars.courseTypes).map((courseType) => {
                     return {
-                        name: courseType.name,
+                        name: courseType,
                     };
                 }),
             },
             cuisines: {
-                connect: (recipeNanaimoBars.cuisines as Prisma.RecipeCuisineCreateInput[]).map((cuisine) => {
+                connect: (recipeNanaimoBars.cuisines).map((cuisine) => {
                     return {
-                        name: cuisine.name,
+                        name: cuisine,
                     };
                 }),
             },
             dietaryRestrictions: {
-                connect: (recipeNanaimoBars.dietaryRestrictions as Prisma.RecipeCuisineCreateInput[]).map((dietaryRestriction) => {
+                connect: (recipeNanaimoBars.dietaryRestrictions).map((dietaryRestriction) => {
                     return {
-                        name: dietaryRestriction.name,
+                        name: dietaryRestriction,
                     };
                 }),
             },
             dishTypes: {
-                connect: (recipeNanaimoBars.dishTypes as Prisma.RecipeCuisineCreateInput[]).map((dishType) => {
+                connect: (recipeNanaimoBars.dishTypes).map((dishType) => {
                     return {
-                        name: dishType.name,
+                        name: dishType,
                     };
                 }),
             },
             ingredients: {
-                create: (recipeNanaimoBars.ingredients).map((recipeIngredient) => {
+                create: (recipeNanaimoBars.ingredients).map((recipeIngredient, index) => {
                     return {
-                        order: recipeIngredient.order,
+                        order: index,
                         section: recipeIngredient.section,
                         quantityWhole: recipeIngredient.quantityWhole,
-                        quantityFraction:  {
+                        quantityFraction: recipeIngredient.quantityFraction ? {
                             connect: {
-                                name: recipeIngredient.quantityFraction.name,
+                                name: recipeIngredient.quantityFraction,
                             },
-                        },
-                        unit: {
+                        } : undefined,
+                        unit: recipeIngredient.unit ? {
                             connect: {
-                                name: recipeIngredient.unit.name,
+                                name: recipeIngredient?.unit,
                             },
-                        },
+                        } : undefined,
                         name: {
                             connect: {
-                                name: recipeIngredient.name.name,
+                                name: recipeIngredient.name,
                             },
                         },
                         alteration: recipeIngredient.alteration,
@@ -608,7 +557,7 @@ async function seedDB() {
                         substitutions: {
                             connect: (recipeIngredient.substitutions).map((substitution) => {
                                 return {
-                                    name: substitution.name,
+                                    name: substitution,
                                 };
                             }),
                         },
@@ -617,9 +566,9 @@ async function seedDB() {
             },
             steps: {
                 createMany: {
-                    data: (recipeNanaimoBars.steps as Prisma.RecipeStepCreateInput[]).map((recipeStep) => {
+                    data: (recipeNanaimoBars.steps as Prisma.RecipeStepCreateInput[]).map((recipeStep, index) => {
                         return {
-                            order: recipeStep.order,
+                            order: index,
                             section: recipeStep.section,
                             details: recipeStep.details,
                         };
@@ -628,9 +577,9 @@ async function seedDB() {
             },
             notes: {
                 createMany: {
-                    data: (recipeNanaimoBars.notes as Prisma.RecipeNoteCreateInput[]).map((recipeNote) => {
+                    data: (recipeNanaimoBars.notes as Prisma.RecipeNoteCreateInput[]).map((recipeNote, index) => {
                         return {
-                            order: recipeNote.order,
+                            order: index,
                             section: recipeNote.section,
                             details: recipeNote.details,
                         };
