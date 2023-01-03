@@ -1,8 +1,8 @@
 import { PrismaClient, RecipeCourseType } from '@prisma/client';
 
-import { getRecipeCategoryFormat } from '../../../prisma/utils';
-
 import type { NextApiResponse, NextApiRequest } from 'next';
+
+import { getRecipeCategoryFormat } from '../../../prisma/utils';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const prisma = new PrismaClient();

@@ -1,46 +1,46 @@
 import { Prisma } from '@prisma/client';
 
-export function getRecipeCategoryFormat(allData = false):
+export function getRecipeCategoryFormat(condensed = false):
 Prisma.RecipeCourseTypesArgs |
 Prisma.RecipeCuisinesArgs |
 Prisma.RecipeDietaryRestrictionsArgs |
 Prisma.RecipeDishTypeArgs {
     return {
         select: {
-            id: (allData) ? true : false,
-            createdAt: (allData) ? true : false,
+            id: (condensed) ? false : true,
+            createdAt: (condensed) ? false : true,
             name: true,
         },
     };
 }
 
-export function getRecipeIngredientName(allData = false): Prisma.RecipeIngredientNameArgs {
+export function getRecipeIngredientName(condensed = false): Prisma.RecipeIngredientNameArgs {
     return {
         select: {
-            id: (allData) ? true : false,
-            createdAt: (allData) ? true : false,
+            id: (condensed) ? false : true,
+            createdAt: (condensed) ? false : true,
             name: true,
             namePlural: true,
         },
     };
 }
 
-export function getRecipeIngredientQuantityFraction(allData = false): Prisma.RecipeIngredientQuantityFractionArgs {
+export function getRecipeIngredientQuantityFraction(condensed = false): Prisma.RecipeIngredientQuantityFractionArgs {
     return {
         select: {
-            id: (allData) ? true : false,
-            createdAt: (allData) ? true : false,
+            id: (condensed) ? false : true,
+            createdAt: (condensed) ? false : true,
             name: true,
             value: true,
         },
     };
 }
 
-export function getRecipeStepOrNote(allData = false): Prisma.RecipeStepsArgs {
+export function getRecipeStepOrNote(condensed = false): Prisma.RecipeStepsArgs {
     return {
         select: {
-            id: (allData) ? true : false,
-            createdAt: (allData) ? true : false,
+            id: (condensed) ? false : true,
+            createdAt: (condensed) ? false : true,
             order: true,
             section: true,
             details: true,
@@ -51,10 +51,10 @@ export function getRecipeStepOrNote(allData = false): Prisma.RecipeStepsArgs {
     };
 }
 
-export function getRecipeFormat(allData = false): Prisma.RecipeSelect {
+export function getRecipeFormat(condensed = false): Prisma.RecipeSelect {
     return {
-        id: (allData) ? true : false,
-        createdAt: (allData) ? true : false,
+        id: (condensed) ? false : true,
+        createdAt: (condensed) ? false : true,
         title: true,
         slug: true,
         sourceName: true,
@@ -64,53 +64,53 @@ export function getRecipeFormat(allData = false): Prisma.RecipeSelect {
         servingAmount: true,
         servingUnit: {
             select: {
-                id: (allData) ? true : false,
-                createdAt: (allData) ? true : false,
+                id: (condensed) ? false : true,
+                createdAt: (condensed) ? false : true,
                 name: true,
                 namePlural: true,
             },
         },
-        servingUnitId: (allData) ? true : false,
-        courseTypes: getRecipeCategoryFormat((allData) ? true : false),
-        cuisines: getRecipeCategoryFormat((allData) ? true : false),
-        dietaryRestrictions: getRecipeCategoryFormat((allData) ? true : false),
-        dishTypes: getRecipeCategoryFormat((allData) ? true : false),
+        servingUnitId: (condensed) ? false : true,
+        courseTypes: getRecipeCategoryFormat(condensed),
+        cuisines: getRecipeCategoryFormat(condensed),
+        dietaryRestrictions: getRecipeCategoryFormat(condensed),
+        dishTypes: getRecipeCategoryFormat(condensed),
         ingredients: {
             select: {
-                id: (allData) ? true : false,
-                createdAt: (allData) ? true : false,
+                id: (condensed) ? false : true,
+                createdAt: (condensed) ? false : true,
                 order: true,
                 section: true,
                 quantityWhole: true,
-                quantityFraction: getRecipeIngredientQuantityFraction((allData) ? true : false),
-                quantityFractionId: (allData) ? true : false,
+                quantityFraction: getRecipeIngredientQuantityFraction(condensed),
+                quantityFractionId: (condensed) ? false : true,
                 quantityMinWhole: true,
-                quantityMinFraction: getRecipeIngredientQuantityFraction((allData) ? true : false),
-                quantityMinFractionId: (allData) ? true : false,
+                quantityMinFraction: getRecipeIngredientQuantityFraction(condensed),
+                quantityMinFractionId: (condensed) ? false : true,
                 quantityMaxWhole: true,
-                quantityMaxFraction: getRecipeIngredientQuantityFraction((allData) ? true : false),
-                quantityMaxFractionId: (allData) ? true : false,
+                quantityMaxFraction: getRecipeIngredientQuantityFraction(condensed),
+                quantityMaxFractionId: (condensed) ? false : true,
                 unit: {
                     select: {
-                        id: (allData) ? true : false,
-                        createdAt: (allData) ? true : false,
+                        id: (condensed) ? false : true,
+                        createdAt: (condensed) ? false : true,
                         name: true,
                         nameAbbr: true,
                         namePlural: true,
                     },
                 },
-                unitId: (allData) ? true : false,
-                name: getRecipeIngredientName((allData) ? true : false),
-                nameId: (allData) ? true : false,
+                unitId: (condensed) ? false : true,
+                name: getRecipeIngredientName(condensed),
+                nameId: (condensed) ? false : true,
                 alteration: true,
                 isOptional: true,
-                substitutions: getRecipeIngredientName((allData) ? true : false),
+                substitutions: getRecipeIngredientName(condensed),
             },
             orderBy: {
                 order: 'asc',
             },
         },
-        steps: getRecipeStepOrNote((allData) ? true : false),
-        notes: getRecipeStepOrNote((allData) ? true : false),
+        steps: getRecipeStepOrNote(condensed),
+        notes: getRecipeStepOrNote(condensed),
     };
 }

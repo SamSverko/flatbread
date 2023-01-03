@@ -28,11 +28,12 @@
     },
     "scripts": {
         "dev": "next dev",
-        "db-seed": "dotenv -e .env.local -- prisma db seed",
+        "db-generate": "dotenv -e .env.local -- prisma generate",
         "db-migrate-dev": "dotenv -e .env.local -- prisma migrate dev",
         "db-push": "dotenv -e .env.local -- prisma db push",
         "db-reset": "dotenv -e .env.local -- prisma db push --force-reset",
         "db-reset-seed": "npm run db-reset; npm run db-seed",
+        "db-seed": "dotenv -e .env.local -- prisma db seed",
         "db-studio": "dotenv -e .env.local -- prisma db studio",
         "build": "npm run lint && next build",
         "start": "next start",
