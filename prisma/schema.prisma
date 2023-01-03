@@ -44,6 +44,7 @@ model RecipeServingUnit {
     recipes    Recipe[]
 }
 
+// RECIPE / CATEGORIES ========================================================
 model RecipeCourseType {
     id        Int      @id @unique @default(autoincrement())
     createdAt DateTime @default(now())

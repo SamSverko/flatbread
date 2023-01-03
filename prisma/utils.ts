@@ -1,5 +1,56 @@
 import { Prisma } from '@prisma/client';
 
+export function getRecipeCategoryFormat(allData = false):
+Prisma.RecipeCourseTypesArgs |
+Prisma.RecipeCuisinesArgs |
+Prisma.RecipeDietaryRestrictionsArgs |
+Prisma.RecipeDishTypeArgs {
+    return {
+        select: {
+            id: (allData) ? true : false,
+            createdAt: (allData) ? true : false,
+            name: true,
+        },
+    };
+}
+
+export function getRecipeIngredientName(allData = false): Prisma.RecipeIngredientNameArgs {
+    return {
+        select: {
+            id: (allData) ? true : false,
+            createdAt: (allData) ? true : false,
+            name: true,
+            namePlural: true,
+        },
+    };
+}
+
+export function getRecipeIngredientQuantityFraction(allData = false): Prisma.RecipeIngredientQuantityFractionArgs {
+    return {
+        select: {
+            id: (allData) ? true : false,
+            createdAt: (allData) ? true : false,
+            name: true,
+            value: true,
+        },
+    };
+}
+
+export function getRecipeStepOrNote(allData = false): Prisma.RecipeStepsArgs {
+    return {
+        select: {
+            id: (allData) ? true : false,
+            createdAt: (allData) ? true : false,
+            order: true,
+            section: true,
+            details: true,
+        },
+        orderBy: {
+            order: 'asc',
+        },
+    };
+}
+
 export function getRecipeFormat(allData = false): Prisma.RecipeSelect {
     return {
         id: (allData) ? true : false,
@@ -20,34 +71,10 @@ export function getRecipeFormat(allData = false): Prisma.RecipeSelect {
             },
         },
         servingUnitId: (allData) ? true : false,
-        courseTypes: {
-            select: {
-                id: (allData) ? true : false,
-                createdAt: (allData) ? true : false,
-                name: true,
-            },
-        },
-        cuisines: {
-            select: {
-                id: (allData) ? true : false,
-                createdAt: (allData) ? true : false,
-                name: true,
-            },
-        },
-        dietaryRestrictions: {
-            select: {
-                id: (allData) ? true : false,
-                createdAt: (allData) ? true : false,
-                name: true,
-            },
-        },
-        dishTypes: {
-            select: {
-                id: (allData) ? true : false,
-                createdAt: (allData) ? true : false,
-                name: true,
-            },
-        },
+        courseTypes: getRecipeCategoryFormat((allData) ? true : false),
+        cuisines: getRecipeCategoryFormat((allData) ? true : false),
+        dietaryRestrictions: getRecipeCategoryFormat((allData) ? true : false),
+        dishTypes: getRecipeCategoryFormat((allData) ? true : false),
         ingredients: {
             select: {
                 id: (allData) ? true : false,
@@ -55,34 +82,13 @@ export function getRecipeFormat(allData = false): Prisma.RecipeSelect {
                 order: true,
                 section: true,
                 quantityWhole: true,
-                quantityFraction: {
-                    select: {
-                        id: (allData) ? true : false,
-                        createdAt: (allData) ? true : false,
-                        name: true,
-                        value: true,
-                    },
-                },
+                quantityFraction: getRecipeIngredientQuantityFraction((allData) ? true : false),
                 quantityFractionId: (allData) ? true : false,
                 quantityMinWhole: true,
-                quantityMinFraction: {
-                    select: {
-                        id: (allData) ? true : false,
-                        createdAt: (allData) ? true : false,
-                        name: true,
-                        value: true,
-                    },
-                },
+                quantityMinFraction: getRecipeIngredientQuantityFraction((allData) ? true : false),
                 quantityMinFractionId: (allData) ? true : false,
                 quantityMaxWhole: true,
-                quantityMaxFraction: {
-                    select: {
-                        id: (allData) ? true : false,
-                        createdAt: (allData) ? true : false,
-                        name: true,
-                        value: true,
-                    },
-                },
+                quantityMaxFraction: getRecipeIngredientQuantityFraction((allData) ? true : false),
                 quantityMaxFractionId: (allData) ? true : false,
                 unit: {
                     select: {
@@ -94,53 +100,17 @@ export function getRecipeFormat(allData = false): Prisma.RecipeSelect {
                     },
                 },
                 unitId: (allData) ? true : false,
-                name: {
-                    select: {
-                        id: (allData) ? true : false,
-                        createdAt: (allData) ? true : false,
-                        name: true,
-                        namePlural: true,
-                    },
-                },
+                name: getRecipeIngredientName((allData) ? true : false),
                 nameId: (allData) ? true : false,
                 alteration: true,
                 isOptional: true,
-                substitutions: {
-                    select: {
-                        id: (allData) ? true : false,
-                        createdAt: (allData) ? true : false,
-                        name: true,
-                        namePlural: true,
-                    },
-                },
+                substitutions: getRecipeIngredientName((allData) ? true : false),
             },
             orderBy: {
                 order: 'asc',
             },
         },
-        steps: {
-            select: {
-                id: (allData) ? true : false,
-                createdAt: (allData) ? true : false,
-                order: true,
-                section: true,
-                details: true,
-            },
-            orderBy: {
-                order: 'asc',
-            },
-        },
-        notes: {
-            select: {
-                id: (allData) ? true : false,
-                createdAt: (allData) ? true : false,
-                order: true,
-                section: true,
-                details: true,
-            },
-            orderBy: {
-                order: 'asc',
-            },
-        },
+        steps: getRecipeStepOrNote((allData) ? true : false),
+        notes: getRecipeStepOrNote((allData) ? true : false),
     };
 }
