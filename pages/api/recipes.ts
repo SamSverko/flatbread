@@ -34,16 +34,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
     }
 
-    const querySlug = slug?.toString().toLowerCase();
-    const queryTitle = title?.toString().toLowerCase();
+    let queryTitle: string | undefined = undefined;
+    if (title) {
+        queryTitle = title.toString().toLowerCase().split(' ').join(' & ');
+    }
 
     // Query recipes based on parameters
     let recipes: unknown[] = [];
 
-    if (querySlug) { // `slug` parameter takes precedence over all other filters
+    if (slug) { // `slug` parameter takes precedence over all other filters
         const results = await prisma.recipe.findUnique({
             where: {
-                slug: querySlug,
+                slug: slug.toString().toLowerCase(),
             },
             select: getRecipeFormat((condensed === 'true')),
         });
@@ -53,7 +55,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         recipes = await prisma.recipe.findMany({
             where: {
                 title: {
-                    search: (queryTitle) ? queryTitle.split(' ').join(' & ') : undefined,
+                    search: queryTitle,
                 },
             },
             select: getRecipeFormat((condensed === 'true')),
