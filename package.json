@@ -27,7 +27,7 @@
         "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
     },
     "scripts": {
-        "dev": "next dev",
+        "build": "npm run lint && next build",
         "db-generate": "dotenv -e .env.local -- prisma generate",
         "db-migrate-dev": "dotenv -e .env.local -- prisma migrate dev",
         "db-push": "dotenv -e .env.local -- prisma db push",
@@ -35,9 +35,9 @@
         "db-reset-seed": "npm run db-reset; npm run db-seed",
         "db-seed": "dotenv -e .env.local -- prisma db seed",
         "db-studio": "dotenv -e .env.local -- prisma db studio",
-        "build": "npm run lint && next build",
-        "start": "next start",
-        "lint": "next lint && npx stylelint \"**/*.{css,scss}\""
+        "dev": "next dev",
+        "lint": "next lint && npx stylelint \"**/*.{css,scss}\"",
+        "start": "next start"
     },
     "dependencies": {
         "@prisma/client": "^4.8.0",

@@ -2,7 +2,11 @@ import { PrismaClient } from '@prisma/client';
 
 import type { NextApiResponse, NextApiRequest } from 'next';
 
-import { getRecipeFormat } from '../../prisma/utils';
+import {
+    getRecipeFormat,
+    validateQueryParamCondensed,
+    validateQueryParamOrderByField,
+} from '../../prisma/utils';
 
 const prisma = new PrismaClient();
 
@@ -15,48 +19,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         title,
     } = req.query;
 
-    // Query validation
-
-    // condensed
-    const condensedOptions = ['true', 'false'];
-    const queryCondensed = condensed?.toString().toLowerCase();
-    if (queryCondensed && !condensedOptions.includes(queryCondensed)) {
-        res.status(400).json({
-            code: 400,
-            message: 'Invalid value for query parameter `condensed`. Fix: Use either `true`, `false`, or omit parameter entirely.',
-        });
-        return;
+    // Query parameter validations
+    if (condensed) {
+        const validateCondensed = validateQueryParamCondensed(condensed);
+        if (validateCondensed.code !== 200) {
+            return res.status(validateCondensed.code).json(validateCondensed.message);
+        }
     }
 
-    // orderBy
-    // orderByField
-    const orderByOptions = ['asc', 'desc'];
-    const orderByFieldOptions = ['title', 'sourceName', 'prepTimeMine', 'cookTimeMin', 'servingAmount'];
-    const queryOrderBy = orderBy?.toString().toLowerCase();
-    const queryOrderByField = orderByField?.toString();
-
-    if ((queryOrderBy && !queryOrderByField) || !queryOrderBy && queryOrderByField) {
-        res.status(400).json({
-            code: 400,
-            message: 'Parameters `orderBy` and `orderByField` must be used simultaneously. Fix: Provide both parameters or omit both parameters entirely.',
-        });
-        return;
-    }
-
-    if (queryOrderBy && !orderByOptions.includes(queryOrderBy)) {
-        res.status(400).json({
-            code: 400,
-            message: `Invalid value for query parameter \`orderBy\`. Fix: Use either \`${orderByOptions.join('`, `')}\`, or omit parameter entirely.`,
-        });
-        return;
-    }
-
-    if (queryOrderByField && !orderByFieldOptions.includes(queryOrderByField)) {
-        res.status(400).json({
-            code: 400,
-            message: `Invalid value for query parameter \`orderByField\`. Fix: Use either \`${orderByFieldOptions.join('`, `')}\`, or omit parameter entirely (along with the \`orderBy\` parameter).`,
-        });
-        return;
+    if (orderBy || orderByField) {
+        const validateOrderByField = validateQueryParamOrderByField(orderBy, orderByField, ['createdAt', 'title', 'sourceName', 'prepTimeMin', 'cookTimeMin', 'servingAmount']);
+        if (validateOrderByField.code !== 200) {
+            return res.status(validateOrderByField.code).json(validateOrderByField.message);
+        }
     }
 
     const querySlug = slug?.toString().toLowerCase();
@@ -70,7 +45,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             where: {
                 slug: querySlug,
             },
-            select: getRecipeFormat((queryCondensed === 'true')),
+            select: getRecipeFormat((condensed === 'true')),
         });
 
         if (results) recipes.push(results);
@@ -81,9 +56,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     search: (queryTitle) ? queryTitle.split(' ').join(' & ') : undefined,
                 },
             },
-            select: getRecipeFormat((queryCondensed === 'true')),
+            select: getRecipeFormat((condensed === 'true')),
             orderBy: {
-                [queryOrderByField]: queryOrderBy,
+                [orderByField as string]: orderBy,
             },
         });
     }
