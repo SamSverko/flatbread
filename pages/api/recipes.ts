@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 
 import type { NextApiResponse, NextApiRequest } from 'next';
 
@@ -34,7 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
     }
 
-    let queryTitle: string | undefined = undefined;
+    let queryTitle: string | Prisma.StringFilter | undefined = undefined;
     if (title) {
         queryTitle = title.toString().toLowerCase().split(' ').join(' & ');
     }
