@@ -40,19 +40,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // Query recipes based on parameters
-    let recipes: unknown[] = [];
-
     if (slug) { // `slug` parameter takes precedence over all other filters
-        const results = await prisma.recipe.findUnique({
+        const recipe = await prisma.recipe.findUnique({
             where: {
                 slug: slug.toString().toLowerCase(),
             },
             select: getRecipeFormat((condensed === 'true')),
         });
 
-        if (results) recipes.push(results);
+        return res.status(200).json(recipe);
     } else {
-        recipes = await prisma.recipe.findMany({
+        const recipes = await prisma.recipe.findMany({
             where: {
                 title: {
                     search: queryTitle,
@@ -63,7 +61,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 [orderByField as string]: orderBy,
             },
         });
-    }
 
-    res.status(200).json(recipes);
+        return res.status(200).json(recipes);
+    }
 }
