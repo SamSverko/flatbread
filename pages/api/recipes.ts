@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 
 import type { NextApiResponse, NextApiRequest } from 'next';
 
@@ -34,11 +34,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
     }
 
-    let queryTitle: string | Prisma.StringFilter | undefined = undefined;
-    if (title) {
-        queryTitle = title.toString().toLowerCase().split(' ').join(' & ');
-    }
-
     // Query recipes based on parameters
     if (slug) { // `slug` parameter takes precedence over all other filters
         const recipe = await prisma.recipe.findUnique({
@@ -53,7 +48,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const recipes = await prisma.recipe.findMany({
             where: {
                 title: {
-                    search: queryTitle,
+                    search: (title) ? title.toString().toLowerCase().split(' ').join(' & ') : undefined,
                 },
             },
             select: getRecipeFormat((condensed === 'true')),
