@@ -124,6 +124,15 @@ export function getRecipeFormat(condensed = false): Prisma.RecipeSelect {
     };
 }
 
+export function getRecipeServingUnit(condensed = false) {
+    return {
+        id: (condensed) ? false : true,
+        createdAt: (condensed) ? false : true,
+        name: true,
+        namePlural: true,
+    };
+}
+
 // Validate API query parameters
 const validQueryParam = {
     code: 200,

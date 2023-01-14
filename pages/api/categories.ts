@@ -44,7 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     if (orderBy || orderByField) {
-        const validateOrderByField = validateQueryParamOrderByField(orderBy, orderByField, ['createdAt', 'title', 'sourceName', 'prepTimeMin', 'cookTimeMin', 'servingAmount']);
+        const validateOrderByField = validateQueryParamOrderByField(orderBy, orderByField, ['createdAt', 'name']);
         if (validateOrderByField.code !== 200) {
             return res.status(validateOrderByField.code).json(validateOrderByField.message);
         }
