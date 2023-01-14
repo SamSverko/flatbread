@@ -4,7 +4,7 @@ import type { NextApiResponse, NextApiRequest } from 'next';
 
 import {
     validateQueryParamOrderByField,
-    getRecipeServingUnit,
+    getServingUnitFormat,
     validateQueryParamCondensed,
 } from '../../prisma/utils';
 
@@ -38,8 +38,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // Query recipes based on parameters
-    const servingUnits = await prisma.recipeServingUnit.findMany({
-        select: getRecipeServingUnit((condensedValidated === 'true')),
+    const servingUnits = await prisma.servingUnit.findMany({
+        select: getServingUnitFormat((condensedValidated === 'true')),
         orderBy: {
             [orderByFieldValidated as string]: orderByValidated,
         },

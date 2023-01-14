@@ -7,7 +7,7 @@ type QueryValidationResponse = {
 }
 
 // Format API data
-export function getRecipeCategoryFormat(condensed = false) {
+export function getCategoryFormat(condensed = false) {
     return {
         id: (condensed) ? false : true,
         createdAt: (condensed) ? false : true,
@@ -15,7 +15,7 @@ export function getRecipeCategoryFormat(condensed = false) {
     };
 }
 
-export function getRecipeIngredientName(condensed = false): Prisma.RecipeIngredientNameArgs {
+export function getIngredientFormat(condensed = false): Prisma.IngredientArgs {
     return {
         select: {
             id: (condensed) ? false : true,
@@ -26,7 +26,7 @@ export function getRecipeIngredientName(condensed = false): Prisma.RecipeIngredi
     };
 }
 
-export function getRecipeIngredientQuantityFraction(condensed = false): Prisma.RecipeIngredientQuantityFractionArgs {
+export function getQuantityFractionFormat(condensed = false): Prisma.QuantityFractionArgs {
     return {
         select: {
             id: (condensed) ? false : true,
@@ -37,7 +37,7 @@ export function getRecipeIngredientQuantityFraction(condensed = false): Prisma.R
     };
 }
 
-export function getRecipeStepOrNote(condensed = false): Prisma.RecipeStepsArgs {
+export function getRecipeStepOrNoteFormat(condensed = false): Prisma.RecipeStepFindManyArgs {
     return {
         select: {
             id: (condensed) ? false : true,
@@ -73,16 +73,16 @@ export function getRecipeFormat(condensed = false): Prisma.RecipeSelect {
         },
         servingUnitId: (condensed) ? false : true,
         courseTypes: {
-            select: getRecipeCategoryFormat(condensed),
+            select: getCategoryFormat(condensed),
         },
         cuisines: {
-            select: getRecipeCategoryFormat(condensed),
+            select: getCategoryFormat(condensed),
         },
         dietaryRestrictions: {
-            select: getRecipeCategoryFormat(condensed),
+            select: getCategoryFormat(condensed),
         },
         dishTypes: {
-            select: getRecipeCategoryFormat(condensed),
+            select: getCategoryFormat(condensed),
         },
         ingredients: {
             select: {
@@ -91,13 +91,13 @@ export function getRecipeFormat(condensed = false): Prisma.RecipeSelect {
                 order: true,
                 section: true,
                 quantityWhole: true,
-                quantityFraction: getRecipeIngredientQuantityFraction(condensed),
+                quantityFraction: getQuantityFractionFormat(condensed),
                 quantityFractionId: (condensed) ? false : true,
                 quantityMinWhole: true,
-                quantityMinFraction: getRecipeIngredientQuantityFraction(condensed),
+                quantityMinFraction: getQuantityFractionFormat(condensed),
                 quantityMinFractionId: (condensed) ? false : true,
                 quantityMaxWhole: true,
-                quantityMaxFraction: getRecipeIngredientQuantityFraction(condensed),
+                quantityMaxFraction: getQuantityFractionFormat(condensed),
                 quantityMaxFractionId: (condensed) ? false : true,
                 unit: {
                     select: {
@@ -109,22 +109,22 @@ export function getRecipeFormat(condensed = false): Prisma.RecipeSelect {
                     },
                 },
                 unitId: (condensed) ? false : true,
-                name: getRecipeIngredientName(condensed),
+                name: getIngredientFormat(condensed),
                 nameId: (condensed) ? false : true,
                 alteration: true,
                 isOptional: true,
-                substitutions: getRecipeIngredientName(condensed),
+                substitutions: getIngredientFormat(condensed),
             },
             orderBy: {
                 order: 'asc',
             },
         },
-        steps: getRecipeStepOrNote(condensed),
-        notes: getRecipeStepOrNote(condensed),
+        steps: getRecipeStepOrNoteFormat(condensed),
+        notes: getRecipeStepOrNoteFormat(condensed),
     };
 }
 
-export function getRecipeServingUnit(condensed = false) {
+export function getServingUnitFormat(condensed = false) {
     return {
         id: (condensed) ? false : true,
         createdAt: (condensed) ? false : true,

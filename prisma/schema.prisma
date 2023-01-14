@@ -15,21 +15,21 @@ datasource db {
 
 // RECIPE =====================================================================
 model Recipe {
-    id                  String                     @id @default(uuid())
-    createdAt           DateTime                   @default(now())
+    id                  String               @id @default(uuid())
+    createdAt           DateTime             @default(now())
     title               String
-    slug                String                     @unique
+    slug                String               @unique
     sourceName          String
     sourceURL           String?
     prepTimeMin         Int
     cookTimeMin         Int
     servingAmount       Int
-    servingUnit         RecipeServingUnit          @relation(fields: [servingUnitId], references: [id])
+    servingUnit         ServingUnit          @relation(fields: [servingUnitId], references: [id])
     servingUnitId       Int
-    courseTypes         RecipeCourseType[]
-    cuisines            RecipeCuisine[]
-    dietaryRestrictions RecipeDietaryRestriction[]
-    dishTypes           RecipeDishType[]
+    courseTypes         CourseType[]
+    cuisines            Cuisine[]
+    dietaryRestrictions DietaryRestriction[]
+    dishTypes           DishType[]
     ingredients         RecipeIngredient[]
     steps               RecipeStep[]
     notes               RecipeNote[]
@@ -37,100 +37,33 @@ model Recipe {
     @@unique(fields: [title, sourceName], name: "recipe_identifier")
 }
 
-model RecipeServingUnit {
-    id         Int      @id @unique @default(autoincrement())
-    createdAt  DateTime @default(now())
-    name       String   @unique
-    namePlural String   @unique
-    recipes    Recipe[]
-}
-
-// RECIPE / CATEGORIES ========================================================
-model RecipeCourseType {
-    id        Int      @id @unique @default(autoincrement())
-    createdAt DateTime @default(now())
-    name      String   @unique
-    recipes   Recipe[]
-}
-
-model RecipeCuisine {
-    id        Int      @id @unique @default(autoincrement())
-    createdAt DateTime @default(now())
-    name      String   @unique
-    recipes   Recipe[]
-}
-
-model RecipeDietaryRestriction {
-    id        Int      @id @unique @default(autoincrement())
-    createdAt DateTime @default(now())
-    name      String   @unique
-    recipes   Recipe[]
-}
-
-model RecipeDishType {
-    id        Int      @id @unique @default(autoincrement())
-    createdAt DateTime @default(now())
-    name      String   @unique
-    recipes   Recipe[]
-}
-
-// RECIPE / INGREDIENT ========================================================
 model RecipeIngredient {
-    id                    Int                               @id @unique @default(autoincrement())
-    createdAt             DateTime                          @default(now())
-    recipe                Recipe                            @relation(fields: [recipeId], references: [id])
+    id                    Int               @id @unique @default(autoincrement())
+    createdAt             DateTime          @default(now())
+    recipe                Recipe            @relation(fields: [recipeId], references: [id])
     recipeId              String
     order                 Int
     section               String?
     quantityWhole         Int?
-    quantityFraction      RecipeIngredientQuantityFraction? @relation("recipe_ingredient_quantity_fraction", fields: [quantityFractionId], references: [id])
+    quantityFraction      QuantityFraction? @relation("recipe_ingredient_quantity_fraction", fields: [quantityFractionId], references: [id])
     quantityFractionId    Int?
     quantityMinWhole      Int?
-    quantityMinFraction   RecipeIngredientQuantityFraction? @relation("recipe_ingredient_quantity_fraction_min", fields: [quantityMinFractionId], references: [id])
+    quantityMinFraction   QuantityFraction? @relation("recipe_ingredient_quantity_fraction_min", fields: [quantityMinFractionId], references: [id])
     quantityMinFractionId Int?
     quantityMaxWhole      Int?
-    quantityMaxFraction   RecipeIngredientQuantityFraction? @relation("recipe_ingredient_quantity_fraction_max", fields: [quantityMaxFractionId], references: [id])
+    quantityMaxFraction   QuantityFraction? @relation("recipe_ingredient_quantity_fraction_max", fields: [quantityMaxFractionId], references: [id])
     quantityMaxFractionId Int?
-    unit                  RecipeIngredientUnit?             @relation(fields: [unitId], references: [id])
+    unit                  IngredientUnit?   @relation(fields: [unitId], references: [id])
     unitId                Int?
-    name                  RecipeIngredientName              @relation("recipe_ingredient_name", fields: [nameId], references: [id])
+    name                  Ingredient        @relation("recipe_ingredient_name", fields: [nameId], references: [id])
     nameId                Int
     alteration            String?
-    isOptional            Boolean                           @default(false)
-    substitutions         RecipeIngredientName[]            @relation("recipe_ingredient_substitutions")
+    isOptional            Boolean           @default(false)
+    substitutions         Ingredient[]      @relation("recipe_ingredient_substitutions")
 
     @@unique(fields: [recipeId, order], name: "recipe_ingredient_identifier")
 }
 
-model RecipeIngredientQuantityFraction {
-    id                           Int                @id @unique @default(autoincrement())
-    createdAt                    DateTime           @default(now())
-    name                         String             @unique
-    value                        Decimal            @unique
-    recipeIngredientsQuantity    RecipeIngredient[] @relation("recipe_ingredient_quantity_fraction")
-    recipeIngredientsQuantityMin RecipeIngredient[] @relation("recipe_ingredient_quantity_fraction_min")
-    recipeIngredientsQuantityMax RecipeIngredient[] @relation("recipe_ingredient_quantity_fraction_max")
-}
-
-model RecipeIngredientUnit {
-    id                Int                @id @unique @default(autoincrement())
-    createdAt         DateTime           @default(now())
-    name              String             @unique
-    nameAbbr          String             @unique
-    namePlural        String             @unique
-    recipeIngredients RecipeIngredient[]
-}
-
-model RecipeIngredientName {
-    id                            Int                @id @unique @default(autoincrement())
-    createdAt                     DateTime           @default(now())
-    name                          String             @unique
-    namePlural                    String             @unique
-    RecipeIngredientName          RecipeIngredient[] @relation("recipe_ingredient_name")
-    RecipeIngredientSubstitutions RecipeIngredient[] @relation("recipe_ingredient_substitutions")
-}
-
-// RECIPE / STEP ==============================================================
 model RecipeStep {
     id        Int      @id @unique @default(autoincrement())
     createdAt DateTime @default(now())
@@ -143,7 +76,6 @@ model RecipeStep {
     @@unique(fields: [recipeId, order], name: "recipe_step_identifier")
 }
 
-// RECIPE / NOTE ==============================================================
 model RecipeNote {
     id        Int      @id @unique @default(autoincrement())
     createdAt DateTime @default(now())
@@ -154,4 +86,70 @@ model RecipeNote {
     details   String
 
     @@unique(fields: [recipeId, order], name: "recipe_note_identifier")
+}
+
+// GENERAL ====================================================================
+model Ingredient {
+    id                            Int                @id @unique @default(autoincrement())
+    createdAt                     DateTime           @default(now())
+    name                          String             @unique
+    namePlural                    String             @unique
+    Ingredient                    RecipeIngredient[] @relation("recipe_ingredient_name")
+    RecipeIngredientSubstitutions RecipeIngredient[] @relation("recipe_ingredient_substitutions")
+}
+
+model IngredientUnit {
+    id                Int                @id @unique @default(autoincrement())
+    createdAt         DateTime           @default(now())
+    name              String             @unique
+    nameAbbr          String             @unique
+    namePlural        String             @unique
+    recipeIngredients RecipeIngredient[]
+}
+
+model QuantityFraction {
+    id                           Int                @id @unique @default(autoincrement())
+    createdAt                    DateTime           @default(now())
+    name                         String             @unique
+    value                        Decimal            @unique
+    recipeIngredientsQuantity    RecipeIngredient[] @relation("recipe_ingredient_quantity_fraction")
+    recipeIngredientsQuantityMin RecipeIngredient[] @relation("recipe_ingredient_quantity_fraction_min")
+    recipeIngredientsQuantityMax RecipeIngredient[] @relation("recipe_ingredient_quantity_fraction_max")
+}
+
+model ServingUnit {
+    id         Int      @id @unique @default(autoincrement())
+    createdAt  DateTime @default(now())
+    name       String   @unique
+    namePlural String   @unique
+    recipes    Recipe[]
+}
+
+// GENERAL / CATEGORIES =======================================================
+model CourseType {
+    id        Int      @id @unique @default(autoincrement())
+    createdAt DateTime @default(now())
+    name      String   @unique
+    recipes   Recipe[]
+}
+
+model Cuisine {
+    id        Int      @id @unique @default(autoincrement())
+    createdAt DateTime @default(now())
+    name      String   @unique
+    recipes   Recipe[]
+}
+
+model DietaryRestriction {
+    id        Int      @id @unique @default(autoincrement())
+    createdAt DateTime @default(now())
+    name      String   @unique
+    recipes   Recipe[]
+}
+
+model DishType {
+    id        Int      @id @unique @default(autoincrement())
+    createdAt DateTime @default(now())
+    name      String   @unique
+    recipes   Recipe[]
 }

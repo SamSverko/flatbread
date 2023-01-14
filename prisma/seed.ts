@@ -40,7 +40,7 @@ interface RecipeToSeed {
 
 const prisma = new PrismaClient();
 
-const recipeServingUnits: Prisma.RecipeServingUnitCreateInput[] = [
+const servingUnits: Prisma.ServingUnitCreateInput[] = [
     { name: 'bun', namePlural: 'buns' },
     { name: 'cake', namePlural: 'cakes' },
     { name: 'cookie', namePlural: 'cookies' },
@@ -59,7 +59,7 @@ const recipeServingUnits: Prisma.RecipeServingUnitCreateInput[] = [
     { name: 'tortilla', namePlural: 'tortillas' },
 ];
 
-const recipeCourseTypes: Prisma.RecipeCourseTypeCreateInput[] = [
+const courseTypes: Prisma.CourseTypeCreateInput[] = [
     { name: 'breakfast' },
     { name: 'breakfast' },
     { name: 'brunch' },
@@ -71,7 +71,7 @@ const recipeCourseTypes: Prisma.RecipeCourseTypeCreateInput[] = [
     { name: 'snack' },
 ];
 
-const recipeCuisines: Prisma.RecipeCuisineCreateInput[] = [
+const cuisines: Prisma.CuisineCreateInput[] = [
     { name: 'american' },
     { name: 'asian' },
     { name: 'belgian' },
@@ -100,7 +100,7 @@ const recipeCuisines: Prisma.RecipeCuisineCreateInput[] = [
     { name: 'turkish' },
 ];
 
-const recipeDietaryRestrictions: Prisma.RecipeDietaryRestrictionCreateInput[] = [
+const dietaryRestrictions: Prisma.DietaryRestrictionCreateInput[] = [
     { name: 'dairy-free' },
     { name: 'gluten-free' },
     { name: 'nut-free' },
@@ -108,7 +108,7 @@ const recipeDietaryRestrictions: Prisma.RecipeDietaryRestrictionCreateInput[] = 
     { name: 'vegetarian' },
 ];
 
-const recipeDishTypes: Prisma.RecipeDishTypeCreateInput[] = [
+const dishTypes: Prisma.DishTypeCreateInput[] = [
     { name: 'bread' },
     { name: 'cake' },
     { name: 'confection' },
@@ -134,7 +134,7 @@ const recipeDishTypes: Prisma.RecipeDishTypeCreateInput[] = [
     { name: 'wrap' },
 ];
 
-const recipeIngredientQuantityFractions: Prisma.RecipeIngredientQuantityFractionCreateInput[] = [
+const quantityFractions: Prisma.QuantityFractionCreateInput[] = [
     { name: '0', value: 0 },
     { name: '⅒', value: 0.1 },
     { name: '⅑', value: 0.111 },
@@ -156,7 +156,7 @@ const recipeIngredientQuantityFractions: Prisma.RecipeIngredientQuantityFraction
     { name: '⅞', value: 0.875 },
 ];
 
-const recipeIngredientUnits: Prisma.RecipeIngredientUnitCreateInput[] = [
+const ingredientUnits: Prisma.IngredientUnitCreateInput[] = [
     { name: 'cup', nameAbbr: 'c', namePlural: 'cups' },
     { name: 'gram', nameAbbr: 'g', namePlural: 'grams' },
     { name: 'litre', nameAbbr: 'L', namePlural: 'litres' },
@@ -172,7 +172,7 @@ const recipeIngredientUnits: Prisma.RecipeIngredientUnitCreateInput[] = [
 - https://www.flatbread.app/?recipe=marcella-hazans-tomato-sauce
 - https://www.flatbread.app/?recipe=slow-cooker-ratatouille
 */
-const recipeIngredientNames: Prisma.RecipeIngredientNameCreateInput[] = [
+const ingredients: Prisma.IngredientCreateInput[] = [
     { name: 'all-purpose flour', namePlural: 'all-purpose flour' },
     { name: 'almonds', namePlural: 'almonds' },
     { name: 'boneless skinless chicken breast', namePlural: 'boneless skinless chicken breasts' },
@@ -506,14 +506,14 @@ function validateRecipe(recipe: RecipeToSeed) {
 }
 
 async function seedDB() {
-    // RecipeCourseType
+    // CourseType
     await prisma.$transaction(
-        recipeCourseTypes.map(courseType => {
+        courseTypes.map(courseType => {
             const recipeCourseType = {
                 name: courseType.name,
             };
 
-            return prisma.recipeCourseType.upsert({
+            return prisma.courseType.upsert({
                 where: {
                     name: recipeCourseType.name,
                 },
@@ -522,16 +522,16 @@ async function seedDB() {
             });
         }),
     );
-    logCompletedSeed('RecipeCourseType');
+    logCompletedSeed('CourseType');
 
-    // RecipeCuisine
+    // Cuisine
     await prisma.$transaction(
-        recipeCuisines.map(cuisine => {
+        cuisines.map(cuisine => {
             const recipeCuisine = {
                 name: cuisine.name,
             };
 
-            return prisma.recipeCuisine.upsert({
+            return prisma.cuisine.upsert({
                 where: {
                     name: recipeCuisine.name,
                 },
@@ -540,16 +540,16 @@ async function seedDB() {
             });
         }),
     );
-    logCompletedSeed('RecipeCuisine');
+    logCompletedSeed('Cuisine');
 
-    // RecipeDietaryRestriction
+    // DietaryRestriction
     await prisma.$transaction(
-        recipeDietaryRestrictions.map(dietaryRestriction => {
+        dietaryRestrictions.map(dietaryRestriction => {
             const recipeDietaryRestriction = {
                 name: dietaryRestriction.name,
             };
 
-            return prisma.recipeDietaryRestriction.upsert({
+            return prisma.dietaryRestriction.upsert({
                 where: {
                     name: recipeDietaryRestriction.name,
                 },
@@ -558,16 +558,16 @@ async function seedDB() {
             });
         }),
     );
-    logCompletedSeed('RecipeDietaryRestriction');
+    logCompletedSeed('DietaryRestriction');
 
-    // RecipeDishType
+    // DishType
     await prisma.$transaction(
-        recipeDishTypes.map(dishType => {
+        dishTypes.map(dishType => {
             const recipeDishType = {
                 name: dishType.name,
             };
 
-            return prisma.recipeDishType.upsert({
+            return prisma.dishType.upsert({
                 where: {
                     name: recipeDishType.name,
                 },
@@ -576,17 +576,17 @@ async function seedDB() {
             });
         }),
     );
-    logCompletedSeed('RecipeDishType');
+    logCompletedSeed('DishType');
 
-    // RecipeServingUnit
+    // ServingUnit
     await prisma.$transaction(
-        recipeServingUnits.map(servingUnit => {
+        servingUnits.map(servingUnit => {
             const recipeServingUnit = {
                 name: servingUnit.name,
                 namePlural: servingUnit.namePlural,
             };
 
-            return prisma.recipeServingUnit.upsert({
+            return prisma.servingUnit.upsert({
                 where: {
                     name: servingUnit.name,
                 },
@@ -595,17 +595,17 @@ async function seedDB() {
             });
         }),
     );
-    logCompletedSeed('RecipeServingUnit');
+    logCompletedSeed('ServingUnit');
 
-    // RecipeIngredientQuantityFraction
+    // QuantityFraction
     await prisma.$transaction(
-        recipeIngredientQuantityFractions.map(ingredientQuantityFraction => {
+        quantityFractions.map(ingredientQuantityFraction => {
             const recipeIngredientQuantityFraction = {
                 name: ingredientQuantityFraction.name,
                 value: ingredientQuantityFraction.value,
             };
 
-            return prisma.recipeIngredientQuantityFraction.upsert({
+            return prisma.quantityFraction.upsert({
                 where: {
                     name: ingredientQuantityFraction.name,
                 },
@@ -614,18 +614,18 @@ async function seedDB() {
             });
         }),
     );
-    logCompletedSeed('RecipeIngredientQuantityFraction');
+    logCompletedSeed('QuantityFraction');
 
-    // RecipeIngredientUnit
+    // IngredientUnit
     await prisma.$transaction(
-        recipeIngredientUnits.map(ingredientUnit => {
+        ingredientUnits.map(ingredientUnit => {
             const recipeIngredientUnit = {
                 name: ingredientUnit.name,
                 nameAbbr: ingredientUnit.nameAbbr,
                 namePlural: ingredientUnit.namePlural,
             };
 
-            return prisma.recipeIngredientUnit.upsert({
+            return prisma.ingredientUnit.upsert({
                 where: {
                     name: ingredientUnit.name,
                 },
@@ -634,17 +634,17 @@ async function seedDB() {
             });
         }),
     );
-    logCompletedSeed('RecipeIngredientUnit');
+    logCompletedSeed('IngredientUnit');
 
-    // RecipeIngredientName
+    // Ingredient
     await prisma.$transaction(
-        recipeIngredientNames.map(ingredientName => {
+        ingredients.map(ingredientName => {
             const recipeIngredient = {
                 name: ingredientName.name,
                 namePlural: ingredientName.namePlural,
             };
 
-            return prisma.recipeIngredientName.upsert({
+            return prisma.ingredient.upsert({
                 where: {
                     name: ingredientName.name,
                 },
@@ -653,7 +653,7 @@ async function seedDB() {
             });
         }),
     );
-    logCompletedSeed('RecipeIngredientName');
+    logCompletedSeed('Ingredient');
 
     // Recipe 
     const doesRecipeNanaimoBarsExist = await prisma.recipe.findUnique({
