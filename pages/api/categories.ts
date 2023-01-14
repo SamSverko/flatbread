@@ -9,6 +9,19 @@ import {
     validateQueryParamShowOnly,
 } from '../../prisma/utils';
 
+type Category = {
+    id: number,
+    createdAt: Date,
+    name: string,
+}
+
+type CategoriesResponse = {
+    courseTypes?: Category[],
+    cuisines?: Category[],
+    dietaryRestrictions?: Category[],
+    dishTypes?: Category[],
+}
+
 const prisma = new PrismaClient();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -19,19 +32,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         showOnly,
     } = req.query;
 
+    let condensedValidated, orderByValidated, orderByFieldValidated, showOnlyValidated;
+
     // Query parameter validations
     if (condensed) {
         const validateCondensed = validateQueryParamCondensed(condensed);
         if (validateCondensed.code !== 200) {
             return res.status(validateCondensed.code).json(validateCondensed.message);
         }
+        condensedValidated = validateCondensed.paramValue as string;
     }
 
     if (orderBy || orderByField) {
-        const validateOrderByField = validateQueryParamOrderByField(orderBy, orderByField, ['id', 'createdAt', 'name']);
+        const validateOrderByField = validateQueryParamOrderByField(orderBy, orderByField, ['createdAt', 'title', 'sourceName', 'prepTimeMin', 'cookTimeMin', 'servingAmount']);
         if (validateOrderByField.code !== 200) {
             return res.status(validateOrderByField.code).json(validateOrderByField.message);
         }
+        orderByValidated = validateOrderByField.paramValue[0] as string;
+        orderByFieldValidated = validateOrderByField.paramValue[1] as string;
     }
 
     if (showOnly) {
@@ -39,41 +57,55 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if (validateShowOnly.code !== 200) {
             return res.status(validateShowOnly.code).json(validateShowOnly.message);
         }
+        showOnlyValidated = validateShowOnly.paramValue;
     }
-    // TO DO - use the showOnly values below...
 
-    const courseTypes = await prisma.recipeCourseType.findMany({
-        select: getRecipeCategoryFormat((condensed === 'true')),
-        orderBy: {
-            [orderByField as string]: orderBy,
-        },
-    });
+    // Query recipes based on parameters
+    const response: CategoriesResponse = {};
 
-    const cuisines = await prisma.recipeCuisine.findMany({
-        select: getRecipeCategoryFormat((condensed === 'true')),
-        orderBy: {
-            [orderByField as string]: orderBy,
-        },
-    });
+    if (!showOnlyValidated || showOnlyValidated.includes('coursetypes')) {
+        const courseTypes = await prisma.recipeCourseType.findMany({
+            select: getRecipeCategoryFormat((condensedValidated === 'true')),
+            orderBy: {
+                [orderByFieldValidated as string]: orderByValidated,
+            },
+        });
 
-    const dietaryRestrictions = await prisma.recipeDietaryRestriction.findMany({
-        select: getRecipeCategoryFormat((condensed === 'true')),
-        orderBy: {
-            [orderByField as string]: orderBy,
-        },
-    });
+        response.courseTypes = courseTypes;
+    }
 
-    const dishTypes = await prisma.recipeDietaryRestriction.findMany({
-        select: getRecipeCategoryFormat((condensed === 'true')),
-        orderBy: {
-            [orderByField as string]: orderBy,
-        },
-    });
+    if (!showOnlyValidated || showOnlyValidated.includes('cuisines')) {
+        const cuisines = await prisma.recipeCuisine.findMany({
+            select: getRecipeCategoryFormat((condensedValidated === 'true')),
+            orderBy: {
+                [orderByFieldValidated as string]: orderByValidated,
+            },
+        });
 
-    res.status(200).json({
-        courseTypes: courseTypes,
-        cuisines: cuisines,
-        dietaryRestrictions: dietaryRestrictions,
-        dishTypes: dishTypes,
-    });
+        response.cuisines = cuisines;
+    }
+
+    if (!showOnlyValidated || showOnlyValidated.includes('dietaryrestrictions')) {
+        const dietaryRestrictions = await prisma.recipeDietaryRestriction.findMany({
+            select: getRecipeCategoryFormat((condensedValidated === 'true')),
+            orderBy: {
+                [orderByFieldValidated as string]: orderByValidated,
+            },
+        });
+
+        response.dietaryRestrictions = dietaryRestrictions;
+    }
+
+    if (!showOnlyValidated || showOnlyValidated.includes('dishtypes')) {
+        const dishTypes = await prisma.recipeDishType.findMany({
+            select: getRecipeCategoryFormat((condensedValidated === 'true')),
+            orderBy: {
+                [orderByFieldValidated as string]: orderByValidated,
+            },
+        });
+
+        response.dishTypes = dishTypes;
+    }
+
+    res.status(200).json(response);
 }

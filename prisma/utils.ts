@@ -3,6 +3,7 @@ import { Prisma } from '@prisma/client';
 type QueryValidationResponse = {
     code: number,
     message: string,
+    paramValue: string | string[],
 }
 
 // Format API data
@@ -137,13 +138,56 @@ export function validateQueryParamCondensed(value: string | string[]): QueryVali
         return {
             code: 400,
             message: 'Invalid value for query parameter `condensed`. Fix: Use either `true`, `false`, or omit parameter entirely.',
+            paramValue: condensed,
         };
     }
 
-    return validQueryParam;
+    return {
+        ...validQueryParam,
+        paramValue: condensed,
+    };
 }
 
-export function validateQueryParamShowOnly(value: string | string[]) {
+export function validateQueryParamOrderByField(
+    orderByValue: string | string[],
+    orderByFieldValue: string | string[],
+    orderByFieldOptions: string[],
+): QueryValidationResponse {
+    const orderByOptions = ['asc', 'desc'];
+    const orderBy = orderByValue?.toString().toLowerCase();
+    const orderByField = orderByFieldValue?.toString();
+
+    if ((orderBy && !orderByField) || (!orderBy && orderByField)) {
+        return {
+            code: 400,
+            message: 'Parameters `orderBy` and `orderByField` must be used simultaneously. Fix: Provide both parameters or omit both parameters entirely.',
+            paramValue: [orderBy, orderByField],
+        };
+    }
+
+    if (orderBy && !orderByOptions.includes(orderBy)) {
+        return {
+            code: 400,
+            message: `Invalid value for query parameter \`orderBy\`. Fix: Use either \`${orderByOptions.join('`, `')}\`, or omit parameter entirely (along with the \`orderByField\` parameter).`,
+            paramValue: [orderBy, orderByField],
+        };
+    }
+
+    if (orderByField && !orderByFieldOptions.includes(orderByField)) {
+        return {
+            code: 400,
+            message: `Invalid value for query parameter \`orderByField\`. Fix: Use either \`${orderByFieldOptions.join('`, `')}\`, or omit parameter entirely (along with the \`orderBy\` parameter).`,
+            paramValue: [orderBy, orderByField],
+        };
+    }
+
+    return {
+        ...validQueryParam,
+        paramValue: [orderBy, orderByField],
+    };
+}
+
+export function validateQueryParamShowOnly(value: string | string[]): QueryValidationResponse {
     const options = ['coursetypes', 'cuisines', 'dietaryrestrictions', 'dishtypes'];
 
     const values = value.toString().toLowerCase().split(',')
@@ -163,41 +207,46 @@ export function validateQueryParamShowOnly(value: string | string[]) {
         return {
             code: 400,
             message: `Invalid value for query parameter \`showOnly\`. Fix: Use any of the following values: \`${options.join('`, `')}\`, or omit parameter entirely. If using multiple values, ensure they are comma-separated.`,
+            paramValue: values,
         };
     }
 
-    return validQueryParam;
+    return {
+        ...validQueryParam,
+        paramValue: values,
+    };
 }
 
-export function validateQueryParamOrderByField(
-    orderByValue: string | string[],
-    orderByFieldValue: string | string[],
-    orderByFieldOptions: string[],
-): QueryValidationResponse {
-    const orderByOptions = ['asc', 'desc'];
-    const orderBy = orderByValue?.toString().toLowerCase();
-    const orderByField = orderByFieldValue?.toString();
+export function validateQueryParamSlug(value: string | string[]): QueryValidationResponse {
+    const slug = value.toString().toLowerCase();
 
-    if ((orderBy && !orderByField) || (!orderBy && orderByField)) {
+    if (!slug) {
         return {
             code: 400,
-            message: 'Parameters `orderBy` and `orderByField` must be used simultaneously. Fix: Provide both parameters or omit both parameters entirely.',
+            message: 'Invalid value for query parameter `slug`. Fix: Provide a hyphen joined string.',
+            paramValue: slug,
         };
     }
 
-    if (orderBy && !orderByOptions.includes(orderBy)) {
+    return {
+        ...validQueryParam,
+        paramValue: slug,
+    };
+}
+
+export function validateQueryParamTitle(value: string | string[]): QueryValidationResponse {
+    const title = value?.toString().toLowerCase().split(' ').join(' & ');
+
+    if (!title) {
         return {
             code: 400,
-            message: `Invalid value for query parameter \`orderBy\`. Fix: Use either \`${orderByOptions.join('`, `')}\`, or omit parameter entirely (along with the \`orderByField\` parameter).`,
+            message: 'Invalid value for query parameter `title`. Fix: Provide a string of words. Spaces are allowed',
+            paramValue: title,
         };
     }
 
-    if (orderByField && !orderByFieldOptions.includes(orderByField)) {
-        return {
-            code: 400,
-            message: `Invalid value for query parameter \`orderByField\`. Fix: Use either \`${orderByFieldOptions.join('`, `')}\`, or omit parameter entirely (along with the \`orderBy\` parameter).`,
-        };
-    }
-
-    return validQueryParam;
+    return {
+        ...validQueryParam,
+        paramValue: title,
+    };
 }
