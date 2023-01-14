@@ -7,7 +7,7 @@ type QueryValidationResponse = {
 }
 
 // Format API data
-export function getCategoryFormat(condensed = false) {
+export function getCategoryFormat(condensed = false): Prisma.CourseTypeSelect {
     return {
         id: (condensed) ? false : true,
         createdAt: (condensed) ? false : true,
@@ -15,40 +15,41 @@ export function getCategoryFormat(condensed = false) {
     };
 }
 
-export function getIngredientFormat(condensed = false): Prisma.IngredientArgs {
+export function getIngredientFormat(condensed = false): Prisma.IngredientSelect {
     return {
-        select: {
-            id: (condensed) ? false : true,
-            createdAt: (condensed) ? false : true,
-            name: true,
-            namePlural: true,
-        },
+        id: (condensed) ? false : true,
+        createdAt: (condensed) ? false : true,
+        name: true,
+        namePlural: true,
     };
 }
 
-export function getQuantityFractionFormat(condensed = false): Prisma.QuantityFractionArgs {
+export function getIngredientUnitFormat(condensed = false): Prisma.IngredientUnitSelect {
     return {
-        select: {
-            id: (condensed) ? false : true,
-            createdAt: (condensed) ? false : true,
-            name: true,
-            value: true,
-        },
+        id: (condensed) ? false : true,
+        createdAt: (condensed) ? false : true,
+        name: true,
+        nameAbbr: true,
+        namePlural: true,
     };
 }
 
-export function getRecipeStepOrNoteFormat(condensed = false): Prisma.RecipeStepFindManyArgs {
+export function getQuantityFractionFormat(condensed = false): Prisma.QuantityFractionSelect {
     return {
-        select: {
-            id: (condensed) ? false : true,
-            createdAt: (condensed) ? false : true,
-            order: true,
-            section: true,
-            details: true,
-        },
-        orderBy: {
-            order: 'asc',
-        },
+        id: (condensed) ? false : true,
+        createdAt: (condensed) ? false : true,
+        name: true,
+        value: true,
+    };
+}
+
+export function getRecipeStepOrNoteFormat(condensed = false): Prisma.RecipeStepSelect {
+    return {
+        id: (condensed) ? false : true,
+        createdAt: (condensed) ? false : true,
+        order: true,
+        section: true,
+        details: true,
     };
 }
 
@@ -91,13 +92,19 @@ export function getRecipeFormat(condensed = false): Prisma.RecipeSelect {
                 order: true,
                 section: true,
                 quantityWhole: true,
-                quantityFraction: getQuantityFractionFormat(condensed),
+                quantityFraction: {
+                    select: getQuantityFractionFormat(condensed),
+                },
                 quantityFractionId: (condensed) ? false : true,
                 quantityMinWhole: true,
-                quantityMinFraction: getQuantityFractionFormat(condensed),
+                quantityMinFraction: {
+                    select: getQuantityFractionFormat(condensed),
+                },
                 quantityMinFractionId: (condensed) ? false : true,
                 quantityMaxWhole: true,
-                quantityMaxFraction: getQuantityFractionFormat(condensed),
+                quantityMaxFraction: {
+                    select: getQuantityFractionFormat(condensed),
+                },
                 quantityMaxFractionId: (condensed) ? false : true,
                 unit: {
                     select: {
@@ -109,22 +116,36 @@ export function getRecipeFormat(condensed = false): Prisma.RecipeSelect {
                     },
                 },
                 unitId: (condensed) ? false : true,
-                name: getIngredientFormat(condensed),
+                name: {
+                    select: getIngredientFormat(condensed),
+                },
                 nameId: (condensed) ? false : true,
                 alteration: true,
                 isOptional: true,
-                substitutions: getIngredientFormat(condensed),
+                substitutions: {
+                    select: getIngredientFormat(condensed),
+                },
             },
             orderBy: {
                 order: 'asc',
             },
         },
-        steps: getRecipeStepOrNoteFormat(condensed),
-        notes: getRecipeStepOrNoteFormat(condensed),
+        steps: {
+            select: getRecipeStepOrNoteFormat(condensed),
+            orderBy: {
+                order: 'asc',
+            },
+        },
+        notes: {
+            select: getRecipeStepOrNoteFormat(condensed),
+            orderBy: {
+                order: 'asc',
+            },
+        },
     };
 }
 
-export function getServingUnitFormat(condensed = false) {
+export function getServingUnitFormat(condensed = false): Prisma.ServingUnitSelect {
     return {
         id: (condensed) ? false : true,
         createdAt: (condensed) ? false : true,

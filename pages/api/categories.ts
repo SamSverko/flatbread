@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient, Recipe } from '@prisma/client';
 
 import type { NextApiResponse, NextApiRequest } from 'next';
 
@@ -10,9 +10,11 @@ import {
 } from '../../prisma/utils';
 
 type Category = {
-    id: number,
-    createdAt: Date,
-    name: string,
+    id?: number | undefined,
+    createdAt?: Date | undefined,
+    name?: string | undefined,
+    recipes?: Recipe[] | undefined,
+    _count?: Prisma.CourseTypeCountOutputType | undefined,
 }
 
 type CategoriesResponse = {
