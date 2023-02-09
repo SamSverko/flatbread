@@ -6,6 +6,9 @@ type QueryValidationResponse = {
     paramValue: string | string[],
 }
 
+// Static data
+export const categoryTables = ['courseType' as const, 'cuisine' as const, 'dietaryRestriction' as const, 'dishType' as const];
+
 // Format API data
 export function getCategoryFormat(condensed = false): Prisma.CourseTypeSelect {
     return {
@@ -160,6 +163,34 @@ const validQueryParam = {
     message: 'Query parameter is valid.',
 };
 
+export function validateQueryParamCategory(value: string | string[]): QueryValidationResponse {
+    const category = value?.toString().toLowerCase();
+    const formattedCategories = categoryTables.map(category => category.toLowerCase());
+
+    if (!category) {
+        return {
+            code: 400,
+            message: 'Missing query parameter `category`. Fix: Provide a value.',
+            paramValue: category,
+        };
+    }
+
+    const categoryIndex = formattedCategories.indexOf(category);
+
+    if (categoryIndex === -1) {
+        return {
+            code: 400,
+            message: `Invalid value for query parameter \`category\`. Fix: Use either \`${formattedCategories.join('`, `')}\`.`,
+            paramValue: category,
+        };
+    }
+
+    return {
+        ...validQueryParam,
+        paramValue: categoryTables[categoryIndex],
+    };
+}
+
 export function validateQueryParamCondensed(value: string | string[]): QueryValidationResponse {
     const condensedOptions = ['true', 'false'];
     const condensed = value?.toString().toLowerCase();
@@ -175,6 +206,23 @@ export function validateQueryParamCondensed(value: string | string[]): QueryVali
     return {
         ...validQueryParam,
         paramValue: condensed,
+    };
+}
+
+export function validateQueryParamName(value: string | string[]): QueryValidationResponse {
+    const name = value?.toString().toLowerCase();
+
+    if (!name) {
+        return {
+            code: 400,
+            message: 'Missing query parameter `name`. Fix: Provide a value.',
+            paramValue: name,
+        };
+    }
+
+    return {
+        ...validQueryParam,
+        paramValue: name,
     };
 }
 
@@ -218,7 +266,7 @@ export function validateQueryParamOrderByField(
 }
 
 export function validateQueryParamShowOnly(value: string | string[]): QueryValidationResponse {
-    const options = ['coursetypes', 'cuisines', 'dietaryrestrictions', 'dishtypes'];
+    const options = categoryTables.map(category => `${category.toLowerCase()}s`);
 
     const values = value.toString().toLowerCase().split(',')
         .map((value) => value.trim())
@@ -279,4 +327,16 @@ export function validateQueryParamTitle(value: string | string[]): QueryValidati
         ...validQueryParam,
         paramValue: title,
     };
+}
+
+// Handle Prisma errors
+export function handlePrismaError(error: unknown) {
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+        return {
+            code: error.code,
+            message: error.message,
+        };
+    } else {
+        return error;
+    }
 }

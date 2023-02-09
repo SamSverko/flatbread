@@ -3,9 +3,9 @@ import { PrismaClient } from '@prisma/client';
 import type { NextApiResponse, NextApiRequest } from 'next';
 
 import {
-    validateQueryParamOrderByField,
     getServingUnitFormat,
     validateQueryParamCondensed,
+    validateQueryParamOrderByField,
 } from '../../prisma/utils';
 
 const prisma = new PrismaClient();
