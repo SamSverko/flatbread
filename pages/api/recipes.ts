@@ -21,49 +21,43 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         title,
     } = req.query;
 
-    let condensedValidated, orderByValidated, orderByFieldValidated, slugValidated, titleValidated;
+    let condensedValidated,
+        orderByValidated,
+        orderByFieldValidated,
+        slugValidated,
+        titleValidated;
 
-    // Query parameter validations
+    // VALIDATION =============================================================
     if (condensed) {
-        const validateCondensed = validateQueryParamCondensed(condensed);
-        if (validateCondensed.code !== 200) {
-            return res.status(validateCondensed.code).json(validateCondensed.message);
-        }
-        condensedValidated = validateCondensed.paramValue as string;
+        condensedValidated = validateQueryParamCondensed(res, condensed);
+        if (condensedValidated === undefined) return;
     }
 
     if (orderBy || orderByField) {
-        const validateOrderByField = validateQueryParamOrderByField(orderBy, orderByField, ['createdAt', 'title', 'sourceName', 'prepTimeMin', 'cookTimeMin', 'servingAmount']);
-        if (validateOrderByField.code !== 200) {
-            return res.status(validateOrderByField.code).json(validateOrderByField.message);
-        }
-        orderByValidated = validateOrderByField.paramValue[0] as string;
-        orderByFieldValidated = validateOrderByField.paramValue[1] as string;
+        const orderByFieldValidation = validateQueryParamOrderByField(res, orderBy, orderByField, ['createdAt', 'title', 'sourceName', 'prepTimeMin', 'cookTimeMin', 'servingAmount']);
+        if (orderByFieldValidation === undefined) return;
+
+        orderByValidated = orderByFieldValidation.orderBy;
+        orderByFieldValidated = orderByFieldValidation.orderByField;
     }
 
     if (slug) {
-        const validatedSlugField = validateQueryParamSlug(slug);
-        if (validatedSlugField.code !== 200) {
-            return res.status(validatedSlugField.code).json(validatedSlugField.message);
-        }
-        slugValidated = validatedSlugField.paramValue as string;
+        slugValidated = validateQueryParamSlug(res, slug);
+        if (slugValidated === undefined) return;
     }
 
     if (title) {
-        const validatedTitleField = validateQueryParamTitle(title);
-        if (validatedTitleField.code !== 200) {
-            return res.status(validatedTitleField.code).json(validatedTitleField.message);
-        }
-        titleValidated = validatedTitleField.paramValue as string;
+        titleValidated = validateQueryParamTitle(res, title);
+        if (titleValidated === undefined) return;
     }
 
-    // Query recipes based on parameters
+    // QUERY ==================================================================
     if (slugValidated) { // `slug` parameter takes precedence over all other filters
         const recipe = await prisma.recipe.findUnique({
             where: {
                 slug: slugValidated,
             },
-            select: getRecipeFormat((condensedValidated === 'true')),
+            select: getRecipeFormat(condensedValidated),
         });
 
         return res.status(200).json(recipe);
@@ -74,7 +68,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     search: (titleValidated) ? titleValidated : undefined,
                 },
             },
-            select: getRecipeFormat((condensedValidated === 'true')),
+            select: getRecipeFormat(condensedValidated),
             orderBy: {
                 [orderByFieldValidated as string]: orderByValidated,
             },

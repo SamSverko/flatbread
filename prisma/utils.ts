@@ -1,13 +1,13 @@
 import { Prisma } from '@prisma/client';
-
-type QueryValidationResponse = {
-    code: number,
-    message: string,
-    paramValue: string | string[],
-}
+import type { NextApiResponse } from 'next';
 
 // Static data
-export const categoryTables = ['courseType' as const, 'cuisine' as const, 'dietaryRestriction' as const, 'dishType' as const];
+export const categoryTables = [
+    'courseType' as const,
+    'cuisine' as const,
+    'dietaryRestriction' as const,
+    'dishType' as const,
+];
 
 // Format API data
 export function getCategoryFormat(condensed = false): Prisma.CourseTypeSelect {
@@ -158,114 +158,74 @@ export function getServingUnitFormat(condensed = false): Prisma.ServingUnitSelec
 }
 
 // Validate API query parameters
-const validQueryParam = {
-    code: 200,
-    message: 'Query parameter is valid.',
-};
-
-export function validateQueryParamCategory(value: string | string[]): QueryValidationResponse {
+export function validateQueryParamCategory(res: NextApiResponse, value: string | string[]) {
     const category = value?.toString().toLowerCase();
     const formattedCategories = categoryTables.map(category => category.toLowerCase());
 
     if (!category) {
-        return {
-            code: 400,
-            message: 'Missing query parameter `category`. Fix: Provide a value.',
-            paramValue: category,
-        };
+        return res.status(400).json('Missing query parameter `category`. Fix: Provide a value.');
     }
 
     const categoryIndex = formattedCategories.indexOf(category);
 
     if (categoryIndex === -1) {
-        return {
-            code: 400,
-            message: `Invalid value for query parameter \`category\`. Fix: Use either \`${formattedCategories.join('`, `')}\`.`,
-            paramValue: category,
-        };
+        return res.status(400).json(`Invalid value for query parameter \`category\`. Fix: Use either \`${formattedCategories.join('`, `')}\`.`);
     }
 
-    return {
-        ...validQueryParam,
-        paramValue: categoryTables[categoryIndex],
-    };
+    return categoryTables[categoryIndex];
 }
 
-export function validateQueryParamCondensed(value: string | string[]): QueryValidationResponse {
-    const condensedOptions = ['true', 'false'];
+export function validateQueryParamCondensed(res: NextApiResponse, value: string | string[]) {
     const condensed = value?.toString().toLowerCase();
 
-    if (value && !condensedOptions.includes(condensed)) {
-        return {
-            code: 400,
-            message: 'Invalid value for query parameter `condensed`. Fix: Use either `true`, `false`, or omit parameter entirely.',
-            paramValue: condensed,
-        };
+    if (condensed === 'true') {
+        return true;
+    } else if (condensed === 'false') {
+        return false;
+    } else {
+        return res.status(400).json('Invalid value for query parameter `condensed`. Fix: Use either `true`, `false`, or omit parameter entirely.');
     }
-
-    return {
-        ...validQueryParam,
-        paramValue: condensed,
-    };
 }
 
-export function validateQueryParamName(value: string | string[]): QueryValidationResponse {
+export function validateQueryParamName(res: NextApiResponse, value: string | string[]) {
     const name = value?.toString().toLowerCase();
 
     if (!name) {
-        return {
-            code: 400,
-            message: 'Missing query parameter `name`. Fix: Provide a value.',
-            paramValue: name,
-        };
+        return res.status(400).json('Missing query parameter `name`. Fix: Provide a value.');
     }
 
-    return {
-        ...validQueryParam,
-        paramValue: name,
-    };
+    return name;
 }
 
 export function validateQueryParamOrderByField(
+    res: NextApiResponse,
     orderByValue: string | string[],
     orderByFieldValue: string | string[],
     orderByFieldOptions: string[],
-): QueryValidationResponse {
+) {
     const orderByOptions = ['asc', 'desc'];
     const orderBy = orderByValue?.toString().toLowerCase();
     const orderByField = orderByFieldValue?.toString();
 
     if ((orderBy && !orderByField) || (!orderBy && orderByField)) {
-        return {
-            code: 400,
-            message: 'Parameters `orderBy` and `orderByField` must be used simultaneously. Fix: Provide both parameters or omit both parameters entirely.',
-            paramValue: [orderBy, orderByField],
-        };
+        return res.status(400).json('Parameters `orderBy` and `orderByField` must be used simultaneously. Fix: Provide both parameters or omit both parameters entirely.');
     }
 
     if (orderBy && !orderByOptions.includes(orderBy)) {
-        return {
-            code: 400,
-            message: `Invalid value for query parameter \`orderBy\`. Fix: Use either \`${orderByOptions.join('`, `')}\`, or omit parameter entirely (along with the \`orderByField\` parameter).`,
-            paramValue: [orderBy, orderByField],
-        };
+        return res.status(400).json(`Invalid value for query parameter \`orderBy\`. Fix: Use either \`${orderByOptions.join('`, `')}\`, or omit parameter entirely (along with the \`orderByField\` parameter).`);
     }
 
     if (orderByField && !orderByFieldOptions.includes(orderByField)) {
-        return {
-            code: 400,
-            message: `Invalid value for query parameter \`orderByField\`. Fix: Use either \`${orderByFieldOptions.join('`, `')}\`, or omit parameter entirely (along with the \`orderBy\` parameter).`,
-            paramValue: [orderBy, orderByField],
-        };
+        return res.status(400).json(`Invalid value for query parameter \`orderByField\`. Fix: Use either \`${orderByFieldOptions.join('`, `')}\`, or omit parameter entirely (along with the \`orderBy\` parameter).`);
     }
 
     return {
-        ...validQueryParam,
-        paramValue: [orderBy, orderByField],
+        orderBy: orderBy,
+        orderByField: orderByField,
     };
 }
 
-export function validateQueryParamShowOnly(value: string | string[]): QueryValidationResponse {
+export function validateQueryParamShowOnly(res: NextApiResponse, value: string | string[]) {
     const options = categoryTables.map(category => `${category.toLowerCase()}s`);
 
     const values = value.toString().toLowerCase().split(',')
@@ -282,51 +242,30 @@ export function validateQueryParamShowOnly(value: string | string[]): QueryValid
     });
 
     if (!isValid) {
-        return {
-            code: 400,
-            message: `Invalid value for query parameter \`showOnly\`. Fix: Use any of the following values: \`${options.join('`, `')}\`, or omit parameter entirely. If using multiple values, ensure they are comma-separated.`,
-            paramValue: values,
-        };
+        return res.status(400).json(`Invalid value for query parameter \`showOnly\`. Fix: Use any of the following values: \`${options.join('`, `')}\`, or omit parameter entirely. If using multiple values, ensure they are comma-separated.`);
+    } else {
+        return values;
     }
-
-    return {
-        ...validQueryParam,
-        paramValue: values,
-    };
 }
 
-export function validateQueryParamSlug(value: string | string[]): QueryValidationResponse {
+export function validateQueryParamSlug(res: NextApiResponse, value: string | string[]) {
     const slug = value.toString().toLowerCase();
 
     if (!slug) {
-        return {
-            code: 400,
-            message: 'Invalid value for query parameter `slug`. Fix: Provide a hyphen joined string.',
-            paramValue: slug,
-        };
+        return res.status(400).json('Invalid value for query parameter `slug`. Fix: Provide a hyphen joined string.');
     }
 
-    return {
-        ...validQueryParam,
-        paramValue: slug,
-    };
+    return slug;
 }
 
-export function validateQueryParamTitle(value: string | string[]): QueryValidationResponse {
+export function validateQueryParamTitle(res: NextApiResponse, value: string | string[]) {
     const title = value?.toString().toLowerCase().split(' ').join(' & ');
 
     if (!title) {
-        return {
-            code: 400,
-            message: 'Invalid value for query parameter `title`. Fix: Provide a string of words. Spaces are allowed',
-            paramValue: title,
-        };
+        return res.status(400).json('Invalid value for query parameter `title`. Fix: Provide a string of words. Spaces are allowed');
     }
 
-    return {
-        ...validQueryParam,
-        paramValue: title,
-    };
+    return title;
 }
 
 // Handle Prisma errors

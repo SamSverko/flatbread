@@ -34,40 +34,36 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         showOnly,
     } = req.query;
 
-    let condensedValidated, orderByValidated, orderByFieldValidated, showOnlyValidated;
+    let condensedValidated,
+        orderByValidated,
+        orderByFieldValidated,
+        showOnlyValidated;
 
-    // Query parameter validations
+    // VALIDATION =============================================================
     if (condensed) {
-        const validateCondensed = validateQueryParamCondensed(condensed);
-        if (validateCondensed.code !== 200) {
-            return res.status(validateCondensed.code).json(validateCondensed.message);
-        }
-        condensedValidated = validateCondensed.paramValue as string;
+        condensedValidated = validateQueryParamCondensed(res, condensed);
+        if (condensedValidated === undefined) return;
     }
 
     if (orderBy || orderByField) {
-        const validateOrderByField = validateQueryParamOrderByField(orderBy, orderByField, ['createdAt', 'name']);
-        if (validateOrderByField.code !== 200) {
-            return res.status(validateOrderByField.code).json(validateOrderByField.message);
-        }
-        orderByValidated = validateOrderByField.paramValue[0] as string;
-        orderByFieldValidated = validateOrderByField.paramValue[1] as string;
+        const orderByFieldValidation = validateQueryParamOrderByField(res, orderBy, orderByField, ['createdAt', 'name']);
+        if (orderByFieldValidation === undefined) return;
+
+        orderByValidated = orderByFieldValidation.orderBy;
+        orderByFieldValidated = orderByFieldValidation.orderByField;
     }
 
     if (showOnly) {
-        const validateShowOnly = validateQueryParamShowOnly(showOnly);
-        if (validateShowOnly.code !== 200) {
-            return res.status(validateShowOnly.code).json(validateShowOnly.message);
-        }
-        showOnlyValidated = validateShowOnly.paramValue;
+        showOnlyValidated = validateQueryParamShowOnly(res, showOnly);
+        if (showOnlyValidated === undefined) return;
     }
 
-    // Query recipes based on parameters
+    // QUERY ==================================================================
     const response: CategoriesResponse = {};
 
     if (!showOnlyValidated || showOnlyValidated.includes('coursetypes')) {
         response.courseTypes = await prisma.courseType.findMany({
-            select: getCategoryFormat((condensedValidated === 'true')),
+            select: getCategoryFormat(condensedValidated),
             orderBy: {
                 [orderByFieldValidated as string]: orderByValidated,
             },
@@ -76,7 +72,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (!showOnlyValidated || showOnlyValidated.includes('cuisines')) {
         response.cuisines = await prisma.cuisine.findMany({
-            select: getCategoryFormat((condensedValidated === 'true')),
+            select: getCategoryFormat(condensedValidated),
             orderBy: {
                 [orderByFieldValidated as string]: orderByValidated,
             },
@@ -85,7 +81,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (!showOnlyValidated || showOnlyValidated.includes('dietaryrestrictions')) {
         response.dietaryRestrictions = await prisma.dietaryRestriction.findMany({
-            select: getCategoryFormat((condensedValidated === 'true')),
+            select: getCategoryFormat(condensedValidated),
             orderBy: {
                 [orderByFieldValidated as string]: orderByValidated,
             },
@@ -94,7 +90,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (!showOnlyValidated || showOnlyValidated.includes('dishtypes')) {
         response.dishTypes = await prisma.dishType.findMany({
-            select: getCategoryFormat((condensedValidated === 'true')),
+            select: getCategoryFormat(condensedValidated),
             orderBy: {
                 [orderByFieldValidated as string]: orderByValidated,
             },

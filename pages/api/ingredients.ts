@@ -17,29 +17,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         orderByField,
     } = req.query;
 
-    let condensedValidated, orderByValidated, orderByFieldValidated;
+    let condensedValidated,
+        orderByValidated,
+        orderByFieldValidated;
 
-    // Query parameter validations
+    // VALIDATION =============================================================
     if (condensed) {
-        const validateCondensed = validateQueryParamCondensed(condensed);
-        if (validateCondensed.code !== 200) {
-            return res.status(validateCondensed.code).json(validateCondensed.message);
-        }
-        condensedValidated = validateCondensed.paramValue as string;
+        condensedValidated = validateQueryParamCondensed(res, condensed);
+        if (condensedValidated === undefined) return;
     }
 
     if (orderBy || orderByField) {
-        const validateOrderByField = validateQueryParamOrderByField(orderBy, orderByField, ['createdAt', 'name', 'namePlural']);
-        if (validateOrderByField.code !== 200) {
-            return res.status(validateOrderByField.code).json(validateOrderByField.message);
-        }
-        orderByValidated = validateOrderByField.paramValue[0] as string;
-        orderByFieldValidated = validateOrderByField.paramValue[1] as string;
+        const orderByFieldValidation = validateQueryParamOrderByField(res, orderBy, orderByField, ['createdAt', 'name', 'namePlural']);
+        if (orderByFieldValidation === undefined) return;
+
+        orderByValidated = orderByFieldValidation.orderBy;
+        orderByFieldValidated = orderByFieldValidation.orderByField;
     }
 
-    // Query recipes based on parameters
+    // QUERY ==================================================================
     const ingredients = await prisma.ingredient.findMany({
-        select: getIngredientFormat((condensedValidated === 'true')),
+        select: getIngredientFormat(condensedValidated),
         orderBy: {
             [orderByFieldValidated as string]: orderByValidated,
         },
