@@ -187,11 +187,21 @@ export function validateQueryParamCondensed(res: NextApiResponse, value: string 
     }
 }
 
-export function validateQueryParamName(res: NextApiResponse, param: 'name' | 'nameUpdated', value: string | string[]) {
+export function validateQueryParamId(res: NextApiResponse, value: string | string[]) {
+    const id = parseInt(value?.toString());
+
+    if (!id) {
+        return res.status(400).json('Missing query parameter `id`. Fix: Provide a value.');
+    }
+
+    return id;
+}
+
+export function validateQueryParamName(res: NextApiResponse, value: string | string[]) {
     const name = value?.toString();
 
     if (!name) {
-        return res.status(400).json(`Missing query parameter \`${param}\`. Fix: Provide a value.`);
+        return res.status(400).json('Missing query parameter `name`. Fix: Provide a value.');
     }
 
     return name;

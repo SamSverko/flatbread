@@ -5,6 +5,7 @@ import type { NextApiResponse, NextApiRequest } from 'next';
 import {
     categoryTables,
     validateQueryParamCategory,
+    validateQueryParamId,
     validateQueryParamName,
 } from '../../prisma/utils';
 
@@ -14,21 +15,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const method = req.method;
     const {
         category,
+        id,
         name,
-        nameUpdated,
     } = req.query;
 
     let categoryValidated,
-        nameValidated,
-        nameUpdatedValidated;
+        idValidated,
+        nameValidated;
 
     if (method === 'DELETE') {
         // VALIDATION =========================================================
         categoryValidated = validateQueryParamCategory(res, category);
         if (categoryValidated === undefined) return;
 
-        nameValidated = validateQueryParamName(res, 'name', name);
-        if (nameValidated === undefined) return;
+        idValidated = validateQueryParamId(res, id);
+        if (idValidated === undefined) return;
 
         // QUERY ==============================================================
         try {
@@ -37,25 +38,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if (categoryValidated === categoryTables[0]) {
                 category = await prisma.courseType.delete({
                     where: {
-                        name: nameValidated,
+                        id: idValidated,
                     },
                 });
             } else if (categoryValidated === categoryTables[1]) {
                 category = await prisma.cuisine.delete({
                     where: {
-                        name: nameValidated,
+                        id: idValidated,
                     },
                 });
             } else if (categoryValidated === categoryTables[2]) {
                 category = await prisma.dietaryRestriction.delete({
                     where: {
-                        name: nameValidated,
+                        id: idValidated,
                     },
                 });
             } else if (categoryValidated === categoryTables[3]) {
                 category = await prisma.dishType.delete({
                     where: {
-                        name: nameValidated,
+                        id: idValidated,
                     },
                 });
             }
@@ -77,11 +78,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         categoryValidated = validateQueryParamCategory(res, category);
         if (categoryValidated === undefined) return;
 
-        nameValidated = validateQueryParamName(res, 'name', name);
-        if (nameValidated === undefined) return;
+        idValidated = validateQueryParamId(res, id);
+        if (idValidated === undefined) return;
 
-        nameUpdatedValidated = validateQueryParamName(res, 'nameUpdated', nameUpdated);
-        if (nameUpdatedValidated === undefined) return;
+        nameValidated = validateQueryParamName(res, name);
+        if (nameValidated === undefined) return;
 
         // QUERY ==============================================================
         try {
@@ -90,37 +91,37 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if (categoryValidated === categoryTables[0]) {
                 category = await prisma.courseType.update({
                     where: {
-                        name: nameValidated,
+                        id: idValidated,
                     },
                     data: {
-                        name: nameUpdatedValidated,
+                        name: nameValidated,
                     },
                 });
             } else if (categoryValidated === categoryTables[1]) {
                 category = await prisma.cuisine.update({
                     where: {
-                        name: nameValidated,
+                        id: idValidated,
                     },
                     data: {
-                        name: nameUpdatedValidated,
+                        name: nameValidated,
                     },
                 });
             } else if (categoryValidated === categoryTables[2]) {
                 category = await prisma.dietaryRestriction.update({
                     where: {
-                        name: nameValidated,
+                        id: idValidated,
                     },
                     data: {
-                        name: nameUpdatedValidated,
+                        name: nameValidated,
                     },
                 });
             } else if (categoryValidated === categoryTables[3]) {
                 category = await prisma.dishType.update({
                     where: {
-                        name: nameValidated,
+                        id: idValidated,
                     },
                     data: {
-                        name: nameUpdatedValidated,
+                        name: nameValidated,
                     },
                 });
             }
@@ -142,7 +143,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         categoryValidated = validateQueryParamCategory(res, category);
         if (categoryValidated === undefined) return;
 
-        nameValidated = validateQueryParamName(res, 'name', name);
+        nameValidated = validateQueryParamName(res, name);
         if (nameValidated === undefined) return;
 
         // QUERY ==============================================================
