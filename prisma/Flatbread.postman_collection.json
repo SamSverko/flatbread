@@ -1,0 +1,789 @@
+{
+	"info": {
+		"_postman_id": "a2b46505-8b85-4750-8038-89298ff5451e",
+		"name": "Flatbread",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8479393"
+	},
+	"item": [
+		{
+			"name": "Categories",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}/category",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"category"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "courseType",
+									"description": "\"courseType\" | \"cuisine\" | \"dietaryRestriction\" | \"dishType\"",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "Test12",
+									"description": "string",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}/categories",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"categories"
+							],
+							"query": [
+								{
+									"key": "condensed",
+									"value": "true",
+									"description": "\"true\" | \"false\"",
+									"disabled": true
+								},
+								{
+									"key": "orderBy",
+									"value": "desc",
+									"description": "\"asc\" | \"desc\"",
+									"disabled": true
+								},
+								{
+									"key": "orderByField",
+									"value": "createdAt",
+									"description": "\"createdAt\" | \"name\"",
+									"disabled": true
+								},
+								{
+									"key": "showOnly",
+									"value": "cuisines",
+									"description": "\"courseTypes\" | \"cuisines\" | \"dietaryRestrictions\" | \"dishTypes\"",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}/category",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"category"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "courseType",
+									"description": "\"courseType\" | \"cuisine\" | \"dietaryRestriction\" | \"dishType\"",
+									"disabled": true
+								},
+								{
+									"key": "id",
+									"value": "13",
+									"description": "number",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "Test12",
+									"description": "string",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}/category",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"category"
+							],
+							"query": [
+								{
+									"key": "category",
+									"value": "courseType",
+									"description": "\"courseType\" | \"cuisine\" | \"dietaryRestriction\" | \"dishType\"",
+									"disabled": true
+								},
+								{
+									"key": "id",
+									"value": "10",
+									"description": "number",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Ingredients",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}/ingredient",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"ingredient"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "test",
+									"description": "string",
+									"disabled": true
+								},
+								{
+									"key": "namePlural",
+									"value": "tests",
+									"description": "string",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}/ingredients",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"ingredients"
+							],
+							"query": [
+								{
+									"key": "condensed",
+									"value": "true",
+									"description": "\"true\" | \"false\"",
+									"disabled": true
+								},
+								{
+									"key": "orderBy",
+									"value": "desc",
+									"description": "\"asc\" | \"desc\"",
+									"disabled": true
+								},
+								{
+									"key": "orderByField",
+									"value": "name",
+									"description": "\"createdAt\" | \"name\" | \"namePlural\"",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}/ingredient",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"ingredient"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "37",
+									"description": "number",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "test",
+									"description": "string",
+									"disabled": true
+								},
+								{
+									"key": "namePlural",
+									"value": "tests",
+									"description": "string",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}/ingredient",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"ingredient"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "37",
+									"description": "number",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Ingredient Units",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}/ingredient-unit",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"ingredient-unit"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "test",
+									"description": "string",
+									"disabled": true
+								},
+								{
+									"key": "nameAbbr",
+									"value": "t",
+									"description": "string",
+									"disabled": true
+								},
+								{
+									"key": "namePlural",
+									"value": "tests",
+									"description": "string",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}/ingredient-units",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"ingredient-units"
+							],
+							"query": [
+								{
+									"key": "condensed",
+									"value": "true",
+									"description": "\"true\" | \"false\"",
+									"disabled": true
+								},
+								{
+									"key": "orderBy",
+									"value": "desc",
+									"description": "\"asc\" | \"desc\"",
+									"disabled": true
+								},
+								{
+									"key": "orderByField",
+									"value": "name",
+									"description": "\"createdAt\" | \"name\" | \"namePlural\"",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}/ingredient-unit",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"ingredient-unit"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "8",
+									"description": "number",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "test",
+									"description": "string",
+									"disabled": true
+								},
+								{
+									"key": "nameAbbr",
+									"value": "t",
+									"description": "string",
+									"disabled": true
+								},
+								{
+									"key": "namePlural",
+									"value": "tests",
+									"description": "string",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}/ingredient-unit",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"ingredient-unit"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "8",
+									"description": "number",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Quantity Fractions",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}/quantity-fraction",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"quantity-fraction"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "tests",
+									"description": "string",
+									"disabled": true
+								},
+								{
+									"key": "value",
+									"value": "0.9",
+									"description": "number",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}/quantity-fractions",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"quantity-fractions"
+							],
+							"query": [
+								{
+									"key": "condensed",
+									"value": "true",
+									"description": "\"true\" | \"false\"",
+									"disabled": true
+								},
+								{
+									"key": "orderBy",
+									"value": "desc",
+									"description": "\"asc\" | \"desc\"",
+									"disabled": true
+								},
+								{
+									"key": "orderByField",
+									"value": "name",
+									"description": "\"createdAt\" | \"name\" | \"namePlural\"",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}/quantity-fraction",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"quantity-fraction"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "23",
+									"description": "number",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "testX",
+									"description": "string",
+									"disabled": true
+								},
+								{
+									"key": "value",
+									"value": "0.99",
+									"description": "number",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}/quantity-fraction",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"quantity-fraction"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "21",
+									"description": "number",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Recipes",
+			"item": [
+				{
+					"name": "Read",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}/recipes",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"recipes"
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "chicken soup",
+									"description": "string",
+									"disabled": true
+								},
+								{
+									"key": "condensed",
+									"value": "true",
+									"description": "\"true\" | \"false\"",
+									"disabled": true
+								},
+								{
+									"key": "orderBy",
+									"value": "asc",
+									"description": "\"asc\" | \"desc\"",
+									"disabled": true
+								},
+								{
+									"key": "orderByField",
+									"value": "sourceName",
+									"description": "\"createdAt\" | \"title\" | \"sourceName\" | \"prepTimeMin\" | \"cookTimeMin\" | \"servingAmount\"",
+									"disabled": true
+								},
+								{
+									"key": "slug",
+									"value": "nanaimo-bars",
+									"description": "string (hyphen separated)",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Serving Units",
+			"item": [
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}/serving-unit",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"serving-unit"
+							],
+							"query": [
+								{
+									"key": "name",
+									"value": "test",
+									"description": "string",
+									"disabled": true
+								},
+								{
+									"key": "namePlural",
+									"value": "tests",
+									"description": "string",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Read",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}/serving-units",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"serving-units"
+							],
+							"query": [
+								{
+									"key": "condensed",
+									"value": "true",
+									"description": "\"true\" | \"false\"",
+									"disabled": true
+								},
+								{
+									"key": "orderBy",
+									"value": "desc",
+									"description": "\"asc\" | \"desc\"",
+									"disabled": true
+								},
+								{
+									"key": "orderByField",
+									"value": "name",
+									"description": "\"createdAt\" | \"name\" | \"namePlural\"",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}/serving-unit",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"serving-unit"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "17",
+									"description": "number",
+									"disabled": true
+								},
+								{
+									"key": "name",
+									"value": "test",
+									"description": "string",
+									"disabled": true
+								},
+								{
+									"key": "namePlural",
+									"value": "tests",
+									"description": "string",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}/serving-unit",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"serving-unit"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "17",
+									"description": "number",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "API_BASE_URL",
+			"value": "http://localhost:3000/api"
+		}
+	]
+}

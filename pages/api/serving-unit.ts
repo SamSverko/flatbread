@@ -5,7 +5,7 @@ import type { NextApiResponse, NextApiRequest } from 'next';
 import {
     validateQueryParamId,
     validateQueryParamName,
-    validateQueryParamValue,
+    validateQueryParamNamePlural,
 } from '../../prisma/utils';
 
 const prisma = new PrismaClient();
@@ -15,12 +15,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const {
         id,
         name,
-        value,
+        namePlural,
     } = req.query;
 
     let idValidated,
         nameValidated,
-        valueValidated;
+        namePluralValidated;
 
     if (method === 'DELETE') {
         // VALIDATION =========================================================
@@ -29,13 +29,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // QUERY ==============================================================
         try {
-            const quantityFraction = await prisma.quantityFraction.delete({
+            const servingUnit = await prisma.servingUnit.delete({
                 where: {
                     id: idValidated,
                 },
             });
 
-            return res.status(200).json(quantityFraction);
+            return res.status(200).json(servingUnit);
 
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -52,19 +52,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         nameValidated = validateQueryParamName(res, name);
         if (nameValidated === undefined) return;
 
-        valueValidated = validateQueryParamValue(res, value);
-        if (valueValidated === undefined) return;
+        namePluralValidated = validateQueryParamNamePlural(res, namePlural);
+        if (namePluralValidated === undefined) return;
 
         // QUERY ==============================================================
         try {
-            const quantityFraction = await prisma.quantityFraction.create({
+            const servingUnit = await prisma.servingUnit.create({
                 data: {
                     name: nameValidated,
-                    value: valueValidated,
+                    namePlural: namePluralValidated,
                 },
             });
 
-            return res.status(201).json(quantityFraction);
+            return res.status(201).json(servingUnit);
 
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -86,24 +86,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if (nameValidated === undefined) return;
         }
 
-        if (value) {
-            valueValidated = validateQueryParamValue(res, value);
-            if (valueValidated === undefined) return;
+        if (namePlural) {
+            namePluralValidated = validateQueryParamNamePlural(res, namePlural);
+            if (namePluralValidated === undefined) return;
         }
 
         // QUERY ==============================================================
         try {
-            const quantityFraction = await prisma.quantityFraction.update({
+            const servingUnit = await prisma.servingUnit.update({
                 where: {
                     id: idValidated,
                 },
                 data: {
                     name: nameValidated,
-                    value: valueValidated,
+                    namePlural: namePluralValidated,
                 },
             });
 
-            return res.status(201).json(quantityFraction);
+            return res.status(201).json(servingUnit);
 
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
