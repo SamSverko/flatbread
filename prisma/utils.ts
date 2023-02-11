@@ -206,6 +206,15 @@ export function validateQueryParamName(res: NextApiResponse, value: string | str
 
     return name;
 }
+export function validateQueryParamNameAbbr(res: NextApiResponse, value: string | string[]) {
+    const nameAbbr = value?.toString();
+
+    if (!nameAbbr) {
+        return res.status(400).json('Missing query parameter `nameAbbr`. Fix: Provide a value.');
+    }
+
+    return nameAbbr;
+}
 
 export function validateQueryParamNamePlural(res: NextApiResponse, value: string | string[]) {
     const namePlural = value?.toString();

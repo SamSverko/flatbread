@@ -189,7 +189,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
         }
     } else {
-        const permittedMethods = ['DELETE', 'PATCH', 'POST'];
+        const permittedMethods = ['DELETE', 'POST', 'PUT'];
         res.setHeader('Allow', permittedMethods);
         res.status(405).end(`Method \`${method}\` not allowed. Allowed methods: \`${permittedMethods.join('`, `')}\`.`);
     }

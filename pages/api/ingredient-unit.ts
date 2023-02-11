@@ -5,6 +5,7 @@ import type { NextApiResponse, NextApiRequest } from 'next';
 import {
     validateQueryParamId,
     validateQueryParamName,
+    validateQueryParamNameAbbr,
     validateQueryParamNamePlural,
 } from '../../prisma/utils';
 
@@ -15,11 +16,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const {
         id,
         name,
+        nameAbbr,
         namePlural,
     } = req.query;
 
     let idValidated,
         nameValidated,
+        nameAbbrValidated,
         namePluralValidated;
 
     if (method === 'DELETE') {
@@ -29,13 +32,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // QUERY ==============================================================
         try {
-            const ingredient = await prisma.ingredient.delete({
+            const ingredientUnit = await prisma.ingredientUnit.delete({
                 where: {
                     id: idValidated,
                 },
             });
 
-            return res.status(200).json(ingredient);
+            return res.status(200).json(ingredientUnit);
 
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -52,19 +55,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         nameValidated = validateQueryParamName(res, name);
         if (nameValidated === undefined) return;
 
+        nameAbbrValidated = validateQueryParamNameAbbr(res, nameAbbr);
+        if (nameAbbrValidated === undefined) return;
+
         namePluralValidated = validateQueryParamNamePlural(res, namePlural);
         if (namePluralValidated === undefined) return;
 
         // QUERY ==============================================================
         try {
-            const ingredient = await prisma.ingredient.create({
+            const ingredientUnit = await prisma.ingredientUnit.create({
                 data: {
                     name: nameValidated,
+                    nameAbbr: nameAbbrValidated,
                     namePlural: namePluralValidated,
                 },
             });
 
-            return res.status(201).json(ingredient);
+            return res.status(201).json(ingredientUnit);
 
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -86,6 +93,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if (nameValidated === undefined) return;
         }
 
+        if (nameAbbr) {
+            nameAbbrValidated = validateQueryParamNamePlural(res, nameAbbr);
+            if (nameAbbrValidated === undefined) return;
+        }
+
         if (namePlural) {
             namePluralValidated = validateQueryParamNamePlural(res, namePlural);
             if (namePluralValidated === undefined) return;
@@ -93,17 +105,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // QUERY ==============================================================
         try {
-            const ingredient = await prisma.ingredient.update({
+            const ingredientUnit = await prisma.ingredientUnit.update({
                 where: {
                     id: idValidated,
                 },
                 data: {
                     name: nameValidated,
+                    nameAbbr: nameAbbrValidated,
                     namePlural: namePluralValidated,
                 },
             });
 
-            return res.status(201).json(ingredient);
+            return res.status(201).json(ingredientUnit);
 
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {
