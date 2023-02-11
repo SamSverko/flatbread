@@ -73,7 +73,57 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 throw error;
             }
         }
-    } else if (method === 'PATCH') {
+    } else if (method === 'POST') {
+        // VALIDATION =========================================================
+        categoryValidated = validateQueryParamCategory(res, category);
+        if (categoryValidated === undefined) return;
+
+        nameValidated = validateQueryParamName(res, name);
+        if (nameValidated === undefined) return;
+
+        // QUERY ==============================================================
+        try {
+            let category;
+
+            if (categoryValidated === categoryTables[0]) {
+                category = await prisma.courseType.create({
+                    data: {
+                        name: nameValidated,
+                    },
+                });
+            } else if (categoryValidated === categoryTables[1]) {
+                category = await prisma.cuisine.create({
+                    data: {
+                        name: nameValidated,
+                    },
+                });
+            } else if (categoryValidated === categoryTables[2]) {
+                category = await prisma.dietaryRestriction.create({
+                    data: {
+                        name: nameValidated,
+                    },
+                });
+            } else if (categoryValidated === categoryTables[3]) {
+                category = await prisma.dishType.create({
+                    data: {
+                        name: nameValidated,
+                    },
+                });
+            }
+
+            return res.status(201).json(category);
+
+        } catch (error) {
+            if (error instanceof Prisma.PrismaClientKnownRequestError) {
+                return res.status(400).json({
+                    code: error.code,
+                    message: error.message,
+                });
+            } else {
+                throw error;
+            }
+        }
+    } else if (method === 'PUT') {
         // VALIDATION =========================================================
         categoryValidated = validateQueryParamCategory(res, category);
         if (categoryValidated === undefined) return;
@@ -127,56 +177,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
 
             return res.status(200).json(category);
-
-        } catch (error) {
-            if (error instanceof Prisma.PrismaClientKnownRequestError) {
-                return res.status(400).json({
-                    code: error.code,
-                    message: error.message,
-                });
-            } else {
-                throw error;
-            }
-        }
-    } else if (method === 'POST') {
-        // VALIDATION =========================================================
-        categoryValidated = validateQueryParamCategory(res, category);
-        if (categoryValidated === undefined) return;
-
-        nameValidated = validateQueryParamName(res, name);
-        if (nameValidated === undefined) return;
-
-        // QUERY ==============================================================
-        try {
-            let category;
-
-            if (categoryValidated === categoryTables[0]) {
-                category = await prisma.courseType.create({
-                    data: {
-                        name: nameValidated,
-                    },
-                });
-            } else if (categoryValidated === categoryTables[1]) {
-                category = await prisma.cuisine.create({
-                    data: {
-                        name: nameValidated,
-                    },
-                });
-            } else if (categoryValidated === categoryTables[2]) {
-                category = await prisma.dietaryRestriction.create({
-                    data: {
-                        name: nameValidated,
-                    },
-                });
-            } else if (categoryValidated === categoryTables[3]) {
-                category = await prisma.dishType.create({
-                    data: {
-                        name: nameValidated,
-                    },
-                });
-            }
-
-            return res.status(201).json(category);
 
         } catch (error) {
             if (error instanceof Prisma.PrismaClientKnownRequestError) {

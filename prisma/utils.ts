@@ -207,6 +207,16 @@ export function validateQueryParamName(res: NextApiResponse, value: string | str
     return name;
 }
 
+export function validateQueryParamNamePlural(res: NextApiResponse, value: string | string[]) {
+    const namePlural = value?.toString();
+
+    if (!namePlural) {
+        return res.status(400).json('Missing query parameter `namePlural`. Fix: Provide a value.');
+    }
+
+    return namePlural;
+}
+
 export function validateQueryParamOrderByField(
     res: NextApiResponse,
     orderByValue: string | string[],
