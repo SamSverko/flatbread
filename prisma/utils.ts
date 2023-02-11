@@ -188,7 +188,7 @@ export function validateQueryParamCondensed(res: NextApiResponse, value: string 
 }
 
 export function validateQueryParamName(res: NextApiResponse, value: string | string[]) {
-    const name = value?.toString().toLowerCase();
+    const name = value?.toString();
 
     if (!name) {
         return res.status(400).json('Missing query parameter `name`. Fix: Provide a value.');
@@ -205,7 +205,8 @@ export function validateQueryParamOrderByField(
 ) {
     const orderByOptions = ['asc', 'desc'];
     const orderBy = orderByValue?.toString().toLowerCase();
-    const orderByField = orderByFieldValue?.toString();
+    const orderByField = orderByFieldValue?.toString().toLowerCase();
+    const formattedOrderByFieldOptions = orderByFieldOptions.map(orderByFieldOption => orderByFieldOption.toLowerCase());
 
     if ((orderBy && !orderByField) || (!orderBy && orderByField)) {
         return res.status(400).json('Parameters `orderBy` and `orderByField` must be used simultaneously. Fix: Provide both parameters or omit both parameters entirely.');
@@ -215,13 +216,15 @@ export function validateQueryParamOrderByField(
         return res.status(400).json(`Invalid value for query parameter \`orderBy\`. Fix: Use either \`${orderByOptions.join('`, `')}\`, or omit parameter entirely (along with the \`orderByField\` parameter).`);
     }
 
-    if (orderByField && !orderByFieldOptions.includes(orderByField)) {
+    const orderByFieldIndex = formattedOrderByFieldOptions.indexOf(orderByField);
+
+    if (orderByFieldIndex === -1) {
         return res.status(400).json(`Invalid value for query parameter \`orderByField\`. Fix: Use either \`${orderByFieldOptions.join('`, `')}\`, or omit parameter entirely (along with the \`orderBy\` parameter).`);
     }
 
     return {
         orderBy: orderBy,
-        orderByField: orderByField,
+        orderByField: orderByFieldOptions[orderByFieldIndex],
     };
 }
 
