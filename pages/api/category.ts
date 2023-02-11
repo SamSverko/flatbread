@@ -22,7 +22,57 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         nameValidated,
         nameUpdatedValidated;
 
-    if (method === 'PATCH') {
+    if (method === 'DELETE') {
+        // VALIDATION =========================================================
+        categoryValidated = validateQueryParamCategory(res, category);
+        if (categoryValidated === undefined) return;
+
+        nameValidated = validateQueryParamName(res, 'name', name);
+        if (nameValidated === undefined) return;
+
+        // QUERY ==============================================================
+        try {
+            let category;
+
+            if (categoryValidated === categoryTables[0]) {
+                category = await prisma.courseType.delete({
+                    where: {
+                        name: nameValidated,
+                    },
+                });
+            } else if (categoryValidated === categoryTables[1]) {
+                category = await prisma.cuisine.delete({
+                    where: {
+                        name: nameValidated,
+                    },
+                });
+            } else if (categoryValidated === categoryTables[2]) {
+                category = await prisma.dietaryRestriction.delete({
+                    where: {
+                        name: nameValidated,
+                    },
+                });
+            } else if (categoryValidated === categoryTables[3]) {
+                category = await prisma.dishType.delete({
+                    where: {
+                        name: nameValidated,
+                    },
+                });
+            }
+
+            return res.status(200).json(category);
+
+        } catch (error) {
+            if (error instanceof Prisma.PrismaClientKnownRequestError) {
+                return res.status(400).json({
+                    code: error.code,
+                    message: error.message,
+                });
+            } else {
+                throw error;
+            }
+        }
+    } else if (method === 'PATCH') {
         // VALIDATION =========================================================
         categoryValidated = validateQueryParamCategory(res, category);
         if (categoryValidated === undefined) return;
@@ -138,7 +188,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
         }
     } else {
-        const permittedMethods = ['PATCH', 'POST'];
+        const permittedMethods = ['DELETE', 'PATCH', 'POST'];
         res.setHeader('Allow', permittedMethods);
         res.status(405).end(`Method \`${method}\` not allowed. Allowed methods: \`${permittedMethods.join('`, `')}\`.`);
     }
