@@ -15,17 +15,84 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const {
         category,
         name,
+        nameUpdated,
     } = req.query;
 
     let categoryValidated,
-        nameValidated;
+        nameValidated,
+        nameUpdatedValidated;
 
-    if (method === 'POST') {
+    if (method === 'PATCH') {
         // VALIDATION =========================================================
         categoryValidated = validateQueryParamCategory(res, category);
         if (categoryValidated === undefined) return;
 
-        nameValidated = validateQueryParamName(res, name);
+        nameValidated = validateQueryParamName(res, 'name', name);
+        if (nameValidated === undefined) return;
+
+        nameUpdatedValidated = validateQueryParamName(res, 'nameUpdated', nameUpdated);
+        if (nameUpdatedValidated === undefined) return;
+
+        // QUERY ==============================================================
+        try {
+            let category;
+
+            if (categoryValidated === categoryTables[0]) {
+                category = await prisma.courseType.update({
+                    where: {
+                        name: nameValidated,
+                    },
+                    data: {
+                        name: nameUpdatedValidated,
+                    },
+                });
+            } else if (categoryValidated === categoryTables[1]) {
+                category = await prisma.cuisine.update({
+                    where: {
+                        name: nameValidated,
+                    },
+                    data: {
+                        name: nameUpdatedValidated,
+                    },
+                });
+            } else if (categoryValidated === categoryTables[2]) {
+                category = await prisma.dietaryRestriction.update({
+                    where: {
+                        name: nameValidated,
+                    },
+                    data: {
+                        name: nameUpdatedValidated,
+                    },
+                });
+            } else if (categoryValidated === categoryTables[3]) {
+                category = await prisma.dishType.update({
+                    where: {
+                        name: nameValidated,
+                    },
+                    data: {
+                        name: nameUpdatedValidated,
+                    },
+                });
+            }
+
+            return res.status(200).json(category);
+
+        } catch (error) {
+            if (error instanceof Prisma.PrismaClientKnownRequestError) {
+                return res.status(400).json({
+                    code: error.code,
+                    message: error.message,
+                });
+            } else {
+                throw error;
+            }
+        }
+    } else if (method === 'POST') {
+        // VALIDATION =========================================================
+        categoryValidated = validateQueryParamCategory(res, category);
+        if (categoryValidated === undefined) return;
+
+        nameValidated = validateQueryParamName(res, 'name', name);
         if (nameValidated === undefined) return;
 
         // QUERY ==============================================================
@@ -71,7 +138,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
         }
     } else {
-        res.setHeader('Allow', ['POST']);
-        res.status(405).end(`Method ${method} Not Allowed`);
+        const permittedMethods = ['PATCH', 'POST'];
+        res.setHeader('Allow', permittedMethods);
+        res.status(405).end(`Method \`${method}\` not allowed. Allowed methods: \`${permittedMethods.join('`, `')}\`.`);
     }
 }

@@ -187,11 +187,11 @@ export function validateQueryParamCondensed(res: NextApiResponse, value: string 
     }
 }
 
-export function validateQueryParamName(res: NextApiResponse, value: string | string[]) {
+export function validateQueryParamName(res: NextApiResponse, param: 'name' | 'nameUpdated', value: string | string[]) {
     const name = value?.toString();
 
     if (!name) {
-        return res.status(400).json('Missing query parameter `name`. Fix: Provide a value.');
+        return res.status(400).json(`Missing query parameter \`${param}\`. Fix: Provide a value.`);
     }
 
     return name;
@@ -265,7 +265,7 @@ export function validateQueryParamTitle(res: NextApiResponse, value: string | st
     const title = value?.toString().toLowerCase().split(' ').join(' & ');
 
     if (!title) {
-        return res.status(400).json('Invalid value for query parameter `title`. Fix: Provide a string of words. Spaces are allowed');
+        return res.status(400).json('Invalid value for query parameter `title`. Fix: Provide a string of words. Spaces are allowed.');
     }
 
     return title;
