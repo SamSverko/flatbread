@@ -490,6 +490,16 @@ export function validateQueryParamTitle(res: NextApiResponse, value: string | st
     return title;
 }
 
+export function validateQueryParamUUID(res: NextApiResponse, value: string | string[]) {
+    const uuid = value?.toString().trim();
+
+    if (!uuid) {
+        return res.status(400).json('Missing query parameter `id`. Fix: Provide a string value.');
+    }
+
+    return uuid;
+}
+
 export function validateQueryParamValue(res: NextApiResponse, value: string | string[]) {
     const paramValue = parseFloat(value?.toString().trim());
 

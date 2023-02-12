@@ -19,6 +19,7 @@ import {
     validateQueryParamSourceURL,
     validateQueryParamSteps,
     validateQueryParamTitle,
+    validateQueryParamUUID,
 } from '../../prisma/utils';
 
 const prisma = new PrismaClient();
@@ -43,7 +44,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         notes,
     } = req.body;
 
-    let titleValidated,
+    const {
+        id,
+    } = req.query;
+
+    let idValidated,
+        titleValidated,
         slugValidated,
         sourceNameValidated,
         sourceURLValidated,
@@ -60,30 +66,55 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         notesValidated;
 
     if (method === 'DELETE') {
-        // // VALIDATION =========================================================
-        // idValidated = validateQueryParamId(res, id);
-        // if (idValidated === undefined) return;
+        // VALIDATION =========================================================
+        idValidated = validateQueryParamUUID(res, id);
+        if (idValidated === undefined) return;
 
-        // // QUERY ==============================================================
-        // try {
-        //     const ingredient = await prisma.ingredient.delete({
-        //         where: {
-        //             id: idValidated,
-        //         },
-        //     });
+        // QUERY ==============================================================
+        try {
+            const recipeIngredients = prisma.recipeIngredient.deleteMany({
+                where: {
+                    recipeId: idValidated,
+                },
+            });
 
-        //     return res.status(200).json(ingredient);
+            const recipeSteps = prisma.recipeStep.deleteMany({
+                where: {
+                    recipeId: idValidated,
+                },
+            });
 
-        // } catch (error) {
-        //     if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        //         return res.status(400).json({
-        //             code: error.code,
-        //             message: error.message,
-        //         });
-        //     } else {
-        //         throw error;
-        //     }
-        // }
+            const recipeNotes = prisma.recipeNote.deleteMany({
+                where: {
+                    recipeId: idValidated,
+                },
+            });
+
+            const recipe = prisma.recipe.delete({
+                where: {
+                    id: idValidated,
+                },
+            });
+
+            const transaction = await prisma.$transaction([
+                recipeIngredients,
+                recipeSteps,
+                recipeNotes,
+                recipe,
+            ]);
+
+            return res.status(200).json(transaction);
+
+        } catch (error) {
+            if (error instanceof Prisma.PrismaClientKnownRequestError) {
+                return res.status(400).json({
+                    code: error.code,
+                    message: error.message,
+                });
+            } else {
+                throw error;
+            }
+        }
     } else if (method === 'POST') {
         // VALIDATION =========================================================
         titleValidated = validateQueryParamTitle(res, title);
