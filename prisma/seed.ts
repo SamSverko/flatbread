@@ -1,42 +1,7 @@
 import { Prisma, PrismaClient } from '@prisma/client';
 import { v4 } from 'uuid';
 
-interface RecipeToSeed {
-    title: string;
-    slug: string;
-    sourceName: string;
-    sourceUrl?: string;
-    prepTimeMin: number;
-    cookTimeMin: number;
-    servingAmount: number;
-    servingUnit: string;
-    courseTypes: string[];
-    cuisines: string[];
-    dietaryRestrictions: string[];
-    dishTypes: string[];
-    ingredients: {
-        section?: string;
-        quantityWhole?: number;
-        quantityFraction?: string;
-        quantityMinWhole?: number;
-        quantityMinFraction?: string;
-        quantityMaxWhole?: number;
-        quantityMaxFraction?: string;
-        unit?: string;
-        name: string;
-        alteration?: string;
-        isOptional: boolean;
-        substitutions: string[];
-    }[];
-    steps: {
-        section?: string;
-        details: string;
-    }[];
-    notes: {
-        section?: string;
-        details: string;
-    }[];
-}
+import type { RecipeToSeed } from './types';
 
 const prisma = new PrismaClient();
 
@@ -171,10 +136,12 @@ const ingredientUnits: Prisma.IngredientUnitCreateInput[] = [
 - https://www.flatbread.app/?recipe=thick-and-creamy-chicken-noodle-soup
 - https://www.flatbread.app/?recipe=marcella-hazans-tomato-sauce
 - https://www.flatbread.app/?recipe=slow-cooker-ratatouille
+- https://www.flatbread.app/?recipe=tabbouleh
 */
 const ingredients: Prisma.IngredientCreateInput[] = [
     { name: 'all-purpose flour', namePlural: 'all-purpose flour' },
     { name: 'almonds', namePlural: 'almonds' },
+    { name: 'apple cider vinegar', namePlural: 'apple cider vinegar' },
     { name: 'boneless skinless chicken breast', namePlural: 'boneless skinless chicken breasts' },
     { name: 'broad egg noodles', namePlural: 'broad egg noodles' },
     { name: 'butter', namePlural: 'butter' },
@@ -189,18 +156,23 @@ const ingredients: Prisma.IngredientCreateInput[] = [
     { name: 'fresh thyme', namePlural: 'fresh thyme' },
     { name: 'frozen peas', namePlural: 'frozen-peas' },
     { name: 'garlic clove', namePlural: 'garlic cloves' },
+    { name: 'garlic powder', namePlural: 'garlic powder' },
     { name: 'graham cracker crumbs', namePlural: 'graham cracker crumbs' },
     { name: 'green pepper', namePlural: 'green peppers' },
     { name: 'icing sugar', namePlural: 'icing sugar' },
+    { name: 'lemon juice', namePlural: 'lemon juice' },
     { name: 'milk', namePlural: 'milk' },
     { name: 'nuts', namePlural: 'nuts' },
     { name: 'olive oil', namePlural: 'olive oil' },
     { name: 'onion', namePlural: 'onions' },
+    { name: 'oregano', namePlural: 'oregano' },
+    { name: 'parsley', namePlural: 'parsley' },
     { name: 'pepper', namePlural: 'pepper' },
     { name: 'pitted ripe olives', namePlural: 'pitted ripe olives' },
     { name: 'salt', namePlural: 'salt' },
     { name: 'semi-sweet chocolate chips', namePlural: 'semi-sweet chocolate chips' },
     { name: 'sodium-reduced chicken broth', namePlural: 'sodium-reduced chicken broth' },
+    { name: 'sumac', namePlural: 'sumac' },
     { name: 'sweetened shredded coconut', namePlural: 'sweetened shredded coconut' },
     { name: 'tomato', namePlural: 'tomatoes' },
     { name: 'tomato paste', namePlural: 'tomato paste' },
