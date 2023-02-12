@@ -238,6 +238,10 @@ export function validateQueryParamDietaryRestrictions(res: NextApiResponse, valu
         return res.status(400).json('Missing query parameter `dietaryRestrictions`. Fix: Provide a string value. If using multiple values, ensure they are comma-separated.');
     }
 
+    if (valueString === '[]') {
+        return [];
+    }
+
     const dietaryRestrictions = valueString.split(',')
         .map((value) => value.trim())
         .filter((value) => value !== '');
@@ -441,7 +445,7 @@ export function validateQueryParamSlug(res: NextApiResponse, value: string | str
 }
 
 export function validateQueryParamSourceName(res: NextApiResponse, value: string | string[]) {
-    const sourceName = value?.toString().toLowerCase().trim();
+    const sourceName = value?.toString().trim();
 
     if (!sourceName) {
         return res.status(400).json('Missing query parameter `sourceName`. Fix: Provide a string value.');
@@ -451,7 +455,7 @@ export function validateQueryParamSourceName(res: NextApiResponse, value: string
 }
 
 export function validateQueryParamSourceURL(res: NextApiResponse, value: string | string[]) {
-    const sourceURL = value?.toString().toLowerCase().trim();
+    const sourceURL = value?.toString().trim();
 
     if (!sourceURL) {
         return res.status(400).json('Missing query parameter `sourceURL`. Fix: Provide a string value (URL).');
@@ -481,6 +485,16 @@ export function validateQueryParamSteps(res: NextApiResponse, value: string | st
 }
 
 export function validateQueryParamTitle(res: NextApiResponse, value: string | string[]) {
+    const title = value?.toString().trim();
+
+    if (!title) {
+        return res.status(400).json('Missing query parameter `title`. Fix: Provide a string value (spaces are allowed).');
+    }
+
+    return title;
+}
+
+export function validateQueryParamTitleSearch(res: NextApiResponse, value: string | string[]) {
     const title = value?.toString().toLowerCase().trim().split(' ').join(' & ');
 
     if (!title) {

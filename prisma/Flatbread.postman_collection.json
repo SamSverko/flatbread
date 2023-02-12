@@ -748,6 +748,164 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Update",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "title",
+									"value": "Fattoush Salad Dressing",
+									"description": "string",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "slug",
+									"value": "fattoush-salad-dressing",
+									"description": "string",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "sourceName",
+									"value": "Sam Sverko",
+									"description": "string",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "sourceURL",
+									"value": "https://www.example.com/",
+									"description": "string",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "prepTimeMin",
+									"value": "10",
+									"description": "number",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "cookTimeMin",
+									"value": "0",
+									"description": "number",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "servingAmount",
+									"value": "3",
+									"description": "number",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "servingUnit",
+									"value": "cup",
+									"description": "string (Table: ServingUnit | Column: name)",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "courseTypes",
+									"value": "homemade",
+									"description": "string (Table: CourseType | Column: name)",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "cuisines",
+									"value": "Lebanese",
+									"description": "string (Table: Cuisine | Column: name)",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "dietaryRestrictions",
+									"value": "dairy-free, gluten-free, nut-free, vegan, vegetarian",
+									"description": "string (Table: DietaryRestriction | Column: name) | \"[]\"",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "dishTypes",
+									"value": "sauce",
+									"description": "string (Table: DishType | Column: name)",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "ingredients",
+									"value": "[\n    {\n        \"quantityFraction\": \"⅓\",\n        \"unit\": \"cup\",\n        \"name\": \"extra-virgin olive oil\",\n        \"isOptional\": false,\n        \"substitutions\": []\n    },\n    {\n        \"quantityFraction\": \"¼\",\n        \"unit\": \"cup\",\n        \"name\": \"apple cider vinegar\",\n        \"isOptional\": false,\n        \"substitutions\": []\n    },\n    {\n        \"quantityWhole\": 4,\n        \"unit\": \"tablespoon\",\n        \"name\": \"lemon juice\",\n        \"isOptional\": false,\n        \"substitutions\": []\n    },\n    {\n        \"quantityWhole\": 1,\n        \"quantityFraction\": \"½\",\n        \"unit\": \"teaspoon\",\n        \"name\": \"salt\",\n        \"isOptional\": false,\n        \"substitutions\": []\n    },\n    {\n        \"quantityWhole\": 1,\n        \"unit\": \"teaspoon\",\n        \"name\": \"sumac\",\n        \"isOptional\": false,\n        \"substitutions\": []\n    },\n    {\n        \"quantityFraction\": \"½\",\n        \"unit\": \"teaspoon\",\n        \"name\": \"garlic powder\",\n        \"isOptional\": false,\n        \"substitutions\": []\n    },\n    {\n        \"quantityFraction\": \"½\",\n        \"unit\": \"teaspoon\",\n        \"name\": \"oregano\",\n        \"isOptional\": false,\n        \"substitutions\": []\n    },\n    {\n        \"quantityFraction\": \"½\",\n        \"unit\": \"teaspoon\",\n        \"name\": \"parsley\",\n        \"isOptional\": false,\n        \"substitutions\": []\n    },\n    {\n        \"quantityFraction\": \"½\",\n        \"unit\": \"teaspoon\",\n        \"name\": \"pepper\",\n        \"isOptional\": false,\n        \"substitutions\": []\n    }\n]\n",
+									"description": "json",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "steps",
+									"value": "[\n    {\n        \"details\": \"Combine all ingredients in a bowl, or some other container to store the dressing.\"\n    }\n]\n",
+									"description": "json",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "notes",
+									"value": "[\n    {\n        \"details\": \"Due to the extra-virgin olive oil, the dressing will solidify in the fridge. Remove from fridge 15 minutes before use or run the dressing under warm water.\"\n    }\n]\n",
+									"description": "json",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "{{API_BASE_URL}}/recipe?id=3d8bb62c-eee8-4f82-bcb8-df688b1dee4a",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"recipe"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "3d8bb62c-eee8-4f82-bcb8-df688b1dee4a",
+									"description": "string"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{API_BASE_URL}}/recipe?id=9f93cca8-0a0f-4439-8b40-961001c62c12",
+							"host": [
+								"{{API_BASE_URL}}"
+							],
+							"path": [
+								"recipe"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "9f93cca8-0a0f-4439-8b40-961001c62c12",
+									"description": "string"
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},

@@ -7,7 +7,7 @@ import {
     validateQueryParamCondensed,
     validateQueryParamOrderByField,
     validateQueryParamSlug,
-    validateQueryParamTitle,
+    validateQueryParamTitleSearch,
 } from '../../prisma/utils';
 
 const prisma = new PrismaClient();
@@ -47,7 +47,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     if (title) {
-        titleValidated = validateQueryParamTitle(res, title);
+        titleValidated = validateQueryParamTitleSearch(res, title);
         if (titleValidated === undefined) return;
     }
 

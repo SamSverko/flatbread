@@ -149,8 +149,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         cuisinesValidated = validateQueryParamCuisines(res, cuisines);
         if (cuisinesValidated === undefined) return;
 
-        dietaryRestrictionsValidated = validateQueryParamDietaryRestrictions(res, dietaryRestrictions);
-        if (dietaryRestrictionsValidated === undefined) return;
+        if (dietaryRestrictions) {
+            dietaryRestrictionsValidated = validateQueryParamDietaryRestrictions(res, dietaryRestrictions);
+            if (dietaryRestrictionsValidated === undefined) return;
+        }
 
         dishTypesValidated = validateQueryParamDishTypes(res, dishTypes);
         if (dishTypesValidated === undefined) return;
@@ -194,13 +196,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             };
                         }),
                     },
-                    dietaryRestrictions: {
+                    dietaryRestrictions: dietaryRestrictionsValidated ? {
                         connect: (dietaryRestrictionsValidated).map((dietaryRestriction) => {
                             return {
                                 name: dietaryRestriction,
                             };
                         }),
-                    },
+                    } : undefined,
                     dishTypes: {
                         connect: (dishTypesValidated).map((dishType) => {
                             return {
@@ -266,11 +268,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     },
                     notes: {
                         createMany: {
-                            data: (notesValidated as Prisma.RecipeStepCreateInput[]).map((recipeStep, index) => {
+                            data: (notesValidated as Prisma.RecipeNoteCreateInput[]).map((recipeNote, index) => {
                                 return {
                                     order: index,
-                                    section: recipeStep.section,
-                                    details: recipeStep.details,
+                                    section: recipeNote.section,
+                                    details: recipeNote.details,
                                 };
                             }),
                         },
@@ -301,44 +303,237 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
         }
     } else if (method === 'PUT') {
-        // // VALIDATION =========================================================
-        // idValidated = validateQueryParamId(res, id);
-        // if (idValidated === undefined) return;
+        // VALIDATION =========================================================
+        idValidated = validateQueryParamUUID(res, id);
+        if (idValidated === undefined) return;
 
-        // if (name) {
-        //     nameValidated = validateQueryParamName(res, name);
-        //     if (nameValidated === undefined) return;
-        // }
+        if (title) {
+            titleValidated = validateQueryParamTitle(res, title);
+            if (titleValidated === undefined) return;
+        }
 
-        // if (namePlural) {
-        //     namePluralValidated = validateQueryParamNamePlural(res, namePlural);
-        //     if (namePluralValidated === undefined) return;
-        // }
+        if (slug) {
+            slugValidated = validateQueryParamSlug(res, slug);
+            if (slugValidated === undefined) return;
+        }
 
-        // // QUERY ==============================================================
-        // try {
-        //     const ingredient = await prisma.ingredient.update({
-        //         where: {
-        //             id: idValidated,
-        //         },
-        //         data: {
-        //             name: nameValidated,
-        //             namePlural: namePluralValidated,
-        //         },
-        //     });
+        if (sourceName) {
+            sourceNameValidated = validateQueryParamSourceName(res, sourceName);
+            if (sourceNameValidated === undefined) return;
+        }
 
-        //     return res.status(201).json(ingredient);
+        if (sourceURL) {
+            sourceURLValidated = validateQueryParamSourceURL(res, sourceURL);
+            if (sourceURLValidated === undefined) return;
+        }
 
-        // } catch (error) {
-        //     if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        //         return res.status(400).json({
-        //             code: error.code,
-        //             message: error.message,
-        //         });
-        //     } else {
-        //         throw error;
-        //     }
-        // }
+        if (prepTimeMin) {
+            prepTimeMinValidated = validateQueryParamPrepTimeMin(res, prepTimeMin);
+            if (prepTimeMinValidated === undefined) return;
+        }
+
+        if (cookTimeMin) {
+            cookTimeMinValidated = validateQueryParamCookTimeMin(res, cookTimeMin);
+            if (cookTimeMinValidated === undefined) return;
+        }
+
+        if (servingAmount) {
+            servingAmountValidated = validateQueryParamServingAmount(res, servingAmount);
+            if (servingAmountValidated === undefined) return;
+        }
+
+        if (servingUnit) {
+            servingUnitValidated = validateQueryParamServingUnit(res, servingUnit);
+            if (servingUnitValidated === undefined) return;
+        }
+
+        if (courseTypes) {
+            courseTypesValidated = validateQueryParamCourseTypes(res, courseTypes);
+            if (courseTypesValidated === undefined) return;
+        }
+
+        if (cuisines) {
+            cuisinesValidated = validateQueryParamCuisines(res, cuisines);
+            if (cuisinesValidated === undefined) return;
+        }
+
+        if (dietaryRestrictions) {
+            dietaryRestrictionsValidated = validateQueryParamDietaryRestrictions(res, dietaryRestrictions);
+            if (dietaryRestrictionsValidated === undefined) return;
+        }
+
+        if (dishTypes) {
+            dishTypesValidated = validateQueryParamDishTypes(res, dishTypes);
+            if (dishTypesValidated === undefined) return;
+        }
+
+        if (ingredients) {
+            ingredientsValidated = validateQueryParamIngredients(res, ingredients) as RecipeIngredient[];
+            if (ingredientsValidated === undefined) return;
+        }
+
+        if (steps) {
+            stepsValidated = validateQueryParamSteps(res, steps);
+            if (stepsValidated === undefined) return;
+        }
+
+        if (notes) {
+            notesValidated = validateQueryParamNotes(res, notes);
+            if (notesValidated === undefined) return;
+        }
+
+        // QUERY ==============================================================
+        try {
+            const recipe = await prisma.recipe.update({
+                where: {
+                    id: idValidated,
+                },
+                data: {
+                    title: titleValidated,
+                    slug: slugValidated,
+                    sourceName: sourceNameValidated,
+                    sourceURL: sourceURLValidated,
+                    prepTimeMin: prepTimeMinValidated,
+                    cookTimeMin: cookTimeMinValidated,
+                    servingAmount: servingAmountValidated,
+                    servingUnit: servingUnitValidated ? {
+                        connect: {
+                            name: servingUnitValidated,
+                        },
+                    } : undefined,
+                    courseTypes: courseTypesValidated ? {
+                        set: [],
+                        connect: (courseTypesValidated).map((courseType) => {
+                            return {
+                                name: courseType,
+                            };
+                        }),
+                    } : undefined,
+                    cuisines: cuisinesValidated ? {
+                        set: [],
+                        connect: (cuisinesValidated).map((cuisine) => {
+                            return {
+                                name: cuisine,
+                            };
+                        }),
+                    } : undefined,
+                    dietaryRestrictions: dietaryRestrictionsValidated ? {
+                        set: [],
+                        connect: (dietaryRestrictionsValidated).map((dietaryRestriction) => {
+                            return {
+                                name: dietaryRestriction,
+                            };
+                        }),
+                    } : undefined,
+                    dishTypes: dishTypesValidated ? {
+                        set: [],
+                        connect: (dishTypesValidated).map((dishTypes) => {
+                            return {
+                                name: dishTypes,
+                            };
+                        }),
+                    } : undefined,
+                    ingredients: ingredientsValidated ? {
+                        deleteMany: {
+                            recipeId: idValidated,
+                        },
+                        create: (ingredientsValidated).map((recipeIngredient, index) => {
+                            return {
+                                order: index,
+                                section: recipeIngredient.section,
+                                quantityWhole: recipeIngredient.quantityWhole,
+                                quantityFraction: recipeIngredient.quantityFraction ? {
+                                    connect: {
+                                        name: recipeIngredient.quantityFraction,
+                                    },
+                                } : undefined,
+                                quantityMinWhole: recipeIngredient.quantityMinWhole,
+                                quantityMinFraction: recipeIngredient.quantityMinFraction ? {
+                                    connect: {
+                                        name: recipeIngredient.quantityMinFraction,
+                                    },
+                                } : undefined,
+                                quantityMaxWhole: recipeIngredient.quantityMaxWhole,
+                                quantityMaxFraction: recipeIngredient.quantityMaxFraction ? {
+                                    connect: {
+                                        name: recipeIngredient.quantityMaxFraction,
+                                    },
+                                } : undefined,
+                                unit: recipeIngredient.unit ? {
+                                    connect: {
+                                        name: recipeIngredient?.unit,
+                                    },
+                                } : undefined,
+                                name: {
+                                    connect: {
+                                        name: recipeIngredient.name,
+                                    },
+                                },
+                                alteration: recipeIngredient.alteration,
+                                isOptional: recipeIngredient.isOptional,
+                                substitutions: {
+                                    connect: (recipeIngredient.substitutions).map((substitution) => {
+                                        return {
+                                            name: substitution,
+                                        };
+                                    }),
+                                },
+                            };
+                        }),
+                    } : undefined,
+                    steps: stepsValidated ? {
+                        deleteMany: {
+                            recipeId: idValidated,
+                        },
+                        createMany: {
+                            data: (stepsValidated as Prisma.RecipeStepCreateInput[]).map((recipeStep, index) => {
+                                return {
+                                    order: index,
+                                    section: recipeStep.section,
+                                    details: recipeStep.details,
+                                };
+                            }),
+                        },
+                    } : undefined,
+                    notes: notesValidated ? {
+                        deleteMany: {
+                            recipeId: idValidated,
+                        },
+                        createMany: {
+                            data: (notesValidated as Prisma.RecipeNoteCreateInput[]).map((recipeNote, index) => {
+                                return {
+                                    order: index,
+                                    section: recipeNote.section,
+                                    details: recipeNote.details,
+                                };
+                            }),
+                        },
+                    } : undefined,
+                },
+                include: {
+                    servingUnit: true,
+                    courseTypes: true,
+                    cuisines: true,
+                    dietaryRestrictions: true,
+                    dishTypes: true,
+                    ingredients: true,
+                    steps: true,
+                    notes: true,
+                },
+            });
+
+            return res.status(201).json(recipe);
+
+        } catch (error) {
+            if (error instanceof Prisma.PrismaClientKnownRequestError) {
+                return res.status(400).json({
+                    code: error.code,
+                    message: error.message,
+                });
+            } else {
+                throw error;
+            }
+        }
     } else {
         const permittedMethods = ['DELETE', 'POST', 'PUT'];
         res.setHeader('Allow', permittedMethods);
