@@ -1,13 +1,12 @@
 import { Prisma, PrismaClient } from '@prisma/client';
-
-import type { NextApiResponse, NextApiRequest } from 'next';
-
 import {
     categoryTables,
     validateQueryParamCategory,
     validateQueryParamId,
     validateQueryParamName,
 } from '../../prisma/utils';
+
+import type { NextApiResponse, NextApiRequest } from 'next';
 
 const prisma = new PrismaClient();
 

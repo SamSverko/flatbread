@@ -1,12 +1,11 @@
 import { Prisma, PrismaClient } from '@prisma/client';
-
-import type { NextApiResponse, NextApiRequest } from 'next';
-
 import {
     validateQueryParamId,
     validateQueryParamName,
     validateQueryParamValue,
 } from '../../prisma/utils';
+
+import type { NextApiResponse, NextApiRequest } from 'next';
 
 const prisma = new PrismaClient();
 

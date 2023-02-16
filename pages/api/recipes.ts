@@ -1,7 +1,4 @@
 import { PrismaClient } from '@prisma/client';
-
-import type { NextApiResponse, NextApiRequest } from 'next';
-
 import {
     getRecipeFormat,
     validateQueryParamCondensed,
@@ -9,6 +6,8 @@ import {
     validateQueryParamSlug,
     validateQueryParamTitleSearch,
 } from '../../prisma/utils';
+
+import type { NextApiResponse, NextApiRequest } from 'next';
 
 const prisma = new PrismaClient();
 

@@ -1,7 +1,4 @@
-import { Prisma, PrismaClient, Recipe } from '@prisma/client';
-
-import type { NextApiResponse, NextApiRequest } from 'next';
-
+import { PrismaClient } from '@prisma/client';
 import {
     getCategoryFormat,
     validateQueryParamCondensed,
@@ -9,13 +6,8 @@ import {
     validateQueryParamShowOnly,
 } from '../../prisma/utils';
 
-type Category = {
-    id?: number | undefined,
-    createdAt?: Date | undefined,
-    name?: string | undefined,
-    recipes?: Recipe[] | undefined,
-    _count?: Prisma.CourseTypeCountOutputType | undefined,
-}
+import type { NextApiResponse, NextApiRequest } from 'next';
+import type { Category } from '../../prisma/types';
 
 type CategoriesResponse = {
     courseTypes?: Category[],

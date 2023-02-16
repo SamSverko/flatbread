@@ -1,8 +1,4 @@
 import { Prisma, PrismaClient } from '@prisma/client';
-
-import type { NextApiResponse, NextApiRequest } from 'next';
-import type { RecipeIngredient } from '../../prisma/types';
-
 import {
     validateQueryParamCookTimeMin,
     validateQueryParamCourseTypes,
@@ -21,6 +17,9 @@ import {
     validateQueryParamTitle,
     validateQueryParamUUID,
 } from '../../prisma/utils';
+
+import type { NextApiResponse, NextApiRequest } from 'next';
+import type { RecipeIngredient } from '../../prisma/types';
 
 const prisma = new PrismaClient();
 

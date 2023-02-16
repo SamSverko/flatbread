@@ -1,8 +1,16 @@
+export type Category = {
+    id?: number | undefined,
+    createdAt?: Date | undefined,
+    name?: string | undefined,
+    recipes?: Recipe[] | undefined,
+    _count?: Prisma.CourseTypeCountOutputType | undefined,
+}
+
 export interface RecipeToSeed {
     title: string;
     slug: string;
     sourceName: string;
-    sourceUrl?: string;
+    sourceURL?: string;
     prepTimeMin: number;
     cookTimeMin: number;
     servingAmount: number;
