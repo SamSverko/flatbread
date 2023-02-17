@@ -1,0 +1,13 @@
+@use '../../styles/mixins.scss';
+
+.container {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+
+    input {
+        margin: calc(var(--border-width) * -1) 0 0;
+        width: 100%;
+    }
+}

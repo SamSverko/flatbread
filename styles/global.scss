@@ -66,6 +66,7 @@ a:visited {
 
 details {
     summary {
+        cursor: pointer;
         font-weight: 700;
 
         &:focus,
@@ -167,6 +168,69 @@ hr {
 }
 
 input {
+    &[type='checkbox'] {
+        --size: 16px;
+
+        // unchecked state
+        appearance: none;
+        background-color: white;
+        border: var(--border-width) solid var(--color-grey-900);
+        border-radius: var(--border-radius);
+        color: var(--color-grey-900);
+        cursor: pointer;
+        display: inline-grid;
+        font: inherit;
+        height: var(--size);
+        place-content: center;
+        transition:
+            background-color 0.1s var(--transition-timing-function),
+            border 0.1s var(--transition-timing-function);
+        width: var(--size);
+
+        // checked state
+        &::before {
+            background-color: white;
+            box-shadow: inset 1em 1em white;
+            clip-path: polygon(12% 51.5%, 22.5% 42%, 40.5% 60%, 76.5% 24%, 86.5% 34%, 40.5% 80%);
+            content: '';
+            height: calc(var(--size) - var(--border-width));
+            transform: scale(0);
+            width: calc(var(--size) - var(--border-width));
+        }
+
+        // checked state
+        &:checked {
+            background-color: var(--color-grey-900);
+            border: var(--border-width) solid var(--color-grey-900);
+
+            &::before {
+                transform: scale(1);
+            }
+
+            &:hover:enabled {
+                background-color: var(--color-grey-800);
+                border: var(--border-width) solid var(--color-grey-800);
+            }
+
+            &:active:enabled {
+                background-color: var(--color-grey-700);
+                border: var(--border-width) solid var(--color-grey-700);
+            }
+        }
+
+        &:hover:enabled:not(:checked) {
+            border: var(--border-width) solid var(--color-grey-800);
+        }
+
+        &:active:enabled:not(:checked) {
+            border: var(--border-width) solid var(--color-grey-700);
+        }
+
+        &:focus-visible {
+            @include mixins.focus-outline;
+        }
+    }
+
     &[type='search'],
     &[type='text'] {
         border: var(--border);
@@ -197,6 +261,22 @@ label {
     font-size: 1rem;
     font-weight: 700;
     padding: var(--spacing-1) var(--spacing-2);
+}
+
+li {
+    line-height: 140%;
+
+    &.tag {
+        border: var(--border);
+        color: var(--color-grey-900);
+        display: inline-block;
+        font-size: 1rem;
+        font-weight: 700;
+        line-height: normal;
+        list-style: none;
+        padding: var(--spacing-1) var(--spacing-2);
+        text-transform: capitalize;
+    }
 }
 
 p {

@@ -6,14 +6,19 @@ import {
     validateQueryParamShowOnly,
 } from '../../prisma/utils';
 
+import type { Prisma } from '@prisma/client';
 import type { NextApiResponse, NextApiRequest } from 'next';
-import type { Category } from '../../prisma/types';
+
+type CourseTypeResponse = Prisma.CourseTypeGetPayload<{ select: { [K in keyof Prisma.CourseTypeSelect]: true } }>
+type CuisineResponse = Prisma.CourseTypeGetPayload<{ select: { [K in keyof Prisma.CourseTypeSelect]: true } }>
+type DietaryRestrictionResponse = Prisma.CourseTypeGetPayload<{ select: { [K in keyof Prisma.CourseTypeSelect]: true } }>
+type DishTypesResponse = Prisma.CourseTypeGetPayload<{ select: { [K in keyof Prisma.CourseTypeSelect]: true } }>
 
 type CategoriesResponse = {
-    courseTypes?: Category[],
-    cuisines?: Category[],
-    dietaryRestrictions?: Category[],
-    dishTypes?: Category[],
+    courseTypes?: CourseTypeResponse[],
+    cuisines?: CuisineResponse[],
+    dietaryRestrictions?: DietaryRestrictionResponse[],
+    dishTypes?: DishTypesResponse[],
 }
 
 const prisma = new PrismaClient();
