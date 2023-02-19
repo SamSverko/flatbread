@@ -17,6 +17,17 @@
     outline-offset: calc(var(--border-width) * -1);
 }
 
+@mixin label {
+    background-color: white;
+    border: var(--border);
+    color: var(--color-grey-900);
+    display: inline-flex;
+    font-family: var(--font-family);
+    font-size: 1rem;
+    font-weight: 700;
+    padding: var(--spacing-1) var(--spacing-2) calc(var(--spacing-1) + 1px);
+}
+
 @mixin transition(
     $property: all,
     $duration: var(--transition-duration),

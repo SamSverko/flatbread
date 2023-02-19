@@ -1,12 +1,10 @@
+@use '../../styles/mixins.scss';
+
 .container {
     display: inline-flex;
 
     span {
-        background-color: white;
-        border: var(--border);
-        display: inline-flex;
-        font-weight: 700;
-        padding: var(--spacing-1) var(--spacing-2) calc(var(--spacing-1) + 1px);
+        @include mixins.label;
     }
 
     button {
