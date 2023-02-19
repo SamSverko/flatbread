@@ -208,7 +208,7 @@ hr {
 
 input {
     &[type='checkbox'] {
-        --size: 16px;
+        --size: 18px;
 
         // unchecked state
         appearance: none;
@@ -220,6 +220,7 @@ input {
         display: inline-grid;
         font: inherit;
         height: var(--size);
+        margin: 0;
         place-content: center;
         transition:
             background-color 0.1s var(--transition-timing-function),
@@ -255,6 +256,14 @@ input {
                 background-color: var(--color-grey-700);
                 border: var(--border-width) solid var(--color-grey-700);
             }
+
+            &:disabled {
+                &:focus,
+                &:focus-visible {
+                    opacity: var(--opacity-disabled);
+                    outline: none;
+                }
+            }
         }
 
         &:hover:enabled:not(:checked) {
@@ -265,8 +274,14 @@ input {
             border: var(--border-width) solid var(--color-grey-700);
         }
 
-        &:focus-visible {
+        &:focus:enabled,
+        &:focus-visible:enabled {
             @include mixins.focus-outline;
+        }
+
+        &:disabled {
+            opacity: var(--opacity-disabled);
+            outline: none;
         }
     }
 
