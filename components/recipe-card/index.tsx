@@ -9,7 +9,7 @@ import IconLink from '../../public/icons/bx-link.svg';
 import IconLinkExternal from '../../public/icons/bx-link-external.svg';
 import IconTimeFive from '../../public/icons/bx-time-five.svg';
 
-import styles from './recipe-card.module.scss';
+import styles from './index.module.scss';
 
 import type {
     CourseType,
@@ -36,11 +36,11 @@ interface RecipeFormatted extends Recipe {
     notes: RecipeNote[];
 }
 
-type RecipeCardProps = {
+type ComponentProps = {
     recipe: RecipeFormatted
 }
 
-const RecipeCard = ({ recipe }: RecipeCardProps) => {
+const RecipeCard = ({ recipe }: ComponentProps) => {
     function getFormattedTime() {
         const totalTime = getTimeString(recipe.prepTimeMin + recipe.cookTimeMin);
         const prepTime = getTimeString(recipe.prepTimeMin);

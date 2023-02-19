@@ -1,12 +1,12 @@
 import * as React from 'react';
 
-import styles from './search-results-card.module.scss';
+import styles from './index.module.scss';
 
-type SearchResultsProps = {
+type ComponentProps = {
     recipeCount: number
 }
 
-const SearchResultsCard = ({ recipeCount }: SearchResultsProps) => {
+const SearchResultsCard = ({ recipeCount }: ComponentProps) => {
     const resultsParagraphRef = React.useRef(null);
 
     React.useEffect(() => {

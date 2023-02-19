@@ -1,10 +1,10 @@
 import * as React from 'react';
 
-import styles from './input-combobox.module.scss';
+import styles from './index.module.scss';
 
 import type { FormattedCategory } from '../../utils/contentful';
 
-type InputComboboxProps = {
+type ComponentProps = {
     handleUpdate: (categories: string[]) => void
     id: string
     items: FormattedCategory[]
@@ -12,7 +12,7 @@ type InputComboboxProps = {
     name: string
 }
 
-const InputCombobox = ({ handleUpdate, id, items, label, name }: InputComboboxProps) => {
+const InputCombobox = ({ handleUpdate, id, items, label, name }: ComponentProps) => {
     const ariaLiveRef = React.useRef(null);
     const inputRef = React.useRef(null);
     const listboxRef = React.useRef(null);

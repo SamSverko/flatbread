@@ -8,13 +8,13 @@ import InfoCircleSolidIcon from '../../public/icons/bxs-info-circle.svg';
 import SearchIcon from '../../public/icons/bx-search.svg';
 import SearchSolidIcon from '../../public/icons/bxs-search.svg';
 
-import styles from './nav-bar.module.scss';
+import styles from './index.module.scss';
 
-type NavBarProps = {
+type ComponentsProps = {
     activeRoute: string
 }
 
-const NavBar = ({ activeRoute }: NavBarProps) => {
+const NavBar = ({ activeRoute }: ComponentsProps) => {
     return (
         <nav className={styles.container}>
             <ul>

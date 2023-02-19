@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import styles from './input-group.module.scss';
+import styles from './index.module.scss';
 
-type InputGroupProps = {
+type ComponentProps = {
     id: string
     label: string
     name: string
@@ -10,7 +10,7 @@ type InputGroupProps = {
     type: 'search' | 'submit' | 'text'
 }
 
-const InputGroup = ({ id, label, name, placeholder, type = 'text' }: InputGroupProps) => {
+const InputGroup = ({ id, label, name, placeholder, type = 'text' }: ComponentProps) => {
     return (
         <div className={styles.container}>
             <label htmlFor={id}>{label}</label>

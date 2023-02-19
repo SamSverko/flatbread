@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import InputGroup from '../input-group/input-group';
+import InputGroup from '../input-group';
 
-import styles from './search-card.module.scss';
+import styles from './index.module.scss';
 
 export const SearchCard = () => {
     const [recipes, setRecipes] = React.useState([]);

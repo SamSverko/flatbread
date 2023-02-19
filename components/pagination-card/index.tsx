@@ -1,8 +1,8 @@
 import * as React from 'react';
 
-import styles from './pagination-card.module.scss';
+import styles from './index.module.scss';
 
-type PaginationProps = {
+type ComponentProps = {
     currentPage: number
     recipeCount: number
     recipesPerPage: number
@@ -14,7 +14,7 @@ export const Pagination = ({
     recipeCount,
     recipesPerPage, 
     setPaginationPage,
-}: PaginationProps) => {
+}: ComponentProps) => {
     const buttonCount = Math.ceil(recipeCount / recipesPerPage);
 
     const [inputValue, setInputValue] = React.useState((currentPage + 1).toString());
