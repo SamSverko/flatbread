@@ -68,6 +68,7 @@ details {
     summary {
         cursor: pointer;
         font-weight: 700;
+        padding: 0 0 1px;
 
         &:focus,
         &:focus-visible {
@@ -313,6 +314,7 @@ input {
 
         &::placeholder {
             color: var(--color-grey-600);
+            font-size: 1rem;
         }
     }
 }
@@ -321,23 +323,8 @@ label {
     @include mixins.label;
 }
 
-li {
-    line-height: 140%;
-
-    &.tag {
-        border: var(--border);
-        color: var(--color-grey-900);
-        display: inline-block;
-        font-size: 1rem;
-        font-weight: 700;
-        line-height: normal;
-        list-style: none;
-        padding: var(--spacing-1) var(--spacing-2);
-        text-transform: capitalize;
-    }
-}
-
 p {
+    fill: var(--color-grey-900);
     margin: 0;
 }
 
