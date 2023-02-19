@@ -5,17 +5,7 @@ class AppDocument extends Document {
     render() {
         return (
             <Html lang='en'>
-                <Head>
-                    <link as='font' crossOrigin='' href='/fonts/spartan-regular.woff2' rel='preload' />
-                    <link as='font' crossOrigin='' href='/fonts/spartan-regular.woff' rel='preload' />
-                    <link as='font' crossOrigin='' href='/fonts/spartan-regular.ttf' rel='preload' />
-                    <link as='font' crossOrigin='' href='/fonts/spartan-medium.woff2' rel='preload' />
-                    <link as='font' crossOrigin='' href='/fonts/spartan-medium.woff' rel='preload' />
-                    <link as='font' crossOrigin='' href='/fonts/spartan-medium.ttf' rel='preload' />
-                    <link as='font' crossOrigin='' href='/fonts/spartan-bold.woff2' rel='preload' />
-                    <link as='font' crossOrigin='' href='/fonts/spartan-bold.woff' rel='preload' />
-                    <link as='font' crossOrigin='' href='/fonts/spartan-bold.ttf' rel='preload' />
-                </Head>
+                <Head/>
                 <body>
                     <Main />
                     <NextScript />

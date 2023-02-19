@@ -28,7 +28,6 @@
                 color: white;
                 display: flex;
                 flex-direction: column;
-                font-family: spartan, sans-serif;
                 font-size: 0.75rem;
                 font-weight: 500;
                 gap: var.$spacing-1;
@@ -55,7 +54,6 @@
 
                 &.active {
                     background-color: var.$color-grey-900;
-                    font-family: spartan, sans-serif;
                     font-weight: 700;
                 }
 

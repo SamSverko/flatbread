@@ -100,14 +100,18 @@ input[type='submit'] {
         border: var(--border-width) solid var(--color-grey-700);
     }
 
-    &:focus,
-    &:focus-visible {
+    &:focus:enabled,
+    &:focus-visible:enabled {
         @include mixins.focus-outline;
     }
 
     &:disabled {
         cursor: not-allowed;
         opacity: var(--opacity-disabled);
+
+        &:focus-visible {
+            outline: none;
+        }
     }
 
     &.secondary {
@@ -128,23 +132,58 @@ input[type='submit'] {
     }
 
     &.icon-only {
-        background-color: transparent;
-        border: none;
+        background-color: white;
+        border: var(--border);
         display: inline-flex;
-        fill: var(--color-grey-900);
-        padding: 0;
-        transition: fill var(--transition-duration) var(--transition-timing-function) var(--transition-delay),;
+        padding: var(--spacing-1);
+
+        svg {
+            fill: var(--color-grey-900);
+            transition: fill var(--transition-duration) var(--transition-timing-function) var(--transition-delay),;
+        }
 
         &:hover:enabled {
-            background-color: transparent;
-            border: none;
-            fill: var(--color-grey-800);
+            background-color: white;
+            border: var(--border-width) solid var(--color-grey-800);
+
+            svg {
+                fill: var(--color-grey-800);
+            }
         }
 
         &:active:enabled {
-            background-color: transparent;
-            border: none;
-            fill: var(--color-grey-700);
+            background-color: white;
+            border: var(--border-width) solid var(--color-grey-700);
+
+            svg {
+                fill: var(--color-grey-700);
+            }
+        }
+
+        &[aria-pressed='true'] {
+            background-color: var(--color-grey-900);
+
+            svg {
+                fill: white;
+            }
+
+            &:hover:enabled {
+                background-color: var(--color-grey-800);
+                border: var(--border-width) solid var(--color-grey-800);
+
+                svg {
+                    fill: white;
+                }
+            }
+
+            &:active:enabled {
+                background-color: var(--color-grey-700);
+                border: var(--border-width) solid var(--color-grey-700);
+
+                svg {
+                    fill: white;
+                }
+            }
         }
     }
 }

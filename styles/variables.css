@@ -31,7 +31,7 @@
 
     /* info */
     --color-info-main: #186cbb;
-    --color-info-light: #1b78d0;
+    --color-info-light: #1b78d0; /* outline color */
     --color-info-dark: #186cbb;
     --color-info-contrast-text: white;
 
