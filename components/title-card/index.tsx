@@ -3,10 +3,10 @@ import * as React from 'react';
 import styles from './index.module.scss';
 
 type ComponentProps = {
-    heading: string
+    heading?: string
 }
 
-const TitleCard = ({ heading }: ComponentProps) => {
+const TitleCard = ({ heading = 'Flatbread' }: ComponentProps) => {
     return (
         <section className={styles.container}>
             <h1>{heading}</h1>
