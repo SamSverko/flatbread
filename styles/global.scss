@@ -288,16 +288,27 @@ input {
     &[type='search'],
     &[type='text'] {
         border: var(--border);
-        border-radius: none;
+        border-radius: 0;
         color: var(--color-grey-900);
         font-family: var(--font-family);
         font-size: 1rem;
         font-weight: 400;
-        padding: var(--spacing-2) var(--spacing-4);
+        padding: var(--spacing-2);
+        transition: border var(--transition-duration) var(--transition-timing-function);
+
+        &:hover {
+            border: var(--border-width) solid var(--color-grey-800);
+        }
 
         &:focus,
         &:focus-visible {
             @include mixins.focus-outline;
+        }
+
+        &:disabled {
+            background-color: white;
+            cursor: not-allowed;
+            opacity: var(--opacity-disabled);
         }
 
         &::placeholder {
