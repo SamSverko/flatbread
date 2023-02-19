@@ -1,5 +1,5 @@
 @use '../../styles/mixins.scss';
 
 .container {
-    @include mixins.card-layout;
+    @include mixins.card;
 }
