@@ -14,7 +14,7 @@ type ComponentsProps = {
     activeRoute: string
 }
 
-const NavBar = ({ activeRoute }: ComponentsProps) => {
+const NavCard = ({ activeRoute }: ComponentsProps) => {
     return (
         <nav className={styles.container}>
             <ul>
@@ -52,4 +52,4 @@ const NavBar = ({ activeRoute }: ComponentsProps) => {
     );
 };
 
-export default NavBar;
+export default NavCard;

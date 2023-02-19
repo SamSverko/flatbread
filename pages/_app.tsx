@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 
-import NavBar from '../components/nav-bar';
+import NavCard from '../components/nav-card';
 import { formatPageTitle } from '../utils/functions';
 
 import '../styles/global.scss';
@@ -43,7 +43,7 @@ function App({ Component, pageProps }: AppProps) {
 
                 <title>{matchedRoute ? formatPageTitle(matchedRoute.title) : ''}</title>
             </Head>
-            <NavBar activeRoute={(matchedRoute) ? matchedRoute.path : '/'} />
+            <NavCard activeRoute={(matchedRoute) ? matchedRoute.path : '/'} />
             <Component {...pageProps} />
         </>
     );
