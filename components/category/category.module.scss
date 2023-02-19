@@ -1,0 +1,25 @@
+.container {
+    display: inline-flex;
+
+    span {
+        background-color: white;
+        border: var(--border);
+        display: inline-flex;
+        font-weight: 700;
+        padding: var(--spacing-1) var(--spacing-2) calc(var(--spacing-1) + 1px);
+    }
+
+    button {
+        align-items: center;
+        display: inline-flex;
+        padding: 0;
+
+        svg {
+            --icon-size: 28px;
+
+            fill: white;
+            height: var(--icon-size);
+            width: var(--icon-size);
+        }
+    }
+}
