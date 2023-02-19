@@ -1,12 +1,14 @@
 // import Link from 'next/link';
 import * as React from 'react';
+
 import IconBowlHot from '../../public/icons/bx-bowl-hot.svg';
 import IconCalendarAlt from '../../public/icons/bx-calendar-alt.svg';
-import IconIdCard from '../../public/icons/bx-id-card.svg';
 import IconHeart from '../../public/icons/bx-heart.svg';
+import IconIdCard from '../../public/icons/bx-id-card.svg';
 import IconLink from '../../public/icons/bx-link.svg';
 import IconLinkExternal from '../../public/icons/bx-link-external.svg';
 import IconTimeFive from '../../public/icons/bx-time-five.svg';
+
 import styles from './recipe-card.module.scss';
 
 import type {

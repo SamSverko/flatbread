@@ -3,10 +3,8 @@ import * as React from 'react';
 
 import CogIcon from '../../public/icons/bx-cog.svg';
 import CogSolidIcon from '../../public/icons/bxs-cog.svg';
-
 import InfoCircleIcon from '../../public/icons/bx-info-circle.svg';
 import InfoCircleSolidIcon from '../../public/icons/bxs-info-circle.svg';
-
 import SearchIcon from '../../public/icons/bx-search.svg';
 import SearchSolidIcon from '../../public/icons/bxs-search.svg';
 

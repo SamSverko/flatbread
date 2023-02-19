@@ -1,5 +1,7 @@
 import * as React from 'react';
+
 import InputGroup from '../input-group/input-group';
+
 import styles from './search-card.module.scss';
 
 export const SearchCard = () => {

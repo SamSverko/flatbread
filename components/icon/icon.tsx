@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import styles from './icon.module.scss';
+
 type IconProps = {
     ariaLabel: string
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -8,7 +10,12 @@ type IconProps = {
 
 const Icon = ({ ariaLabel, Icon }: IconProps) => {
     return (
-        <Icon aria-label={ariaLabel} role='img' viewBox='0 0 24 24' />
+        <Icon
+            aria-label={ariaLabel}
+            className={styles.svg}
+            role='img'
+            viewBox='0 0 24 24'
+        />
     );
 };
 

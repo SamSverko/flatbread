@@ -1,8 +1,10 @@
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import { formatPageTitle } from '../utils/functions';
+
 import NavBar from '../components/nav-bar/nav-bar';
+import { formatPageTitle } from '../utils/functions';
+
 import '../styles/global.scss';
 import '../styles/variables.css';
 
