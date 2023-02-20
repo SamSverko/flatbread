@@ -10,6 +10,7 @@ import bxHeart from '../../public/icons/bx-heart.svg';
 import bxIdCard from '../../public/icons/bx-id-card.svg';
 import bxLink from '../../public/icons/bx-link.svg';
 import bxLinkExternal from '../../public/icons/bx-link-external.svg';
+import bxListPlus from '../../public/icons/bx-list-plus.svg';
 import bxTimeFive from '../../public/icons/bx-time-five.svg';
 
 import styles from './index.module.scss';
@@ -44,88 +45,6 @@ type ComponentProps = {
 }
 
 const RecipeCard = ({ recipe }: ComponentProps) => {
-    // Event listeners
-    function handleIngredientClick(event: React.MouseEvent<HTMLInputElement>) {
-        const target = event.target as HTMLInputElement;
-        const label = target.nextElementSibling as HTMLLabelElement;
-        if (target.checked && label) {
-            label.className = styles.checked;
-        } else {
-            label.className = '';
-        }
-    }
-
-    // Helpers
-    function getFormattedTime() {
-        const totalTime = getTimeString(recipe.prepTimeMin + recipe.cookTimeMin);
-        const prepTime = getTimeString(recipe.prepTimeMin);
-        const cookTime = getTimeString(recipe.cookTimeMin);
-
-        return (<span><b>{totalTime}</b> ({prepTime} prep + {cookTime} cook)</span>);
-    }
-
-    function getTimeString(totalMinutes: number) {
-        const hours = Math.floor(totalMinutes / 60);
-        const minutes = totalMinutes % 60;
-
-        if (hours === 0) {
-            return `${minutes} min`;
-        } else if (minutes === 0) {
-            return `${hours} hr`;
-        } else {
-            return `${hours} hr ${minutes} min`;
-        }
-    }
-
-    function getIngredientString(ingredient: RecipeIngredientResponse, id: string) {
-        let quantity = '';
-        let quantityValue = 0;
-
-        if (ingredient.quantityWhole) {
-            quantity += ingredient.quantityWhole;
-            quantityValue += ingredient.quantityWhole;
-        }
-
-        if (ingredient.quantityFraction) {
-            quantity += ingredient.quantityFraction.name;
-            quantityValue += Number(ingredient.quantityFraction.value);
-        }
-
-        if (ingredient.quantityMinWhole) {
-            quantity += ingredient.quantityMinWhole;
-            quantityValue += ingredient.quantityMinWhole;
-        }
-
-        if (ingredient.quantityMinFraction) {
-            quantity += ingredient.quantityMinFraction.name;
-            quantityValue += Number(ingredient.quantityMinFraction.value);
-        }
-
-        if (ingredient.quantityMaxWhole || ingredient.quantityMaxFraction) {
-            quantity += '-';
-        }
-
-        if (ingredient.quantityMaxWhole) {
-            quantity += ingredient.quantityMaxWhole;
-            quantityValue += ingredient.quantityMaxWhole;
-        }
-
-        if (ingredient.quantityMaxFraction) {
-            quantity += ingredient.quantityMaxFraction.name;
-            quantityValue += Number(ingredient.quantityMaxFraction.value);
-        }
-
-        const unit = (ingredient.unit) ? (quantityValue <= 1 ? ingredient.unit.name : ingredient.unit.namePlural) : '';
-        const name = (quantityValue <= 1) ? ingredient.name.name : ingredient.name.namePlural;
-        const alteration = (ingredient.alteration) ? `, ${ingredient.alteration}` : '';
-        const optional = (ingredient.isOptional) ? ' (optional)' : '';
-        const substitutions = (ingredient.substitutions.length > 0)
-            ? ` (substitutions: ${ingredient.substitutions.map((substitution) => substitution.name).join(', ')})`
-            : '';
-
-        return <label htmlFor={id}><b>{quantity} {unit} {name}</b><em>{alteration}</em>{optional}{substitutions}</label>;
-    }
-
     // Renderers
     function renderCategories() {
         function renderCategory(category: string, categories: Cuisine[]) {
@@ -157,6 +76,126 @@ const RecipeCard = ({ recipe }: ComponentProps) => {
         );
     }
 
+    function renderControls() {
+        return (
+            <div className={styles.controls}>
+                <div>
+                    <button className='icon-only' disabled>
+                        <Icon ariaLabel='Add to favourites' Icon={bxHeart} />
+                    </button>
+                    <button className='icon-only' disabled>
+                        <Icon ariaLabel='Add to meal prep' Icon={bxCalendarCheck} />
+                    </button>
+                    <button className='icon-only' disabled>
+                        <Icon ariaLabel='Copy recipe link to clipboard' Icon={bxLink} />
+                    </button>
+                </div>
+                <div>
+                    <button className='icon-only' disabled>
+                        <Icon ariaLabel='Expand recipe details' Icon={bxExpandVertical} />                        
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
+    function renderIngredients() {
+        let currentSection: null | string = null;
+        const formattedRecipes: (RecipeIngredientResponse | string)[] = [];
+
+        recipe.ingredients.map((ingredient) => {
+            if (ingredient.section && ingredient.section !== currentSection) {
+                formattedRecipes.push(ingredient.section);
+                currentSection = ingredient.section;
+            }
+            formattedRecipes.push(ingredient);
+        });
+
+        function renderIngredientString(ingredient: RecipeIngredientResponse, id: string) {
+            let quantity = '';
+            let quantityValue = 0;
+    
+            if (ingredient.quantityWhole) {
+                quantity += ingredient.quantityWhole;
+                quantityValue += ingredient.quantityWhole;
+            }
+    
+            if (ingredient.quantityFraction) {
+                quantity += ingredient.quantityFraction.name;
+                quantityValue += Number(ingredient.quantityFraction.value);
+            }
+    
+            if (ingredient.quantityMinWhole) {
+                quantity += ingredient.quantityMinWhole;
+                quantityValue += ingredient.quantityMinWhole;
+            }
+    
+            if (ingredient.quantityMinFraction) {
+                quantity += ingredient.quantityMinFraction.name;
+                quantityValue += Number(ingredient.quantityMinFraction.value);
+            }
+    
+            if (ingredient.quantityMaxWhole || ingredient.quantityMaxFraction) {
+                quantity += '-';
+            }
+    
+            if (ingredient.quantityMaxWhole) {
+                quantity += ingredient.quantityMaxWhole;
+                quantityValue += ingredient.quantityMaxWhole;
+            }
+    
+            if (ingredient.quantityMaxFraction) {
+                quantity += ingredient.quantityMaxFraction.name;
+                quantityValue += Number(ingredient.quantityMaxFraction.value);
+            }
+    
+            const unit = (ingredient.unit) ? (quantityValue <= 1 ? ingredient.unit.name : ingredient.unit.namePlural) : '';
+            const name = (quantityValue <= 1) ? ingredient.name.name : ingredient.name.namePlural;
+            const alteration = (ingredient.alteration) ? `, ${ingredient.alteration}` : '';
+            const optional = (ingredient.isOptional) ? ' (optional)' : '';
+            const substitutions = (ingredient.substitutions.length > 0)
+                ? ` (substitutions: ${ingredient.substitutions.map((substitution) => substitution.name).join(', ')})`
+                : '';
+    
+            return <label className='no-styles' htmlFor={id}><b>{quantity} {unit} {name}</b><em>{alteration}</em>{optional}{substitutions}</label>;
+        }
+
+        return (
+            <details className={styles.ingredients}>
+                <summary>Ingredients</summary>
+
+                <div className={styles['add-all-container']}>
+                    <span>Add all</span>
+                    <button className='icon-only' disabled>
+                        <Icon ariaLabel='Add all ingredients to shopping list' Icon={bxListPlus} />
+                    </button>
+                </div>
+
+                <ul>
+                    {formattedRecipes.map((ingredient, index) => {
+                        const ingredientId = `${recipe.slug}-ingredient-${index}`;
+
+                        if (typeof ingredient === 'string') {
+                            return <li key={`key-${ingredientId}`}><b>{ingredient}</b></li>;
+                        } else {
+                            return (
+                                <li key={`key-${ingredientId}`}>
+                                    <div className={styles['details']}>
+                                        <input id={ingredientId} type='checkbox' />
+                                        {renderIngredientString(ingredient, ingredientId)}
+                                    </div>
+                                    <button className='icon-only' disabled>
+                                        <Icon ariaLabel='Add ingredient to shopping list' Icon={bxListPlus} />
+                                    </button>
+                                </li>
+                            );
+                        }
+                    })} 
+                </ul>
+            </details>
+        );
+    }
+
     function renderTitle() {
         return (
             <h2 className={styles.title}>
@@ -167,30 +206,28 @@ const RecipeCard = ({ recipe }: ComponentProps) => {
         );
     }
 
-    function renderControls() {
-        return (
-            <div className={styles.controls}>
-                <div>
-                    <button className='icon-only' disabled>
-                        <Icon aria-label='Add to favourites' Icon={bxHeart} />
-                    </button>
-                    <button className='icon-only' disabled>
-                        <Icon aria-label='Add to meal prep' Icon={bxCalendarCheck} />
-                    </button>
-                    <button className='icon-only' disabled>
-                        <Icon aria-label='Copy recipe link to clipboard' Icon={bxLink} />
-                    </button>
-                </div>
-                <div>
-                    <button className='icon-only' disabled>
-                        <Icon aria-label='Expand recipe details' Icon={bxExpandVertical} />                        
-                    </button>
-                </div>
-            </div>
-        );
-    }
-
     function renderTopInfo(type: 'source' | 'time' | 'yield', InfoIcon: JSX.Element) {
+        function getTimeString(totalMinutes: number) {
+            const hours = Math.floor(totalMinutes / 60);
+            const minutes = totalMinutes % 60;
+    
+            if (hours === 0) {
+                return `${minutes} min`;
+            } else if (minutes === 0) {
+                return `${hours} hr`;
+            } else {
+                return `${hours} hr ${minutes} min`;
+            }
+        }
+
+        function renderFormattedTime() {
+            const totalTime = getTimeString(recipe.prepTimeMin + recipe.cookTimeMin);
+            const prepTime = getTimeString(recipe.prepTimeMin);
+            const cookTime = getTimeString(recipe.cookTimeMin);
+    
+            return (<span><b>{totalTime}</b> ({prepTime} prep + {cookTime} cook)</span>);
+        }
+
         return (
             <div className={styles['top-info']}>
                 <div className={styles['icon-container']}>
@@ -200,12 +237,12 @@ const RecipeCard = ({ recipe }: ComponentProps) => {
                     <a href={recipe.sourceURL ? recipe.sourceURL : undefined} rel='noreferrer' target='_blank'>
                         {recipe.sourceName}
                         {recipe.sourceURL && 
-                            <Icon aria-label='Open link in new tab' Icon={bxLinkExternal} />
+                            <Icon ariaLabel='Open link in new tab' Icon={bxLinkExternal} />
                         }
                     </a>
                 }
                 {type === 'time' &&
-                    getFormattedTime()
+                    renderFormattedTime()
                 }
                 {type === 'yield' &&
                     <span><b>{recipe.servingAmount} {recipe.servingUnit.namePlural}</b></span>
@@ -221,31 +258,14 @@ const RecipeCard = ({ recipe }: ComponentProps) => {
             <hr />
 
             {renderTitle()}
-            {renderTopInfo('source', <Icon aria-label='Recipe source' Icon={bxIdCard} />)}
-            {renderTopInfo('time', <Icon aria-label='Recipe time' Icon={bxTimeFive} />)}
-            {renderTopInfo('yield', <Icon aria-label='Recipe time' Icon={bxBowlHot} />)}
+            {renderTopInfo('source', <Icon ariaLabel='Recipe source' Icon={bxIdCard} />)}
+            {renderTopInfo('time', <Icon ariaLabel='Recipe time' Icon={bxTimeFive} />)}
+            {renderTopInfo('yield', <Icon ariaLabel='Recipe time' Icon={bxBowlHot} />)}
 
             <hr />
 
-            {renderCategories()}            
-
-            {/* ingredients */}
-            {/* <details className={styles.ingredients}>
-                <summary>Ingredients</summary>
-
-                <ul>
-                    {recipe.ingredients.map((ingredient, index) => {
-                        const ingredientId = `${recipe.slug}-ingredient-${index}`;
-
-                        return (
-                            <li key={`key-${ingredientId}`}>
-                                <input id={ingredientId} onClick={handleIngredientClick} type='checkbox' />
-                                {getIngredientString(ingredient, ingredientId)}
-                            </li>
-                        );
-                    })} 
-                </ul>
-            </details> */}
+            {renderCategories()}    
+            {renderIngredients()}
         </section>
     );
 };

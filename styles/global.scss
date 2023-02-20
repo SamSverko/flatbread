@@ -319,7 +319,7 @@ input {
     }
 }
 
-label {
+label:not(.no-styles) {
     @include mixins.label;
 }
 
