@@ -44,6 +44,12 @@ type FormattedRecipeYield = {
     unit: string
 }
 
+export type Route = {
+    path: string
+    title: string
+    icon: unknown;
+}
+
 export type SearchQueryProps = {
     title: string
     courseTypes: string[]

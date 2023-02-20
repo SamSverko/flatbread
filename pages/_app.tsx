@@ -5,20 +5,44 @@ import * as React from 'react';
 import NavCard from '../components/nav-card';
 import { formatPageTitle } from '../utils/functions';
 
+import BxCog from '../public/icons/bx-cog.svg';
+import bxsHeart from '../public/icons/bxs-heart.svg';
+import bxCalendarCheck from '../public/icons/bx-calendar-check.svg';
+import bxListCheck from '../public/icons/bx-list-check.svg';
+import bxSearch from '../public/icons/bx-search.svg';
+
 import '../styles/global.scss';
 import '../styles/variables.css';
 
 import type { AppProps } from 'next/app';
-
-type Route = {
-    path: string
-    title: string
-}
+import type { Route } from '../utils/types';
 
 const routes: Route[] = [
-    { path: '/', title: 'Search' },
-    { path: '/about', title: 'About' },
-    { path: '/settings', title: 'Settings' },
+    {
+        path: '/settings',
+        title: 'Settings',
+        icon: BxCog,
+    },
+    {
+        path: '/saved',
+        title: 'Saved',
+        icon: bxsHeart,
+    },
+    {
+        path: '/plan',
+        title: 'Plan',
+        icon: bxCalendarCheck,
+    },
+    {
+        path: '/list',
+        title: 'List',
+        icon: bxListCheck,
+    },
+    {
+        path: '/',
+        title: 'Search',
+        icon: bxSearch,
+    },
 ];
 
 function App({ Component, pageProps }: AppProps) {
@@ -43,8 +67,8 @@ function App({ Component, pageProps }: AppProps) {
 
                 <title>{matchedRoute ? formatPageTitle(matchedRoute.title) : ''}</title>
             </Head>
-            <NavCard activeRoute={(matchedRoute) ? matchedRoute.path : '/'} />
             <Component {...pageProps} />
+            <NavCard activeRoute={(matchedRoute) ? matchedRoute.path : '/'} routes={routes} />
         </>
     );
 }

@@ -1,72 +1,67 @@
 @use '../../styles/mixins.scss';
-@use '../../styles/variables.scss' as var;
 
 .container {
-    background-color: var.$color-secondary-main;
-    bottom: 0;
-    left: 0;
+    @include mixins.card;
+
+    bottom: var(--spacing-5);
+    left: var(--spacing-5);
+    padding: 0;
     position: fixed;
-    width: 100%;
-    z-index: var.$navbar-z-index;
+    width: calc(100% - var(--spacing-5) - var(--spacing-5));
+    z-index: var(--z-index-nav);
 
     ul {
-        list-style-type: none;
-        margin: 0 auto;
-        max-width: var.$card-max-width;
+        display: flex;
+        justify-content: space-between;
+        list-style: none;
+        margin: 0;
         padding: 0;
 
         li {
-            align-items: center;
-            display: flex;
-            justify-content: space-evenly;
+            padding: 0;
+            width: 100%;
 
             a {
-                @include mixins.transition(background-color);
-
                 align-items: center;
-                background-color: var.$color-secondary-main;
-                color: white;
+                background-color: white;
                 display: flex;
                 flex-direction: column;
                 font-size: 0.75rem;
-                font-weight: 500;
-                gap: var.$spacing-1;
-                line-height: normal;
-                padding: var.$spacing-1 0;
-                width: 100%;
-
-                &:hover {
-                    background-color: var.$color-grey-700;
-                }
-
-                &:active {
-                    background-color: var.$color-grey-600;
-                }
-
-                &:focus {
-                    border-radius: 0;
-                    outline: none;
-                }
-
-                &:focus-visible {
-                    background-color: var.$color-grey-700;
-                }
+                font-weight: 700;
+                justify-content: center;
+                padding: var(--spacing-2);
+                text-decoration: none;
 
                 &.active {
-                    background-color: var.$color-grey-900;
-                    font-weight: 700;
+                    background-color: var(--color-grey-900);
+                    color: white;
+
+                    svg {
+                        fill: white;
+                    }
                 }
 
                 svg {
-                    --size: 1.5rem;
+                    --icon-size: 24px;
 
-                    fill: white;
-                    height: var(--size);
-                    margin: 0;
-                    vertical-align: revert;
-                    width: var(--size);
+                    height: var(--icon-size);
+                    transition:
+                        fill
+                        var(--transition-duration)
+                        var(--transition-timing-function)
+                        var(--transition-delay);
+                    width: var(--icon-size);
                 }
             }
         }
     }
+}
+
+.hide-overflow {
+    background-color: var(--page-background);
+    bottom: 0;
+    height: calc(var(--nav-height) + var(--spacing-5) - calc(var(--spacing-2) / 2));
+    left: 0;
+    position: fixed;
+    width: 100%;
 }

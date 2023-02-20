@@ -6,7 +6,7 @@
 
 // HTML =======================================================================
 html {
-    background-color: var(--color-grey-300);
+    background-color: var(--page-background);
     color: var(--color-grey-900);
     font-family: var(--font-family);
     font-size: var(--font-size);
@@ -16,7 +16,7 @@ html {
 
     body {
         margin: 0;
-        padding: var(--spacing-5) var(--spacing-5) calc(var(--navbar-height) + var(--spacing-5));
+        padding: var(--spacing-5) var(--spacing-5) calc(var(--nav-height) + (calc(var(--spacing-5) * 2)));
         text-align: center;
 
         // stylelint-disable-next-line selector-id-pattern

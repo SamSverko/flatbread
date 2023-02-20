@@ -37,7 +37,7 @@
 
     /* grey */
     --color-grey-50: #fafafa;
-    --color-grey-100: #f5f5f5; /* Page background */
+    --color-grey-100: #f5f5f5;
     --color-grey-200: #eee;
     --color-grey-300: #e0e0e0;
     --color-grey-400: #bdbdbd;
@@ -71,8 +71,11 @@
     --transition-timing-function: ease;
     --transition-delay: 0s;
 
+    /* z-index */
+    --z-index-nav: 10;
+
     /* element-specific */
     --card-max-width: 400px;
-    --navbar-height: 50px;
-    --navbar-z-index: 10;
+    --nav-height: 63px;
+    --page-background: var(--color-grey-300);
 }

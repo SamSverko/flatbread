@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 import IconBowlHot from '../../public/icons/bx-bowl-hot.svg';
-import IconCalendarAlt from '../../public/icons/bx-calendar-alt.svg';
+import IconCalendarAlt from '../../public/icons/bx-calendar-check.svg';
 import IconHeart from '../../public/icons/bx-heart.svg';
 import IconIdCard from '../../public/icons/bx-id-card.svg';
 import IconLink from '../../public/icons/bx-link.svg';
