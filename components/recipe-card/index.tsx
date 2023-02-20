@@ -1,13 +1,16 @@
-// import Link from 'next/link';
+import Link from 'next/link';
 import * as React from 'react';
 
-import IconBowlHot from '../../public/icons/bx-bowl-hot.svg';
-import IconCalendarAlt from '../../public/icons/bx-calendar-check.svg';
-import IconHeart from '../../public/icons/bx-heart.svg';
-import IconIdCard from '../../public/icons/bx-id-card.svg';
-import IconLink from '../../public/icons/bx-link.svg';
-import IconLinkExternal from '../../public/icons/bx-link-external.svg';
-import IconTimeFive from '../../public/icons/bx-time-five.svg';
+import Icon from '../icon';
+
+import bxBowlHot from '../../public/icons/bx-bowl-hot.svg';
+import bxCalendarCheck from '../../public/icons/bx-calendar-check.svg';
+import bxExpandVertical from '../../public/icons/bx-expand-vertical.svg';
+import bxHeart from '../../public/icons/bx-heart.svg';
+import bxIdCard from '../../public/icons/bx-id-card.svg';
+import bxLink from '../../public/icons/bx-link.svg';
+import bxLinkExternal from '../../public/icons/bx-link-external.svg';
+import bxTimeFive from '../../public/icons/bx-time-five.svg';
 
 import styles from './index.module.scss';
 
@@ -41,6 +44,18 @@ type ComponentProps = {
 }
 
 const RecipeCard = ({ recipe }: ComponentProps) => {
+    // Event listeners
+    function handleIngredientClick(event: React.MouseEvent<HTMLInputElement>) {
+        const target = event.target as HTMLInputElement;
+        const label = target.nextElementSibling as HTMLLabelElement;
+        if (target.checked && label) {
+            label.className = styles.checked;
+        } else {
+            label.className = '';
+        }
+    }
+
+    // Helpers
     function getFormattedTime() {
         const totalTime = getTimeString(recipe.prepTimeMin + recipe.cookTimeMin);
         const prepTime = getTimeString(recipe.prepTimeMin);
@@ -111,106 +126,111 @@ const RecipeCard = ({ recipe }: ComponentProps) => {
         return <label htmlFor={id}><b>{quantity} {unit} {name}</b><em>{alteration}</em>{optional}{substitutions}</label>;
     }
 
-    function handleIngredientClick(event: React.MouseEvent<HTMLInputElement>) {
-        const target = event.target as HTMLInputElement;
-        const label = target.nextElementSibling as HTMLLabelElement;
-        if (target.checked && label) {
-            label.className = styles.checked;
-        } else {
-            label.className = '';
+    // Renderers
+    function renderCategories() {
+        function renderCategory(category: string, categories: Cuisine[]) {
+            const id = category.toLowerCase().replaceAll(' ', '-');
+
+            return (
+                <div>
+                    <p><b>{category}</b></p>
+                    <ul>
+                        {categories.map((category, index) => {
+                            return <li key={`key-${recipe.slug}-${id}-${index}`}>{category.name}</li>;
+                        })} 
+                    </ul>
+                </div>
+            );
         }
+
+        return (
+            <details className={styles.categories}>
+                <summary>Categories</summary>
+
+                <div className={styles['details-content']}>
+                    {renderCategory('Cuisines', recipe.cuisines)}
+                    {renderCategory('Dish types', recipe.dishTypes)}
+                    {renderCategory('Course types', recipe.courseTypes)}
+                    {renderCategory('Dietary restrictions', recipe.dietaryRestrictions)}
+                </div>
+            </details>
+        );
+    }
+
+    function renderTitle() {
+        return (
+            <h2 className={styles.title}>
+                <Link href={`/recipe/${recipe.slug}`}>
+                    <a>{recipe.title}</a>
+                </Link>
+            </h2>
+        );
+    }
+
+    function renderControls() {
+        return (
+            <div className={styles.controls}>
+                <div>
+                    <button className='icon-only' disabled>
+                        <Icon aria-label='Add to favourites' Icon={bxHeart} />
+                    </button>
+                    <button className='icon-only' disabled>
+                        <Icon aria-label='Add to meal prep' Icon={bxCalendarCheck} />
+                    </button>
+                    <button className='icon-only' disabled>
+                        <Icon aria-label='Copy recipe link to clipboard' Icon={bxLink} />
+                    </button>
+                </div>
+                <div>
+                    <button className='icon-only' disabled>
+                        <Icon aria-label='Expand recipe details' Icon={bxExpandVertical} />                        
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
+    function renderTopInfo(type: 'source' | 'time' | 'yield', InfoIcon: JSX.Element) {
+        return (
+            <div className={styles['top-info']}>
+                <div className={styles['icon-container']}>
+                    {InfoIcon}
+                </div>
+                {type === 'source' &&
+                    <a href={recipe.sourceURL ? recipe.sourceURL : undefined} rel='noreferrer' target='_blank'>
+                        {recipe.sourceName}
+                        {recipe.sourceURL && 
+                            <Icon aria-label='Open link in new tab' Icon={bxLinkExternal} />
+                        }
+                    </a>
+                }
+                {type === 'time' &&
+                    getFormattedTime()
+                }
+                {type === 'yield' &&
+                    <span><b>{recipe.servingAmount} {recipe.servingUnit.namePlural}</b></span>
+                }
+            </div>
+        );
     }
 
     return (
         <section className={styles.container}>
-            {/* controls */}
-            <div className={styles.controls}>
-                <button className='icon-only' disabled>
-                    <IconHeart aria-label='Add to favourites' role='img' viewBox="0 0 24 24" />
-                </button>
-                <button className='icon-only' disabled>
-                    <IconCalendarAlt aria-label='Add to meal prep' role='img' viewBox="0 0 24 24" />
-                </button>
-                <button className='icon-only' disabled>
-                    <IconLink aria-label='Link recipe' role='img' viewBox="0 0 24 24" />
-                </button>
-            </div>
+            {renderControls()}
 
             <hr />
 
-            {/* title */}
-            <h2>
-                <a className={styles['recipe-link']}>{recipe.title}</a>
-            </h2>
-
-            {/* source */}
-            <div className={styles.source}>
-                <IconIdCard aria-label='Recipe source' role='img' viewBox="0 0 24 24" />
-                <a href={recipe.sourceURL ? recipe.sourceURL : undefined} rel='noreferrer' target='_blank'>
-                    {recipe.sourceName}
-                    {recipe.sourceURL && 
-                        <IconLinkExternal aria-label='Open link in new tab' role='img' viewBox="0 0 24 24" />
-                    }
-                </a>
-            </div>
-
-            {/* time */}
-            <div className={styles.source}>
-                <IconTimeFive aria-label='Recipe time' role='img' viewBox="0 0 24 24" />
-                {getFormattedTime()}
-            </div>
-
-            {/* yield */}
-            <div className={styles.source}>
-                <IconBowlHot aria-label='Recipe yield' role='img' viewBox="0 0 24 24" />
-                {<span><b>{recipe.servingAmount} {recipe.servingUnit.namePlural}</b></span>}
-            </div>
+            {renderTitle()}
+            {renderTopInfo('source', <Icon aria-label='Recipe source' Icon={bxIdCard} />)}
+            {renderTopInfo('time', <Icon aria-label='Recipe time' Icon={bxTimeFive} />)}
+            {renderTopInfo('yield', <Icon aria-label='Recipe time' Icon={bxBowlHot} />)}
 
             <hr />
 
-            {/* categories */}
-            <details className={styles.categories}>
-                <summary>Categories</summary>
-
-                <div>
-                    <p><b>Cuisines</b></p>
-                    <ul>
-                        {recipe.cuisines.map((cuisine, index) => {
-                            return <li className='tag' key={`key-${recipe.slug}-cuisine-${index}`}>{cuisine.name}</li>;
-                        })} 
-                    </ul>
-                </div>
-
-                <div>
-                    <p><b>Dish types</b></p>
-                    <ul>
-                        {recipe.dishTypes.map((dishType, index) => {
-                            return <li className='tag' key={`key-${recipe.slug}-dish-type-${index}`}>{dishType.name}</li>;
-                        })} 
-                    </ul>
-                </div>
-
-                <div>
-                    <p><b>Course types</b></p>
-                    <ul>
-                        {recipe.courseTypes.map((courseType, index) => {
-                            return <li className='tag' key={`key-${recipe.slug}-course-type-${index}`}>{courseType.name}</li>;
-                        })} 
-                    </ul>
-                </div>
-
-                <div>
-                    <p><b>Dietary restrictions</b></p>
-                    <ul>
-                        {recipe.dietaryRestrictions.map((dietaryRestriction, index) => {
-                            return <li className='tag' key={`key-${recipe.slug}-course-type-${index}`}>{dietaryRestriction.name}</li>;
-                        })} 
-                    </ul>
-                </div>
-            </details>
+            {renderCategories()}            
 
             {/* ingredients */}
-            <details className={styles.ingredients}>
+            {/* <details className={styles.ingredients}>
                 <summary>Ingredients</summary>
 
                 <ul>
@@ -225,7 +245,7 @@ const RecipeCard = ({ recipe }: ComponentProps) => {
                         );
                     })} 
                 </ul>
-            </details>
+            </details> */}
         </section>
     );
 };

@@ -1,9 +1,11 @@
 import { PrismaClient } from '@prisma/client';
 import * as React from 'react';
+
+// import RecipeCard from '../components/recipe-card';
+import SearchCard from '../components/search-card';
+import TitleCard from '../components/title-card';
+
 import { getCategoryFormat } from '../prisma/utils';
-import Card from '../components/card/card';
-import RecipeCard from '../components/recipe-card/recipe-card';
-import SearchCard from '../components/search-card/search-card';
 
 import type { NextPage } from 'next';
 
@@ -21,17 +23,17 @@ const Index: NextPage<IndexProps> = ({
     dishTypes,
 }: IndexProps) => {
     // REFS ===================================================================
-    const [recipes, setRecipes] = React.useState([]);
+    // const [recipes, setRecipes] = React.useState([]);
 
     // STATES =================================================================
     // EFFECTS ================================================================
-    React.useEffect(() => {
-        fetch('/api/recipes?title=chicken&condensed=true')
-            .then((response) => response.json())
-            .then((data) => {
-                setRecipes(data);
-            });
-    }, []);
+    // React.useEffect(() => {
+    //     fetch('/api/recipes?title=chicken&condensed=true')
+    //         .then((response) => response.json())
+    //         .then((data) => {
+    //             setRecipes(data);
+    //         });
+    // }, []);
 
     console.log(courseTypes, cuisines, dietaryRestrictions, dishTypes);
 
@@ -41,20 +43,13 @@ const Index: NextPage<IndexProps> = ({
     // RENDER =================================================================
     return (
         <>
-            <Card>
-                <h1>Flatbread</h1>
-            </Card>
+            <TitleCard heading='Search' />
 
             <SearchCard />
 
-            <Card>
-                <h2>Search results</h2>
-                <p>24 recipes found.</p>
-            </Card>
-
-            {recipes.length > 0 &&
+            {/* {recipes.length > 0 &&
                 <RecipeCard recipe={recipes[0]} />
-            }
+            } */}
         </>
     );
 };

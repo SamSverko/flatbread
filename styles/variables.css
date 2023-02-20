@@ -76,6 +76,7 @@
 
     /* element-specific */
     --card-max-width: 400px;
+    --icon-size: 24px;
     --nav-height: 63px;
     --page-background: var(--color-grey-300);
 }

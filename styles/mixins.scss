@@ -1,3 +1,8 @@
+@mixin break-word {
+    overflow-wrap: anywhere;
+    word-break: normal;
+}
+
 @mixin card {
     background-color: white;
     border: var(--border);
