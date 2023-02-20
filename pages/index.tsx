@@ -1,10 +1,10 @@
-import { PrismaClient } from '@prisma/client';
 import * as React from 'react';
 
 // import RecipeCard from '../components/recipe-card';
 import SearchCard from '../components/search-card';
 import TitleCard from '../components/title-card';
 
+import { prisma } from '../prisma/db';
 import { getCategoryFormat } from '../prisma/utils';
 
 import type { NextPage } from 'next';
@@ -57,8 +57,6 @@ const Index: NextPage<IndexProps> = ({
 export default Index;
 
 export async function getStaticProps() {
-    const prisma = new PrismaClient();
-
     const courseTypes = await prisma.courseType.findMany({
         select: getCategoryFormat(true),
         orderBy: {

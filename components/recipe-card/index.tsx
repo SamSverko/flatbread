@@ -4,7 +4,7 @@ import * as React from 'react';
 import Icon from '../icon';
 
 import bxBowlHot from '../../public/icons/bx-bowl-hot.svg';
-import bxCalendarCheck from '../../public/icons/bx-calendar-check.svg';
+import bxCalendarPlus from '../../public/icons/bx-calendar-plus.svg';
 import bxExpandVertical from '../../public/icons/bx-expand-vertical.svg';
 import bxHeart from '../../public/icons/bx-heart.svg';
 import bxIdCard from '../../public/icons/bx-id-card.svg';
@@ -84,7 +84,7 @@ const RecipeCard = ({ recipe }: ComponentProps) => {
                         <Icon ariaLabel='Add to favourites' Icon={bxHeart} />
                     </button>
                     <button className='icon-only' disabled>
-                        <Icon ariaLabel='Add to meal prep' Icon={bxCalendarCheck} />
+                        <Icon ariaLabel='Add to meal prep' Icon={bxCalendarPlus} />
                     </button>
                     <button className='icon-only' disabled>
                         <Icon ariaLabel='Copy recipe link to clipboard' Icon={bxLink} />

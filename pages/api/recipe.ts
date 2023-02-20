@@ -1,5 +1,6 @@
-import { Prisma, PrismaClient } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 
+import { prisma } from '../../prisma/db';
 import {
     validateQueryParamCookTimeMin,
     validateQueryParamCourseTypes,
@@ -21,8 +22,6 @@ import {
 
 import type { NextApiResponse, NextApiRequest } from 'next';
 import type { RecipeIngredient } from '../../prisma/types';
-
-const prisma = new PrismaClient();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const method = req.method;

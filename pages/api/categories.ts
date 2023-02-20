@@ -1,5 +1,4 @@
-import { PrismaClient } from '@prisma/client';
-
+import { prisma } from '../../prisma/db';
 import {
     getCategoryFormat,
     validateQueryParamCondensed,
@@ -21,8 +20,6 @@ type CategoriesResponse = {
     dietaryRestrictions?: DietaryRestrictionResponse[],
     dishTypes?: DishTypesResponse[],
 }
-
-const prisma = new PrismaClient();
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const {

@@ -1,9 +1,9 @@
-import { Prisma, PrismaClient } from '@prisma/client';
+import { Prisma } from '@prisma/client';
 import { v4 } from 'uuid';
 
-import type { RecipeToSeed } from './types';
+import { prisma } from './db';
 
-const prisma = new PrismaClient();
+import type { RecipeToSeed } from './types';
 
 const servingUnits: Prisma.ServingUnitCreateInput[] = [
     { name: 'bun', namePlural: 'buns' },
