@@ -1,5 +1,34 @@
 @use '../../styles/mixins.scss';
 
+@mixin list {
+    ul {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-1);
+        list-style-type: none;
+        margin: var(--spacing-2) 0 0;
+        padding: 0;
+
+        li {
+            align-items: center;
+            display: flex;
+            gap: var(--spacing-2);
+            justify-content: space-between;
+
+            &.header {
+                margin: var(--spacing-2) 0 var(--spacing-1) 0;
+            }
+
+            .details {
+                align-items: flex-start;
+                display: flex;
+                gap: var(--spacing-2);
+                justify-content: space-between;
+            }
+        }
+    }
+}
+
 .container {
     @include mixins.card;
 
@@ -84,6 +113,7 @@
 
     .ingredients {
         @include mixins.break-word;
+        @include list;
 
         .add-all-container {
             align-items: center;
@@ -95,27 +125,29 @@
                 font-weight: 700;
             }
         }
+    }
+
+    .steps {
+        @include mixins.break-word;
+        @include list;
 
         ul {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-2);
-            list-style-type: none;
-            margin: var(--spacing-2) 0 0;
-            padding: 0;
+            li {
+                align-items: flex-start;
+            }
+        }
+    }
+
+    .notes {
+        @include mixins.break-word;
+        @include list;
+
+        ul {
+            list-style-type: disc;
+            margin-left: var(--spacing-5);
 
             li {
-                align-items: center;
-                display: flex;
-                gap: var(--spacing-1);
-                justify-content: space-between;
-
-                .details {
-                    align-items: center;
-                    display: flex;
-                    gap: var(--spacing-2);
-                    justify-content: space-between;
-                }
+                display: list-item;
             }
         }
     }

@@ -101,14 +101,14 @@ const RecipeCard = ({ recipe }: ComponentProps) => {
 
     function renderIngredients() {
         let currentSection: null | string = null;
-        const formattedRecipes: (RecipeIngredientResponse | string)[] = [];
+        const formattedIngredients: (RecipeIngredientResponse | string)[] = [];
 
         recipe.ingredients.map((ingredient) => {
             if (ingredient.section && ingredient.section !== currentSection) {
-                formattedRecipes.push(ingredient.section);
+                formattedIngredients.push(ingredient.section);
                 currentSection = ingredient.section;
             }
-            formattedRecipes.push(ingredient);
+            formattedIngredients.push(ingredient);
         });
 
         function renderIngredientString(ingredient: RecipeIngredientResponse, id: string) {
@@ -172,11 +172,11 @@ const RecipeCard = ({ recipe }: ComponentProps) => {
                 </div>
 
                 <ul>
-                    {formattedRecipes.map((ingredient, index) => {
+                    {formattedIngredients.map((ingredient, index) => {
                         const ingredientId = `${recipe.slug}-ingredient-${index}`;
 
                         if (typeof ingredient === 'string') {
-                            return <li key={`key-${ingredientId}`}><b>{ingredient}</b></li>;
+                            return <li className={styles.header} key={`key-${ingredientId}`}><b>{ingredient}</b></li>;
                         } else {
                             return (
                                 <li key={`key-${ingredientId}`}>
@@ -187,6 +187,73 @@ const RecipeCard = ({ recipe }: ComponentProps) => {
                                     <button className='icon-only' disabled>
                                         <Icon ariaLabel='Add ingredient to shopping list' Icon={bxListPlus} />
                                     </button>
+                                </li>
+                            );
+                        }
+                    })} 
+                </ul>
+            </details>
+        );
+    }
+
+    function renderNotes() {
+        let currentSection: null | string = null;
+        const formattedNotes: (RecipeNote | string)[] = [];
+
+        recipe.notes.map((note) => {
+            if (note.section && note.section !== currentSection) {
+                formattedNotes.push(note.section);
+                currentSection = note.section;
+            }
+            formattedNotes.push(note);
+        });
+
+        return (
+            <details className={styles.notes}>
+                <summary>Notes</summary>
+
+                <ul>
+                    {formattedNotes.map((note, index) => {
+                        const noteId = `${recipe.slug}-note-${index}`;
+
+                        if (typeof note === 'string') {
+                            return <li className={styles.header} key={`key-${noteId}`}><b>{note}</b></li>;
+                        } else {
+                            return <li key={`key-${noteId}`}>{note.details}</li>;
+                        }
+                    })} 
+                </ul>
+            </details>
+        );
+    }
+
+    function renderSteps() {
+        let currentSection: null | string = null;
+        const formattedSteps: (RecipeStep | string)[] = [];
+
+        recipe.steps.map((step) => {
+            if (step.section && step.section !== currentSection) {
+                formattedSteps.push(step.section);
+                currentSection = step.section;
+            }
+            formattedSteps.push(step);
+        });
+
+        return (
+            <details className={styles.steps}>
+                <summary>Steps</summary>
+
+                <ul>
+                    {formattedSteps.map((step, index) => {
+                        const stepId = `${recipe.slug}-step-${index}`;
+
+                        if (typeof step === 'string') {
+                            return <li className={styles.header} key={`key-${stepId}`}><b>{step}</b></li>;
+                        } else {
+                            return (
+                                <li key={`key-${stepId}`}>
+                                    <input id={stepId} type='checkbox' />
+                                    <label className='no-styles' htmlFor={stepId}>{step.details}</label>
                                 </li>
                             );
                         }
@@ -266,6 +333,8 @@ const RecipeCard = ({ recipe }: ComponentProps) => {
 
             {renderCategories()}    
             {renderIngredients()}
+            {renderSteps()}
+            {renderNotes()}
         </section>
     );
 };
