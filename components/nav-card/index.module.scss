@@ -13,14 +13,15 @@
 
     ul {
         display: flex;
+        flex-wrap: wrap;
         justify-content: space-between;
         list-style: none;
         margin: 0;
         padding: 0;
 
         li {
+            flex-grow: 1;
             padding: 0;
-            width: 100%;
 
             a {
                 align-items: center;

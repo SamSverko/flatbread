@@ -80,3 +80,15 @@
     --nav-height: 63px;
     --page-background: var(--color-grey-300);
 }
+
+@media only screen and (max-width: 295px) {
+    :root {
+        --nav-height: 122px;
+    }
+}
+
+@media only screen and (max-width: 181px) {
+    :root {
+        --nav-height: 181px;
+    }
+}
