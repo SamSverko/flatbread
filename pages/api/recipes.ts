@@ -60,6 +60,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             select: getRecipeFormat(condensedValidated),
         });
 
+        if (!recipe) {
+            return res.status(404).json({ error: 'Recipe not found. Fix: Try another `slug` value.' });
+        }
+
         return res.status(200).json(recipe);
     } else {
         const recipes = await prisma.recipe.findMany({

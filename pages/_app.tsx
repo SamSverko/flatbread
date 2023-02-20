@@ -68,7 +68,7 @@ function App({ Component, pageProps }: AppProps) {
                 <title>{matchedRoute ? formatPageTitle(matchedRoute.title) : ''}</title>
             </Head>
             <Component {...pageProps} />
-            <NavCard activeRoute={(matchedRoute) ? matchedRoute.path : '/'} routes={routes} />
+            <NavCard activeRoute={(matchedRoute) ? matchedRoute.path : ''} routes={routes} />
         </>
     );
 }
