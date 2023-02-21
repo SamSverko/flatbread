@@ -1,48 +1,27 @@
-import type { FormattedCategory } from './contentful';
+import type {
+    CourseType,
+    Cuisine,
+    DietaryRestriction,
+    DishType,
+    Prisma,
+    Recipe,
+    RecipeNote,
+    RecipeStep,
+    ServingUnit,
+} from '@prisma/client';
 
-export type FetchedCategories = {
-    courseType: FormattedCategory[]
-    cuisine: FormattedCategory[]
-    dietaryRestriction: FormattedCategory[]
-    dishType: FormattedCategory[]
+export interface RecipeFormatted extends Recipe {
+    servingUnit: ServingUnit;
+    courseTypes: CourseType[];
+    cuisines: Cuisine[];
+    dietaryRestrictions: DietaryRestriction[];
+    dishTypes: DishType[];
+    ingredients: RecipeIngredientResponse[];
+    steps: RecipeStep[];
+    notes: RecipeNote[];
 }
 
-export type FormattedRecipe = {
-    title: string,
-    slug: string,
-    createdAt: string,
-    source: FormattedRecipeSource
-    image?: FormattedRecipeImage
-    time: FormattedRecipeTime
-    yield: FormattedRecipeYield
-    courseTypes: string[]
-    cuisines?: string[]
-    dietaryRestrictions?: string[]
-    dishTypes: string[]
-    ingredients: string[]
-    steps: string[]
-    notes?: string[]
-}
-
-type FormattedRecipeImage = {
-    alt?: string
-    url?: string
-}
-
-type FormattedRecipeSource = {
-    name: string
-    url?: string
-}
-
-type FormattedRecipeTime = {
-    cook: number
-    prep: number
-}
-
-type FormattedRecipeYield = {
-    amount: number
-    unit: string
-}
+export type RecipeIngredientResponse = Prisma.RecipeIngredientGetPayload<{ select: { [K in keyof Required<Prisma.RecipeIngredientSelect>]: true } }>
 
 export type Route = {
     path: string

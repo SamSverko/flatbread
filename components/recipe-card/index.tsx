@@ -15,30 +15,8 @@ import bxTimeFive from '../../public/icons/bx-time-five.svg';
 
 import styles from './index.module.scss';
 
-import type {
-    CourseType,
-    Cuisine,
-    DietaryRestriction,
-    DishType,
-    Prisma,
-    Recipe,
-    RecipeNote,
-    RecipeStep,
-    ServingUnit,
-} from '@prisma/client';
-
-type RecipeIngredientResponse = Prisma.RecipeIngredientGetPayload<{ select: { [K in keyof Required<Prisma.RecipeIngredientSelect>]: true } }>
-
-interface RecipeFormatted extends Recipe {
-    servingUnit: ServingUnit;
-    courseTypes: CourseType[];
-    cuisines: Cuisine[];
-    dietaryRestrictions: DietaryRestriction[];
-    dishTypes: DishType[];
-    ingredients: RecipeIngredientResponse[];
-    steps: RecipeStep[];
-    notes: RecipeNote[];
-}
+import type { Cuisine, RecipeNote, RecipeStep } from '@prisma/client';
+import type { RecipeFormatted, RecipeIngredientResponse } from '../../utils/types';
 
 type ComponentProps = {
     recipe: RecipeFormatted

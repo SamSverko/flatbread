@@ -19,7 +19,7 @@ const SearchResultsCard = ({ recipeCount }: ComponentProps) => {
         <section className={styles.container}>
             <h2>Search results</h2>
             <p ref={resultsParagraphRef} tabIndex={-1}>
-                {recipeCount} {recipeCount === 1 ? 'recipe' : 'recipes'} found
+                {recipeCount} recipe{recipeCount > 1 ? 's' : ''} found.
             </p>
         </section>
     );

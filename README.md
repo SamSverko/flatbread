@@ -49,9 +49,10 @@ To get the website running locally, please do the following:
 
 ## Tech stack
 
-- **Front End Framework:** [Next.js](https://nextjs.org/) - A React framework for developing single page and multi-page JavaScript applications and websites.
-- **Headless CMS:** [Contentful](https://www.contentful.com/) - An API-first content management platform to create, manage and publish content on any digital channel.
-- **Hosting:** [Vercel](https://aws.amazon.com/ec2/) - A cloud platform for static sites and serverless functions.
+- **Front end framework:** [Next.js](https://nextjs.org/) - A React framework for developing single page and multi-page JavaScript applications and websites.
+- **Object Relational Mapping (ORM):** [Prisma](https://www.prisma.io/) - A next-generation Node.js and TypeScript ORM for PostgreSQL, MySQL, SQL Server, SQLite, MongoDB, and CockroachDB.
+- **Database:** [PostgreSQL](https://www.postgresql.org/) - The World's Most Advanced Open Source Relational Database.
+- **App hosting:** [Vercel](https://aws.amazon.com/ec2/) - A cloud platform for static sites and serverless functions.
 
 ---
 

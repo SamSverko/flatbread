@@ -1,14 +1,15 @@
 import * as React from 'react';
 
-// import RecipeCard from '../components/recipe-card';
+import RecipeCard from '../components/recipe-card';
 import SearchCard from '../components/search-card';
+import SearchResultsCard from '../components/search-results-card';
 import TitleCard from '../components/title-card';
 
 import { prisma } from '../prisma/db';
 import { getCategoryFormat } from '../prisma/utils';
 
 import type { NextPage } from 'next';
-import type { SearchQueryProps } from '../utils/types';
+import type { RecipeFormatted, SearchQueryProps } from '../utils/types';
 
 type IndexProps = {
     courseTypes: string[]
@@ -25,15 +26,20 @@ const Index: NextPage<IndexProps> = ({
 }: IndexProps) => {
     // States
     const [isSearching, setIsSearching] = React.useState(false);
+    const [searchPerformed, setSearchPerformed] = React.useState(false);
     const [recipes, setRecipes] = React.useState([]);
 
     // Event listeners
     function handleSearchSubmit(searchQuery: SearchQueryProps) {
         if (searchQuery.title) {
+            setIsSearching(true);
+
             fetch(`/api/recipes?title=${searchQuery.title}`)
                 .then((response) => response.json())
                 .then((data) => {
                     setRecipes(data);
+                    setIsSearching(false);
+                    setSearchPerformed(true);
                 });
         }
     }
@@ -51,7 +57,13 @@ const Index: NextPage<IndexProps> = ({
                 dishTypes={dishTypes}
             />
 
-            <TitleCard level={2} text='Fetching recipes...' />
+            {isSearching && <TitleCard level={2} text='Fetching recipes...' />}
+            {(!isSearching && searchPerformed && recipes) && <SearchResultsCard recipeCount={recipes.length} />}
+            {recipes && 
+                (recipes as RecipeFormatted[]).map((recipe, index) => {
+                    return <RecipeCard key={`key-recipe-${recipe.slug}-${index}`} recipe={recipe} />;
+                })
+            }
         </>
     );
 };
