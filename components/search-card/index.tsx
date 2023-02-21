@@ -4,25 +4,33 @@ import InputGroup from '../input-group';
 
 import styles from './index.module.scss';
 
-export const SearchCard = () => {
-    const [recipes, setRecipes] = React.useState([]);
+import type { SearchQueryProps } from '../../utils/types';
 
-    React.useEffect(() => {
-        console.log(recipes);
-    }, [recipes]);
+type IndexProps = {
+    courseTypes: string[]
+    cuisines: string[]
+    dietaryRestrictions: string[]
+    dishTypes: string[]
+    handleSearchSubmit: (searchQuery: SearchQueryProps) => void
+}
 
+export const SearchCard = ({
+    courseTypes,
+    cuisines,
+    dietaryRestrictions,
+    dishTypes,
+    handleSearchSubmit,
+}: IndexProps) => {
     function handleFormSubmit(event: React.FormEvent) {
         event.preventDefault();
 
         const formData = new FormData(event.target as HTMLFormElement);
-        const title = formData.get('title');
+        const title = formData.get('title')?.toString();
 
         if (title) {
-            fetch(`/api/recipes?title=${title}`)
-                .then((response) => response.json())
-                .then((data) => {
-                    setRecipes(data);
-                });
+            handleSearchSubmit({
+                title: title,
+            });
         }
     }
 
@@ -43,7 +51,7 @@ export const SearchCard = () => {
 
                 <div className={styles['submit-container']}>
                     <input name='submit-search' type='submit' value='Search' />
-                    <input className='secondary' name='submit-random' type='submit' value='Random' />
+                    <input className='secondary' disabled name='submit-random' type='submit' value='Random' />
                 </div>
             </form>
         </section>

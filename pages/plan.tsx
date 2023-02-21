@@ -7,7 +7,7 @@ import type { NextPage } from 'next';
 const Plan: NextPage = () => {
     return (
         <>
-            <TitleCard heading='Meal plan' />
+            <TitleCard text='Meal plan' />
         </>
     );
 };

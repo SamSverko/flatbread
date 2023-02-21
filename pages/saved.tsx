@@ -7,7 +7,7 @@ import type { NextPage } from 'next';
 const Saved: NextPage = () => {
     return (
         <>
-            <TitleCard heading='Saved' />
+            <TitleCard text='Saved' />
         </>
     );
 };

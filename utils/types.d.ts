@@ -51,9 +51,9 @@ export type Route = {
 }
 
 export type SearchQueryProps = {
-    title: string
-    courseTypes: string[]
-    cuisines: string[]
-    dietaryRestrictions: string[]
-    dishTypes: string[]
+    title?: string
+    courseTypes?: string[]
+    cuisines?: string[]
+    dietaryRestrictions?: string[]
+    dishTypes?: string[]
 }

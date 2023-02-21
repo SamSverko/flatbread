@@ -19,7 +19,7 @@ const Settings: NextPage = () => {
 
     return (
         <>
-            <TitleCard heading='Settings' />
+            <TitleCard text='Settings' />
 
             <h2>Local Storage</h2>
 

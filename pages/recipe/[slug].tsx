@@ -28,8 +28,8 @@ const RecipePage: NextPage = () => {
         }
     }, [slug]);
 
-    if (isLoading) return <TitleCard heading='Fetching recipe!' />;
-    if (!recipe) return <TitleCard heading='No recipe found!' />;
+    if (isLoading) return <TitleCard text='Fetching recipe...' />;
+    if (!recipe) return <TitleCard text='No recipe found!' />;
 
     return <RecipeCard recipe={recipe} />;
 };

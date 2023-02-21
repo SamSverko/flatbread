@@ -8,6 +8,7 @@ import { prisma } from '../prisma/db';
 import { getCategoryFormat } from '../prisma/utils';
 
 import type { NextPage } from 'next';
+import type { SearchQueryProps } from '../utils/types';
 
 type IndexProps = {
     courseTypes: string[]
@@ -22,34 +23,35 @@ const Index: NextPage<IndexProps> = ({
     dietaryRestrictions,
     dishTypes,
 }: IndexProps) => {
-    // REFS ===================================================================
-    // const [recipes, setRecipes] = React.useState([]);
+    // States
+    const [isSearching, setIsSearching] = React.useState(false);
+    const [recipes, setRecipes] = React.useState([]);
 
-    // STATES =================================================================
-    // EFFECTS ================================================================
-    // React.useEffect(() => {
-    //     fetch('/api/recipes?title=chicken&condensed=true')
-    //         .then((response) => response.json())
-    //         .then((data) => {
-    //             setRecipes(data);
-    //         });
-    // }, []);
+    // Event listeners
+    function handleSearchSubmit(searchQuery: SearchQueryProps) {
+        if (searchQuery.title) {
+            fetch(`/api/recipes?title=${searchQuery.title}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    setRecipes(data);
+                });
+        }
+    }
 
-    console.log(courseTypes, cuisines, dietaryRestrictions, dishTypes);
-
-    // EVENT LISTENERS ========================================================
-    
-
-    // RENDER =================================================================
+    // Renderers
     return (
         <>
-            <TitleCard heading='Search' />
+            <TitleCard text='Search' />
 
-            <SearchCard />
+            <SearchCard
+                handleSearchSubmit={handleSearchSubmit}
+                courseTypes={courseTypes}
+                cuisines={cuisines}
+                dietaryRestrictions={dietaryRestrictions}
+                dishTypes={dishTypes}
+            />
 
-            {/* {recipes.length > 0 &&
-                <RecipeCard recipe={recipes[0]} />
-            } */}
+            <TitleCard level={2} text='Fetching recipes...' />
         </>
     );
 };
