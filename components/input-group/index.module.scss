@@ -10,4 +10,24 @@
         margin: calc(var(--border-width) * -1) 0 0;
         width: 100%;
     }
+
+    .with-button {
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+
+        button {
+            margin: calc(var(--border-width) * -1) 0 0;
+        }
+    }
+
+    ul {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spacing-2);
+        list-style-type: none;
+        margin: var(--spacing-2) 0 0;
+        padding: 0;
+    }
 }

@@ -3,6 +3,10 @@
 .container {
     @include mixins.card;
 
+    h2 {
+        @include mixins.break-word;
+    }
+
     form {
         align-items: flex-start;
         display: flex;
@@ -16,6 +20,8 @@
             width: 100%;
 
             summary {
+                @include mixins.break-word;
+
                 &:focus,
                 &:focus-visible {
                     outline: none; /* REMOVE ME WHEN ENABLED */
@@ -29,8 +35,20 @@
 
         .submit-container {
             display: flex;
+            flex-wrap: wrap;
+            gap: var(--spacing-2);
             justify-content: space-between;
             width: 100%;
+
+            input {
+                @include mixins.break-word;
+
+                @media screen and (max-width: 185px) {
+                    & {
+                        padding: var(--spacing-1);
+                    }
+                }
+            }
         }
     }
 }

@@ -5,6 +5,10 @@
 
     gap: var(--spacing-2);
 
+    h2 {
+        @include mixins.break-word;
+    }
+
     p {
         &:focus {
             @include mixins.focus-outline;
