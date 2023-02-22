@@ -6,6 +6,10 @@
     flex-direction: column;
     width: 100%;
 
+    label {
+        @include mixins.break-word;
+    }
+
     input {
         margin: calc(var(--border-width) * -1) 0 0;
         width: 100%;
