@@ -26,6 +26,7 @@ const InputGroup = ({
     placeholder,
     type = 'text',
 }: ComponentProps) => {
+    const inputRef = React.useRef(null);
     const listboxRef = React.useRef(null);
 
     // TO DO - pass selected categories to parent component
@@ -35,8 +36,6 @@ const InputGroup = ({
 
     // Event listeners
     function handleCategoryRemoveOnClick(category: string) {
-        if (!listboxRef.current) return;
-
         const listItems = getListItemElements();
         if (!listItems) return;
 
@@ -54,16 +53,17 @@ const InputGroup = ({
     }
 
     function handleInputOnInput(event: React.KeyboardEvent<HTMLInputElement>) {
-        if (!listboxRef.current) return;
         if (!categories) return;
+
+        if (categories && !showList) {
+            setShowList(true);
+        }
 
         const inputValue = (event.target as HTMLInputElement).value;
         const searchRegex = new RegExp(inputValue, 'i');
 
         // filter out items that do not match searchRegex
-        const filteredItems = categories.filter((item) => {
-            return (item.search(searchRegex) !== -1);
-        });
+        const filteredItems = categories.filter((item) => (item.search(searchRegex) !== -1));
 
         const listItemElements = getListItemElements();
         if (!listItemElements) return;
@@ -76,7 +76,9 @@ const InputGroup = ({
             // hide all list items that don't match category text
             const text = element.innerText;
             if (text && !filteredItems.map((item) => item).includes(text)) {
-                element.classList.add(styles.hide);
+                if (!element.classList.contains(styles['none-found'])) {
+                    element.classList.add(styles.hide);
+                }
             }
         });
 
@@ -88,7 +90,25 @@ const InputGroup = ({
         }
     }
 
-    function handleListItemClick(event: React.MouseEvent<HTMLLIElement>) {
+    function handleInputOnKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+        if (event.key === 'ArrowDown' && categories && showList && !noResults) {
+            event.preventDefault();
+            const listItemElements = getListItemElements();
+            if (!listItemElements) return;
+            const visibleListItemElements = listItemElements.filter((listItem) => !listItem.classList.contains(styles.hide));
+            visibleListItemElements[0].focus();
+        } else if (event.key === 'ArrowDown' && !showList) {
+            setShowList(true);
+        } else if (event.key === 'Escape') {
+            setShowList(false);
+        }
+    }
+
+    function handleListItemOnBlur() {
+        setShowList(false);
+    }
+
+    function handleListItemOnClick(event: React.MouseEvent<HTMLLIElement>) {
         const element = (event.target as HTMLLIElement);
         const selectedCategory = element.innerText;
         const isSelected = selectedCategories.findIndex((category) => category === selectedCategory);
@@ -97,6 +117,38 @@ const InputGroup = ({
             addSelectedCategory(selectedCategory, element);
         } else {
             removeSelectedCategory(selectedCategory, element);
+        }
+    }
+
+    function handleListItemOnFocus() {
+        setShowList(true);
+    }
+
+    function handleListItemOnKeyDown(event: React.KeyboardEvent<HTMLLIElement>) {
+        const listItemElements = getListItemElements();
+        if (!listItemElements) return;
+
+        const visibleListItemElements = listItemElements.filter((listItem) => !listItem.classList.contains(styles.hide));
+        const currentListItem = document.activeElement as HTMLLIElement;
+        const currentItemIndex = visibleListItemElements.findIndex((listItem) => listItem.innerText === currentListItem.innerText);
+
+        if (event.key === 'Escape' || (event.key === 'ArrowUp' && currentItemIndex === 0)) {
+            event.preventDefault();
+            if (inputRef.current) (inputRef.current as HTMLInputElement).focus();
+            setShowList(false);
+        } else if (event.key === 'ArrowDown' && currentItemIndex < visibleListItemElements.length - 1) {
+            event.preventDefault();
+            visibleListItemElements[currentItemIndex + 1].focus();
+        } else if (event.key === 'ArrowUp' && currentItemIndex >= 0) {
+            event.preventDefault();
+            visibleListItemElements[currentItemIndex - 1].focus();
+        } else if (event.key === ' ' || event.key === 'Enter') {
+            event.preventDefault();
+            if (currentListItem.getAttribute('aria-pressed') === 'true') {
+                removeSelectedCategory(currentListItem.innerText, currentListItem);
+            } else {
+                addSelectedCategory(currentListItem.innerText, currentListItem);
+            }
         }
     }
 
@@ -127,14 +179,16 @@ const InputGroup = ({
                     onBlur={handleInputOnBlur}
                     onFocus={handleInputOnFocus}
                     onInput={handleInputOnInput}
+                    onKeyDown={handleInputOnKeyDown}
                     name={name}
                     placeholder={placeholder}
+                    ref={inputRef}
                     type={type}
                 />
             )}
 
             <div className={styles['found-categories-container']}>
-                {categories && categories.length > 0 &&
+                {categories &&
                     <ul
                         aria-label={label}
                         className={`${(showList) ? styles.show : ''}`}
@@ -145,9 +199,13 @@ const InputGroup = ({
                             return (
                                 <li
                                     aria-pressed={false}
-                                    onClick={handleListItemClick}
+                                    onBlur={handleListItemOnBlur}
+                                    onClick={handleListItemOnClick}
+                                    onFocus={handleListItemOnFocus}
+                                    onKeyDown={handleListItemOnKeyDown}
                                     onMouseDown={(event) => event.preventDefault()}
                                     key={`key-found-category-${category}-${index}`}
+                                    tabIndex={-1}
                                 >
                                     {category}
                                     <Icon ariaHidden={true} Icon={bxCheck} />
