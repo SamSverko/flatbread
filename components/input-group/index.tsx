@@ -14,6 +14,7 @@ type ComponentProps = {
     label: string
     name: string
     placeholder?: string
+    setCategory?: React.Dispatch<React.SetStateAction<string[]>>
     type: 'search' | 'submit' | 'text'
 }
 
@@ -24,12 +25,15 @@ const InputGroup = ({
     label,
     name,
     placeholder,
+    setCategory,
     type = 'text',
 }: ComponentProps) => {
+    // TODO - Fix removal of category when Enter is pressed on the top search
+    // Refs
     const inputRef = React.useRef(null);
     const listboxRef = React.useRef(null);
 
-    // TO DO - pass selected categories to parent component
+    // States
     const [selectedCategories, setSelectedCategories] = React.useState<Array<string>>([]);
     const [showList, setShowList] = React.useState(false);
     const [noResults, setNoResults] = React.useState(false);
@@ -97,9 +101,9 @@ const InputGroup = ({
             if (!listItemElements) return;
             const visibleListItemElements = listItemElements.filter((listItem) => !listItem.classList.contains(styles.hide));
             visibleListItemElements[0].focus();
-        } else if (event.key === 'ArrowDown' && !showList) {
+        } else if (event.key === 'ArrowDown' && categories && !showList) {
             setShowList(true);
-        } else if (event.key === 'Escape') {
+        } else if (event.key === 'Escape' && categories) {
             setShowList(false);
         }
     }
@@ -155,6 +159,7 @@ const InputGroup = ({
     // Helpers
     function addSelectedCategory(category: string, listItem: HTMLLIElement) {
         setSelectedCategories(selectedCategories => [...selectedCategories, category]);
+        if (setCategory) setCategory(selectedCategories => [...selectedCategories, category]);
         listItem.setAttribute('aria-pressed', 'true');
     }
 
@@ -166,6 +171,7 @@ const InputGroup = ({
 
     function removeSelectedCategory(category: string, listItem: HTMLLIElement) {
         setSelectedCategories(selectedCategories.filter(selectedCategory => selectedCategory !== category));
+        if (setCategory) setCategory(selectedCategories.filter(selectedCategory => selectedCategory !== category));
         listItem.setAttribute('aria-pressed', 'false');
     }
 

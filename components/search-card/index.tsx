@@ -21,17 +21,26 @@ export const SearchCard = ({
     dishTypes,
     handleSearchSubmit,
 }: IndexProps) => {
+    // States
+    const [selectedCourseTypes, setSelectedCourseTypes] = React.useState<Array<string>>([]);
+    const [selectedCuisines, setSelectedCuisines] = React.useState<Array<string>>([]);
+    const [selectedDietaryRestrictions, setSelectedDietaryRestrictions] = React.useState<Array<string>>([]);
+    const [selectedDishTypes, setSelectedDishTypes] = React.useState<Array<string>>([]);
+
+    // Event listeners
     function handleFormSubmit(event: React.FormEvent) {
         event.preventDefault();
 
         const formData = new FormData(event.target as HTMLFormElement);
         const title = formData.get('title')?.toString();
 
-        if (title) {
-            handleSearchSubmit({
-                title: title,
-            });
-        }
+        handleSearchSubmit({
+            title: title,
+            courseTypes: selectedCourseTypes,
+            cuisines: selectedCuisines,
+            dietaryRestrictions: selectedDietaryRestrictions,
+            dishTypes: selectedDishTypes,
+        });
     }
 
     return (
@@ -48,10 +57,38 @@ export const SearchCard = ({
                         <p>By default, all recipe categories are selected.</p>
                         <p>To refine your search results, select only the categories needed.</p>
 
-                        <InputGroup categories={courseTypes} id='input-course-types' label='Course types' name='course-types' type='text' />
-                        <InputGroup categories={cuisines} id='input-cuisines' label='Cuisines' name='cuisines' type='text' />
-                        <InputGroup categories={dietaryRestrictions} id='input-dietary-restrictions' label='Dietary restrictions' name='dietary-restrictions' type='text' />
-                        <InputGroup categories={dishTypes} id='input-dish-types' label='Dish types' name='dish-types' type='text' />
+                        <InputGroup
+                            categories={courseTypes}
+                            id='input-course-types'
+                            label='Course types'
+                            name='course-types'
+                            setCategory={setSelectedCourseTypes}
+                            type='text'
+                        />
+                        <InputGroup
+                            categories={cuisines}
+                            id='input-cuisines'
+                            label='Cuisines'
+                            name='cuisines'
+                            setCategory={setSelectedCuisines}
+                            type='text'
+                        />
+                        <InputGroup
+                            categories={dietaryRestrictions}
+                            id='input-dietary-restrictions'
+                            label='Dietary restrictions'
+                            name='dietary-restrictions'
+                            setCategory={setSelectedDietaryRestrictions}
+                            type='text'
+                        />
+                        <InputGroup
+                            categories={dishTypes}
+                            id='input-dish-types'
+                            label='Dish types'
+                            name='dish-types'
+                            setCategory={setSelectedDishTypes}
+                            type='text'
+                        />
                     </div>
                 </details>
 
