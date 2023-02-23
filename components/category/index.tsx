@@ -7,16 +7,21 @@ import IconX from '../../public/icons/bx-x.svg';
 import styles from './index.module.scss';
 
 type ComponentProps = {
+    handleCategoryRemoveOnClick: (category: string) => void
     removable?: boolean
     text: string
 }
 
-const Category = ({ removable, text }: ComponentProps) => {
+const Category = ({ handleCategoryRemoveOnClick, removable, text }: ComponentProps) => {
+    function handleOnClick() {
+        handleCategoryRemoveOnClick(text);
+    }
+
     return (
         <div className={styles.container}>
             <span>{text}</span>
             {removable && 
-                <button aria-label='Close'>
+                <button aria-label='Close' onClick={handleOnClick}>
                     <Icon ariaHidden={true} Icon={IconX} />
                 </button>
             }

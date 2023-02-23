@@ -72,11 +72,14 @@
     --transition-delay: 0s;
 
     /* z-index */
+    --z-index-category-list: 11;
     --z-index-nav: 10;
 
     /* element-specific */
     --card-max-width: 400px;
     --icon-size: 24px;
+    --input-height: 38px;
+    --list-item-background-color-hover: var(--color-grey-300);
     --nav-height: 63px;
     --page-background: var(--color-grey-300);
 }

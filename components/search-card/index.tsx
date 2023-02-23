@@ -41,11 +41,17 @@ export const SearchCard = ({
             <form onSubmit={handleFormSubmit}>
                 <InputGroup id='input-title' label='Title' name='title' type='search' />
 
-                <details onClick={(event) => { event.preventDefault(); }}>
-                    <summary>Advanced options (coming soon)</summary>
+                <details open>
+                    <summary>Advanced options</summary>
 
                     <div className={styles['advanced-options-content']}>
-                        <InputGroup id='input-course-types' label='Course types' name='course-types' type='text' />
+                        <p>By default, all recipe categories are selected.</p>
+                        <p>To refine your search results, select only the categories needed.</p>
+
+                        <InputGroup categories={courseTypes} id='input-course-types' label='Course types' name='course-types' type='text' />
+                        <InputGroup categories={cuisines} id='input-cuisines' label='Cuisines' name='cuisines' type='text' />
+                        <InputGroup categories={dietaryRestrictions} id='input-dietary-restrictions' label='Dietary restrictions' name='dietary-restrictions' type='text' />
+                        <InputGroup categories={dishTypes} id='input-dish-types' label='Dish types' name='dish-types' type='text' />
                     </div>
                 </details>
 

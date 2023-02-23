@@ -14,22 +14,17 @@
         gap: var(--spacing-5);
 
         details {
-            cursor: not-allowed; /* REMOVE ME WHEN ENABLED */
-            opacity: var(--opacity-disabled); /* REMOVE ME WHEN ENABLED */
-            user-select: none; /* REMOVE ME WHEN ENABLED */
             width: 100%;
 
             summary {
                 @include mixins.break-word;
-
-                &:focus,
-                &:focus-visible {
-                    outline: none; /* REMOVE ME WHEN ENABLED */
-                }
             }
 
             .advanced-options-content {
-                padding: var(--spacing-5) 0 0 0;
+                display: flex;
+                flex-direction: column;
+                gap: var(--spacing-5);
+                margin: var(--spacing-5) 0 0 0;
             }
         }
 
