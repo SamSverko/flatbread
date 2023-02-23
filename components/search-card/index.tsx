@@ -21,6 +21,9 @@ export const SearchCard = ({
     dishTypes,
     handleSearchSubmit,
 }: IndexProps) => {
+    // Refs
+    const formRef = React.useRef(null);
+
     // States
     const [selectedCourseTypes, setSelectedCourseTypes] = React.useState<Array<string>>([]);
     const [selectedCuisines, setSelectedCuisines] = React.useState<Array<string>>([]);
@@ -28,10 +31,12 @@ export const SearchCard = ({
     const [selectedDishTypes, setSelectedDishTypes] = React.useState<Array<string>>([]);
 
     // Event listeners
-    function handleFormSubmit(event: React.FormEvent) {
-        event.preventDefault();
+    function handleFormSubmit(event?: React.FormEvent) {
+        if (event) event.preventDefault();
+        if (!formRef.current) return;
 
-        const formData = new FormData(event.target as HTMLFormElement);
+        const formElement = (formRef.current as HTMLFormElement);
+        const formData = new FormData(formElement);
         const title = formData.get('title')?.toString();
 
         handleSearchSubmit({
@@ -47,8 +52,14 @@ export const SearchCard = ({
         <section className={styles.container}>
             <h2>Search for recipes</h2>
 
-            <form onSubmit={handleFormSubmit}>
-                <InputGroup id='input-title' label='Title' name='title' type='search' />
+            <form onSubmit={handleFormSubmit} ref={formRef}>
+                <InputGroup
+                    id='input-title'
+                    label='Title'
+                    onEnterSubmit={handleFormSubmit}
+                    name='title'
+                    type='search'
+                />
 
                 <details open>
                     <summary>Advanced options</summary>

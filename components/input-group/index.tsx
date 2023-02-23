@@ -12,6 +12,7 @@ type ComponentProps = {
     categories?: string[]
     id: string
     label: string
+    onEnterSubmit?: () => void
     name: string
     placeholder?: string
     setCategory?: React.Dispatch<React.SetStateAction<string[]>>
@@ -23,12 +24,12 @@ const InputGroup = ({
     categories,
     id,
     label,
+    onEnterSubmit,
     name,
     placeholder,
     setCategory,
     type = 'text',
 }: ComponentProps) => {
-    // TODO - Fix removal of category when Enter is pressed on the top search
     // Refs
     const inputRef = React.useRef(null);
     const listboxRef = React.useRef(null);
@@ -105,6 +106,9 @@ const InputGroup = ({
             setShowList(true);
         } else if (event.key === 'Escape' && categories) {
             setShowList(false);
+        } else if (event.key === 'Enter') {
+            event.preventDefault();
+            if (onEnterSubmit) onEnterSubmit();
         }
     }
 
