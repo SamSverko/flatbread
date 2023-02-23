@@ -2,11 +2,12 @@ import * as React from 'react';
 
 import styles from './index.module.scss';
 
+import type { SVGElement } from '../../utils/types';
+
 type ComponentProps = {
     ariaHidden?: boolean
     ariaLabel?: string
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    Icon: any
+    Icon: SVGElement;
 }
 
 const Icon = ({ ariaHidden = false, ariaLabel, Icon }: ComponentProps) => {
