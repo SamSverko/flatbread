@@ -40,10 +40,14 @@ export const SearchCard = ({
         let submitterName = 'submit-search';
 
         if (event?.nativeEvent) {
-            const submitterElement = (event?.nativeEvent as SubmitEvent).submitter?.name;
+            const submitterElement = (event?.nativeEvent as SubmitEvent).submitter;
 
             if (submitterElement) {
-                submitterName = submitterElement;
+                const submitterElementName = (submitterElement as HTMLInputElement).name;
+
+                if (submitterElementName) {
+                    submitterName = submitterElementName;
+                }
             }
         }
 
