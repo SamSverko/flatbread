@@ -31,10 +31,10 @@ export type Route = {
 
 export type SearchQueryProps = {
     title?: string
-    courseTypes?: string[]
-    cuisines?: string[]
-    dietaryRestrictions?: string[]
-    dishTypes?: string[]
+    courseTypes?: string
+    cuisines?: string
+    dietaryRestrictions?: string
+    dishTypes?: string
 }
 
 export type SVGElement = React.FunctionComponent<React.SVGAttributes<SVGElement>>;

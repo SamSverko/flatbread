@@ -3,7 +3,8 @@
 .container {
     @include mixins.card;
 
-    h2 {
+    h2,
+    p {
         @include mixins.break-word;
     }
 

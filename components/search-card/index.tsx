@@ -37,14 +37,20 @@ export const SearchCard = ({
 
         const formElement = (formRef.current as HTMLFormElement);
         const formData = new FormData(formElement);
-        const title = formData.get('title')?.toString();
+        const formDataTitle = formData.get('title');
+
+        const titleValidated = (formDataTitle) ? formDataTitle.toString() : undefined;
+        const courseTypesValidated = (selectedCourseTypes) ? selectedCourseTypes.join(',') : undefined;
+        const cuisinesValidated = (selectedCuisines) ? selectedCuisines.join(',') : undefined;
+        const dietaryRestrictionsValidated = (selectedDietaryRestrictions) ? selectedDietaryRestrictions.join(',') : undefined;
+        const dishTypesValidated = (selectedDishTypes) ? selectedDishTypes.join(',') : undefined;
 
         handleSearchSubmit({
-            title: title,
-            courseTypes: selectedCourseTypes,
-            cuisines: selectedCuisines,
-            dietaryRestrictions: selectedDietaryRestrictions,
-            dishTypes: selectedDishTypes,
+            title: titleValidated,
+            courseTypes: courseTypesValidated,
+            cuisines: cuisinesValidated,
+            dietaryRestrictions: dietaryRestrictionsValidated,
+            dishTypes: dishTypesValidated,
         });
     }
 
@@ -61,13 +67,13 @@ export const SearchCard = ({
                     type='search'
                 />
 
-                <details open>
+                <p>All recipes will be returned by&nbsp;default.</p>
+                <p>To refine your search results, select only the categories needed using the <b>Advanced options</b>&nbsp;below.</p>
+
+                <details>
                     <summary>Advanced options</summary>
 
                     <div className={styles['advanced-options-content']}>
-                        <p>By default, all recipe categories are selected.</p>
-                        <p>To refine your search results, select only the categories needed.</p>
-
                         <InputGroup
                             categories={courseTypes}
                             id='input-course-types'

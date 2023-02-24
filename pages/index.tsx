@@ -31,18 +31,23 @@ const Index: NextPage<IndexProps> = ({
 
     // Event listeners
     function handleSearchSubmit(searchQuery: SearchQueryProps) {
-        console.log(searchQuery);
-        // if (searchQuery.title) {
-        //     setIsSearching(true);
+        setIsSearching(true);
 
-        //     fetch(`/api/recipes?title=${searchQuery.title}`)
-        //         .then((response) => response.json())
-        //         .then((data) => {
-        //             setRecipes(data);
-        //             setIsSearching(false);
-        //             setSearchPerformed(true);
-        //         });
-        // }
+        let queryString = `/api/recipes?title=${searchQuery.title ? searchQuery.title : ''}`;
+        if (searchQuery.courseTypes) queryString += `&courseTypes=${searchQuery.courseTypes}`;
+        if (searchQuery.cuisines) queryString += `&cuisines=${searchQuery.cuisines}`;
+        if (searchQuery.dietaryRestrictions) queryString += `&dietaryRestrictions=${searchQuery.dietaryRestrictions}`;
+        if (searchQuery.dishTypes) queryString += `&dishTypes=${searchQuery.dishTypes}`;
+
+        console.log(queryString);
+
+        fetch(queryString)
+            .then((response) => response.json())
+            .then((data) => {
+                setRecipes(data);
+                setIsSearching(false);
+                setSearchPerformed(true);
+            });
     }
 
     // Renderers
