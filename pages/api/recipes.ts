@@ -155,7 +155,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
 
         if (randomValidated) {
-            return res.status(200).json([recipes[Math.floor(Math.random() * recipes.length)]]);
+            if (recipes.length > 0) {
+                const randomNumber = Math.floor(Math.random() * recipes.length);
+                return res.status(200).json([recipes[randomNumber]]);
+            } else {
+                return res.status(200).json([]);
+            }
         }
 
         return res.status(200).json(recipes);
