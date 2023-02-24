@@ -5,6 +5,7 @@ import Icon from '../icon';
 
 import bxBowlHot from '../../public/icons/bx-bowl-hot.svg';
 import bxCalendarPlus from '../../public/icons/bx-calendar-plus.svg';
+import bxCollapseVertical from '../../public/icons/bx-collapse-vertical.svg';
 import bxExpandVertical from '../../public/icons/bx-expand-vertical.svg';
 import bxHeart from '../../public/icons/bx-heart.svg';
 import bxIdCard from '../../public/icons/bx-id-card.svg';
@@ -23,6 +24,50 @@ type ComponentProps = {
 }
 
 const RecipeCard = ({ recipe }: ComponentProps) => {
+    // States
+    const [isCategoriesExpanded, setIsCategoriesExpanded] = React.useState(false);
+    const [isExpandSelected, setIsExpandSelected] = React.useState(false);
+    const [isIngredientsExpanded, setIsIngredientsExpanded] = React.useState(false);
+    const [isNotesExpanded, setIsNotesExpanded] = React.useState(false);
+    const [isStepsExpanded, setIsStepsExpanded] = React.useState(false);
+
+    // Effects
+    React.useEffect(() => {
+        if (!isCategoriesExpanded && !isIngredientsExpanded && !isNotesExpanded && !isStepsExpanded) {
+            setIsExpandSelected(false);
+        } else if (isCategoriesExpanded && isIngredientsExpanded && isNotesExpanded && isStepsExpanded) {
+            setIsExpandSelected(true);
+        }
+    }, [isCategoriesExpanded, isIngredientsExpanded, isNotesExpanded, isStepsExpanded]);
+
+    // Event listeners
+    function handleExpandAllOnClick() {
+        const updateExpandedValue = (isExpandSelected) ? false : true;
+        setIsExpandSelected(updateExpandedValue);
+
+        setIsCategoriesExpanded(updateExpandedValue);
+        setIsIngredientsExpanded(updateExpandedValue);
+        setIsNotesExpanded(updateExpandedValue);
+        setIsStepsExpanded(updateExpandedValue);
+    }
+
+    function handleSummaryOnClick(event: React.MouseEvent<HTMLLIElement>) {
+        event.preventDefault();
+        if (!event.target) return;
+
+        const elementText = (event.target as HTMLElement).innerText;
+
+        if (elementText === 'Categories') {
+            setIsCategoriesExpanded(isCategoriesExpanded => (isCategoriesExpanded) ? false : true);
+        } else if (elementText === 'Ingredients') {
+            setIsIngredientsExpanded(isIngredientsExpanded => (isIngredientsExpanded) ? false : true);
+        } else if (elementText === 'Steps') {
+            setIsStepsExpanded(isStepsExpanded => (isStepsExpanded) ? false : true);
+        } else if (elementText === 'Notes') {
+            setIsNotesExpanded(isNotesExpanded => (isNotesExpanded) ? false : true);
+        }
+    }
+
     // Renderers
     function renderCategories() {
         function renderCategory(category: string, categories: Cuisine[]) {
@@ -41,8 +86,8 @@ const RecipeCard = ({ recipe }: ComponentProps) => {
         }
 
         return (
-            <details className={styles.categories}>
-                <summary>Categories</summary>
+            <details className={styles.categories} open={isCategoriesExpanded}>
+                <summary onClick={handleSummaryOnClick}>Categories</summary>
 
                 <div className={styles['details-content']}>
                     {renderCategory('Cuisines', recipe.cuisines)}
@@ -69,8 +114,17 @@ const RecipeCard = ({ recipe }: ComponentProps) => {
                     </button>
                 </div>
                 <div>
-                    <button className='icon-only' disabled>
-                        <Icon ariaLabel='Expand recipe details' Icon={bxExpandVertical} />                        
+                    <button
+                        aria-pressed={isExpandSelected}
+                        className='icon-only'
+                        onClick={handleExpandAllOnClick}
+                    >
+                        {!isExpandSelected &&
+                            <Icon ariaLabel='Expand all recipe sections' Icon={bxExpandVertical} />                        
+                        }
+                        {isExpandSelected &&
+                            <Icon ariaLabel='Collapse all recipe sections' Icon={bxCollapseVertical} />                        
+                        }
                     </button>
                 </div>
             </div>
@@ -139,8 +193,8 @@ const RecipeCard = ({ recipe }: ComponentProps) => {
         }
 
         return (
-            <details className={styles.ingredients}>
-                <summary>Ingredients</summary>
+            <details className={styles.ingredients} open={isIngredientsExpanded}>
+                <summary onClick={handleSummaryOnClick}>Ingredients</summary>
 
                 <div className={styles['add-all-container']}>
                     <span>Add all</span>
@@ -187,8 +241,8 @@ const RecipeCard = ({ recipe }: ComponentProps) => {
         });
 
         return (
-            <details className={styles.notes}>
-                <summary>Notes</summary>
+            <details className={styles.notes} open={isNotesExpanded}>
+                <summary onClick={handleSummaryOnClick}>Notes</summary>
 
                 <ul>
                     {formattedNotes.map((note, index) => {
@@ -218,8 +272,8 @@ const RecipeCard = ({ recipe }: ComponentProps) => {
         });
 
         return (
-            <details className={styles.steps}>
-                <summary>Steps</summary>
+            <details className={styles.steps} open={isStepsExpanded}>
+                <summary onClick={handleSummaryOnClick}>Steps</summary>
 
                 <ul>
                     {formattedSteps.map((step, index) => {
