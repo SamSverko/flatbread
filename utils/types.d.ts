@@ -26,7 +26,7 @@ export type RecipeIngredientResponse = Prisma.RecipeIngredientGetPayload<{ selec
 export type Route = {
     path: string
     title: string
-    icon: unknown;
+    icon: SVGElement;
 }
 
 export type SearchQueryProps = {
