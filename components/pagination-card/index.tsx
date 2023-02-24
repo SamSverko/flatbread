@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import InputGroup from '../input-group';
+
 import styles from './index.module.scss';
 
 type ComponentProps = {
@@ -9,26 +11,26 @@ type ComponentProps = {
     setPaginationPage: (prop: number) => void
 }
 
-export const Pagination = ({
+export const PaginationCard = ({
     currentPage,
     recipeCount,
     recipesPerPage, 
     setPaginationPage,
 }: ComponentProps) => {
-    const buttonCount = Math.ceil(recipeCount / recipesPerPage);
-
-    const [inputValue, setInputValue] = React.useState((currentPage + 1).toString());
+    const [buttonCount] = React.useState(Math.ceil(recipeCount / recipesPerPage));
 
     function handleFormSubmit(event: React.FormEvent) {
         event.preventDefault();
 
-        setPaginationPage(parseInt(inputValue) - 1);
-    }
+        const formElement = (event.target as HTMLFormElement);
+        const formData = new FormData(formElement);
+        const formDataValue = formData.get('jump-to-page');
 
-    function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
-        const value = (event.target as HTMLInputElement).value;
+        if (formDataValue) {
+            setPaginationPage(parseInt(formDataValue.toString()) - 1);
+        }
 
-        setInputValue(value);
+        
     }
 
     function handlePreviousNextButton(type: 'previous' | 'next') {
@@ -41,7 +43,7 @@ export const Pagination = ({
 
     return (
         <section className={styles.container}>
-            <h2>Search results pages</h2>
+            <h2>Search results pagination</h2>
 
             <div className={styles['buttons-container']}>
                 <button
@@ -60,12 +62,18 @@ export const Pagination = ({
             <hr />
 
             <form onSubmit={handleFormSubmit}>
-                <label htmlFor='jump-to-page'>Jump to</label>
-                <input max={buttonCount} min={1} name='pagination-page' onChange={handleInputChange} type='number' value={inputValue} />
-                <input name='jump-to-page' type='submit' value='Go' />
+                <InputGroup
+                    button='Go'
+                    label='Jump to page'
+                    max={buttonCount}
+                    min={1}
+                    name='jump-to-page'
+                    id='id-jump-to-page'
+                    type='number'
+                />
             </form>
         </section>
     );
 };
 
-export default Pagination;
+export default PaginationCard;

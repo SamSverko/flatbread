@@ -13,11 +13,13 @@ type ComponentProps = {
     focusSearchInput?: number
     id: string
     label: string
+    max?: number
+    min?: number
     onEnterSubmit?: () => void
     name: string
     placeholder?: string
     setCategory?: React.Dispatch<React.SetStateAction<string[]>>
-    type: 'search' | 'submit' | 'text'
+    type: 'number' | 'search' | 'submit' | 'text'
 }
 
 const InputGroup = ({
@@ -26,6 +28,8 @@ const InputGroup = ({
     focusSearchInput,
     id,
     label,
+    max,
+    min,
     onEnterSubmit,
     name,
     placeholder,
@@ -115,7 +119,7 @@ const InputGroup = ({
             setShowList(true);
         } else if (event.key === 'Escape' && categories) {
             setShowList(false);
-        } else if (event.key === 'Enter') {
+        } else if (event.key === 'Enter' && type !== 'number') {
             event.preventDefault();
             if (onEnterSubmit) onEnterSubmit();
         }
@@ -188,23 +192,28 @@ const InputGroup = ({
         listItem.setAttribute('aria-pressed', 'false');
     }
 
+    // Renderers
+    function renderInput() {
+        return <input
+            id={id}
+            max={max}
+            min={min}
+            name={name}
+            onBlur={handleInputOnBlur}
+            onFocus={handleInputOnFocus}
+            onInput={handleInputOnInput}
+            onKeyDown={handleInputOnKeyDown}
+            placeholder={placeholder}
+            ref={inputTitleRef}
+            type={type}
+        />;
+    }
+ 
     return (
         <div className={styles.container}>
             <label htmlFor={id}>{label}</label>
 
-            {!button && (
-                <input
-                    id={id}
-                    onBlur={handleInputOnBlur}
-                    onFocus={handleInputOnFocus}
-                    onInput={handleInputOnInput}
-                    onKeyDown={handleInputOnKeyDown}
-                    name={name}
-                    placeholder={placeholder}
-                    ref={inputTitleRef}
-                    type={type}
-                />
-            )}
+            {!button && renderInput()}
 
             <div className={styles['found-categories-container']}>
                 {categories &&
@@ -241,7 +250,7 @@ const InputGroup = ({
 
             {button && 
                 <div className={styles['with-button']}>
-                    <input id={id} name={name} placeholder={placeholder} type={type} />
+                    {renderInput()}
                     <button type='submit'>{button}</button>
                 </div>
             }

@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import PaginationCard from '../components/pagination-card';
 import RecipeCard from '../components/recipe-card';
 import SearchCard from '../components/search-card';
 import SearchResultsCard from '../components/search-results-card';
@@ -25,10 +26,12 @@ const Index: NextPage<IndexProps> = ({
     dishTypes,
 }: IndexProps) => {
     // States
+    const [currentPaginationPage, setCurrentPaginationPage] = React.useState(0);
     const [focusSearchInput, setFocusSearchInput] = React.useState(0);
     const [isSearching, setIsSearching] = React.useState(false);
     const [searchPerformed, setSearchPerformed] = React.useState(false);
     const [recipes, setRecipes] = React.useState([]);
+    const [recipesPerPage] = React.useState(5);
 
     // Event listeners
     function handleSearchSubmit(searchQuery: SearchQueryProps) {
@@ -47,6 +50,7 @@ const Index: NextPage<IndexProps> = ({
                 setRecipes(data);
                 setIsSearching(false);
                 setSearchPerformed(true);
+                setCurrentPaginationPage(0);
             });
     }
 
@@ -54,6 +58,7 @@ const Index: NextPage<IndexProps> = ({
     function clearSearchResults() {
         setSearchPerformed(false);
         setRecipes([]);
+        setCurrentPaginationPage(0);
         setFocusSearchInput((focusSearchInput) => (focusSearchInput > 1) ? 1 : focusSearchInput + 1);
     }
 
@@ -72,11 +77,24 @@ const Index: NextPage<IndexProps> = ({
             />
 
             {isSearching && <TitleCard level={2} text='Fetching recipes...' />}
+
             {(!isSearching && searchPerformed && recipes) && <SearchResultsCard clearSearchResults={clearSearchResults} recipeCount={recipes.length} />}
+
             {recipes && 
-                (recipes as RecipeFormatted[]).map((recipe, index) => {
-                    return <RecipeCard key={`key-recipe-${recipe.slug}-${index}`} recipe={recipe} />;
-                })
+                (recipes as RecipeFormatted[])
+                    .slice(currentPaginationPage * recipesPerPage, (currentPaginationPage * recipesPerPage) + recipesPerPage)
+                    .map((recipe, index) => {
+                        return <RecipeCard key={`key-recipe-${recipe.slug}-${index}`} recipe={recipe} />;
+                    })
+            }
+
+            {recipes.length >= recipesPerPage &&
+                <PaginationCard
+                    currentPage={currentPaginationPage}
+                    recipeCount={recipes.length}
+                    recipesPerPage={recipesPerPage}
+                    setPaginationPage={setCurrentPaginationPage}
+                />
             }
         </>
     );
