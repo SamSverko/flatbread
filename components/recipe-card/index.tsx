@@ -26,6 +26,7 @@ type ComponentProps = {
 const RecipeCard = ({ recipe }: ComponentProps) => {
     // States
     const [isCategoriesExpanded, setIsCategoriesExpanded] = React.useState(false);
+    const [isCopiedSelected, setIsCopiedSelected] = React.useState(false);
     const [isExpandSelected, setIsExpandSelected] = React.useState(false);
     const [isIngredientsExpanded, setIsIngredientsExpanded] = React.useState(false);
     const [isNotesExpanded, setIsNotesExpanded] = React.useState(false);
@@ -41,6 +42,16 @@ const RecipeCard = ({ recipe }: ComponentProps) => {
     }, [isCategoriesExpanded, isIngredientsExpanded, isNotesExpanded, isStepsExpanded]);
 
     // Event listeners
+    async function handleCopyLinkOnClick() {
+        try {
+            await navigator.clipboard.writeText(`${window.location.origin}/recipe/${recipe.slug}`);
+            setIsCopiedSelected(true);
+            window.setTimeout(() => setIsCopiedSelected(false), 2000);
+        } catch (error) {
+            console.error('Failed to copy recipe link to clipboard: ', error);
+        }
+    }
+
     function handleExpandAllOnClick() {
         const updateExpandedValue = (isExpandSelected) ? false : true;
         setIsExpandSelected(updateExpandedValue);
@@ -109,7 +120,11 @@ const RecipeCard = ({ recipe }: ComponentProps) => {
                     <button className='icon-only' disabled>
                         <Icon ariaLabel='Add to meal prep' Icon={bxCalendarPlus} />
                     </button>
-                    <button className='icon-only' disabled>
+                    <button
+                        aria-pressed={isCopiedSelected}
+                        className='icon-only'
+                        onClick={handleCopyLinkOnClick}
+                    >
                         <Icon ariaLabel='Copy recipe link to clipboard' Icon={bxLink} />
                     </button>
                 </div>
