@@ -3,7 +3,7 @@
 .container {
     @include mixins.card;
 
-    gap: var(--spacing-2);
+    gap: var(--spacing-5);
 
     h2 {
         @include mixins.break-word;

@@ -10,6 +10,7 @@ import styles from './index.module.scss';
 type ComponentProps = {
     button?: string
     categories?: string[]
+    focusSearchInput?: number
     id: string
     label: string
     onEnterSubmit?: () => void
@@ -22,6 +23,7 @@ type ComponentProps = {
 const InputGroup = ({
     button,
     categories,
+    focusSearchInput,
     id,
     label,
     onEnterSubmit,
@@ -31,13 +33,20 @@ const InputGroup = ({
     type = 'text',
 }: ComponentProps) => {
     // Refs
-    const inputRef = React.useRef(null);
+    const inputTitleRef = React.useRef(null);
     const listboxRef = React.useRef(null);
 
     // States
     const [selectedCategories, setSelectedCategories] = React.useState<Array<string>>([]);
     const [showList, setShowList] = React.useState(false);
     const [noResults, setNoResults] = React.useState(false);
+
+    // Effects
+    React.useEffect(() => {
+        if (focusSearchInput) {
+            if (inputTitleRef.current) (inputTitleRef.current as HTMLInputElement).focus();
+        }
+    }, [focusSearchInput]);
 
     // Event listeners
     function handleCategoryRemoveOnClick(category: string) {
@@ -142,7 +151,7 @@ const InputGroup = ({
 
         if (event.key === 'Escape' || (event.key === 'ArrowUp' && currentItemIndex === 0)) {
             event.preventDefault();
-            if (inputRef.current) (inputRef.current as HTMLInputElement).focus();
+            if (inputTitleRef.current) (inputTitleRef.current as HTMLInputElement).focus();
             setShowList(false);
         } else if (event.key === 'ArrowDown' && currentItemIndex < visibleListItemElements.length - 1) {
             event.preventDefault();
@@ -192,7 +201,7 @@ const InputGroup = ({
                     onKeyDown={handleInputOnKeyDown}
                     name={name}
                     placeholder={placeholder}
-                    ref={inputRef}
+                    ref={inputTitleRef}
                     type={type}
                 />
             )}

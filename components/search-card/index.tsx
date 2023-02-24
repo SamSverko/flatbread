@@ -11,6 +11,7 @@ type IndexProps = {
     cuisines: string[]
     dietaryRestrictions: string[]
     dishTypes: string[]
+    focusSearchInput?: number
     handleSearchSubmit: (searchQuery: SearchQueryProps) => void
 }
 
@@ -19,6 +20,7 @@ export const SearchCard = ({
     cuisines,
     dietaryRestrictions,
     dishTypes,
+    focusSearchInput,
     handleSearchSubmit,
 }: IndexProps) => {
     // Refs
@@ -60,6 +62,7 @@ export const SearchCard = ({
 
             <form onSubmit={handleFormSubmit} ref={formRef}>
                 <InputGroup
+                    focusSearchInput={focusSearchInput}
                     id='input-title'
                     label='Title'
                     onEnterSubmit={handleFormSubmit}

@@ -25,6 +25,7 @@ const Index: NextPage<IndexProps> = ({
     dishTypes,
 }: IndexProps) => {
     // States
+    const [focusSearchInput, setFocusSearchInput] = React.useState(0);
     const [isSearching, setIsSearching] = React.useState(false);
     const [searchPerformed, setSearchPerformed] = React.useState(false);
     const [recipes, setRecipes] = React.useState([]);
@@ -39,8 +40,6 @@ const Index: NextPage<IndexProps> = ({
         if (searchQuery.dietaryRestrictions) queryString += `&dietaryRestrictions=${searchQuery.dietaryRestrictions}`;
         if (searchQuery.dishTypes) queryString += `&dishTypes=${searchQuery.dishTypes}`;
 
-        console.log(queryString);
-
         fetch(queryString)
             .then((response) => response.json())
             .then((data) => {
@@ -50,21 +49,29 @@ const Index: NextPage<IndexProps> = ({
             });
     }
 
+    // Helpers
+    function clearSearchResults() {
+        setSearchPerformed(false);
+        setRecipes([]);
+        setFocusSearchInput((focusSearchInput) => (focusSearchInput > 1) ? 1 : focusSearchInput + 1);
+    }
+
     // Renderers
     return (
         <>
             <TitleCard text='Search' />
 
             <SearchCard
-                handleSearchSubmit={handleSearchSubmit}
                 courseTypes={courseTypes}
                 cuisines={cuisines}
                 dietaryRestrictions={dietaryRestrictions}
                 dishTypes={dishTypes}
+                focusSearchInput={focusSearchInput}
+                handleSearchSubmit={handleSearchSubmit}
             />
 
             {isSearching && <TitleCard level={2} text='Fetching recipes...' />}
-            {(!isSearching && searchPerformed && recipes) && <SearchResultsCard recipeCount={recipes.length} />}
+            {(!isSearching && searchPerformed && recipes) && <SearchResultsCard clearSearchResults={clearSearchResults} recipeCount={recipes.length} />}
             {recipes && 
                 (recipes as RecipeFormatted[]).map((recipe, index) => {
                     return <RecipeCard key={`key-recipe-${recipe.slug}-${index}`} recipe={recipe} />;
