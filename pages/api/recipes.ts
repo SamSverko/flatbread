@@ -1,6 +1,7 @@
 import { prisma } from '../../prisma/db';
 import {
     getRecipeFormat,
+    validateQueryParamCategoryFilter,
     validateQueryParamCondensed,
     validateQueryParamOrderByField,
     validateQueryParamSlug,
@@ -9,9 +10,27 @@ import {
 
 import type { NextApiResponse, NextApiRequest } from 'next';
 
+interface ANDORQueries {
+    [title: string]: {
+        search: string | undefined
+    } |
+    {
+        some: {
+            name: {
+                contains: string
+                mode: string
+            }
+        }
+    };
+}[];
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const {
         condensed,
+        courseTypes,
+        cuisines,
+        dietaryRestrictions,
+        dishTypes,
         orderBy,
         orderByField,
         slug,
@@ -19,6 +38,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } = req.query;
 
     let condensedValidated,
+        courseTypesValidated,
+        cuisinesValidated,
+        dietaryRestrictionsValidated,
+        dishTypesValidated,
         orderByValidated,
         orderByFieldValidated,
         slugValidated,
@@ -28,6 +51,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (condensed) {
         condensedValidated = validateQueryParamCondensed(res, condensed);
         if (condensedValidated === undefined) return;
+    }
+
+    if (courseTypes) {
+        courseTypesValidated = validateQueryParamCategoryFilter(res, 'courseTypes', courseTypes);
+        if (courseTypesValidated === undefined) return;
+    }
+
+    if (cuisines) {
+        cuisinesValidated = validateQueryParamCategoryFilter(res, 'cuisines', cuisines);
+        if (cuisinesValidated === undefined) return;
+    }
+
+    if (dietaryRestrictions) {
+        dietaryRestrictionsValidated = validateQueryParamCategoryFilter(res, 'dietaryRestrictions', dietaryRestrictions);
+        if (dietaryRestrictionsValidated === undefined) return;
+    }
+
+    if (dishTypes) {
+        dishTypesValidated = validateQueryParamCategoryFilter(res, 'dishTypes', dishTypes);
+        if (dishTypesValidated === undefined) return;
     }
 
     if (orderBy || orderByField) {
@@ -63,11 +106,39 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         return res.status(200).json(recipe);
     } else {
-        const recipes = await prisma.recipe.findMany({
-            where: {
+        // Leaving OR here in case this needs changing
+        // https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#and
+        let ANDQueries: ANDORQueries[] = [];
+        const ORQueries: ANDORQueries[] = [];
+
+        if (titleValidated) {
+            ANDQueries = [...ANDQueries, {
                 title: {
                     search: (titleValidated) ? titleValidated : undefined,
                 },
+            }];
+        }
+
+        if (courseTypesValidated) {
+            ANDQueries = [...ANDQueries, ...courseTypesValidated];
+        }
+
+        if (cuisinesValidated) {
+            ANDQueries = [...ANDQueries, ...cuisinesValidated];
+        }
+
+        if (dietaryRestrictionsValidated) {
+            ANDQueries = [...ANDQueries, ...dietaryRestrictionsValidated];
+        }
+
+        if (dishTypesValidated) {
+            ANDQueries = [...ANDQueries, ...dishTypesValidated];
+        }
+
+        const recipes = await prisma.recipe.findMany({
+            where: {
+                AND: (ANDQueries.length > 0) ? ANDQueries : undefined,
+                OR: (ORQueries.length > 0) ? ORQueries : undefined,
             },
             select: getRecipeFormat(condensedValidated),
             orderBy: {

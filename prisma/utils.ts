@@ -159,6 +159,32 @@ export function getServingUnitFormat(condensed = false): Prisma.ServingUnitSelec
 }
 
 // Validate API query parameters
+export function validateQueryParamCategoryFilter(res: NextApiResponse, categoryName: string, value: string | string[]) {
+    const valueString = value?.toString().trim();
+
+    if (!valueString) {
+        return res.status(400).json(`Missing query parameter ${categoryName}. Fix: Provide a string value. If using multiple values, ensure they are comma-separated.`);
+    }
+
+    const categories = valueString.split(',')
+        .map((value) => value.trim())
+        .filter((value) => value !== '')
+        .map((value) => {
+            return {
+                [categoryName]: {
+                    some: {
+                        name: {
+                            contains: value,
+                            mode: 'insensitive',
+                        },
+                    },
+                },
+            };
+        });
+
+    return categories;
+}
+
 export function validateQueryParamCategory(res: NextApiResponse, value: string | string[]) {
     const category = value?.toString().toLowerCase().trim();
     const formattedCategories = categoryTables.map(category => category.toLowerCase());

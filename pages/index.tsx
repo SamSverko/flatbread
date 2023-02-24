@@ -31,17 +31,18 @@ const Index: NextPage<IndexProps> = ({
 
     // Event listeners
     function handleSearchSubmit(searchQuery: SearchQueryProps) {
-        if (searchQuery.title) {
-            setIsSearching(true);
+        console.log(searchQuery);
+        // if (searchQuery.title) {
+        //     setIsSearching(true);
 
-            fetch(`/api/recipes?title=${searchQuery.title}`)
-                .then((response) => response.json())
-                .then((data) => {
-                    setRecipes(data);
-                    setIsSearching(false);
-                    setSearchPerformed(true);
-                });
-        }
+        //     fetch(`/api/recipes?title=${searchQuery.title}`)
+        //         .then((response) => response.json())
+        //         .then((data) => {
+        //             setRecipes(data);
+        //             setIsSearching(false);
+        //             setSearchPerformed(true);
+        //         });
+        // }
     }
 
     // Renderers
@@ -85,7 +86,7 @@ export async function getStaticProps() {
         },
     });
 
-    const dietaryRestrictions = await prisma.dishType.findMany({
+    const dietaryRestrictions = await prisma.dietaryRestriction.findMany({
         select: getCategoryFormat(true),
         orderBy: {
             name: 'asc',
