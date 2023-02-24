@@ -4,6 +4,7 @@ import {
     validateQueryParamCategoryFilter,
     validateQueryParamCondensed,
     validateQueryParamOrderByField,
+    validateQueryParamRandom,
     validateQueryParamSlug,
     validateQueryParamTitleSearch,
 } from '../../prisma/utils';
@@ -33,6 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         dishTypes,
         orderBy,
         orderByField,
+        random,
         slug,
         title,
     } = req.query;
@@ -44,6 +46,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         dishTypesValidated,
         orderByValidated,
         orderByFieldValidated,
+        randomValidated,
         slugValidated,
         titleValidated;
 
@@ -81,6 +84,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         orderByFieldValidated = orderByFieldValidation.orderByField;
     }
 
+    if (random) {
+        randomValidated = validateQueryParamRandom(res, random);
+        if (randomValidated === undefined) return;
+    }
+
     if (slug) {
         slugValidated = validateQueryParamSlug(res, slug);
         if (slugValidated === undefined) return;
@@ -106,7 +114,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         return res.status(200).json(recipe);
     } else {
-        // Leaving OR here in case this needs changing
+        // Leaving OR here in case this needs changing (hint: it probably will)
         // https://www.prisma.io/docs/reference/api-reference/prisma-client-reference#and
         let ANDQueries: ANDORQueries[] = [];
         const ORQueries: ANDORQueries[] = [];
@@ -145,6 +153,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 [orderByFieldValidated as string]: orderByValidated,
             },
         });
+
+        if (randomValidated) {
+            return res.status(200).json([recipes[Math.floor(Math.random() * recipes.length)]]);
+        }
 
         return res.status(200).json(recipes);
     }

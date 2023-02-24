@@ -37,6 +37,16 @@ export const SearchCard = ({
         if (event) event.preventDefault();
         if (!formRef.current) return;
 
+        let submitterName = 'submit-search';
+
+        if (event?.nativeEvent) {
+            const submitterElement = (event?.nativeEvent as SubmitEvent).submitter?.name;
+
+            if (submitterElement) {
+                submitterName = submitterElement;
+            }
+        }
+
         const formElement = (formRef.current as HTMLFormElement);
         const formData = new FormData(formElement);
         const formDataTitle = formData.get('title');
@@ -53,6 +63,7 @@ export const SearchCard = ({
             cuisines: cuisinesValidated,
             dietaryRestrictions: dietaryRestrictionsValidated,
             dishTypes: dishTypesValidated,
+            random: (submitterName === 'submit-random') ? true : false,
         });
     }
 
@@ -114,7 +125,7 @@ export const SearchCard = ({
 
                 <div className={styles['submit-container']}>
                     <input name='submit-search' type='submit' value='Search' />
-                    <input className='secondary' disabled name='submit-random' type='submit' value='Random' />
+                    <input className='secondary' name='submit-random' type='submit' value='Random' />
                 </div>
             </form>
         </section>

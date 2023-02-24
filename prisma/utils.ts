@@ -407,6 +407,18 @@ export function validateQueryParamPrepTimeMin(res: NextApiResponse, value: strin
     return prepTimeMinNum;
 }
 
+export function validateQueryParamRandom(res: NextApiResponse, value: string | string[]) {
+    const random = value?.toString().toLowerCase().trim();
+
+    if (random === 'true') {
+        return true;
+    } else if (random === 'false') {
+        return false;
+    } else {
+        return res.status(400).json('Invalid value for query parameter `random`. Fix: Use either `true`, `false`, or omit parameter entirely.');
+    }
+}
+
 export function validateQueryParamServingAmount(res: NextApiResponse, value: string | string[]) {
     const servingAmount = value?.toString();
 

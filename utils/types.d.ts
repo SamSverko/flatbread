@@ -35,6 +35,7 @@ export type SearchQueryProps = {
     cuisines?: string
     dietaryRestrictions?: string
     dishTypes?: string
+    random?: boolean
 }
 
 export type SVGElement = React.FunctionComponent<React.SVGAttributes<SVGElement>>;

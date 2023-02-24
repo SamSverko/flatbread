@@ -39,6 +39,7 @@ const Index: NextPage<IndexProps> = ({
         if (searchQuery.cuisines) queryString += `&cuisines=${searchQuery.cuisines}`;
         if (searchQuery.dietaryRestrictions) queryString += `&dietaryRestrictions=${searchQuery.dietaryRestrictions}`;
         if (searchQuery.dishTypes) queryString += `&dishTypes=${searchQuery.dishTypes}`;
+        if (searchQuery.random) queryString += '&random=true';
 
         fetch(queryString)
             .then((response) => response.json())

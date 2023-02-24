@@ -654,7 +654,7 @@
 								{
 									"key": "dietaryRestrictions",
 									"value": "dairy-free, gluten-free, nut-free, vegan, vegetarian",
-									"description": "string (Table: DieraryRestriction | Column: name)",
+									"description": "string (Table: DietaryRestriction | Column: name)",
 									"type": "text",
 									"disabled": true
 								},
@@ -740,8 +740,38 @@
 								},
 								{
 									"key": "slug",
-									"value": "nanaimo-bars",
+									"value": "thick-and-creamy-chicken-noodle-soup",
 									"description": "string",
+									"disabled": true
+								},
+								{
+									"key": "courseTypes",
+									"value": "dinner",
+									"description": "string",
+									"disabled": true
+								},
+								{
+									"key": "cuisines",
+									"value": "Canadian",
+									"description": "string",
+									"disabled": true
+								},
+								{
+									"key": "dietaryRestrictions",
+									"value": "nut-free, vegetarian",
+									"description": "string",
+									"disabled": true
+								},
+								{
+									"key": "dishTypes",
+									"value": "soup",
+									"description": "string",
+									"disabled": true
+								},
+								{
+									"key": "random",
+									"value": "true",
+									"description": "\"true\" | \"false\"",
 									"disabled": true
 								}
 							]
