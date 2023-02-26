@@ -8,6 +8,7 @@ import bxCalendarPlus from '../../public/icons/bx-calendar-plus.svg';
 import bxCollapseVertical from '../../public/icons/bx-collapse-vertical.svg';
 import bxExpandVertical from '../../public/icons/bx-expand-vertical.svg';
 import bxHeart from '../../public/icons/bx-heart.svg';
+import bxsHeart from '../../public/icons/bxs-heart.svg';
 import bxIdCard from '../../public/icons/bx-id-card.svg';
 import bxLink from '../../public/icons/bx-link.svg';
 import bxLinkExternal from '../../public/icons/bx-link-external.svg';
@@ -20,14 +21,16 @@ import type { Cuisine, RecipeNote, RecipeStep } from '@prisma/client';
 import type { RecipeFormatted, RecipeIngredientResponse } from '../../utils/types';
 
 type ComponentProps = {
+    onRemoveFromSaved?: () => void
     recipe: RecipeFormatted
 }
 
-const RecipeCard = ({ recipe }: ComponentProps) => {
+const RecipeCard = ({ onRemoveFromSaved, recipe }: ComponentProps) => {
     // States
     const [isCategoriesExpanded, setIsCategoriesExpanded] = React.useState(false);
     const [isCopiedSelected, setIsCopiedSelected] = React.useState(false);
     const [isExpandSelected, setIsExpandSelected] = React.useState(false);
+    const [isSaved, setIsSaved] = React.useState(false);
     const [isIngredientsExpanded, setIsIngredientsExpanded] = React.useState(false);
     const [isNotesExpanded, setIsNotesExpanded] = React.useState(false);
     const [isStepsExpanded, setIsStepsExpanded] = React.useState(false);
@@ -40,6 +43,23 @@ const RecipeCard = ({ recipe }: ComponentProps) => {
             setIsExpandSelected(true);
         }
     }, [isCategoriesExpanded, isIngredientsExpanded, isNotesExpanded, isStepsExpanded]);
+
+    React.useEffect(() => {
+        const savedRecipes = localStorage.getItem('saved-recipes');
+
+        if (!savedRecipes) {
+            setIsSaved(false);
+        } else {
+            const savedRecipesArray = JSON.parse(savedRecipes);
+            const savedRecipeIndex = savedRecipesArray.findIndex((savedRecipe: RecipeFormatted) => savedRecipe.slug === recipe.slug);
+
+            if (savedRecipeIndex === -1) {
+                setIsSaved(false);
+            } else {
+                setIsSaved(true);
+            }
+        }
+    }, [isSaved]);
 
     // Event listeners
     async function handleCopyLinkOnClick() {
@@ -79,6 +99,29 @@ const RecipeCard = ({ recipe }: ComponentProps) => {
         }
     }
 
+    function handleSaveRecipeOnClick() {
+        const savedRecipes = localStorage.getItem('saved-recipes');
+
+        if (!savedRecipes) {
+            localStorage.setItem('saved-recipes', `[${JSON.stringify(recipe)}]`);
+            setIsSaved(true);
+        } else {
+            const savedRecipesArray = JSON.parse(savedRecipes);
+            const savedRecipeIndex = savedRecipesArray.findIndex((savedRecipe: RecipeFormatted) => savedRecipe.slug === recipe.slug);
+
+            if (savedRecipeIndex === -1) {
+                savedRecipesArray.push(recipe);
+                localStorage.setItem('saved-recipes', JSON.stringify(savedRecipesArray));
+                setIsSaved(true);
+            } else {
+                savedRecipesArray.splice(savedRecipeIndex, 1);
+                localStorage.setItem('saved-recipes', JSON.stringify(savedRecipesArray));
+                setIsSaved(false);
+                if (onRemoveFromSaved) onRemoveFromSaved();
+            }
+        }
+    }
+
     // Renderers
     function renderCategories() {
         function renderCategory(category: string, categories: Cuisine[]) {
@@ -114,8 +157,17 @@ const RecipeCard = ({ recipe }: ComponentProps) => {
         return (
             <div className={styles.controls}>
                 <div>
-                    <button className='icon-only' disabled>
-                        <Icon ariaLabel='Add to favourites' Icon={bxHeart} />
+                    <button
+                        aria-pressed={isSaved}
+                        className='icon-only'
+                        onClick={handleSaveRecipeOnClick}
+                    >
+                        {!isSaved &&
+                            <Icon ariaLabel='Add to saved recipes' Icon={bxHeart} />                        
+                        }
+                        {isSaved &&
+                            <Icon ariaLabel='Remove to saved recipes' Icon={bxsHeart} />                        
+                        }
                     </button>
                     <button className='icon-only' disabled>
                         <Icon ariaLabel='Add to meal prep' Icon={bxCalendarPlus} />

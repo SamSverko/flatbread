@@ -88,7 +88,7 @@ const Index: NextPage<IndexProps> = ({
                     })
             }
 
-            {recipes.length >= recipesPerPage &&
+            {recipes.length > recipesPerPage &&
                 <PaginationCard
                     currentPage={currentPaginationPage}
                     recipeCount={recipes.length}
