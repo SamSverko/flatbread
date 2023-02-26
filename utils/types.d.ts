@@ -10,6 +10,12 @@ import type {
     ServingUnit,
 } from '@prisma/client';
 
+export type PlannedRecipe = {
+    title: string;
+    isComplete: boolean;
+    url?: string;
+}
+
 export interface RecipeFormatted extends Recipe {
     servingUnit: ServingUnit;
     courseTypes: CourseType[];
@@ -24,18 +30,18 @@ export interface RecipeFormatted extends Recipe {
 export type RecipeIngredientResponse = Prisma.RecipeIngredientGetPayload<{ select: { [K in keyof Required<Prisma.RecipeIngredientSelect>]: true } }>
 
 export type Route = {
-    path: string
-    title: string
+    path: string;
+    title: string;
     icon: SVGElement;
 }
 
 export type SearchQueryProps = {
-    title?: string
-    courseTypes?: string
-    cuisines?: string
-    dietaryRestrictions?: string
-    dishTypes?: string
-    random?: boolean
+    title?: string;
+    courseTypes?: string;
+    cuisines?: string;
+    dietaryRestrictions?: string;
+    dishTypes?: string;
+    random?: boolean;
 }
 
 export type SVGElement = React.FunctionComponent<React.SVGAttributes<SVGElement>>;

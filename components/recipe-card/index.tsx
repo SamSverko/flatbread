@@ -4,6 +4,7 @@ import * as React from 'react';
 import Icon from '../icon';
 
 import bxBowlHot from '../../public/icons/bx-bowl-hot.svg';
+import bxCalendarCheck from '../../public/icons/bx-calendar-check.svg';
 import bxCalendarPlus from '../../public/icons/bx-calendar-plus.svg';
 import bxCollapseVertical from '../../public/icons/bx-collapse-vertical.svg';
 import bxExpandVertical from '../../public/icons/bx-expand-vertical.svg';
@@ -18,7 +19,7 @@ import bxTimeFive from '../../public/icons/bx-time-five.svg';
 import styles from './index.module.scss';
 
 import type { Cuisine, RecipeNote, RecipeStep } from '@prisma/client';
-import type { RecipeFormatted, RecipeIngredientResponse } from '../../utils/types';
+import type { PlannedRecipe, RecipeFormatted, RecipeIngredientResponse } from '../../utils/types';
 
 type ComponentProps = {
     onRemoveFromSaved?: () => void
@@ -30,6 +31,7 @@ const RecipeCard = ({ onRemoveFromSaved, recipe }: ComponentProps) => {
     const [isCategoriesExpanded, setIsCategoriesExpanded] = React.useState(false);
     const [isCopiedSelected, setIsCopiedSelected] = React.useState(false);
     const [isExpandSelected, setIsExpandSelected] = React.useState(false);
+    const [isPlanned, setIsPlanned] = React.useState(false);
     const [isSaved, setIsSaved] = React.useState(false);
     const [isIngredientsExpanded, setIsIngredientsExpanded] = React.useState(false);
     const [isNotesExpanded, setIsNotesExpanded] = React.useState(false);
@@ -80,6 +82,33 @@ const RecipeCard = ({ onRemoveFromSaved, recipe }: ComponentProps) => {
         setIsIngredientsExpanded(updateExpandedValue);
         setIsNotesExpanded(updateExpandedValue);
         setIsStepsExpanded(updateExpandedValue);
+    }
+
+    function handlePlanRecipeOnClick() {
+        const plannedRecipes = localStorage.getItem('planned-recipes');
+        const currentRecipe: PlannedRecipe = {
+            title: recipe.title,
+            isComplete: false,
+            url: `${window.location.origin}/recipe/${recipe.slug}`,
+        };
+
+        if (!plannedRecipes) {
+            localStorage.setItem('planned-recipes', `[${JSON.stringify(currentRecipe)}]`);
+            setIsPlanned(true);
+        } else {
+            const plannedRecipesArray = JSON.parse(plannedRecipes);
+            const plannedRecipeIndex = plannedRecipesArray.findIndex((plannedRecipe: PlannedRecipe) => plannedRecipe.title === recipe.title);
+
+            if (plannedRecipeIndex === -1) {
+                plannedRecipesArray.push(currentRecipe);
+                localStorage.setItem('planned-recipes', JSON.stringify(plannedRecipesArray));
+                setIsPlanned(true);
+            } else {
+                plannedRecipesArray.splice(plannedRecipeIndex, 1);
+                localStorage.setItem('planned-recipes', JSON.stringify(plannedRecipesArray));
+                setIsPlanned(false);
+            }
+        }
     }
 
     function handleSummaryOnClick(event: React.MouseEvent<HTMLLIElement>) {
@@ -169,8 +198,17 @@ const RecipeCard = ({ onRemoveFromSaved, recipe }: ComponentProps) => {
                             <Icon ariaLabel='Remove to saved recipes' Icon={bxsHeart} />                        
                         }
                     </button>
-                    <button className='icon-only' disabled>
-                        <Icon ariaLabel='Add to meal prep' Icon={bxCalendarPlus} />
+                    <button
+                        aria-pressed={isPlanned}
+                        className='icon-only'
+                        onClick={handlePlanRecipeOnClick}
+                    >
+                        {!isPlanned &&
+                            <Icon ariaLabel='Add to meal plan' Icon={bxCalendarPlus} />
+                        }
+                        {isPlanned &&
+                            <Icon ariaLabel='Remove to meal plan' Icon={bxCalendarCheck} />
+                        }
                     </button>
                     <button
                         aria-pressed={isCopiedSelected}
@@ -187,10 +225,10 @@ const RecipeCard = ({ onRemoveFromSaved, recipe }: ComponentProps) => {
                         onClick={handleExpandAllOnClick}
                     >
                         {!isExpandSelected &&
-                            <Icon ariaLabel='Expand all recipe sections' Icon={bxExpandVertical} />                        
+                            <Icon ariaLabel='Expand all recipe sections' Icon={bxExpandVertical} />
                         }
                         {isExpandSelected &&
-                            <Icon ariaLabel='Collapse all recipe sections' Icon={bxCollapseVertical} />                        
+                            <Icon ariaLabel='Collapse all recipe sections' Icon={bxCollapseVertical} />
                         }
                     </button>
                 </div>

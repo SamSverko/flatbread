@@ -1,0 +1,56 @@
+@use '../../styles/mixins.scss';
+
+.container {
+    @include mixins.card;
+    @include mixins.break-word;
+
+    .heading-container {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    ul {
+        align-items: space-between;
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-5);
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+            align-items: center;
+            display: flex;
+            gap: var(--spacing-2);
+            justify-content: space-between;
+
+            .left {
+                align-items: flex-start;
+                display: flex;
+                gap: var(--spacing-2);
+                justify-content: center;
+                max-width: 60%;
+            }
+
+            .right {
+                align-items: center;
+                display: flex;
+                gap: var(--spacing-2);
+                justify-content: center;
+
+                @media screen and (max-width: 256px) {
+                    & {
+                        flex-wrap: wrap;
+                    }
+                }
+
+                button {
+                    svg {
+                        pointer-events: none;
+                    }
+                }
+            }
+        }
+    }
+}
