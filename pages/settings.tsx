@@ -1,13 +1,15 @@
 import Link from 'next/link';
 import * as React from 'react';
 
-import TitleCard from '../components/title-card';
+import Card from '../components/card';
 
 import type { NextPage } from 'next';
 
 const Settings: NextPage = () => {
+    // State
     const [localStorageDeleted, setLocalStorageDeleted] = React.useState(false);
 
+    // Event listeners
     function handleDeleteLocalStorageClick() {
         localStorage.removeItem('recipes');
         const recipes = localStorage.getItem('recipes');
@@ -17,9 +19,12 @@ const Settings: NextPage = () => {
         }
     }
 
+    // Renderers
     return (
         <>
-            <TitleCard text='Settings' />
+            <Card>
+                <h2>Settings</h2>
+            </Card>
 
             <h2>Local Storage</h2>
 

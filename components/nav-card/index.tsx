@@ -13,6 +13,7 @@ type ComponentsProps = {
 }
 
 const NavCard = ({ activeRoute, routes }: ComponentsProps) => {
+    // Renderers
     return (
         <>
             <nav className={styles.container}>

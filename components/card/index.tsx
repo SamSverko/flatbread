@@ -8,6 +8,7 @@ type ComponentProps = {
 }
 
 const Card = ({ children, hide }: ComponentProps) => {
+    // Renderers
     if (hide) return <></>;
 
     return (

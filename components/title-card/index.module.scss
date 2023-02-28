@@ -1,6 +1,0 @@
-@use '../../styles/mixins.scss';
-
-.container {
-    @include mixins.card;
-    @include mixins.break-word;
-}

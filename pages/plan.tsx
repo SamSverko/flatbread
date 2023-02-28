@@ -67,6 +67,7 @@ const Plan: NextPage = () => {
         setPlannedRecipes([]);
     }
 
+    // Renderers
     return (
         <>
             <Card>

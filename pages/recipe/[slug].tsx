@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
 
+import Card from '../../components/card';
 import RecipeCard from '../../components/recipe-card';
-import TitleCard from '../../components/title-card';
 
 import type { NextPage } from 'next';
 
@@ -10,9 +10,11 @@ const RecipePage: NextPage = () => {
     const router = useRouter();
     const { slug } = router.query;
 
+    // States
     const [recipe, setRecipe] = React.useState(null);
     const [isLoading, setIsLoading] = React.useState(true);
 
+    // Effects
     React.useEffect(() => {
         if (slug) {
             fetch(`/api/recipes?condensed=true&slug=${slug}`)
@@ -28,8 +30,9 @@ const RecipePage: NextPage = () => {
         }
     }, [slug]);
 
-    if (isLoading) return <TitleCard text='Fetching recipe...' />;
-    if (!recipe) return <TitleCard text='No recipe found!' />;
+    // Renderers
+    if (isLoading) return <Card><h2>Fetching recipe...</h2></Card>;
+    if (!recipe) return <Card><h2>No recipe found!</h2></Card>;
 
     return <RecipeCard recipe={recipe} />;
 };

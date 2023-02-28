@@ -13,10 +13,12 @@ type ComponentProps = {
 }
 
 const Category = ({ handleCategoryRemoveOnClick, removable, text }: ComponentProps) => {
+    // Event listeners
     function handleOnClick() {
         handleCategoryRemoveOnClick(text);
     }
 
+    // Renderers
     return (
         <div className={styles.container}>
             <span>{text}</span>

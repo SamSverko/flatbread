@@ -43,6 +43,7 @@ export const PaginationCard = ({
         }
     }
 
+    // Renderers
     return (
         <Card>
             <h2>Search results pagination</h2>

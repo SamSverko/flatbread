@@ -15,6 +15,7 @@ const Icon = ({ ariaHidden = false, ariaLabel, Icon }: ComponentProps) => {
         console.warn('Icon issue: An icon is missing both the `aria-hidden` and `aria-label` attributes. Fix: provide at least one.');
     }
 
+    // Renderers
     return (
         <Icon
             aria-hidden={(ariaHidden) ? 'true' : undefined}

@@ -32,21 +32,20 @@ const Index: NextPage<IndexProps> = ({
 
     // States
     const [currentPaginationPage, setCurrentPaginationPage] = React.useState(0);
-    const [isSearching, setIsSearching] = React.useState(false);
-    const [searchPerformed, setSearchPerformed] = React.useState(false);
     const [recipes, setRecipes] = React.useState([]);
-    const [recipesPerPage] = React.useState(2);
+    const [recipesPerPage] = React.useState(5);
+    const [searchStatus, setSearchStatus] = React.useState<'pending' | 'searching' | 'complete'>('pending');
 
     // Effects
     React.useEffect(() => {
         if (resultsParagraphRef.current) {
             (resultsParagraphRef.current as HTMLParagraphElement).focus();
         }
-    }, [currentPaginationPage, searchPerformed]);
+    }, [currentPaginationPage, searchStatus]);
 
     // Event listeners
     function handleClearSearchResultsOnClick() {
-        setSearchPerformed(false);
+        setSearchStatus('pending');
         setRecipes([]);
         setCurrentPaginationPage(0);
 
@@ -60,8 +59,7 @@ const Index: NextPage<IndexProps> = ({
         event.preventDefault();
         if (!event.target) return;
 
-        setIsSearching(true);
-        setSearchPerformed(false);
+        setSearchStatus('searching');
 
         const formElement = (event.target as HTMLFormElement);
         const formData = new FormData(formElement);
@@ -103,8 +101,7 @@ const Index: NextPage<IndexProps> = ({
             .then((response) => response.json())
             .then((data) => {
                 setRecipes(data);
-                setIsSearching(false);
-                setSearchPerformed(true);
+                setSearchStatus('complete');
                 setCurrentPaginationPage(0);
             });
     }
@@ -182,25 +179,21 @@ const Index: NextPage<IndexProps> = ({
                 </form>
             </Card>
 
-            {isSearching &&
-                <Card>
-                    <h2>Fetching recipes...</h2>
-                </Card>
-            }
+            <Card hide={searchStatus !== 'searching'}>
+                <h2>Fetching recipes...</h2>
+            </Card>
 
-            {(!isSearching && searchPerformed && recipes) &&
-                <Card>
-                    <h2>Search results</h2>
-                    <p
-                        className={styles['search-results-paragraph']}
-                        ref={resultsParagraphRef}
-                        tabIndex={-1}
-                    >{recipes.length} recipe{recipes.length > 1 ? 's' : ''} found.</p>
-                    <div>
-                        <button onClick={handleClearSearchResultsOnClick}>Clear search results</button>
-                    </div>
-                </Card>
-            }
+            <Card hide={searchStatus !== 'complete'}>
+                <h2>Search results</h2>
+                <p
+                    className={styles['search-results-paragraph']}
+                    ref={resultsParagraphRef}
+                    tabIndex={-1}
+                >{recipes.length} recipe{recipes.length > 1 ? 's' : ''} found.</p>
+                <div>
+                    <button onClick={handleClearSearchResultsOnClick}>Clear search results</button>
+                </div>
+            </Card>
 
             {recipes &&
                 (recipes as RecipeFormatted[])

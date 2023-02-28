@@ -25,6 +25,7 @@ const ResultsCard = ({
         }
     });
 
+    // Renderers
     return (
         <section className={styles.container}>
             <h2>{heading}</h2>

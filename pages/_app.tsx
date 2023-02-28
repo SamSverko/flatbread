@@ -49,6 +49,7 @@ function App({ Component, pageProps }: AppProps) {
     const router = useRouter();
     const matchedRoute = routes.find((route: Route) => route.path === router.pathname);
 
+    // Renderers
     return (
         <>
             <Head>
