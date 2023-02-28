@@ -17,6 +17,7 @@ import type { PlannedRecipe } from '../utils/types';
 const Plan: NextPage = () => {
     // States
     const [plannedRecipes, setPlannedRecipes] = React.useState<Array<PlannedRecipe>>([]);
+    const [searchStatus, setSearchStatus] = React.useState<'pending' | 'searching' | 'complete'>('searching');
 
     // Effects
     React.useEffect(() => {
@@ -24,6 +25,7 @@ const Plan: NextPage = () => {
 
         if (localPlannedMeals) {
             setPlannedRecipes(JSON.parse(localPlannedMeals));
+            setSearchStatus('complete');
         }
     }, []);
 
@@ -73,6 +75,28 @@ const Plan: NextPage = () => {
 
     }
 
+    function handleOrderOnClick(event: React.MouseEvent<HTMLButtonElement>, movement: 'down' | 'up') {
+        const target = event.target as HTMLButtonElement;
+        const currentRecipeTitle = target.getAttribute('data-title');
+
+        const localPlannedRecipes = localStorage.getItem('planned-recipes');
+        if (localPlannedRecipes && currentRecipeTitle) {
+            const localPlannedRecipeArray: PlannedRecipe[] = JSON.parse(localPlannedRecipes);
+            const currentRecipeIndex = localPlannedRecipeArray.findIndex(plannedRecipe => plannedRecipe.title === currentRecipeTitle);
+            console.log(currentRecipeIndex);
+
+            if (movement === 'up' && currentRecipeIndex > 0) {
+                const currentPlannedRecipe = localPlannedRecipeArray.splice(currentRecipeIndex, 1);
+                localPlannedRecipeArray.splice(currentRecipeIndex - 1, 0, currentPlannedRecipe[0]);
+            } else if (movement === 'down' && localPlannedRecipeArray.length - 1) {
+                const currentPlannedRecipe = localPlannedRecipeArray.splice(currentRecipeIndex, 1);
+                localPlannedRecipeArray.splice(currentRecipeIndex + 1, 0, currentPlannedRecipe[0]);
+            }
+
+            updatePlannedRecipes(localPlannedRecipeArray);
+        }
+    }
+
     function handleRemoveOnClick(event: React.MouseEvent<HTMLButtonElement>) {
         const target = event.target as HTMLButtonElement;
         const currentRecipeTitle = target.getAttribute('data-title');
@@ -105,19 +129,21 @@ const Plan: NextPage = () => {
                 <h1>Meal plan</h1>
             </Card>
 
-            <Card hide={(plannedRecipes.length > 0) ? true : false}>
+            <Card hide={searchStatus !== 'searching'}>
                 <h2>Fetching planned recipes...</h2>
             </Card>
 
-            <Card hide={(!plannedRecipes || plannedRecipes.length === 0) ? true : false}>
+            <Card hide={searchStatus !== 'complete'}>
                 <>
                     <div className={styles['list-heading']}>
                         <h2>Meals ({plannedRecipes.length})</h2>
-                        {plannedRecipes.length > 0 &&
-                            <button aria-label='Remove all planned recipes from list' className='icon-only' onClick={removeAllPlannedRecipes}>
-                                <Icon ariaHidden={true} Icon={bxTrash} />
-                            </button>
-                        }
+                        <button
+                            aria-label='Remove all planned recipes from list'
+                            className={`icon-only ${(plannedRecipes.length === 0) ? styles.hidden : ''}`}
+                            onClick={removeAllPlannedRecipes}
+                        >
+                            <Icon ariaHidden={true} Icon={bxTrash} />
+                        </button>
                     </div>
 
                     {plannedRecipes.length > 0 &&
@@ -140,16 +166,28 @@ const Plan: NextPage = () => {
                                         </label>
                                     </div>
                                     <div className={styles.right}>
-                                        <button disabled={index === 0} aria-label='Move up in list by one' className='icon-only'>
+                                        <button
+                                            aria-label='Move up in list by one'
+                                            className='icon-only'
+                                            data-title={plannedRecipe.title}
+                                            disabled={index === 0}
+                                            onClick={(event) => handleOrderOnClick(event, 'up')}
+                                        >
                                             <Icon ariaHidden={true} Icon={bxUpArrowAlt} />
                                         </button>
-                                        <button disabled={index === plannedRecipes.length - 1} aria-label='Move down in list by one' className='icon-only'>
+                                        <button
+                                            aria-label='Move down in list by one'
+                                            className='icon-only'
+                                            data-title={plannedRecipe.title}
+                                            disabled={index === plannedRecipes.length - 1}
+                                            onClick={(event) => handleOrderOnClick(event, 'down')}
+                                        >
                                             <Icon ariaHidden={true} Icon={bxDownArrowAlt} />
                                         </button>
                                         <button
                                             aria-label='Remove from list'
-                                            data-title={plannedRecipe.title}
                                             className='icon-only'
+                                            data-title={plannedRecipe.title}
                                             onClick={handleRemoveOnClick}
                                         >
                                             <Icon ariaHidden={true} Icon={bxTrash} />

@@ -3,6 +3,10 @@
     display: flex;
     gap: var(--spacing-2);
     justify-content: space-between;
+
+    button.hidden {
+        visibility: hidden;
+    }
 }
 
 .list {
