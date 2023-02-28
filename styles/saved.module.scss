@@ -1,0 +1,7 @@
+@use '../styles/mixins.scss';
+
+.search-results-paragraph {
+    &:focus {
+        @include mixins.focus-outline;
+    }
+}

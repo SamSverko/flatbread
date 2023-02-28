@@ -35,13 +35,4 @@ export type Route = {
     icon: SVGElement;
 }
 
-export type SearchQueryProps = {
-    title?: string;
-    courseTypes?: string;
-    cuisines?: string;
-    dietaryRestrictions?: string;
-    dishTypes?: string;
-    random?: boolean;
-}
-
 export type SVGElement = React.FunctionComponent<React.SVGAttributes<SVGElement>>;

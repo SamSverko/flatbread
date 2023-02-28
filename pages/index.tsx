@@ -189,7 +189,9 @@ const Index: NextPage<IndexProps> = ({
                     className={styles['search-results-paragraph']}
                     ref={resultsParagraphRef}
                     tabIndex={-1}
-                >{recipes.length} recipe{recipes.length > 1 ? 's' : ''} found.</p>
+                >
+                    {recipes.length} recipe{recipes.length > 1 ? 's' : ''} found.
+                </p>
                 <div>
                     <button onClick={handleClearSearchResultsOnClick}>Clear search results</button>
                 </div>

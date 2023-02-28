@@ -4,10 +4,15 @@ import Card from '../components/card';
 import PaginationCard from '../components/pagination-card';
 import RecipeCard from '../components/recipe-card';
 
+import styles from '../styles/saved.module.scss';
+
 import type { NextPage } from 'next';
 import type { RecipeFormatted } from '../utils/types';
 
 const Saved: NextPage = () => {
+    // Refs
+    const resultsParagraphRef = React.useRef(null);
+
     // States
     const [searchStatus, setSearchStatus] = React.useState<'pending' | 'searching' | 'complete'>('pending');
     const [currentPaginationPage, setCurrentPaginationPage] = React.useState(0);
@@ -18,6 +23,12 @@ const Saved: NextPage = () => {
     React.useEffect(() => {
         getSavedRecipes();
     }, []);
+
+    React.useEffect(() => {
+        if (resultsParagraphRef.current) {
+            (resultsParagraphRef.current as HTMLParagraphElement).focus();
+        }
+    }, [currentPaginationPage, savedRecipes, searchStatus]);
 
     // Helpers
     function getSavedRecipes() {
@@ -45,7 +56,13 @@ const Saved: NextPage = () => {
 
             <Card hide={searchStatus !== 'complete'}>
                 <h2>Saved recipes</h2>
-                <p>{savedRecipes.length} recipe{savedRecipes.length > 1 ? 's' : ''} found.</p>
+                <p
+                    className={styles['search-results-paragraph']}
+                    ref={resultsParagraphRef}
+                    tabIndex={-1}
+                >
+                    {savedRecipes.length} recipe{savedRecipes.length > 1 ? 's' : ''} found.
+                </p>
             </Card>
 
             {savedRecipes && 
