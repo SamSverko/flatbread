@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import * as React from 'react';
 
+import Card from '../card';
 import Icon from '../icon';
 
 import bxBowlHot from '../../public/icons/bx-bowl-hot.svg';
@@ -178,6 +179,8 @@ const RecipeCard = ({ onRemoveFromSaved, recipe }: ComponentProps) => {
                     {renderCategory('Course types', recipe.courseTypes)}
                     {renderCategory('Dietary restrictions', recipe.dietaryRestrictions)}
                 </div>
+
+                <hr />
             </details>
         );
     }
@@ -329,6 +332,8 @@ const RecipeCard = ({ onRemoveFromSaved, recipe }: ComponentProps) => {
                         }
                     })} 
                 </ul>
+
+                <hr />
             </details>
         );
     }
@@ -396,6 +401,8 @@ const RecipeCard = ({ onRemoveFromSaved, recipe }: ComponentProps) => {
                         }
                     })} 
                 </ul>
+
+                <hr />
             </details>
         );
     }
@@ -456,7 +463,7 @@ const RecipeCard = ({ onRemoveFromSaved, recipe }: ComponentProps) => {
     }
 
     return (
-        <section className={styles.container}>
+        <Card>
             {renderControls()}
 
             <hr />
@@ -468,11 +475,11 @@ const RecipeCard = ({ onRemoveFromSaved, recipe }: ComponentProps) => {
 
             <hr />
 
-            {renderCategories()}    
+            {renderCategories()}
             {renderIngredients()}
             {renderSteps()}
             {renderNotes()}
-        </section>
+        </Card>
     );
 };
 

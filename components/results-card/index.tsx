@@ -9,7 +9,7 @@ type ComponentProps = {
     recipeCount: number
 }
 
-const SearchResultsCard = ({
+const ResultsCard = ({
     clearSearchResults,
     heading = 'Search results',
     hideClearButton,
@@ -42,4 +42,4 @@ const SearchResultsCard = ({
     );
 };
 
-export default SearchResultsCard;
+export default ResultsCard;

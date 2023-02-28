@@ -334,6 +334,59 @@ p {
     margin: 0;
 }
 
+select {
+    appearance: none;
+    background: url('/icons/bx-chevron-down.svg') no-repeat right;
+    background-color: white;
+    border: var(--border);
+    border-radius: 0;
+    color: var(--color-grey-900);
+    cursor: pointer;
+    font-family: var(--font-family);
+    font-size: 1rem;
+    font-weight: 400;
+    padding: var(--spacing-2);
+    transition: border var(--transition-duration) var(--transition-timing-function);
+
+    &:hover {
+        border: var(--border-width) solid var(--color-grey-800);
+    }
+
+    &:focus,
+    &:focus-visible {
+        @include mixins.focus-outline;
+    }
+
+    &:disabled {
+        background-color: white;
+        cursor: not-allowed;
+        opacity: var(--opacity-disabled);
+    }
+
+    &[multiple] {
+        --selected-option-background: #4699e7; // 3.01:1 against white | 5.34:1 against var(--color-grey-900)
+
+        background: none;
+        height: 76px;
+        min-height: 38px;
+        resize: vertical;
+
+        option:checked,
+        &:focus option:checked {
+            background:
+                var(--selected-option-background)
+                linear-gradient(
+                    0deg,
+                    var(--selected-option-background)
+                    0%,
+                    var(--selected-option-background)
+                    100%
+                );
+            color: var(--color-grey-900);
+        }
+    }
+}
+
 svg {
     fill: var(--color-grey-900);
 }

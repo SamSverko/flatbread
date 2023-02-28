@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import PaginationCard from '../components/pagination-card';
 import RecipeCard from '../components/recipe-card';
-import SearchResultsCard from '../components/search-results-card';
+import ResultsCard from '../components/results-card';
 import TitleCard from '../components/title-card';
 
 import type { NextPage } from 'next';
@@ -39,7 +39,7 @@ const Saved: NextPage = () => {
             {isSearching && <TitleCard level={2} text='Fetching saved recipes...' />}
 
             {(!isSearching && savedRecipes) &&
-                <SearchResultsCard
+                <ResultsCard
                     heading='Saved recipes'
                     hideClearButton
                     recipeCount={savedRecipes.length}

@@ -1,6 +1,7 @@
 import * as React from 'react';
 
-import InputGroup from '../input-group';
+import Card from '../card';
+import InputGroup2 from '../input-group-2';
 
 import styles from './index.module.scss';
 
@@ -17,20 +18,21 @@ export const PaginationCard = ({
     recipesPerPage, 
     setPaginationPage,
 }: ComponentProps) => {
+    // States
     const [buttonCount] = React.useState(Math.ceil(recipeCount / recipesPerPage));
+    const [inputValue, setInputValue] = React.useState((currentPage + 1).toString());
 
+    // Event listeners
     function handleFormSubmit(event: React.FormEvent) {
         event.preventDefault();
 
-        const formElement = (event.target as HTMLFormElement);
-        const formData = new FormData(formElement);
-        const formDataValue = formData.get('jump-to-page');
+        setPaginationPage(parseInt(inputValue) - 1);
+    }
 
-        if (formDataValue) {
-            setPaginationPage(parseInt(formDataValue.toString()) - 1);
-        }
+    function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+        const value = (event.target as HTMLInputElement).value;
 
-        
+        setInputValue(value);
     }
 
     function handlePreviousNextButton(type: 'previous' | 'next') {
@@ -42,7 +44,7 @@ export const PaginationCard = ({
     }
 
     return (
-        <section className={styles.container}>
+        <Card>
             <h2>Search results pagination</h2>
 
             <div className={styles['buttons-container']}>
@@ -62,17 +64,21 @@ export const PaginationCard = ({
             <hr />
 
             <form onSubmit={handleFormSubmit}>
-                <InputGroup
-                    button='Go'
-                    label='Jump to page'
-                    max={buttonCount}
-                    min={1}
-                    name='jump-to-page'
-                    id='id-jump-to-page'
-                    type='number'
+                <InputGroup2
+                    button={<input type='submit' value='Go' />}
+                    input={<input
+                        id='input-jump-to-page'
+                        max={buttonCount}
+                        min={1}
+                        name='jump-to-page'
+                        onChange={handleInputChange}
+                        type='number'
+                        value={inputValue}
+                    />}
+                    label={<label htmlFor='input-jump-to-page'>Jump to page</label>}
                 />
             </form>
-        </section>
+        </Card>
     );
 };
 

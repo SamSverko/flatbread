@@ -2,16 +2,5 @@
 
 .container {
     @include mixins.break-word;
-
-    background-color: white;
-    border: var(--border);
-    box-shadow: -4px 4px 0 0 var(--color-grey-900);
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-5);
-    margin: 0 auto;
-    max-width: var(--card-max-width);
-    padding: var(--spacing-5);
-    text-align: left;
-    width: 100%;
+    @include mixins.card;
 }

@@ -29,126 +29,128 @@
     }
 }
 
-.container {
-    @include mixins.card;
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacing-2);
+    justify-content: space-between;
 
-    .controls {
-        display: flex;
-        flex-wrap: wrap;
-        gap: var(--spacing-2);
-        justify-content: space-between;
-
-        @media only screen and (max-width: 163px) {
-            & {
-                justify-content: center;
-            }
-
-            div:first-of-type {
-                justify-content: center;
-            }
+    @media only screen and (max-width: 163px) {
+        & {
+            justify-content: center;
         }
 
         div:first-of-type {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--spacing-2);
+            justify-content: center;
         }
     }
 
-    .title {
-        a {
-            @include mixins.break-word;
-        }
+    div:first-of-type {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spacing-2);
     }
+}
 
-    .top-info {
+.title {
+    a {
+        @include mixins.break-word;
+    }
+}
+
+.top-info {
+    align-items: center;
+    display: flex;
+    gap: var(--spacing-3);
+
+    .icon-container {
         align-items: center;
         display: flex;
-        gap: var(--spacing-3);
+        height: var(--icon-size);
+        justify-content: center;
+        width: var(--icon-size);
+    }
 
-        .icon-container {
+    a {
+        @include mixins.break-word;
+
+        display: inline-flex;
+        flex-wrap: wrap;
+    }
+
+    span {
+        @include mixins.break-word;
+    }
+}
+
+.categories {
+    @include mixins.break-word;
+
+    .details-content {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-5);
+        margin: var(--spacing-5) 0;
+
+        ul {
             align-items: center;
             display: flex;
-            height: var(--icon-size);
-            justify-content: center;
-            width: var(--icon-size);
-        }
-
-        a {
-            @include mixins.break-word;
-
-            display: inline-flex;
             flex-wrap: wrap;
+            gap: var(--spacing-2);
+            list-style-type: none;
+            margin: var(--spacing-2) 0 0 0;
+            padding: 0;
+
+            li {
+                @include mixins.label;
+            }
         }
+    }
+}
+
+.ingredients {
+    @include mixins.break-word;
+    @include list;
+
+    .add-all-container {
+        align-items: center;
+        display: flex;
+        gap: var(--spacing-2);
+        justify-content: flex-end;
 
         span {
-            @include mixins.break-word;
+            font-weight: 700;
         }
     }
 
-    .categories {
-        @include mixins.break-word;
+    ul {
+        margin-bottom: var(--spacing-5);
+    }
+}
 
-        .details-content {
-            display: flex;
-            flex-direction: column;
-            gap: var(--spacing-5);
-            margin: var(--spacing-5) 0 0;
+.steps {
+    @include mixins.break-word;
+    @include list;
 
-            ul {
-                align-items: center;
-                display: flex;
-                flex-wrap: wrap;
-                gap: var(--spacing-2);
-                list-style-type: none;
-                margin: var(--spacing-2) 0 0 0;
-                padding: 0;
+    ul {
+        margin-bottom: var(--spacing-5);
 
-                li {
-                    @include mixins.label;
-                }
-            }
+        li {
+            align-items: flex-start;
         }
     }
+}
 
-    .ingredients {
-        @include mixins.break-word;
-        @include list;
+.notes {
+    @include mixins.break-word;
+    @include list;
 
-        .add-all-container {
-            align-items: center;
-            display: flex;
-            gap: var(--spacing-2);
-            justify-content: flex-end;
+    ul {
+        list-style-type: disc;
+        margin-left: var(--spacing-5);
 
-            span {
-                font-weight: 700;
-            }
-        }
-    }
-
-    .steps {
-        @include mixins.break-word;
-        @include list;
-
-        ul {
-            li {
-                align-items: flex-start;
-            }
-        }
-    }
-
-    .notes {
-        @include mixins.break-word;
-        @include list;
-
-        ul {
-            list-style-type: disc;
-            margin-left: var(--spacing-5);
-
-            li {
-                display: list-item;
-            }
+        li {
+            display: list-item;
         }
     }
 }

@@ -129,6 +129,10 @@ const Plan: NextPage = () => {
                     }
                 </>
             </Card>
+
+            <Card>
+                <h2>Add to meal plan</h2>
+            </Card>
         </>
     );
 };

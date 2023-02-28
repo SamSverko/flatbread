@@ -3,8 +3,8 @@ import * as React from 'react';
 import styles from './index.module.scss';
 
 type ComponentProps = {
-    children: JSX.Element
-    hide?: boolean
+    children: JSX.Element | JSX.Element[];
+    hide?: boolean;
 }
 
 const Card = ({ children, hide }: ComponentProps) => {
