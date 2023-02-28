@@ -3,6 +3,7 @@ import * as React from 'react';
 
 import Card from '../components/card';
 import Icon from '../components/icon';
+import InputGroup2 from '../components/input-group-2';
 
 import bxDownArrowAlt from '../public/icons/bx-down-arrow-alt.svg';
 import bxTrash from '../public/icons/bx-trash.svg';
@@ -27,6 +28,36 @@ const Plan: NextPage = () => {
     }, []);
 
     // Event listeners
+    function handleFormOnSubmit(event: React.FormEvent) {
+        event.preventDefault();
+        if (!event.target) return;
+
+        const formElement = (event.target as HTMLFormElement);
+        const formData = new FormData(formElement);
+        
+        const formDataTitle = formData.get('title');
+        const titleValidated = (formDataTitle) ? formDataTitle.toString() : '';
+
+        if (titleValidated.length > 0) {
+            const recipeToAdd: PlannedRecipe = {
+                isComplete: false,
+                title: titleValidated,
+            };
+
+            const plannedRecipes = localStorage.getItem('planned-recipes');
+
+            if (!plannedRecipes) {
+                localStorage.setItem('planned-recipes', `[${JSON.stringify(recipeToAdd)}]`);
+                updatePlannedRecipes([recipeToAdd]);
+            } else {
+                const plannedRecipesArray = JSON.parse(plannedRecipes);
+                plannedRecipesArray.push(recipeToAdd);
+                localStorage.setItem('planned-recipes', JSON.stringify(plannedRecipesArray));
+                updatePlannedRecipes(plannedRecipesArray);
+            }
+        }
+    }
+
     function handleInputOnChange(event: React.ChangeEvent<HTMLInputElement>) {
         const checkbox = event.target as HTMLInputElement;
         const recipeTitle = (checkbox.nextSibling as HTMLLabelElement).innerText;
@@ -133,6 +164,14 @@ const Plan: NextPage = () => {
 
             <Card>
                 <h2>Add to meal plan</h2>
+
+                <form onSubmit={handleFormOnSubmit}>
+                    <InputGroup2
+                        button={<input name='submit' type='submit' value='Add' />}
+                        input={<input id='input-add-to-meal-plan' name='title' type='text' />}
+                        label={<label htmlFor='input-add-to-meal-plan'>Item</label>}
+                    />
+                </form>
             </Card>
         </>
     );

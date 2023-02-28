@@ -23,7 +23,7 @@ export const PaginationCard = ({
     const [inputValue, setInputValue] = React.useState((currentPage + 1).toString());
 
     // Event listeners
-    function handleFormSubmit(event: React.FormEvent) {
+    function handleFormOnSubmit(event: React.FormEvent) {
         event.preventDefault();
 
         setPaginationPage(parseInt(inputValue) - 1);
@@ -64,7 +64,7 @@ export const PaginationCard = ({
 
             <hr />
 
-            <form onSubmit={handleFormSubmit}>
+            <form onSubmit={handleFormOnSubmit}>
                 <InputGroup2
                     button={<input type='submit' value='Go' />}
                     input={<input

@@ -55,7 +55,7 @@ const Index: NextPage<IndexProps> = ({
         }
     }
 
-    function handleFormSubmit(event: React.FormEvent) {
+    function handleFormOnSubmit(event: React.FormEvent) {
         event.preventDefault();
         if (!event.target) return;
 
@@ -116,7 +116,7 @@ const Index: NextPage<IndexProps> = ({
             <Card>
                 <h2>Search for recipes</h2>
 
-                <form onSubmit={handleFormSubmit} className={styles['search-form']}>
+                <form onSubmit={handleFormOnSubmit} className={styles['search-form']}>
                     <InputGroup2
                         input={<input id='input-title' name='title' type='search' />}
                         label={<label htmlFor='input-title'>Title</label>}
