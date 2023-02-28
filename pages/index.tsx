@@ -15,10 +15,10 @@ import type { NextPage } from 'next';
 import type { RecipeFormatted } from '../utils/types';
 
 type IndexProps = {
-    courseTypes: string[]
-    cuisines: string[]
-    dietaryRestrictions: string[]
-    dishTypes: string[]
+    courseTypes: string[];
+    cuisines: string[];
+    dietaryRestrictions: string[];
+    dishTypes: string[];
 }
 
 const Index: NextPage<IndexProps> = ({

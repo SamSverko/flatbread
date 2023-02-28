@@ -23,8 +23,8 @@ import type { Cuisine, RecipeNote, RecipeStep } from '@prisma/client';
 import type { PlannedRecipe, RecipeFormatted, RecipeIngredientResponse } from '../../utils/types';
 
 type ComponentProps = {
-    onRemoveFromSaved?: () => void
-    recipe: RecipeFormatted
+    onRemoveFromSaved?: () => void;
+    recipe: RecipeFormatted;
 }
 
 const RecipeCard = ({ onRemoveFromSaved, recipe }: ComponentProps) => {
@@ -65,6 +65,10 @@ const RecipeCard = ({ onRemoveFromSaved, recipe }: ComponentProps) => {
     }, [isSaved]);
 
     // Event listeners
+    function handleAddIngredientOnClick(ingredient: RecipeIngredientResponse, quantityValue: number) {
+        console.log(ingredient, quantityValue);
+    }
+
     async function handleCopyLinkOnClick() {
         try {
             await navigator.clipboard.writeText(`${window.location.origin}/recipe/${recipe.slug}`);
@@ -251,7 +255,7 @@ const RecipeCard = ({ onRemoveFromSaved, recipe }: ComponentProps) => {
             formattedIngredients.push(ingredient);
         });
 
-        function renderIngredientString(ingredient: RecipeIngredientResponse, id: string) {
+        function parseIngredient(ingredient: RecipeIngredientResponse) {
             let quantity = '';
             let quantityValue = 0;
     
@@ -288,6 +292,14 @@ const RecipeCard = ({ onRemoveFromSaved, recipe }: ComponentProps) => {
                 quantity += ingredient.quantityMaxFraction.name;
                 quantityValue += Number(ingredient.quantityMaxFraction.value);
             }
+
+            if (ingredient.quantityMinFraction && ingredient.quantityMaxFraction) {
+                quantityValue -= Number(ingredient.quantityMinFraction.value);
+            }
+
+            if (ingredient.quantityMinWhole && ingredient.quantityMaxWhole) {
+                quantityValue -= ingredient.quantityMinWhole;
+            }
     
             const unit = (ingredient.unit) ? (quantityValue <= 1 ? ingredient.unit.name : ingredient.unit.namePlural) : '';
             const name = (quantityValue <= 1) ? ingredient.name.name : ingredient.name.namePlural;
@@ -297,7 +309,15 @@ const RecipeCard = ({ onRemoveFromSaved, recipe }: ComponentProps) => {
                 ? ` (substitutions: ${ingredient.substitutions.map((substitution) => substitution.name).join(', ')})`
                 : '';
     
-            return <label className='no-styles' htmlFor={id}><b>{quantity} {unit} {name}</b><em>{alteration}</em>{optional}{substitutions}</label>;
+            return {
+                alteration: alteration,
+                name: name,
+                optional: optional,
+                quantity: quantity,
+                quantityValue: quantityValue,
+                substitutions: substitutions,
+                unit: unit,
+            };
         }
 
         return (
@@ -318,13 +338,20 @@ const RecipeCard = ({ onRemoveFromSaved, recipe }: ComponentProps) => {
                         if (typeof ingredient === 'string') {
                             return <li className={styles.header} key={`key-${ingredientId}`}><b>{ingredient}</b></li>;
                         } else {
+                            const parsedIngredient = parseIngredient(ingredient);
                             return (
                                 <li key={`key-${ingredientId}`}>
                                     <div className={styles['details']}>
                                         <input id={ingredientId} type='checkbox' />
-                                        {renderIngredientString(ingredient, ingredientId)}
+                                        <label className='no-styles' htmlFor={ingredientId}>
+                                            <b>{parsedIngredient.quantity} {parsedIngredient.unit} {parsedIngredient.name}</b>
+                                            <em>{parsedIngredient.alteration}</em>{parsedIngredient.optional}{parsedIngredient.substitutions}
+                                        </label>
                                     </div>
-                                    <button className='icon-only' disabled>
+                                    <button
+                                        className='icon-only'
+                                        onClick={() => handleAddIngredientOnClick(ingredient, parsedIngredient.quantityValue)}
+                                    >
                                         <Icon ariaLabel='Add ingredient to shopping list' Icon={bxListPlus} />
                                     </button>
                                 </li>

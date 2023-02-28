@@ -8,8 +8,8 @@ import styles from './index.module.scss';
 import type { Route } from '../../utils/types';
 
 type ComponentsProps = {
-    activeRoute: string
-    routes: Route[]
+    activeRoute: string;
+    routes: Route[];
 }
 
 const NavCard = ({ activeRoute, routes }: ComponentsProps) => {

@@ -7,9 +7,9 @@ import IconX from '../../public/icons/bx-x.svg';
 import styles from './index.module.scss';
 
 type ComponentProps = {
-    handleCategoryRemoveOnClick: (category: string) => void
-    removable?: boolean
-    text: string
+    handleCategoryRemoveOnClick: (category: string) => void;
+    removable?: boolean;
+    text: string;
 }
 
 const Category = ({ handleCategoryRemoveOnClick, removable, text }: ComponentProps) => {

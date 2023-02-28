@@ -3,10 +3,10 @@ import * as React from 'react';
 import styles from './index.module.scss';
 
 type ComponentProps = {
-    clearSearchResults?: () => void
-    heading?: string
-    hideClearButton?: boolean
-    recipeCount: number
+    clearSearchResults?: () => void;
+    heading?: string;
+    hideClearButton?: boolean;
+    recipeCount: number;
 }
 
 const ResultsCard = ({

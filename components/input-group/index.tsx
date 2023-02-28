@@ -8,18 +8,18 @@ import bxCheck from '../../public/icons/bx-check.svg';
 import styles from './index.module.scss';
 
 type ComponentProps = {
-    button?: string
-    categories?: string[]
-    focusSearchInput?: number
-    id: string
-    label: string
-    max?: number
-    min?: number
-    onEnterSubmit?: () => void
-    name: string
-    placeholder?: string
-    setCategory?: React.Dispatch<React.SetStateAction<string[]>>
-    type: 'number' | 'search' | 'submit' | 'text'
+    button?: string;
+    categories?: string[];
+    focusSearchInput?: number;
+    id: string;
+    label: string;
+    max?: number;
+    min?: number;
+    onEnterSubmit?: () => void;
+    name: string;
+    placeholder?: string;
+    setCategory?: React.Dispatch<React.SetStateAction<string[]>>;
+    type: 'number' | 'search' | 'submit' | 'text';
 }
 
 const InputGroup = ({

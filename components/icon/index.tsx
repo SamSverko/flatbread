@@ -5,8 +5,8 @@ import styles from './index.module.scss';
 import type { SVGElement } from '../../utils/types';
 
 type ComponentProps = {
-    ariaHidden?: boolean
-    ariaLabel?: string
+    ariaHidden?: boolean;
+    ariaLabel?: string;
     Icon: SVGElement;
 }
 

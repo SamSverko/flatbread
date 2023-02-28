@@ -9,16 +9,16 @@ import {
 import type { Prisma } from '@prisma/client';
 import type { NextApiResponse, NextApiRequest } from 'next';
 
-type CourseTypeResponse = Prisma.CourseTypeGetPayload<{ select: { [K in keyof Prisma.CourseTypeSelect]: true } }>
-type CuisineResponse = Prisma.CourseTypeGetPayload<{ select: { [K in keyof Prisma.CourseTypeSelect]: true } }>
-type DietaryRestrictionResponse = Prisma.CourseTypeGetPayload<{ select: { [K in keyof Prisma.CourseTypeSelect]: true } }>
-type DishTypesResponse = Prisma.CourseTypeGetPayload<{ select: { [K in keyof Prisma.CourseTypeSelect]: true } }>
+type CourseTypeResponse = Prisma.CourseTypeGetPayload<{ select: { [K in keyof Prisma.CourseTypeSelect]: true } }>;
+type CuisineResponse = Prisma.CourseTypeGetPayload<{ select: { [K in keyof Prisma.CourseTypeSelect]: true } }>;
+type DietaryRestrictionResponse = Prisma.CourseTypeGetPayload<{ select: { [K in keyof Prisma.CourseTypeSelect]: true } }>;
+type DishTypesResponse = Prisma.CourseTypeGetPayload<{ select: { [K in keyof Prisma.CourseTypeSelect]: true } }>;
 
 type CategoriesResponse = {
-    courseTypes?: CourseTypeResponse[],
-    cuisines?: CuisineResponse[],
-    dietaryRestrictions?: DietaryRestrictionResponse[],
-    dishTypes?: DishTypesResponse[],
+    courseTypes?: CourseTypeResponse[];
+    cuisines?: CuisineResponse[];
+    dietaryRestrictions?: DietaryRestrictionResponse[];
+    dishTypes?: DishTypesResponse[];
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {

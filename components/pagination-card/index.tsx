@@ -6,10 +6,10 @@ import InputGroup2 from '../input-group-2';
 import styles from './index.module.scss';
 
 type ComponentProps = {
-    currentPage: number
-    recipeCount: number
-    recipesPerPage: number
-    setPaginationPage: (prop: number) => void
+    currentPage: number;
+    recipeCount: number;
+    recipesPerPage: number;
+    setPaginationPage: (prop: number) => void;
 }
 
 export const PaginationCard = ({

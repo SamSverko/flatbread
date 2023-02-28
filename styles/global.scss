@@ -143,6 +143,7 @@ input[type='submit'] {
 
         svg {
             fill: var(--color-grey-900);
+            pointer-events: none;
             transition: fill var(--transition-duration) var(--transition-timing-function) var(--transition-delay),;
         }
 
