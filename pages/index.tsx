@@ -12,7 +12,7 @@ import { getCategoryFormat } from '../prisma/utils';
 import styles from '../styles/index.module.scss';
 
 import type { NextPage } from 'next';
-import type { RecipeFormatted } from '../utils/types';
+import type { PlannedRecipe, RecipeFormatted } from '../utils/types';
 
 type IndexProps = {
     courseTypes: string[];
@@ -32,11 +32,26 @@ const Index: NextPage<IndexProps> = ({
 
     // States
     const [currentPaginationPage, setCurrentPaginationPage] = React.useState(0);
+    const [plannedRecipes, setPlannedRecipes] = React.useState([]);
     const [recipes, setRecipes] = React.useState([]);
     const [recipesPerPage] = React.useState(5);
+    const [savedRecipes, setSavedRecipes] = React.useState([]);
     const [searchStatus, setSearchStatus] = React.useState<'pending' | 'searching' | 'complete'>('pending');
 
     // Effects
+    React.useEffect(() => {
+        const localSavedRecipes = localStorage.getItem('saved-recipes');
+        const localPlannedRecipes = localStorage.getItem('planned-recipes');
+
+        if (localSavedRecipes) {
+            setSavedRecipes(JSON.parse(localSavedRecipes));
+        }
+
+        if (localPlannedRecipes) {
+            setPlannedRecipes(JSON.parse(localPlannedRecipes));
+        }
+    }, []);
+
     React.useEffect(() => {
         if (resultsParagraphRef.current) {
             (resultsParagraphRef.current as HTMLParagraphElement).focus();
@@ -201,7 +216,15 @@ const Index: NextPage<IndexProps> = ({
                 (recipes as RecipeFormatted[])
                     .slice(currentPaginationPage * recipesPerPage, (currentPaginationPage * recipesPerPage) + recipesPerPage)
                     .map((recipe, index) => {
-                        return <RecipeCard key={`key-recipe-${recipe.slug}-${index}`} recipe={recipe} />;
+                        const isPlanned = (plannedRecipes.findIndex((savedRecipe: PlannedRecipe) => savedRecipe.title === recipe.title) === -1) ? false : true;
+                        const isSaved = (savedRecipes.findIndex((savedRecipe: RecipeFormatted) => savedRecipe.slug === recipe.slug) === -1) ? false : true;
+
+                        return <RecipeCard
+                            isPlanned={isPlanned}
+                            isSaved={isSaved}
+                            key={`key-recipe-${recipe.slug}-${index}`}
+                            recipe={recipe}
+                        />;
                     })
             }
 

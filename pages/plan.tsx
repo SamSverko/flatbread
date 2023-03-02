@@ -25,8 +25,9 @@ const Plan: NextPage = () => {
 
         if (localPlannedMeals) {
             setPlannedRecipes(JSON.parse(localPlannedMeals));
-            setSearchStatus('complete');
         }
+
+        setSearchStatus('complete');
     }, []);
 
     // Event listeners
@@ -83,7 +84,6 @@ const Plan: NextPage = () => {
         if (localPlannedRecipes && currentRecipeTitle) {
             const localPlannedRecipeArray: PlannedRecipe[] = JSON.parse(localPlannedRecipes);
             const currentRecipeIndex = localPlannedRecipeArray.findIndex(plannedRecipe => plannedRecipe.title === currentRecipeTitle);
-            console.log(currentRecipeIndex);
 
             if (movement === 'up' && currentRecipeIndex > 0) {
                 const currentPlannedRecipe = localPlannedRecipeArray.splice(currentRecipeIndex, 1);

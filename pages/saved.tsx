@@ -7,7 +7,7 @@ import RecipeCard from '../components/recipe-card';
 import styles from '../styles/saved.module.scss';
 
 import type { NextPage } from 'next';
-import type { RecipeFormatted } from '../utils/types';
+import type { PlannedRecipe, RecipeFormatted } from '../utils/types';
 
 const Saved: NextPage = () => {
     // Refs
@@ -16,12 +16,19 @@ const Saved: NextPage = () => {
     // States
     const [searchStatus, setSearchStatus] = React.useState<'pending' | 'searching' | 'complete'>('pending');
     const [currentPaginationPage, setCurrentPaginationPage] = React.useState(0);
+    const [plannedRecipes, setPlannedRecipes] = React.useState([]);
     const [recipesPerPage] = React.useState(5);
     const [savedRecipes, setSavedRecipes] = React.useState([]);
 
     // Effects
     React.useEffect(() => {
         getSavedRecipes();
+
+        const localPlannedMeals = localStorage.getItem('planned-recipes');
+
+        if (localPlannedMeals) {
+            setPlannedRecipes(JSON.parse(localPlannedMeals));
+        }
     }, []);
 
     React.useEffect(() => {
@@ -69,7 +76,16 @@ const Saved: NextPage = () => {
                 (savedRecipes as RecipeFormatted[])
                     .slice(currentPaginationPage * recipesPerPage, (currentPaginationPage * recipesPerPage) + recipesPerPage)
                     .map((recipe, index) => {
-                        return <RecipeCard key={`key-recipe-${recipe.slug}-${index}`} onRemoveFromSaved={getSavedRecipes} recipe={recipe} />;
+                        const isPlanned = (plannedRecipes.findIndex((savedRecipe: PlannedRecipe) => savedRecipe.title === recipe.title) === -1) ? false : true;
+                        const isSaved = (savedRecipes.findIndex((savedRecipe: RecipeFormatted) => savedRecipe.slug === recipe.slug) === -1) ? false : true;
+
+                        return <RecipeCard
+                            isPlanned={isPlanned}
+                            isSaved={isSaved}
+                            key={`key-recipe-${recipe.slug}-${index}`}
+                            onRemoveFromSaved={getSavedRecipes}
+                            recipe={recipe}
+                        />;
                     })
             }
 

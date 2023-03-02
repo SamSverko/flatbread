@@ -23,19 +23,26 @@ import type { Cuisine, RecipeNote, RecipeStep } from '@prisma/client';
 import type { PlannedRecipe, RecipeFormatted, RecipeIngredientResponse } from '../../utils/types';
 
 type ComponentProps = {
+    isPlanned: boolean;
+    isSaved: boolean;
     onRemoveFromSaved?: () => void;
     recipe: RecipeFormatted;
 }
 
-const RecipeCard = ({ onRemoveFromSaved, recipe }: ComponentProps) => {
+const RecipeCard = ({
+    isPlanned = false,
+    isSaved = false,
+    onRemoveFromSaved,
+    recipe,
+}: ComponentProps) => {
     // States
     const [isCategoriesExpanded, setIsCategoriesExpanded] = React.useState(false);
     const [isCopiedSelected, setIsCopiedSelected] = React.useState(false);
     const [isExpandSelected, setIsExpandSelected] = React.useState(false);
-    const [isPlanned, setIsPlanned] = React.useState(false);
-    const [isSaved, setIsSaved] = React.useState(false);
+    const [isPlannedState, setIsPlannedState] = React.useState(isPlanned);
     const [isIngredientsExpanded, setIsIngredientsExpanded] = React.useState(false);
     const [isNotesExpanded, setIsNotesExpanded] = React.useState(false);
+    const [isSavedState, setIsSavedState] = React.useState(isSaved);
     const [isStepsExpanded, setIsStepsExpanded] = React.useState(false);
 
     // Effects
@@ -46,23 +53,6 @@ const RecipeCard = ({ onRemoveFromSaved, recipe }: ComponentProps) => {
             setIsExpandSelected(true);
         }
     }, [isCategoriesExpanded, isIngredientsExpanded, isNotesExpanded, isStepsExpanded]);
-
-    React.useEffect(() => {
-        const savedRecipes = localStorage.getItem('saved-recipes');
-
-        if (!savedRecipes) {
-            setIsSaved(false);
-        } else {
-            const savedRecipesArray = JSON.parse(savedRecipes);
-            const savedRecipeIndex = savedRecipesArray.findIndex((savedRecipe: RecipeFormatted) => savedRecipe.slug === recipe.slug);
-
-            if (savedRecipeIndex === -1) {
-                setIsSaved(false);
-            } else {
-                setIsSaved(true);
-            }
-        }
-    }, [isSaved]);
 
     // Event listeners
     function handleAddIngredientOnClick(ingredient: RecipeIngredientResponse, quantityValue: number) {
@@ -99,7 +89,7 @@ const RecipeCard = ({ onRemoveFromSaved, recipe }: ComponentProps) => {
 
         if (!plannedRecipes) {
             localStorage.setItem('planned-recipes', `[${JSON.stringify(currentRecipe)}]`);
-            setIsPlanned(true);
+            setIsPlannedState(true);
         } else {
             const plannedRecipesArray = JSON.parse(plannedRecipes);
             const plannedRecipeIndex = plannedRecipesArray.findIndex((plannedRecipe: PlannedRecipe) => plannedRecipe.title === recipe.title);
@@ -107,11 +97,11 @@ const RecipeCard = ({ onRemoveFromSaved, recipe }: ComponentProps) => {
             if (plannedRecipeIndex === -1) {
                 plannedRecipesArray.push(currentRecipe);
                 localStorage.setItem('planned-recipes', JSON.stringify(plannedRecipesArray));
-                setIsPlanned(true);
+                setIsPlannedState(true);
             } else {
                 plannedRecipesArray.splice(plannedRecipeIndex, 1);
                 localStorage.setItem('planned-recipes', JSON.stringify(plannedRecipesArray));
-                setIsPlanned(false);
+                setIsPlannedState(false);
             }
         }
     }
@@ -138,7 +128,7 @@ const RecipeCard = ({ onRemoveFromSaved, recipe }: ComponentProps) => {
 
         if (!savedRecipes) {
             localStorage.setItem('saved-recipes', `[${JSON.stringify(recipe)}]`);
-            setIsSaved(true);
+            setIsSavedState(true);
         } else {
             const savedRecipesArray = JSON.parse(savedRecipes);
             const savedRecipeIndex = savedRecipesArray.findIndex((savedRecipe: RecipeFormatted) => savedRecipe.slug === recipe.slug);
@@ -146,11 +136,11 @@ const RecipeCard = ({ onRemoveFromSaved, recipe }: ComponentProps) => {
             if (savedRecipeIndex === -1) {
                 savedRecipesArray.push(recipe);
                 localStorage.setItem('saved-recipes', JSON.stringify(savedRecipesArray));
-                setIsSaved(true);
+                setIsSavedState(true);
             } else {
                 savedRecipesArray.splice(savedRecipeIndex, 1);
                 localStorage.setItem('saved-recipes', JSON.stringify(savedRecipesArray));
-                setIsSaved(false);
+                setIsSavedState(false);
                 if (onRemoveFromSaved) onRemoveFromSaved();
             }
         }
@@ -194,26 +184,26 @@ const RecipeCard = ({ onRemoveFromSaved, recipe }: ComponentProps) => {
             <div className={styles.controls}>
                 <div>
                     <button
-                        aria-pressed={isSaved}
+                        aria-pressed={isSavedState}
                         className='icon-only'
                         onClick={handleSaveRecipeOnClick}
                     >
-                        {!isSaved &&
+                        {!isSavedState &&
                             <Icon ariaLabel='Add to saved recipes' Icon={bxHeart} />                        
                         }
-                        {isSaved &&
+                        {isSavedState &&
                             <Icon ariaLabel='Remove to saved recipes' Icon={bxsHeart} />                        
                         }
                     </button>
                     <button
-                        aria-pressed={isPlanned}
+                        aria-pressed={isPlannedState}
                         className='icon-only'
                         onClick={handlePlanRecipeOnClick}
                     >
-                        {!isPlanned &&
+                        {!isPlannedState &&
                             <Icon ariaLabel='Add to meal plan' Icon={bxCalendarPlus} />
                         }
-                        {isPlanned &&
+                        {isPlannedState &&
                             <Icon ariaLabel='Remove to meal plan' Icon={bxCalendarCheck} />
                         }
                     </button>
