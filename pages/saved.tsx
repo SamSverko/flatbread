@@ -4,6 +4,8 @@ import Card from '../components/card';
 import PaginationCard from '../components/pagination-card';
 import RecipeCard from '../components/recipe-card';
 
+import { LSKey } from '../utils/functions';
+
 import styles from '../styles/saved.module.scss';
 
 import type { NextPage } from 'next';
@@ -24,11 +26,13 @@ const Saved: NextPage = () => {
     React.useEffect(() => {
         getSavedRecipes();
 
-        const localPlannedMeals = localStorage.getItem('planned-recipes');
+        const localPlannedMeals = localStorage.getItem(LSKey.plannedRecipes);
 
         if (localPlannedMeals) {
             setPlannedRecipes(JSON.parse(localPlannedMeals));
         }
+
+        setSearchStatus('complete');
     }, []);
 
     React.useEffect(() => {
@@ -39,7 +43,7 @@ const Saved: NextPage = () => {
 
     // Helpers
     function getSavedRecipes() {
-        const savedRecipes = localStorage.getItem('saved-recipes');
+        const savedRecipes = localStorage.getItem(LSKey.savedRecipes);
 
         if (savedRecipes) {
             setSearchStatus('searching');

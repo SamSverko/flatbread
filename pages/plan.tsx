@@ -5,6 +5,8 @@ import Card from '../components/card';
 import Icon from '../components/icon';
 import InputGroup2 from '../components/input-group-2';
 
+import { LSKey } from '../utils/functions';
+
 import bxDownArrowAlt from '../public/icons/bx-down-arrow-alt.svg';
 import bxTrash from '../public/icons/bx-trash.svg';
 import bxUpArrowAlt from '../public/icons/bx-up-arrow-alt.svg';
@@ -21,7 +23,7 @@ const Plan: NextPage = () => {
 
     // Effects
     React.useEffect(() => {
-        const localPlannedMeals = localStorage.getItem('planned-recipes');
+        const localPlannedMeals = localStorage.getItem(LSKey.plannedRecipes);
 
         if (localPlannedMeals) {
             setPlannedRecipes(JSON.parse(localPlannedMeals));
@@ -47,15 +49,15 @@ const Plan: NextPage = () => {
                 title: titleValidated,
             };
 
-            const plannedRecipes = localStorage.getItem('planned-recipes');
+            const plannedRecipes = localStorage.getItem(LSKey.plannedRecipes);
 
             if (!plannedRecipes) {
-                localStorage.setItem('planned-recipes', `[${JSON.stringify(recipeToAdd)}]`);
+                localStorage.setItem(LSKey.plannedRecipes, `[${JSON.stringify(recipeToAdd)}]`);
                 updatePlannedRecipes([recipeToAdd]);
             } else {
                 const plannedRecipesArray = JSON.parse(plannedRecipes);
                 plannedRecipesArray.push(recipeToAdd);
-                localStorage.setItem('planned-recipes', JSON.stringify(plannedRecipesArray));
+                localStorage.setItem(LSKey.plannedRecipes, JSON.stringify(plannedRecipesArray));
                 updatePlannedRecipes(plannedRecipesArray);
             }
         }
@@ -65,7 +67,7 @@ const Plan: NextPage = () => {
         const checkbox = event.target as HTMLInputElement;
         const recipeTitle = (checkbox.nextSibling as HTMLLabelElement).innerText;
 
-        const localPlannedRecipes = localStorage.getItem('planned-recipes');
+        const localPlannedRecipes = localStorage.getItem(LSKey.plannedRecipes);
         if (localPlannedRecipes) {
             const localPlannedRecipeArray: PlannedRecipe[] = JSON.parse(localPlannedRecipes);
             const currentRecipeIndex = localPlannedRecipeArray.findIndex(plannedRecipe => plannedRecipe.title === recipeTitle);
@@ -73,14 +75,13 @@ const Plan: NextPage = () => {
 
             updatePlannedRecipes(localPlannedRecipeArray);
         }
-
     }
 
     function handleOrderOnClick(event: React.MouseEvent<HTMLButtonElement>, movement: 'down' | 'up') {
         const target = event.target as HTMLButtonElement;
         const currentRecipeTitle = target.getAttribute('data-title');
 
-        const localPlannedRecipes = localStorage.getItem('planned-recipes');
+        const localPlannedRecipes = localStorage.getItem(LSKey.plannedRecipes);
         if (localPlannedRecipes && currentRecipeTitle) {
             const localPlannedRecipeArray: PlannedRecipe[] = JSON.parse(localPlannedRecipes);
             const currentRecipeIndex = localPlannedRecipeArray.findIndex(plannedRecipe => plannedRecipe.title === currentRecipeTitle);
@@ -101,7 +102,7 @@ const Plan: NextPage = () => {
         const target = event.target as HTMLButtonElement;
         const currentRecipeTitle = target.getAttribute('data-title');
 
-        const localPlannedRecipes = localStorage.getItem('planned-recipes');
+        const localPlannedRecipes = localStorage.getItem(LSKey.plannedRecipes);
         if (localPlannedRecipes && currentRecipeTitle) {
             const localPlannedRecipeArray: PlannedRecipe[] = JSON.parse(localPlannedRecipes);
             const currentRecipeIndex = localPlannedRecipeArray.findIndex(plannedRecipe => plannedRecipe.title === currentRecipeTitle);
@@ -113,12 +114,12 @@ const Plan: NextPage = () => {
 
     // Helpers
     function updatePlannedRecipes(updatedPlannedRecipes: PlannedRecipe[]) {
-        localStorage.setItem('planned-recipes', JSON.stringify(updatedPlannedRecipes));
+        localStorage.setItem(LSKey.plannedRecipes, JSON.stringify(updatedPlannedRecipes));
         setPlannedRecipes(updatedPlannedRecipes);
     }
 
     function removeAllPlannedRecipes() {
-        localStorage.setItem('planned-recipes', JSON.stringify([]));
+        localStorage.setItem(LSKey.plannedRecipes, JSON.stringify([]));
         setPlannedRecipes([]);
     }
 

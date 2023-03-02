@@ -4,6 +4,8 @@ import { useRouter } from 'next/router';
 import Card from '../../components/card';
 import RecipeCard from '../../components/recipe-card';
 
+import { LSKey } from '../../utils/functions';
+
 import type { NextPage } from 'next';
 import type { PlannedRecipe, RecipeFormatted } from '../../utils/types';
 
@@ -21,8 +23,8 @@ const RecipePage: NextPage = () => {
     React.useEffect(() => {
         if (!recipe) return;
 
-        const localSavedRecipes = localStorage.getItem('saved-recipes');
-        const localPlannedRecipes = localStorage.getItem('planned-recipes');
+        const localSavedRecipes = localStorage.getItem(LSKey.savedRecipes);
+        const localPlannedRecipes = localStorage.getItem(LSKey.plannedRecipes);
 
         if (localSavedRecipes) {
             const isSaved = (

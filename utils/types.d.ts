@@ -35,4 +35,18 @@ export type Route = {
     icon: SVGElement;
 }
 
+export type SavedIngredient = {
+    isComplete: boolean;
+    name: {
+        name: string;
+        namePlural: string;
+    }
+    quantity: number;
+    unit: {
+        name: ingredient.unit.name,
+        nameAbbr: ingredient.unit.nameAbbr,
+        namePlural: ingredient.unit.namePlural,
+    }
+}
+
 export type SVGElement = React.FunctionComponent<React.SVGAttributes<SVGElement>>;

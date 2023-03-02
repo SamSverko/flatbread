@@ -6,7 +6,7 @@ import PaginationCard from '../components/pagination-card';
 import RecipeCard from '../components/recipe-card';
 
 import { prisma } from '../prisma/db';
-import { capitalizeFirstLetter } from '../utils/functions';
+import { capitalizeFirstLetter, LSKey } from '../utils/functions';
 import { getCategoryFormat } from '../prisma/utils';
 
 import styles from '../styles/index.module.scss';
@@ -40,8 +40,8 @@ const Index: NextPage<IndexProps> = ({
 
     // Effects
     React.useEffect(() => {
-        const localSavedRecipes = localStorage.getItem('saved-recipes');
-        const localPlannedRecipes = localStorage.getItem('planned-recipes');
+        const localSavedRecipes = localStorage.getItem(LSKey.savedRecipes);
+        const localPlannedRecipes = localStorage.getItem(LSKey.plannedRecipes);
 
         if (localSavedRecipes) {
             setSavedRecipes(JSON.parse(localSavedRecipes));
