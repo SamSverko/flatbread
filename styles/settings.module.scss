@@ -1,0 +1,23 @@
+@use '../styles/mixins.scss';
+
+.section {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-5);
+
+    ul {
+        display: flex;
+        flex-direction: column;
+        gap: var(--spacing-2);
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+            align-items: center;
+            display: flex;
+            gap: var(--spacing-2);
+            justify-content: flex-start;
+        }
+    }
+}

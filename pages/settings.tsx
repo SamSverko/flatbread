@@ -1,22 +1,58 @@
-import Link from 'next/link';
 import * as React from 'react';
 
 import Card from '../components/card';
+import Icon from '../components/icon';
+
+import { LSKey } from '../utils/functions';
+
+import bxCalendarCheck from '../public/icons/bx-calendar-check.svg';
+import bxLinkExternal from '../public/icons/bx-link-external.svg';
+import bxListCheck from '../public/icons/bx-list-check.svg';
+import bxsHeart from '../public/icons/bxs-heart.svg';
+
+import styles from '../styles/settings.module.scss';
 
 import type { NextPage } from 'next';
+import type { PlannedRecipe, SavedIngredient } from '../utils/types';
 
 const Settings: NextPage = () => {
-    // State
-    const [localStorageDeleted, setLocalStorageDeleted] = React.useState(false);
+    // States
+    const [listItems, setListItems] = React.useState<Array<SavedIngredient>>([]);
+    const [plannedRecipes, setPlannedRecipes] = React.useState<Array<PlannedRecipe>>([]);
+    const [savedRecipes, setSavedRecipes] = React.useState([]);
+    const [searchStatus, setSearchStatus] = React.useState<'pending' | 'searching' | 'complete'>('pending');
+
+    // Effects
+    React.useEffect(() => {
+        const localListItems = localStorage.getItem(LSKey.shoppingList);
+        const localPlannedMeals = localStorage.getItem(LSKey.plannedRecipes);
+        const localSavedRecipes = localStorage.getItem(LSKey.savedRecipes);
+
+        if (localListItems) {
+            setListItems(JSON.parse(localListItems));
+        }
+
+        if (localPlannedMeals) {
+            setPlannedRecipes(JSON.parse(localPlannedMeals));
+        }
+
+        if (localSavedRecipes) {
+            setSavedRecipes(JSON.parse(localSavedRecipes));
+        }
+
+        setSearchStatus('complete');
+    }, []);
 
     // Event listeners
-    function handleDeleteLocalStorageClick() {
-        localStorage.removeItem('recipes');
-        const recipes = localStorage.getItem('recipes');
+    function handleDeleteLocalStorageOnClick() {
+        localStorage.removeItem(LSKey.shoppingList);
+        setListItems([]);
 
-        if (!recipes) {
-            setLocalStorageDeleted(true);
-        }
+        localStorage.removeItem(LSKey.plannedRecipes);
+        setPlannedRecipes([]);
+
+        localStorage.removeItem(LSKey.savedRecipes);
+        setSavedRecipes([]);
     }
 
     // Renderers
@@ -26,18 +62,49 @@ const Settings: NextPage = () => {
                 <h2>Settings</h2>
             </Card>
 
-            <h2>Local Storage</h2>
+            <Card>
+                <div className={styles.section}>
+                    <h2>Local Storage</h2>
 
-            <p>Flatbread uses your browser&apos;s <Link href='https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage'><a rel='noreferrer' target='_blank'><b>localStorage</b></a></Link> to save recipes locally for faster searches.</p>
-            <p>This setup reduces the number of network requests needed when you perform any type of search.</p>
-            <p>Flatbread will automatically save new recipes to your <b>localStorage</b> if new ones are detected.</p>
-            <p>If you would like to erase all Flatbread <b>localStorage</b> data, you can use the button below:</p>
+                    <p>
+                        Flatbread uses your browser&apos;s
+                        <a href='https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage' rel='noreferrer' target='_blank'>
+                            Local Storage
+                            <Icon ariaLabel='Open link in new tab' Icon={bxLinkExternal} />
+                        </a> to store data for the&nbsp;following:
+                    </p>
 
-            <button onClick={handleDeleteLocalStorageClick}>Delete all Flatbread <b>localStorage</b> data</button>
+                    <ul>
+                        <li><Icon ariaHidden={true} Icon={bxsHeart} />Saved recipes</li>
+                        <li><Icon ariaHidden={true} Icon={bxCalendarCheck} />Meal plan recipes</li>
+                        <li><Icon ariaHidden={true} Icon={bxListCheck} />Shopping list items</li>
+                    </ul>
 
-            {localStorageDeleted &&
-                <p role='status'>All Flatbread <b>localStorage</b> data successfully deleted.</p>
-            }
+                    <p>This data will persist until you clear your browser&apos;s&nbsp;cache.</p>
+
+                    {((searchStatus === 'complete') && (listItems.length > 0 || plannedRecipes.length > 0 || savedRecipes.length > 0)) &&
+                        <div className={styles.section}>
+                            <p>If you would like to erase all Flatbread <b>Local Storage</b> data, you can use the button&nbsp;below:</p>
+                            <div>
+                                <button onClick={handleDeleteLocalStorageOnClick}>Delete all Flatbread<br />Local Storage data</button>
+                            </div>
+                        </div>
+                    }
+                    {((searchStatus === 'complete') && (listItems.length === 0 && plannedRecipes.length === 0 && savedRecipes.length === 0)) &&
+                        <p>No Flatbread <b>Local Storage</b> found!</p>
+                    }
+                </div>
+
+                <hr />
+
+                <div className={styles.section}>
+                    <h2>Support</h2>
+
+                    <p>Questions, comments, found a bug?</p>
+
+                    <a href='https://github.com/SamSverko/flatbread/issues/new/choose' rel='noreferrer' target='_blank'>Let us know! <Icon ariaLabel='Open link in new tab' Icon={bxLinkExternal} /></a>
+                </div>
+            </Card>
         </>
     );
 };
