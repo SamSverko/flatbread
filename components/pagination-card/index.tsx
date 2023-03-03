@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import Card from '../card';
-import InputGroup2 from '../input-group-2';
+import InputGroup from '../input-group';
 
 import styles from './index.module.scss';
 
@@ -65,7 +65,7 @@ export const PaginationCard = ({
             <hr />
 
             <form onSubmit={handleFormOnSubmit}>
-                <InputGroup2
+                <InputGroup
                     button={<input type='submit' value='Go' />}
                     input={<input
                         id='input-jump-to-page'

@@ -10,90 +10,19 @@
         @include mixins.break-word;
     }
 
-    input {
-        margin: calc(var(--border-width) * -1) 0 0;
-        width: 100%;
-    }
-
-    .with-button {
-        align-items: center;
+    .input-container {
         display: flex;
-        justify-content: center;
         width: 100%;
 
-        button {
+        input,
+        select {
             margin: calc(var(--border-width) * -1) 0 0;
-        }
-    }
-
-    .found-categories-container {
-        position: relative;
-        width: 100%;
-
-        ul {
-            background-color: white;
-            border: var(--border);
-            display: none;
-            flex-direction: column;
-            list-style-type: none;
-            margin: 0;
-            max-height: calc(var(--input-height) * 3.8);
-            overflow: scroll;
-            padding: 0;
-            position: absolute;
-            top: -2px;
             width: 100%;
-            z-index: var(--z-index-category-list);
-
-            &.show {
-                display: flex;
-            }
-
-            li {
-                align-items: center;
-                cursor: pointer;
-                display: flex;
-                gap: var(--spacing-2);
-                justify-content: space-between;
-                padding: var(--spacing-2) var(--spacing-4);
-
-                &:hover {
-                    background-color: var(--list-item-background-color-hover);
-                }
-
-                &:focus {
-                    @include mixins.focus-outline;
-                }
-
-                &.hide {
-                    display: none;
-                }
-
-                &.none-found {
-                    background-color: white;
-                    cursor: default;
-                }
-
-                svg {
-                    pointer-events: none;
-                    visibility: hidden;
-                }
-
-                &[aria-pressed='true'] {
-                    svg {
-                        visibility: visible;
-                    }
-                }
-            }
         }
-    }
 
-    .selected-categories {
-        display: flex;
-        flex-wrap: wrap;
-        gap: var(--spacing-2);
-        list-style-type: none;
-        margin: var(--spacing-2) 0 0;
-        padding: 0;
+        button,
+        input[type='submit'] {
+            width: auto;
+        }
     }
 }

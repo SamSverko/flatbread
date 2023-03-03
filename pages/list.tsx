@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import Card from '../components/card';
 import Icon from '../components/icon';
-import InputGroup2 from '../components/input-group-2';
+import InputGroup from '../components/input-group';
 
 import { prisma } from '../prisma/db';
 import { getQuantityFractionFormat } from '../prisma/utils';
@@ -260,11 +260,11 @@ const List: NextPage<ListProps> = ({ quantityFractions }: ListProps) => {
                 <h2>Add to shopping list</h2>
 
                 <form className={styles.form} onSubmit={handleFormOnSubmit}>
-                    <InputGroup2
+                    <InputGroup
                         input={<input id='add-to-shopping-list-quantity' name='quantity' required type='number' />}
                         label={<label htmlFor='add-to-shopping-list-quantity'>Amount</label>}
                     />
-                    <InputGroup2
+                    <InputGroup
                         button={<input name='submit' type='submit' value='Add' />}
                         input={<input id='add-to-shopping-list-name' name='name' required type='text' />}
                         label={<label htmlFor='add-to-shopping-list-name'>Name</label>}

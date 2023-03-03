@@ -3,7 +3,7 @@ import * as React from 'react';
 
 import Card from '../components/card';
 import Icon from '../components/icon';
-import InputGroup2 from '../components/input-group-2';
+import InputGroup from '../components/input-group';
 
 import { LSKey } from '../utils/functions';
 
@@ -205,7 +205,7 @@ const Plan: NextPage = () => {
                 <h2>Add to meal plan</h2>
 
                 <form onSubmit={handleFormOnSubmit}>
-                    <InputGroup2
+                    <InputGroup
                         button={<input name='submit' type='submit' value='Add' />}
                         input={<input id='input-add-to-meal-plan' name='title' required type='text' />}
                         label={<label htmlFor='input-add-to-meal-plan'>Item</label>}

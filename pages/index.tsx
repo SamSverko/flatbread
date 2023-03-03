@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import Card from '../components/card';
-import InputGroup2 from '../components/input-group-2';
+import InputGroup from '../components/input-group';
 import PaginationCard from '../components/pagination-card';
 import RecipeCard from '../components/recipe-card';
 
@@ -132,7 +132,7 @@ const Index: NextPage<IndexProps> = ({
                 <h2>Search for recipes</h2>
 
                 <form onSubmit={handleFormOnSubmit} className={styles['search-form']}>
-                    <InputGroup2
+                    <InputGroup
                         input={<input id='input-title' name='title' type='search' />}
                         label={<label htmlFor='input-title'>Title</label>}
                     />
@@ -144,7 +144,7 @@ const Index: NextPage<IndexProps> = ({
                         <summary>Advanced options</summary>
 
                         <div className={styles['advanced-options-content']}>
-                            <InputGroup2
+                            <InputGroup
                                 input={<select id='select-course-types' multiple name='course-types'>
                                     {courseTypes.map((courseType) => {
                                         return <option key={`course-type-${courseType}`} value={courseType}>
@@ -154,7 +154,7 @@ const Index: NextPage<IndexProps> = ({
                                 </select>}
                                 label={<label htmlFor='select-course-types'>Course types</label>}
                             />
-                            <InputGroup2
+                            <InputGroup
                                 input={<select id='select-cuisines' multiple name='cuisines'>
                                     {cuisines.map((cuisine) => {
                                         return <option key={`cuisine-${cuisine}`} value={cuisine}>
@@ -164,7 +164,7 @@ const Index: NextPage<IndexProps> = ({
                                 </select>}
                                 label={<label htmlFor='select-cuisines'>Cuisines</label>}
                             />
-                            <InputGroup2
+                            <InputGroup
                                 input={<select id='select-dietary-restrictions' multiple name='dietary-restrictions'>
                                     {dietaryRestrictions.map((dietaryRestriction) => {
                                         return <option key={`dietary-restriction-${dietaryRestriction}`} value={dietaryRestriction}>
@@ -174,7 +174,7 @@ const Index: NextPage<IndexProps> = ({
                                 </select>}
                                 label={<label htmlFor='select-dietary-restriction-s'>Dietary restrictions</label>}
                             />
-                            <InputGroup2
+                            <InputGroup
                                 input={<select id='select-dish-types' multiple name='dish-types'>
                                     {dishTypes.map((dishType) => {
                                         return <option key={`dish-type-${dishType}`} value={dishType}>
