@@ -113,14 +113,14 @@ const Plan: NextPage = () => {
     }
 
     // Helpers
-    function updatePlannedRecipes(updatedPlannedRecipes: PlannedRecipe[]) {
-        localStorage.setItem(LSKey.plannedRecipes, JSON.stringify(updatedPlannedRecipes));
-        setPlannedRecipes(updatedPlannedRecipes);
-    }
-
     function removeAllPlannedRecipes() {
         localStorage.setItem(LSKey.plannedRecipes, JSON.stringify([]));
         setPlannedRecipes([]);
+    }
+
+    function updatePlannedRecipes(updatedPlannedRecipes: PlannedRecipe[]) {
+        localStorage.setItem(LSKey.plannedRecipes, JSON.stringify(updatedPlannedRecipes));
+        setPlannedRecipes(updatedPlannedRecipes);
     }
 
     // Renderers
@@ -207,7 +207,7 @@ const Plan: NextPage = () => {
                 <form onSubmit={handleFormOnSubmit}>
                     <InputGroup2
                         button={<input name='submit' type='submit' value='Add' />}
-                        input={<input id='input-add-to-meal-plan' name='title' type='text' />}
+                        input={<input id='input-add-to-meal-plan' name='title' required type='text' />}
                         label={<label htmlFor='input-add-to-meal-plan'>Item</label>}
                     />
                 </form>

@@ -1,0 +1,90 @@
+.list-heading {
+    align-items: center;
+    display: flex;
+    gap: var(--spacing-2);
+    justify-content: space-between;
+
+    button.hidden {
+        visibility: hidden;
+    }
+}
+
+.list {
+    align-items: space-between;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-5);
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+        align-items: center;
+        display: flex;
+        gap: var(--spacing-2);
+        justify-content: space-between;
+
+        .left {
+            align-items: flex-start;
+            display: flex;
+            gap: var(--spacing-2);
+            justify-content: center;
+            max-width: 60%;
+
+            input[type='number'] {
+                // font-size: 0.8rem;
+                width: 9ch;
+            }
+        }
+
+        .right {
+            align-items: center;
+            display: flex;
+            gap: var(--spacing-2);
+            justify-content: flex-end;
+
+            @media screen and (max-width: 256px) {
+                & {
+                    flex-wrap: wrap;
+                }
+            }
+        }
+    }
+}
+
+.form {
+    display: flex;
+
+    > div:first-child {
+        max-width: 80px;
+        width: auto;
+
+        label {
+            width: 100%;
+        }
+    }
+
+    > div:nth-child(2) {
+        margin-left: -2px;
+    }
+
+    @media only screen and (max-width: 295px) {
+        & {
+            flex-direction: column;
+            gap: var(--spacing-5);
+        }
+
+        > div:first-child {
+            max-width: 100%;
+            width: 100%;
+
+            label {
+                width: auto;
+            }
+        }
+
+        > div:nth-child(2) {
+            margin-left: 0;
+        }
+    }
+}

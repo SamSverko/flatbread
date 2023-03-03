@@ -4,6 +4,8 @@ import * as React from 'react';
 import Card from '../card';
 import Icon from '../icon';
 
+import { LSKey } from '../../utils/functions';
+
 import bxBowlHot from '../../public/icons/bx-bowl-hot.svg';
 import bxCalendarCheck from '../../public/icons/bx-calendar-check.svg';
 import bxCalendarPlus from '../../public/icons/bx-calendar-plus.svg';
@@ -20,7 +22,12 @@ import bxTimeFive from '../../public/icons/bx-time-five.svg';
 import styles from './index.module.scss';
 
 import type { Cuisine, RecipeNote, RecipeStep } from '@prisma/client';
-import type { PlannedRecipe, RecipeFormatted, RecipeIngredientResponse } from '../../utils/types';
+import type {
+    PlannedRecipe,
+    RecipeFormatted,
+    RecipeIngredientResponse,
+    SavedIngredient,
+} from '../../utils/types';
 
 type ComponentProps = {
     isPlanned: boolean;
@@ -40,7 +47,7 @@ const RecipeCard = ({
     const [isCopiedSelected, setIsCopiedSelected] = React.useState(false);
     const [isExpandSelected, setIsExpandSelected] = React.useState(false);
     const [isPlannedState, setIsPlannedState] = React.useState(isPlanned);
-    const [isIngredientsExpanded, setIsIngredientsExpanded] = React.useState(false);
+    const [isIngredientsExpanded, setIsIngredientsExpanded] = React.useState(true);
     const [isNotesExpanded, setIsNotesExpanded] = React.useState(false);
     const [isSavedState, setIsSavedState] = React.useState(isSaved);
     const [isStepsExpanded, setIsStepsExpanded] = React.useState(false);
@@ -55,8 +62,65 @@ const RecipeCard = ({
     }, [isCategoriesExpanded, isIngredientsExpanded, isNotesExpanded, isStepsExpanded]);
 
     // Event listeners
-    function handleAddIngredientOnClick(ingredient: RecipeIngredientResponse, quantityValue: number) {
-        console.log(ingredient, quantityValue);
+    function handleAddIngredientOnClick(event: React.MouseEvent<HTMLButtonElement>, ingredient: RecipeIngredientResponse) {
+        const target = event.target;
+        if ((target as HTMLButtonElement).getAttribute('aria-pressed') === 'true') return;
+
+        const shoppingList = localStorage.getItem(LSKey.shoppingList);
+        
+        let quantity = 0;
+        if (ingredient.quantityMaxWhole) {
+            quantity += ingredient.quantityMaxWhole;
+        }
+        if (ingredient.quantityMaxFraction) {
+            quantity += Number(Number(ingredient.quantityMaxFraction.value).toFixed(3));
+        }
+        if (ingredient.quantityWhole) {
+            quantity += ingredient.quantityWhole;
+        }
+        if (ingredient.quantityFraction) {
+            quantity += Number(Number(ingredient.quantityFraction.value).toFixed(3));
+        }
+        
+        const ingredientToAdd: SavedIngredient = {
+            isComplete: false,
+            name: {
+                name: ingredient.name.name,
+                namePlural: ingredient.name.namePlural,
+            },
+            quantity: quantity,
+        };
+
+        if (ingredient.unit) {
+            ingredientToAdd.unit = {
+                name: ingredient.unit.name,
+                nameAbbr: ingredient.unit.nameAbbr,
+                namePlural: ingredient.unit.namePlural,
+            };
+        }
+
+        if (!shoppingList) {
+            localStorage.setItem(LSKey.shoppingList, `[${JSON.stringify(ingredientToAdd)}]`);
+        } else {
+            const shoppingListArray: SavedIngredient[] = JSON.parse(shoppingList);
+            const ingredientToAddIndex = shoppingListArray.findIndex(listItem => listItem.name.name === ingredientToAdd.name.name);
+            
+            if (ingredientToAddIndex === -1) {
+                shoppingListArray.push(ingredientToAdd);
+            } else {
+                const newQuantity = shoppingListArray[ingredientToAddIndex].quantity + ingredientToAdd.quantity;
+
+                shoppingListArray[ingredientToAddIndex].quantity = Number(newQuantity.toFixed(3));
+                shoppingListArray[ingredientToAddIndex].isComplete = false;
+            }
+
+            localStorage.setItem(LSKey.shoppingList, JSON.stringify(shoppingListArray));
+        }
+
+        if (!target) return;
+
+        (target as HTMLButtonElement).setAttribute('aria-pressed', 'true');
+        window.setTimeout(() => (target as HTMLButtonElement).setAttribute('aria-pressed', 'false'), 500);
     }
 
     async function handleCopyLinkOnClick() {
@@ -80,7 +144,7 @@ const RecipeCard = ({
     }
 
     function handlePlanRecipeOnClick() {
-        const plannedRecipes = localStorage.getItem('planned-recipes');
+        const plannedRecipes = localStorage.getItem(LSKey.plannedRecipes);
         const currentRecipe: PlannedRecipe = {
             title: recipe.title,
             isComplete: false,
@@ -88,7 +152,7 @@ const RecipeCard = ({
         };
 
         if (!plannedRecipes) {
-            localStorage.setItem('planned-recipes', `[${JSON.stringify(currentRecipe)}]`);
+            localStorage.setItem(LSKey.plannedRecipes, `[${JSON.stringify(currentRecipe)}]`);
             setIsPlannedState(true);
         } else {
             const plannedRecipesArray = JSON.parse(plannedRecipes);
@@ -96,11 +160,11 @@ const RecipeCard = ({
 
             if (plannedRecipeIndex === -1) {
                 plannedRecipesArray.push(currentRecipe);
-                localStorage.setItem('planned-recipes', JSON.stringify(plannedRecipesArray));
+                localStorage.setItem(LSKey.plannedRecipes, JSON.stringify(plannedRecipesArray));
                 setIsPlannedState(true);
             } else {
                 plannedRecipesArray.splice(plannedRecipeIndex, 1);
-                localStorage.setItem('planned-recipes', JSON.stringify(plannedRecipesArray));
+                localStorage.setItem(LSKey.plannedRecipes, JSON.stringify(plannedRecipesArray));
                 setIsPlannedState(false);
             }
         }
@@ -124,10 +188,10 @@ const RecipeCard = ({
     }
 
     function handleSaveRecipeOnClick() {
-        const savedRecipes = localStorage.getItem('saved-recipes');
+        const savedRecipes = localStorage.getItem(LSKey.savedRecipes);
 
         if (!savedRecipes) {
-            localStorage.setItem('saved-recipes', `[${JSON.stringify(recipe)}]`);
+            localStorage.setItem(LSKey.savedRecipes, `[${JSON.stringify(recipe)}]`);
             setIsSavedState(true);
         } else {
             const savedRecipesArray = JSON.parse(savedRecipes);
@@ -135,11 +199,11 @@ const RecipeCard = ({
 
             if (savedRecipeIndex === -1) {
                 savedRecipesArray.push(recipe);
-                localStorage.setItem('saved-recipes', JSON.stringify(savedRecipesArray));
+                localStorage.setItem(LSKey.savedRecipes, JSON.stringify(savedRecipesArray));
                 setIsSavedState(true);
             } else {
                 savedRecipesArray.splice(savedRecipeIndex, 1);
-                localStorage.setItem('saved-recipes', JSON.stringify(savedRecipesArray));
+                localStorage.setItem(LSKey.savedRecipes, JSON.stringify(savedRecipesArray));
                 setIsSavedState(false);
                 if (onRemoveFromSaved) onRemoveFromSaved();
             }
@@ -334,13 +398,14 @@ const RecipeCard = ({
                                     <div className={styles['details']}>
                                         <input id={ingredientId} type='checkbox' />
                                         <label className='no-styles' htmlFor={ingredientId}>
-                                            <b>{parsedIngredient.quantity} {parsedIngredient.unit} {parsedIngredient.name}</b>
+                                            {parsedIngredient.quantity} {parsedIngredient.unit} <b>{parsedIngredient.name}</b>
                                             <em>{parsedIngredient.alteration}</em>{parsedIngredient.optional}{parsedIngredient.substitutions}
                                         </label>
                                     </div>
                                     <button
+                                        aria-pressed={false}
                                         className='icon-only'
-                                        onClick={() => handleAddIngredientOnClick(ingredient, parsedIngredient.quantityValue)}
+                                        onClick={(event) => handleAddIngredientOnClick(event, ingredient)}
                                     >
                                         <Icon ariaLabel='Add ingredient to shopping list' Icon={bxListPlus} />
                                     </button>

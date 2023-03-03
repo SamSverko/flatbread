@@ -100,7 +100,6 @@ const dishTypes: Prisma.DishTypeCreateInput[] = [
 ];
 
 const quantityFractions: Prisma.QuantityFractionCreateInput[] = [
-    { name: '0', value: 0 },
     { name: '⅒', value: 0.1 },
     { name: '⅑', value: 0.111 },
     { name: '⅛', value: 0.125 },

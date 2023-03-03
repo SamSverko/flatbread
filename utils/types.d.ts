@@ -42,10 +42,10 @@ export type SavedIngredient = {
         namePlural: string;
     }
     quantity: number;
-    unit: {
-        name: ingredient.unit.name,
-        nameAbbr: ingredient.unit.nameAbbr,
-        namePlural: ingredient.unit.namePlural,
+    unit?: {
+        name: ingredient.unit.name;
+        nameAbbr: ingredient.unit.nameAbbr;
+        namePlural: ingredient.unit.namePlural;
     }
 }
 
