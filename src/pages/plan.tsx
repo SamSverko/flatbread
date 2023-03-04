@@ -5,7 +5,7 @@ import Card from '../components/card';
 import Icon from '../components/icon';
 import InputGroup from '../components/input-group';
 
-import { LSKey } from '../utils/functions';
+import { LSKey } from '../utils';
 
 import bxDownArrowAlt from '../../public/icons/bx-down-arrow-alt.svg';
 import bxTrash from '../../public/icons/bx-trash.svg';
@@ -14,7 +14,7 @@ import bxUpArrowAlt from '../../public/icons/bx-up-arrow-alt.svg';
 import styles from '../styles/plan.module.scss';
 
 import type { NextPage } from 'next';
-import type { PlannedRecipe } from '../utils/types';
+import type { PlannedRecipe } from '../types';
 
 const Plan: NextPage = () => {
     // States

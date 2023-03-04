@@ -3,7 +3,7 @@ import * as React from 'react';
 import Card from '../components/card';
 import Icon from '../components/icon';
 
-import { LSKey } from '../utils/functions';
+import { LSKey } from '../utils';
 
 import bxCalendarCheck from '../../public/icons/bx-calendar-check.svg';
 import bxLinkExternal from '../../public/icons/bx-link-external.svg';
@@ -13,7 +13,7 @@ import bxsHeart from '../../public/icons/bxs-heart.svg';
 import styles from '../styles/settings.module.scss';
 
 import type { NextPage } from 'next';
-import type { PlannedRecipe, SavedIngredient } from '../utils/types';
+import type { PlannedRecipe, SavedIngredient } from '../types';
 
 const Settings: NextPage = () => {
     // States

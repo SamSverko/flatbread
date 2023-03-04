@@ -4,10 +4,10 @@ import { useRouter } from 'next/router';
 import Card from '../../components/card';
 import RecipeCard from '../../components/recipe-card';
 
-import { LSKey } from '../../utils/functions';
+import { LSKey } from '../../utils';
 
 import type { NextPage } from 'next';
-import type { PlannedRecipe, RecipeFormatted } from '../../utils/types';
+import type { PlannedRecipe, RecipeFormatted } from '../../types';
 
 const RecipePage: NextPage = () => {
     const router = useRouter();

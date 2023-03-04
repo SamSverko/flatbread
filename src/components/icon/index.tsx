@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import styles from './index.module.scss';
 
-import type { SVGElement } from '../../utils/types';
+import type { SVGElement } from '../../types';
 
 type ComponentProps = {
     ariaHidden?: boolean;

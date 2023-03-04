@@ -5,7 +5,7 @@ import Icon from '../icon';
 
 import styles from './index.module.scss';
 
-import type { Route } from '../../utils/types';
+import type { Route } from '../../types';
 
 type ComponentsProps = {
     activeRoute: string;

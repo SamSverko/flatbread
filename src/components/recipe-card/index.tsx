@@ -4,7 +4,7 @@ import * as React from 'react';
 import Card from '../card';
 import Icon from '../icon';
 
-import { LSKey } from '../../utils/functions';
+import { LSKey } from '../../utils';
 
 import bxBowlHot from '../../../public/icons/bx-bowl-hot.svg';
 import bxCalendarCheck from '../../../public/icons/bx-calendar-check.svg';
@@ -27,7 +27,7 @@ import type {
     RecipeFormatted,
     RecipeIngredientResponse,
     SavedIngredient,
-} from '../../utils/types';
+} from '../../types';
 
 type ComponentProps = {
     isPlanned: boolean;

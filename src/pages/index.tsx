@@ -6,13 +6,13 @@ import PaginationCard from '../components/pagination-card';
 import RecipeCard from '../components/recipe-card';
 
 import { prisma } from '../prisma/db';
-import { capitalizeFirstLetter, LSKey } from '../utils/functions';
+import { capitalizeFirstLetter, LSKey } from '../utils';
 import { getCategoryFormat } from '../prisma/utils';
 
 import styles from '../styles/index.module.scss';
 
 import type { NextPage } from 'next';
-import type { PlannedRecipe, RecipeFormatted } from '../utils/types';
+import type { PlannedRecipe, RecipeFormatted } from '../types';
 
 type IndexProps = {
     courseTypes: string[];

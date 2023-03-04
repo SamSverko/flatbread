@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import * as React from 'react';
 
 import NavCard from '../components/nav-card';
-import { formatPageTitle } from '../utils/functions';
+import { formatPageTitle } from '../utils';
 
 import bxCog from '../../public/icons/bx-cog.svg';
 import bxsHeart from '../../public/icons/bxs-heart.svg';
@@ -15,7 +15,7 @@ import '../styles/global.scss';
 import '../styles/variables.css';
 
 import type { AppProps } from 'next/app';
-import type { Route } from '../utils/types';
+import type { Route } from '../types';
 
 const routes: Route[] = [
     {

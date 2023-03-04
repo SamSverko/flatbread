@@ -6,7 +6,7 @@ import InputGroup from '../components/input-group';
 
 import { prisma } from '../prisma/db';
 import { getQuantityFractionFormat } from '../prisma/utils';
-import { LSKey } from '../utils/functions';
+import { LSKey } from '../utils';
 
 import bxDownArrowAlt from '../../public/icons/bx-down-arrow-alt.svg';
 import bxTrash from '../../public/icons/bx-trash.svg';
@@ -15,7 +15,7 @@ import bxUpArrowAlt from '../../public/icons/bx-up-arrow-alt.svg';
 import styles from '../styles/list.module.scss';
 
 import type { NextPage } from 'next';
-import type { SavedIngredient } from '../utils/types';
+import type { SavedIngredient } from '../types';
 
 type ListProps = {
     quantityFractions: QuantityFraction[];

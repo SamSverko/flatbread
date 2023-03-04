@@ -4,12 +4,12 @@ import Card from '../components/card';
 import PaginationCard from '../components/pagination-card';
 import RecipeCard from '../components/recipe-card';
 
-import { LSKey } from '../utils/functions';
+import { LSKey } from '../utils';
 
 import styles from '../styles/saved.module.scss';
 
 import type { NextPage } from 'next';
-import type { PlannedRecipe, RecipeFormatted } from '../utils/types';
+import type { PlannedRecipe, RecipeFormatted } from '../types';
 
 const Saved: NextPage = () => {
     // Refs
