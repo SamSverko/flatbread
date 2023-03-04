@@ -493,7 +493,7 @@ const RecipeCard = ({
         return (
             <h2 className={styles.title}>
                 <Link href={`/recipe/${recipe.slug}`}>
-                    <a>{recipe.title}</a>
+                    {recipe.title}
                 </Link>
             </h2>
         );

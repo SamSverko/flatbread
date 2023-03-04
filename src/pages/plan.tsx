@@ -158,7 +158,7 @@ const Plan: NextPage = () => {
                                         <label className='no-styles' htmlFor={plannedRecipeId}>
                                             {plannedRecipe.url &&
                                                 <Link href={plannedRecipe.url}>
-                                                    <a>{plannedRecipe.title}</a>
+                                                    {plannedRecipe.title}
                                                 </Link>
                                             }
                                             {!plannedRecipe.url &&

@@ -185,7 +185,7 @@ export function validateQueryParamCategoryFilter(res: NextApiResponse, categoryN
     return categories;
 }
 
-export function validateQueryParamCategory(res: NextApiResponse, value: string | string[]) {
+export function validateQueryParamCategory(res: NextApiResponse, value: string | string[] | undefined) {
     const category = value?.toString().toLowerCase().trim();
     const formattedCategories = categoryTables.map(category => category.toLowerCase());
 
@@ -290,12 +290,12 @@ export function validateQueryParamDishTypes(res: NextApiResponse, value: string 
     return dishTypes;
 }
 
-export function validateQueryParamId(res: NextApiResponse, value: string | string[]) {
-    const id = parseInt(value?.toString().trim());
-
-    if (!id) {
+export function validateQueryParamId(res: NextApiResponse, value: string | string[] | undefined) {
+    if (!value) {
         return res.status(400).json('Missing query parameter `id`. Fix: Provide a number value.');
     }
+
+    const id = parseInt(value?.toString().trim());
 
     return id;
 }
@@ -315,7 +315,7 @@ export function validateQueryParamIngredients(res: NextApiResponse, value: strin
     }
 }
 
-export function validateQueryParamName(res: NextApiResponse, value: string | string[]) {
+export function validateQueryParamName(res: NextApiResponse, value: string | string[] | undefined) {
     const name = value?.toString().trim();
 
     if (!name) {
@@ -325,7 +325,7 @@ export function validateQueryParamName(res: NextApiResponse, value: string | str
     return name;
 }
 
-export function validateQueryParamNameAbbr(res: NextApiResponse, value: string | string[]) {
+export function validateQueryParamNameAbbr(res: NextApiResponse, value: string | string[] | undefined) {
     const nameAbbr = value?.toString().trim();
 
     if (!nameAbbr) {
@@ -335,7 +335,7 @@ export function validateQueryParamNameAbbr(res: NextApiResponse, value: string |
     return nameAbbr;
 }
 
-export function validateQueryParamNamePlural(res: NextApiResponse, value: string | string[]) {
+export function validateQueryParamNamePlural(res: NextApiResponse, value: string | string[] | undefined) {
     const namePlural = value?.toString().trim();
 
     if (!namePlural) {
@@ -362,8 +362,8 @@ export function validateQueryParamNotes(res: NextApiResponse, value: string | st
 
 export function validateQueryParamOrderByField(
     res: NextApiResponse,
-    orderByValue: string | string[],
-    orderByFieldValue: string | string[],
+    orderByValue: string | string[] | undefined,
+    orderByFieldValue: string | string[] | undefined,
     orderByFieldOptions: string[],
 ) {
     const orderByOptions = ['asc', 'desc'];
@@ -379,7 +379,7 @@ export function validateQueryParamOrderByField(
         return res.status(400).json(`Invalid value for query parameter \`orderBy\`. Fix: Use either \`${orderByOptions.join('`, `')}\`, or omit parameter entirely (along with the \`orderByField\` parameter).`);
     }
 
-    const orderByFieldIndex = formattedOrderByFieldOptions.indexOf(orderByField);
+    const orderByFieldIndex = formattedOrderByFieldOptions.indexOf(orderByField as string);
 
     if (orderByFieldIndex === -1) {
         return res.status(400).json(`Invalid value for query parameter \`orderByField\`. Fix: Use either \`${orderByFieldOptions.join('`, `')}\`, or omit parameter entirely (along with the \`orderBy\` parameter).`);
@@ -543,7 +543,7 @@ export function validateQueryParamTitleSearch(res: NextApiResponse, value: strin
     return title;
 }
 
-export function validateQueryParamUUID(res: NextApiResponse, value: string | string[]) {
+export function validateQueryParamUUID(res: NextApiResponse, value: string | string[] | undefined) {
     const uuid = value?.toString().trim();
 
     if (!uuid) {
@@ -553,12 +553,12 @@ export function validateQueryParamUUID(res: NextApiResponse, value: string | str
     return uuid;
 }
 
-export function validateQueryParamValue(res: NextApiResponse, value: string | string[]) {
-    const paramValue = parseFloat(value?.toString().trim());
-
-    if (!paramValue) {
+export function validateQueryParamValue(res: NextApiResponse, value: string | string[] | undefined) {
+    if (!value) {
         return res.status(400).json('Missing query parameter `value`. Fix: Provide a number value.');
     }
+
+    const paramValue = parseFloat(value?.toString().trim());
 
     return paramValue;
 }

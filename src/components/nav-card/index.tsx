@@ -21,11 +21,9 @@ const NavCard = ({ activeRoute, routes }: ComponentsProps) => {
                     {routes.map((route, index) => {
                         return (
                             <li key={`nav-link-${index}`}>
-                                <Link href={route.path}>
-                                    <a className={(activeRoute === route.path) ? styles.active : ''}>
-                                        <Icon ariaHidden={true} Icon={route.icon} />
-                                        {route.title}
-                                    </a>
+                                <Link className={(activeRoute === route.path) ? styles.active : ''} href={route.path}>
+                                    <Icon ariaHidden={true} Icon={route.icon} />
+                                    {route.title}
                                 </Link>
                             </li>
                         );
