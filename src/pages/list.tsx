@@ -8,9 +8,9 @@ import { prisma } from '../prisma/db';
 import { getQuantityFractionFormat } from '../prisma/utils';
 import { LSKey } from '../utils/functions';
 
-import bxDownArrowAlt from '../public/icons/bx-down-arrow-alt.svg';
-import bxTrash from '../public/icons/bx-trash.svg';
-import bxUpArrowAlt from '../public/icons/bx-up-arrow-alt.svg';
+import bxDownArrowAlt from '../../public/icons/bx-down-arrow-alt.svg';
+import bxTrash from '../../public/icons/bx-trash.svg';
+import bxUpArrowAlt from '../../public/icons/bx-up-arrow-alt.svg';
 
 import styles from '../styles/list.module.scss';
 
@@ -177,7 +177,7 @@ const List: NextPage<ListProps> = ({ quantityFractions }: ListProps) => {
             unit = (quantity > 1 || (quantity === 1) && quantityRemainder > 0) ? listItem.unit.namePlural : listItem.unit.name;
         }
 
-        return <>{quantity}{quantityFraction} {unit} <b>{name}</b></>;
+        return <>{(quantity === 0) ? '' : quantity}{quantityFraction} {unit} <b>{name}</b></>;
     }
 
     return (

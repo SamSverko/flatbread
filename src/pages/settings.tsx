@@ -5,10 +5,10 @@ import Icon from '../components/icon';
 
 import { LSKey } from '../utils/functions';
 
-import bxCalendarCheck from '../public/icons/bx-calendar-check.svg';
-import bxLinkExternal from '../public/icons/bx-link-external.svg';
-import bxListCheck from '../public/icons/bx-list-check.svg';
-import bxsHeart from '../public/icons/bxs-heart.svg';
+import bxCalendarCheck from '../../public/icons/bx-calendar-check.svg';
+import bxLinkExternal from '../../public/icons/bx-link-external.svg';
+import bxListCheck from '../../public/icons/bx-list-check.svg';
+import bxsHeart from '../../public/icons/bxs-heart.svg';
 
 import styles from '../styles/settings.module.scss';
 

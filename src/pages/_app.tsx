@@ -5,11 +5,11 @@ import * as React from 'react';
 import NavCard from '../components/nav-card';
 import { formatPageTitle } from '../utils/functions';
 
-import BxCog from '../public/icons/bx-cog.svg';
-import bxsHeart from '../public/icons/bxs-heart.svg';
-import bxCalendarCheck from '../public/icons/bx-calendar-check.svg';
-import bxListCheck from '../public/icons/bx-list-check.svg';
-import bxSearch from '../public/icons/bx-search.svg';
+import bxCog from '../../public/icons/bx-cog.svg';
+import bxsHeart from '../../public/icons/bxs-heart.svg';
+import bxCalendarCheck from '../../public/icons/bx-calendar-check.svg';
+import bxListCheck from '../../public/icons/bx-list-check.svg';
+import bxSearch from '../../public/icons/bx-search.svg';
 
 import '../styles/global.scss';
 import '../styles/variables.css';
@@ -21,7 +21,7 @@ const routes: Route[] = [
     {
         path: '/settings',
         title: 'Settings',
-        icon: BxCog,
+        icon: bxCog,
     },
     {
         path: '/saved',

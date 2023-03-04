@@ -6,18 +6,18 @@ import Icon from '../icon';
 
 import { LSKey } from '../../utils/functions';
 
-import bxBowlHot from '../../public/icons/bx-bowl-hot.svg';
-import bxCalendarCheck from '../../public/icons/bx-calendar-check.svg';
-import bxCalendarPlus from '../../public/icons/bx-calendar-plus.svg';
-import bxCollapseVertical from '../../public/icons/bx-collapse-vertical.svg';
-import bxExpandVertical from '../../public/icons/bx-expand-vertical.svg';
-import bxHeart from '../../public/icons/bx-heart.svg';
-import bxsHeart from '../../public/icons/bxs-heart.svg';
-import bxIdCard from '../../public/icons/bx-id-card.svg';
-import bxLink from '../../public/icons/bx-link.svg';
-import bxLinkExternal from '../../public/icons/bx-link-external.svg';
-import bxListPlus from '../../public/icons/bx-list-plus.svg';
-import bxTimeFive from '../../public/icons/bx-time-five.svg';
+import bxBowlHot from '../../../public/icons/bx-bowl-hot.svg';
+import bxCalendarCheck from '../../../public/icons/bx-calendar-check.svg';
+import bxCalendarPlus from '../../../public/icons/bx-calendar-plus.svg';
+import bxCollapseVertical from '../../../public/icons/bx-collapse-vertical.svg';
+import bxExpandVertical from '../../../public/icons/bx-expand-vertical.svg';
+import bxHeart from '../../../public/icons/bx-heart.svg';
+import bxsHeart from '../../../public/icons/bxs-heart.svg';
+import bxIdCard from '../../../public/icons/bx-id-card.svg';
+import bxLink from '../../../public/icons/bx-link.svg';
+import bxLinkExternal from '../../../public/icons/bx-link-external.svg';
+import bxListPlus from '../../../public/icons/bx-list-plus.svg';
+import bxTimeFive from '../../../public/icons/bx-time-five.svg';
 
 import styles from './index.module.scss';
 

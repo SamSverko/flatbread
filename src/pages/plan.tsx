@@ -7,9 +7,9 @@ import InputGroup from '../components/input-group';
 
 import { LSKey } from '../utils/functions';
 
-import bxDownArrowAlt from '../public/icons/bx-down-arrow-alt.svg';
-import bxTrash from '../public/icons/bx-trash.svg';
-import bxUpArrowAlt from '../public/icons/bx-up-arrow-alt.svg';
+import bxDownArrowAlt from '../../public/icons/bx-down-arrow-alt.svg';
+import bxTrash from '../../public/icons/bx-trash.svg';
+import bxUpArrowAlt from '../../public/icons/bx-up-arrow-alt.svg';
 
 import styles from '../styles/plan.module.scss';
 
