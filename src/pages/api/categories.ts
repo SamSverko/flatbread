@@ -22,6 +22,7 @@ type CategoriesResponse = {
 }
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    const method = req.method;
     const {
         condensed,
         orderBy,
@@ -34,63 +35,69 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         orderByFieldValidated,
         showOnlyValidated;
 
-    // VALIDATION =============================================================
-    if (condensed) {
-        condensedValidated = validateQueryParamCondensed(res, condensed);
-        if (condensedValidated === undefined) return;
+    if (method === 'GET') {
+        // VALIDATION =============================================================
+        if (condensed) {
+            condensedValidated = validateQueryParamCondensed(res, condensed);
+            if (condensedValidated === undefined) return;
+        }
+
+        if (orderBy || orderByField) {
+            const orderByFieldValidation = validateQueryParamOrderByField(res, orderBy, orderByField, ['createdAt', 'name']);
+            if (orderByFieldValidation === undefined) return;
+
+            orderByValidated = orderByFieldValidation.orderBy;
+            orderByFieldValidated = orderByFieldValidation.orderByField;
+        }
+
+        if (showOnly) {
+            showOnlyValidated = validateQueryParamShowOnly(res, showOnly);
+            if (showOnlyValidated === undefined) return;
+        }
+
+        // QUERY ==================================================================
+        const response: CategoriesResponse = {};
+
+        if (!showOnlyValidated || showOnlyValidated.includes('coursetypes')) {
+            response.courseTypes = await prisma.courseType.findMany({
+                select: getCategoryFormat(condensedValidated),
+                orderBy: {
+                    [orderByFieldValidated as string]: orderByValidated,
+                },
+            });
+        }
+
+        if (!showOnlyValidated || showOnlyValidated.includes('cuisines')) {
+            response.cuisines = await prisma.cuisine.findMany({
+                select: getCategoryFormat(condensedValidated),
+                orderBy: {
+                    [orderByFieldValidated as string]: orderByValidated,
+                },
+            });
+        }
+
+        if (!showOnlyValidated || showOnlyValidated.includes('dietaryrestrictions')) {
+            response.dietaryRestrictions = await prisma.dietaryRestriction.findMany({
+                select: getCategoryFormat(condensedValidated),
+                orderBy: {
+                    [orderByFieldValidated as string]: orderByValidated,
+                },
+            });
+        }
+
+        if (!showOnlyValidated || showOnlyValidated.includes('dishtypes')) {
+            response.dishTypes = await prisma.dishType.findMany({
+                select: getCategoryFormat(condensedValidated),
+                orderBy: {
+                    [orderByFieldValidated as string]: orderByValidated,
+                },
+            });
+        }
+
+        res.status(200).json(response);
+    } else {
+        const permittedMethods = ['GET'];
+        res.setHeader('Allow', permittedMethods);
+        res.status(405).end(`Method \`${method}\` not allowed. Allowed methods: \`${permittedMethods.join('`, `')}\`.`);
     }
-
-    if (orderBy || orderByField) {
-        const orderByFieldValidation = validateQueryParamOrderByField(res, orderBy, orderByField, ['createdAt', 'name']);
-        if (orderByFieldValidation === undefined) return;
-
-        orderByValidated = orderByFieldValidation.orderBy;
-        orderByFieldValidated = orderByFieldValidation.orderByField;
-    }
-
-    if (showOnly) {
-        showOnlyValidated = validateQueryParamShowOnly(res, showOnly);
-        if (showOnlyValidated === undefined) return;
-    }
-
-    // QUERY ==================================================================
-    const response: CategoriesResponse = {};
-
-    if (!showOnlyValidated || showOnlyValidated.includes('coursetypes')) {
-        response.courseTypes = await prisma.courseType.findMany({
-            select: getCategoryFormat(condensedValidated),
-            orderBy: {
-                [orderByFieldValidated as string]: orderByValidated,
-            },
-        });
-    }
-
-    if (!showOnlyValidated || showOnlyValidated.includes('cuisines')) {
-        response.cuisines = await prisma.cuisine.findMany({
-            select: getCategoryFormat(condensedValidated),
-            orderBy: {
-                [orderByFieldValidated as string]: orderByValidated,
-            },
-        });
-    }
-
-    if (!showOnlyValidated || showOnlyValidated.includes('dietaryrestrictions')) {
-        response.dietaryRestrictions = await prisma.dietaryRestriction.findMany({
-            select: getCategoryFormat(condensedValidated),
-            orderBy: {
-                [orderByFieldValidated as string]: orderByValidated,
-            },
-        });
-    }
-
-    if (!showOnlyValidated || showOnlyValidated.includes('dishtypes')) {
-        response.dishTypes = await prisma.dishType.findMany({
-            select: getCategoryFormat(condensedValidated),
-            orderBy: {
-                [orderByFieldValidated as string]: orderByValidated,
-            },
-        });
-    }
-
-    res.status(200).json(response);
 }
