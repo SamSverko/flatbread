@@ -1,3 +1,4 @@
+import { SessionProvider } from 'next-auth/react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import * as React from 'react';
@@ -45,13 +46,16 @@ const routes: Route[] = [
     },
 ];
 
-function App({ Component, pageProps }: AppProps) {
+function App({
+    Component,
+    pageProps: { session, ...pageProps },
+}: AppProps) {
     const router = useRouter();
     const matchedRoute = routes.find((route: Route) => route.path === router.pathname);
 
     // Renderers
     return (
-        <>
+        <SessionProvider session={session}>
             <Head>
                 <link href='/apple-touch-icon.png' rel='apple-touch-icon' sizes='180x180' />
                 <link href='/favicon-32x32.png' rel='icon' sizes='32x32' type='image/png' />
@@ -70,7 +74,7 @@ function App({ Component, pageProps }: AppProps) {
             </Head>
             <Component {...pageProps} />
             <NavCard activeRoute={(matchedRoute) ? matchedRoute.path : ''} routes={routes} />
-        </>
+        </SessionProvider>
     );
 }
 

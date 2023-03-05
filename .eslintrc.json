@@ -23,19 +23,38 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "comma-dangle": ["error", "always-multiline"],
-        "eol-last": ["error", "always"],
-        "indent": ["error", 4],
+        "comma-dangle": [
+            "error",
+            "always-multiline"
+        ],
+        "eol-last": [
+            "error",
+            "always"
+        ],
+        "indent": [
+            "error",
+            4
+        ],
         "no-param-reassign": "off",
-        "object-curly-spacing": ["error", "always"],
-        "quotes": ["error", "single", {
-            "avoidEscape": true
-        }],
-        "semi": ["error", "always"]
+        "object-curly-spacing": [
+            "error",
+            "always"
+        ],
+        "quotes": [
+            "error",
+            "single",
+            {
+                "avoidEscape": true
+            }
+        ],
+        "semi": [
+            "error",
+            "always"
+        ]
     },
     "settings": {
         "react": {
             "version": "detect"
-          }
+        }
     }
 }
