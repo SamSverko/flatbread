@@ -4,7 +4,7 @@ import Card from '../components/card';
 
 import type { NextPage } from 'next';
 
-const NotFoundPage: NextPage = () => {
+const NotFound: NextPage = () => {
     const foodPuns = [
         '🥚 Have an egg-cellent day!',
         '🧈 You butter believe it.',
@@ -40,4 +40,4 @@ const NotFoundPage: NextPage = () => {
     );
 };
 
-export default NotFoundPage;
+export default NotFound;

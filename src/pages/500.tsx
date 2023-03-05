@@ -4,7 +4,7 @@ import Card from '../components/card';
 
 import type { NextPage } from 'next';
 
-const ServerErrorPage: NextPage = () => {
+const ServerError: NextPage = () => {
     // Renderers
     return (
         <>
@@ -19,4 +19,4 @@ const ServerErrorPage: NextPage = () => {
     );
 };
 
-export default ServerErrorPage;
+export default ServerError;

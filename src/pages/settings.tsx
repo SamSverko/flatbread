@@ -1,3 +1,4 @@
+import { signIn } from 'next-auth/react';
 import * as React from 'react';
 
 import Card from '../components/card';
@@ -67,8 +68,7 @@ const Settings: NextPage = () => {
                     <h2>Local Storage</h2>
 
                     <p>
-                        Flatbread uses your browser&apos;s
-                        <a href='https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage' rel='noreferrer' target='_blank'>
+                        Flatbread uses your browser&apos;s <a href='https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage' rel='noreferrer' target='_blank'>
                             Local Storage
                             <Icon ariaLabel='Open link in new tab' Icon={bxLinkExternal} />
                         </a> to store data for the&nbsp;following:
@@ -103,6 +103,18 @@ const Settings: NextPage = () => {
                     <p>Questions, comments, found a bug?</p>
 
                     <a href='https://github.com/SamSverko/flatbread/issues/new/choose' rel='noreferrer' target='_blank'>Let us know! <Icon ariaLabel='Open link in new tab' Icon={bxLinkExternal} /></a>
+                </div>
+
+                <hr />
+
+                <div className={styles.section}>
+                    <h2>Admin</h2>
+
+                    <p>At this time, only admins can edit recipe data.</p>
+
+                    <div>
+                        <button onClick={() => signIn('github', { callbackUrl: 'http://localhost:3000/admin' })}>Sign in as admin</button>
+                    </div>
                 </div>
             </Card>
         </>
