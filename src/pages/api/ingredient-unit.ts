@@ -1,5 +1,7 @@
+import { getServerSession } from 'next-auth/next';
 import { Prisma } from '@prisma/client';
 
+import authOptions from './auth/[...nextauth]';
 import { prisma } from '../../prisma/db';
 import {
     validateQueryParamId,
@@ -23,6 +25,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         nameValidated,
         nameAbbrValidated,
         namePluralValidated;
+
+    // ADMIN-ONLY ROUTE =======================================================
+    const session = await getServerSession(req, res, authOptions);
+    if (!session) {
+        res.send({ error: 'You must sign in to access this API route.' });
+        return;
+    }
 
     if (method === 'DELETE') {
         // VALIDATION =========================================================
