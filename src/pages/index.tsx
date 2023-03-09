@@ -131,7 +131,7 @@ const Index: NextPage<IndexProps> = ({
             <Card>
                 <h2>Search for recipes</h2>
 
-                <form onSubmit={handleFormOnSubmit} className={styles['search-form']}>
+                <form className={styles['search-form']} onSubmit={handleFormOnSubmit}>
                     <InputGroup
                         input={<input id='input-title' name='title' type='search' />}
                         label={<label htmlFor='input-title'>Title</label>}

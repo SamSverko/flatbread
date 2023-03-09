@@ -10,6 +10,8 @@ import type {
     ServingUnit,
 } from '@prisma/client';
 
+export type Category = 'courseType' | 'cuisine' | 'dietaryRestriction' | 'dishType';
+
 export type PlannedRecipe = {
     title: string;
     isComplete: boolean;

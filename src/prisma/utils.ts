@@ -1,13 +1,14 @@
 import { Prisma } from '@prisma/client';
 
 import type { NextApiResponse } from 'next';
+import type { Category } from '../types';
 
 // Static data
-export const categoryTables = [
-    'courseType' as const,
-    'cuisine' as const,
-    'dietaryRestriction' as const,
-    'dishType' as const,
+export const categoryTables: Category[] = [
+    'courseType',
+    'cuisine',
+    'dietaryRestriction',
+    'dishType',
 ];
 
 // Format API data
@@ -163,7 +164,9 @@ export function validateQueryParamCategoryFilter(res: NextApiResponse, categoryN
     const valueString = value?.toString().trim();
 
     if (!valueString) {
-        return res.status(400).json(`Missing query parameter ${categoryName}. Fix: Provide a string value. If using multiple values, ensure they are comma-separated.`);
+        return res.status(400).json({
+            error: `Missing query parameter ${categoryName}. Fix: Provide a string value. If using multiple values, ensure they are comma-separated.`,
+        });
     }
 
     const categories = valueString.split(',')
@@ -190,13 +193,17 @@ export function validateQueryParamCategory(res: NextApiResponse, value: string |
     const formattedCategories = categoryTables.map(category => category.toLowerCase());
 
     if (!category) {
-        return res.status(400).json('Missing query parameter `category`. Fix: Provide a string value.');
+        return res.status(400).json({
+            error: 'Missing query parameter `category`. Fix: Provide a string value.',
+        });
     }
 
     const categoryIndex = formattedCategories.indexOf(category);
 
     if (categoryIndex === -1) {
-        return res.status(400).json(`Invalid value for query parameter \`category\`. Fix: Use either \`${formattedCategories.join('`, `')}\`.`);
+        return res.status(400).json({
+            error: `Invalid value for query parameter \`category\`. Fix: Use either \`${formattedCategories.join('`, `')}\`.`,
+        });
     }
 
     return categoryTables[categoryIndex];
@@ -210,7 +217,9 @@ export function validateQueryParamCondensed(res: NextApiResponse, value: string 
     } else if (condensed === 'false') {
         return false;
     } else {
-        return res.status(400).json('Invalid value for query parameter `condensed`. Fix: Use either `true`, `false`, or omit parameter entirely.');
+        return res.status(400).json({
+            error: 'Invalid value for query parameter `condensed`. Fix: Use either `true`, `false`, or omit parameter entirely.',
+        });
     }
 }
 
@@ -218,13 +227,17 @@ export function validateQueryParamCookTimeMin(res: NextApiResponse, value: strin
     const cookTimeMin = value?.toString().trim();
 
     if (!cookTimeMin) {
-        return res.status(400).json('Missing query parameter `cookTimeMin`. Fix: Provide a number value.');
+        return res.status(400).json({
+            error: 'Missing query parameter `cookTimeMin`. Fix: Provide a number value.',
+        });
     }
 
     const cookTimeMinNum = parseInt(cookTimeMin);
 
     if (isNaN(cookTimeMinNum)) {
-        return res.status(400).json('Invalid value for query parameter `cookTimeMin`. Fix: Provide a number value.');
+        return res.status(400).json({
+            error: 'Invalid value for query parameter `cookTimeMin`. Fix: Provide a number value.',
+        });
     }
 
     return cookTimeMinNum;
@@ -234,7 +247,9 @@ export function validateQueryParamCourseTypes(res: NextApiResponse, value: strin
     const valueString = value?.toString().toLowerCase().trim();
 
     if (!valueString) {
-        return res.status(400).json('Missing query parameter `courseTypes`. Fix: Provide a string value. If using multiple values, ensure they are comma-separated.');
+        return res.status(400).json({
+            error: 'Missing query parameter `courseTypes`. Fix: Provide a string value. If using multiple values, ensure they are comma-separated.',
+        });
     }
 
     const courseTypes = valueString.split(',')
@@ -248,7 +263,9 @@ export function validateQueryParamCuisines(res: NextApiResponse, value: string |
     const valueString = value?.toString().trim();
 
     if (!valueString) {
-        return res.status(400).json('Missing query parameter `cuisines`. Fix: Provide a string value. If using multiple values, ensure they are comma-separated.');
+        return res.status(400).json({
+            error: 'Missing query parameter `cuisines`. Fix: Provide a string value. If using multiple values, ensure they are comma-separated.',
+        });
     }
 
     const cuisines = valueString.split(',')
@@ -262,7 +279,9 @@ export function validateQueryParamDietaryRestrictions(res: NextApiResponse, valu
     const valueString = value?.toString().toLowerCase().trim();
 
     if (!valueString) {
-        return res.status(400).json('Missing query parameter `dietaryRestrictions`. Fix: Provide a string value. If using multiple values, ensure they are comma-separated.');
+        return res.status(400).json({
+            error: 'Missing query parameter `dietaryRestrictions`. Fix: Provide a string value. If using multiple values, ensure they are comma-separated.',
+        });
     }
 
     if (valueString === '[]') {
@@ -280,7 +299,9 @@ export function validateQueryParamDishTypes(res: NextApiResponse, value: string 
     const valueString = value?.toString().trim();
 
     if (!valueString) {
-        return res.status(400).json('Missing query parameter `dishTypes`. Fix: Provide a string value. If using multiple values, ensure they are comma-separated.');
+        return res.status(400).json({
+            error: 'Missing query parameter `dishTypes`. Fix: Provide a string value. If using multiple values, ensure they are comma-separated.',
+        });
     }
 
     const dishTypes = valueString.split(',')
@@ -292,7 +313,9 @@ export function validateQueryParamDishTypes(res: NextApiResponse, value: string 
 
 export function validateQueryParamId(res: NextApiResponse, value: string | string[] | undefined) {
     if (!value) {
-        return res.status(400).json('Missing query parameter `id`. Fix: Provide a number value.');
+        return res.status(400).json({
+            error: 'Missing query parameter `id`. Fix: Provide a number value.',
+        });
     }
 
     const id = parseInt(value?.toString().trim());
@@ -304,14 +327,18 @@ export function validateQueryParamIngredients(res: NextApiResponse, value: strin
     const ingredients = value?.toString();
 
     if (!ingredients) {
-        return res.status(400).json('Missing query parameter `ingredients`. Fix: Provide a string value (JSON).');
+        return res.status(400).json({
+            error: 'Missing query parameter `ingredients`. Fix: Provide a string value (JSON).',
+        });
     }
 
     try {
         const ingredientsJSON = JSON.parse(ingredients);
         return ingredientsJSON;
     } catch (error) {
-        return res.status(400).json('Invalid value for query parameter `ingredients`. Fix: Provide a valid string value (JSON).');
+        return res.status(400).json({
+            error: 'Invalid value for query parameter `ingredients`. Fix: Provide a valid string value (JSON).',
+        });
     }
 }
 
@@ -319,7 +346,9 @@ export function validateQueryParamName(res: NextApiResponse, value: string | str
     const name = value?.toString().trim();
 
     if (!name) {
-        return res.status(400).json('Missing query parameter `name`. Fix: Provide a string value.');
+        return res.status(400).json({
+            error: 'Missing query parameter `name`. Fix: Provide a string value.',
+        });
     }
 
     return name;
@@ -329,7 +358,9 @@ export function validateQueryParamNameAbbr(res: NextApiResponse, value: string |
     const nameAbbr = value?.toString().trim();
 
     if (!nameAbbr) {
-        return res.status(400).json('Missing query parameter `nameAbbr`. Fix: Provide a string value.');
+        return res.status(400).json({
+            error: 'Missing query parameter `nameAbbr`. Fix: Provide a string value.',
+        });
     }
 
     return nameAbbr;
@@ -339,7 +370,9 @@ export function validateQueryParamNamePlural(res: NextApiResponse, value: string
     const namePlural = value?.toString().trim();
 
     if (!namePlural) {
-        return res.status(400).json('Missing query parameter `namePlural`. Fix: Provide a string value.');
+        return res.status(400).json({
+            error: 'Missing query parameter `namePlural`. Fix: Provide a string value.',
+        });
     }
 
     return namePlural;
@@ -349,14 +382,18 @@ export function validateQueryParamNotes(res: NextApiResponse, value: string | st
     const notes = value?.toString();
 
     if (!notes) {
-        return res.status(400).json('Missing query parameter `notes`. Fix: Provide a string value (JSON).');
+        return res.status(400).json({
+            error: 'Missing query parameter `notes`. Fix: Provide a string value (JSON).',
+        });
     }
 
     try {
         const notesJSON = JSON.parse(notes);
         return notesJSON;
     } catch (error) {
-        return res.status(400).json('Invalid value for query parameter `notes`. Fix: Provide a valid string value (JSON).');
+        return res.status(400).json({
+            error: 'Invalid value for query parameter `notes`. Fix: Provide a valid string value (JSON).',
+        });
     }
 }
 
@@ -372,17 +409,23 @@ export function validateQueryParamOrderByField(
     const formattedOrderByFieldOptions = orderByFieldOptions.map(orderByFieldOption => orderByFieldOption.toLowerCase());
 
     if ((orderBy && !orderByField) || (!orderBy && orderByField)) {
-        return res.status(400).json('Parameters `orderBy` and `orderByField` must be used simultaneously. Fix: Provide both parameters or omit both parameters entirely.');
+        return res.status(400).json({
+            error: 'Parameters `orderBy` and `orderByField` must be used simultaneously. Fix: Provide both parameters or omit both parameters entirely.',
+        });
     }
 
     if (orderBy && !orderByOptions.includes(orderBy)) {
-        return res.status(400).json(`Invalid value for query parameter \`orderBy\`. Fix: Use either \`${orderByOptions.join('`, `')}\`, or omit parameter entirely (along with the \`orderByField\` parameter).`);
+        return res.status(400).json({
+            error: `Invalid value for query parameter \`orderBy\`. Fix: Use either \`${orderByOptions.join('`, `')}\`, or omit parameter entirely (along with the \`orderByField\` parameter).`,
+        });
     }
 
     const orderByFieldIndex = formattedOrderByFieldOptions.indexOf(orderByField as string);
 
     if (orderByFieldIndex === -1) {
-        return res.status(400).json(`Invalid value for query parameter \`orderByField\`. Fix: Use either \`${orderByFieldOptions.join('`, `')}\`, or omit parameter entirely (along with the \`orderBy\` parameter).`);
+        return res.status(400).json({
+            error: `Invalid value for query parameter \`orderByField\`. Fix: Use either \`${orderByFieldOptions.join('`, `')}\`, or omit parameter entirely (along with the \`orderBy\` parameter).`,
+        });
     }
 
     return {
@@ -395,13 +438,17 @@ export function validateQueryParamPrepTimeMin(res: NextApiResponse, value: strin
     const prepTimeMin = value?.toString();
 
     if (!prepTimeMin) {
-        return res.status(400).json('Missing query parameter `prepTimeMin`. Fix: Provide a number value.');
+        return res.status(400).json({
+            error: 'Missing query parameter `prepTimeMin`. Fix: Provide a number value.',
+        });
     }
 
     const prepTimeMinNum = parseInt(prepTimeMin);
 
     if (isNaN(prepTimeMinNum)) {
-        return res.status(400).json('Invalid value for query parameter `prepTimeMin`. Fix: Provide a number value.');
+        return res.status(400).json({
+            error: 'Invalid value for query parameter `prepTimeMin`. Fix: Provide a number value.',
+        });
     }
 
     return prepTimeMinNum;
@@ -415,7 +462,9 @@ export function validateQueryParamRandom(res: NextApiResponse, value: string | s
     } else if (random === 'false') {
         return false;
     } else {
-        return res.status(400).json('Invalid value for query parameter `random`. Fix: Use either `true`, `false`, or omit parameter entirely.');
+        return res.status(400).json({
+            error: 'Invalid value for query parameter `random`. Fix: Use either `true`, `false`, or omit parameter entirely.',
+        });
     }
 }
 
@@ -423,13 +472,17 @@ export function validateQueryParamServingAmount(res: NextApiResponse, value: str
     const servingAmount = value?.toString();
 
     if (!servingAmount) {
-        return res.status(400).json('Missing query parameter `servingAmount`. Fix: Provide a number value.');
+        return res.status(400).json({
+            error: 'Missing query parameter `servingAmount`. Fix: Provide a number value.',
+        });
     }
 
     const servingAmountNum = parseInt(servingAmount);
 
     if (isNaN(servingAmountNum)) {
-        return res.status(400).json('Invalid value for query parameter `servingAmount`. Fix: Provide a number value.');
+        return res.status(400).json({
+            error: 'Invalid value for query parameter `servingAmount`. Fix: Provide a number value.',
+        });
     }
 
     return servingAmountNum;
@@ -439,7 +492,9 @@ export function validateQueryParamServingUnit(res: NextApiResponse, value: strin
     const servingUnit = value?.toString().toLowerCase().trim();
 
     if (!servingUnit) {
-        return res.status(400).json('Missing query parameter `servingUnit`. Fix: Provide a string value.');
+        return res.status(400).json({
+            error: 'Missing query parameter `servingUnit`. Fix: Provide a string value.',
+        });
     }
 
     return servingUnit;
@@ -462,7 +517,9 @@ export function validateQueryParamShowOnly(res: NextApiResponse, value: string |
     });
 
     if (!isValid) {
-        return res.status(400).json(`Invalid value for query parameter \`showOnly\`. Fix: Use any of the following values: \`${options.join('`, `')}\`, or omit parameter entirely. If using multiple values, ensure they are comma-separated.`);
+        return res.status(400).json({
+            error: `Invalid value for query parameter \`showOnly\`. Fix: Use any of the following values: \`${options.join('`, `')}\`, or omit parameter entirely. If using multiple values, ensure they are comma-separated.`,
+        });
     } else {
         return values;
     }
@@ -473,11 +530,15 @@ export function validateQueryParamSlug(res: NextApiResponse, value: string | str
     const slugRegEx = /^[a-z0-9]+(?:-[a-z0-9]+)*$/g;
 
     if (!slug) {
-        return res.status(400).json('Missing query parameter `slug`. Fix: Provide a string value (no spaces allowed, separate words with hyphens).');
+        return res.status(400).json({
+            error: 'Missing query parameter `slug`. Fix: Provide a string value (no spaces allowed, separate words with hyphens).',
+        });
     }
 
     if (!slugRegEx.test(slug)) {
-        return res.status(400).json('Invalid value for query parameter `slug`. Fix: Provide a value string (allowed characters: letters, numbers, and hyphens).');
+        return res.status(400).json({
+            error: 'Invalid value for query parameter `slug`. Fix: Provide a value string (allowed characters: letters, numbers, and hyphens).',
+        });
     }
 
     return slug;
@@ -487,7 +548,9 @@ export function validateQueryParamSourceName(res: NextApiResponse, value: string
     const sourceName = value?.toString().trim();
 
     if (!sourceName) {
-        return res.status(400).json('Missing query parameter `sourceName`. Fix: Provide a string value.');
+        return res.status(400).json({
+            error: 'Missing query parameter `sourceName`. Fix: Provide a string value.',
+        });
     }
 
     return sourceName;
@@ -497,14 +560,18 @@ export function validateQueryParamSourceURL(res: NextApiResponse, value: string 
     const sourceURL = value?.toString().trim();
 
     if (!sourceURL) {
-        return res.status(400).json('Missing query parameter `sourceURL`. Fix: Provide a string value (URL).');
+        return res.status(400).json({
+            error: 'Missing query parameter `sourceURL`. Fix: Provide a string value (URL).',
+        });
     }
 
     try {
         const isSourceURLValid = new URL(sourceURL);
         return isSourceURLValid.href;
     } catch (error) {
-        return res.status(400).json('Invalid value for query parameter `sourceURL`. Fix: Provide a valid URL.');
+        return res.status(400).json({
+            error: 'Invalid value for query parameter `sourceURL`. Fix: Provide a valid URL.',
+        });
     }
 }
 
@@ -512,14 +579,18 @@ export function validateQueryParamSteps(res: NextApiResponse, value: string | st
     const steps = value?.toString().trim();
 
     if (!steps) {
-        return res.status(400).json('Missing query parameter `steps`. Fix: Provide a string value (JSON).');
+        return res.status(400).json({
+            error: 'Missing query parameter `steps`. Fix: Provide a string value (JSON).',
+        });
     }
 
     try {
         const stepsJSON = JSON.parse(steps);
         return stepsJSON;
     } catch (error) {
-        return res.status(400).json('Invalid value for query parameter `steps`. Fix: Provide a valid string value (JSON).');
+        return res.status(400).json({
+            error: 'Invalid value for query parameter `steps`. Fix: Provide a valid string value (JSON).',
+        });
     }
 }
 
@@ -527,7 +598,9 @@ export function validateQueryParamTitle(res: NextApiResponse, value: string | st
     const title = value?.toString().trim();
 
     if (!title) {
-        return res.status(400).json('Missing query parameter `title`. Fix: Provide a string value (spaces are allowed).');
+        return res.status(400).json({
+            error: 'Missing query parameter `title`. Fix: Provide a string value (spaces are allowed).',
+        });
     }
 
     return title;
@@ -537,7 +610,9 @@ export function validateQueryParamTitleSearch(res: NextApiResponse, value: strin
     const title = value?.toString().toLowerCase().trim().split(' ').join(' & ');
 
     if (!title) {
-        return res.status(400).json('Missing query parameter `title`. Fix: Provide a string value (spaces are allowed).');
+        return res.status(400).json({
+            error: 'Missing query parameter `title`. Fix: Provide a string value (spaces are allowed).',
+        });
     }
 
     return title;
@@ -547,7 +622,9 @@ export function validateQueryParamUUID(res: NextApiResponse, value: string | str
     const uuid = value?.toString().trim();
 
     if (!uuid) {
-        return res.status(400).json('Missing query parameter `id`. Fix: Provide a string value.');
+        return res.status(400).json({
+            error: 'Missing query parameter `id`. Fix: Provide a string value.',
+        });
     }
 
     return uuid;
@@ -555,22 +632,12 @@ export function validateQueryParamUUID(res: NextApiResponse, value: string | str
 
 export function validateQueryParamValue(res: NextApiResponse, value: string | string[] | undefined) {
     if (!value) {
-        return res.status(400).json('Missing query parameter `value`. Fix: Provide a number value.');
+        return res.status(400).json({
+            error: 'Missing query parameter `value`. Fix: Provide a number value.',
+        });
     }
 
     const paramValue = parseFloat(value?.toString().trim());
 
     return paramValue;
-}
-
-// Handle Prisma errors
-export function handlePrismaError(error: unknown) {
-    if (error instanceof Prisma.PrismaClientKnownRequestError) {
-        return {
-            code: error.code,
-            message: error.message,
-        };
-    } else {
-        return error;
-    }
 }

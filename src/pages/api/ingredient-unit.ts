@@ -28,10 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // ADMIN-ONLY ROUTE =======================================================
     const session = await getServerSession(req, res, authOptions);
-    if (!session) {
-        res.send({ error: 'You must sign in to access this API route.' });
-        return;
-    }
+    if (!session) return res.status(405).json({ error: 'You must sign in to access this API route.' });
 
     if (method === 'DELETE') {
         // VALIDATION =========================================================
@@ -139,6 +136,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } else {
         const permittedMethods = ['DELETE', 'POST', 'PUT'];
         res.setHeader('Allow', permittedMethods);
-        res.status(405).end(`Method \`${method}\` not allowed. Allowed methods: \`${permittedMethods.join('`, `')}\`.`);
+        return res.status(405).json({ error: `Method \`${method}\` not allowed. Allowed methods: \`${permittedMethods.join('`, `')}\`.` });
     }
 }

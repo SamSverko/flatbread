@@ -98,6 +98,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } else {
         const permittedMethods = ['GET'];
         res.setHeader('Allow', permittedMethods);
-        res.status(405).end(`Method \`${method}\` not allowed. Allowed methods: \`${permittedMethods.join('`, `')}\`.`);
+        return res.status(405).json({ error: `Method \`${method}\` not allowed. Allowed methods: \`${permittedMethods.join('`, `')}\`.` });
     }
 }
