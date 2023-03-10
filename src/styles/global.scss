@@ -205,6 +205,12 @@ h2 {
     margin: 0;
 }
 
+h3 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+}
+
 hr {
     border: calc(var(--border-width) / 2) solid var(--color-grey-900);
     height: var(--border-width);
