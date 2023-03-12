@@ -3,20 +3,33 @@ import * as React from 'react';
 import Icon from '../icon';
 import InputGroup from '../input-group';
 
+import { categoryTables } from '../../prisma/utils';
+
 import bxX from '../../../public/icons/bx-x.svg';
 
 import styles from './index.module.scss';
 
-import type { ServingUnit } from '@prisma/client';
+import type { CourseType, Cuisine, DietaryRestriction, DishType, ServingUnit } from '@prisma/client';
+import type { Category } from '../../types';
 
 type ComponentProps = {
-    closeDialog: (editType: string, changeMade: boolean) => void;
-    editType: 'categories' | 'serving units';
+    closeDialog: (editType: string) => void;
+    courseTypes: CourseType[];
+    cuisines: Cuisine[];
+    dataChange: (editType: string) => void;
+    dietaryRestrictions: DietaryRestriction[];
+    dishTypes: DishType[];
+    editType: 'categories' | 'serving units' | '';
     servingUnits: ServingUnit[];
 }
 
 const EditDataDialog = ({
     closeDialog,
+    courseTypes,
+    cuisines,
+    dataChange,
+    dietaryRestrictions,
+    dishTypes,
     editType,
     servingUnits,
 }: ComponentProps) => {
@@ -26,8 +39,11 @@ const EditDataDialog = ({
     const servingUnitUpdateNamePluralRef = React.useRef(null);
 
     // States
-    const [changeMade, setChangeMade] = React.useState(false);
+    const [currentDeleteCategoryType, setCurrentDeleteCategoryType] = React.useState('courseType');
+    const [currentUpdateCategoryType, setCurrentUpdateCategoryType] = React.useState('courseType');
+    const [deleteCategoryOptions, setDeleteCategoryOptions] = React.useState(courseTypes);
     const [formFeedback, setFormFeedback] = React.useState('');
+    const [updateCategoryOptions, setUpdateCategoryOptions] = React.useState(courseTypes);
 
     // Effects
     React.useEffect(() => {
@@ -43,7 +59,61 @@ const EditDataDialog = ({
         };
     }, []);
 
+    React.useEffect(() => {
+        if (currentDeleteCategoryType === 'courseType' || currentUpdateCategoryType === 'courseType') {
+            setDeleteCategoryOptions(courseTypes);
+            setUpdateCategoryOptions(courseTypes);
+        } else if (currentDeleteCategoryType === 'cuisine' || currentUpdateCategoryType === 'cuisine') {
+            setDeleteCategoryOptions(cuisines);
+            setUpdateCategoryOptions(cuisines);
+        } else if (currentDeleteCategoryType === 'dietaryRestriction' || currentUpdateCategoryType === 'dietaryRestriction') {
+            setDeleteCategoryOptions(dietaryRestrictions);
+            setUpdateCategoryOptions(dietaryRestrictions);
+        } else if (currentDeleteCategoryType === 'dishType' || currentUpdateCategoryType === 'dishType') {
+            setDeleteCategoryOptions(dishTypes);
+            setUpdateCategoryOptions(dishTypes);
+        }
+    }, [courseTypes, cuisines, dietaryRestrictions, dishTypes]);
+
     // Event listeners
+    function onChangeDeleteCategory(event: React.ChangeEvent<HTMLSelectElement>) {
+        if (!event.target) return;
+        const select = event.target as HTMLSelectElement;
+
+        if (select.value === 'courseType') {
+            setCurrentDeleteCategoryType('courseType');
+            setDeleteCategoryOptions(courseTypes);
+        } else if (select.value === 'cuisine') {
+            setCurrentDeleteCategoryType('cuisine');
+            setDeleteCategoryOptions(cuisines);
+        } else if (select.value === 'dietaryRestriction') {
+            setCurrentDeleteCategoryType('dietaryRestriction');
+            setDeleteCategoryOptions(dietaryRestrictions);
+        } else if (select.value === 'dishType') {
+            setCurrentDeleteCategoryType('dishType');
+            setDeleteCategoryOptions(dishTypes);
+        }
+    }
+
+    function onChangeUpdateCategory(event: React.ChangeEvent<HTMLSelectElement>) {
+        if (!event.target) return;
+        const select = event.target as HTMLSelectElement;
+
+        if (select.value === 'courseType') {
+            setCurrentUpdateCategoryType('courseType');
+            setUpdateCategoryOptions(courseTypes);
+        } else if (select.value === 'cuisine') {
+            setCurrentUpdateCategoryType('cuisine');
+            setUpdateCategoryOptions(cuisines);
+        } else if (select.value === 'dietaryRestriction') {
+            setCurrentUpdateCategoryType('dietaryRestriction');
+            setUpdateCategoryOptions(dietaryRestrictions);
+        } else if (select.value === 'dishType') {
+            setCurrentUpdateCategoryType('dishType');
+            setUpdateCategoryOptions(dishTypes);
+        }
+    }
+
     function onChangeUpdateServingUnitNames(event: React.ChangeEvent<HTMLSelectElement>) {
         if (!event.target) return;
         if (!servingUnitUpdateNameRef.current) return;
@@ -58,6 +128,54 @@ const EditDataDialog = ({
         if (selectedServingUnit) {
             inputName.value = selectedServingUnit.name;
             inputNamePlural.value = selectedServingUnit.namePlural;
+        }
+    }
+
+    function onSubmitAddCategory(event: React.FormEvent) {
+        event.preventDefault();
+        if (!event.target) return;
+        setFormFeedback('');
+
+        const formElement = (event.target as HTMLFormElement);
+        const formData = new FormData(formElement);
+
+        const formDataCategory = formData.get('add-category-type');
+        const categoryValidated: Category | undefined = (formDataCategory) ? formDataCategory as Category : undefined;
+        if (!categoryValidated || !categoryTables.includes(categoryValidated)) {
+            setFormFeedback(`Form error: Category value must be any of these values: "${categoryTables.join('", "')}". The value was "${categoryValidated}".`);
+            return;
+        }
+
+        const formDataName = formData.get('add-name');
+        const nameValidated = (formDataName) ? formDataName.toString() : undefined;
+        if (!nameValidated) {
+            setFormFeedback('Form error: \'Name\' value must be a string.');
+            return;
+        }
+
+        const queryString = `/api/category?category=${categoryValidated}&name=${nameValidated}`;
+
+        try {
+            fetch(queryString, {
+                method: 'POST',
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.error) {
+                        setFormFeedback(`Form error: ${data.error}`);
+                        return;
+                    }
+
+                    if (data.code) {
+                        setFormFeedback(`Form error: ${data.code}: ${data.message}`);
+                        return;
+                    }
+
+                    setFormFeedback(`Form success: New '${categoryValidated}' created (name: '${nameValidated}').`);
+                    dataChange(editType);
+                });
+        } catch (error) {
+            setFormFeedback('Form error: Please try again.');
         }
     }
 
@@ -102,7 +220,55 @@ const EditDataDialog = ({
                     }
 
                     setFormFeedback(`Form success: New 'serving unit' created (name: "${nameValidated}", namePlural: "${namePluralValidated}").`);
-                    setChangeMade(true);
+                    dataChange(editType);
+                });
+        } catch (error) {
+            setFormFeedback('Form error: Please try again.');
+        }
+    }
+
+    function onSubmitDeleteCategory(event: React.FormEvent) {
+        event.preventDefault();
+        if (!event.target) return;
+        setFormFeedback('');
+
+        const formElement = (event.target as HTMLFormElement);
+        const formData = new FormData(formElement);
+
+        const formDataCategory = formData.get('delete-category');
+        const categoryValidated: Category | undefined = (formDataCategory) ? formDataCategory as Category : undefined;
+        if (!categoryValidated || !categoryTables.includes(categoryValidated)) {
+            setFormFeedback(`Form error: Category value must be any of these values: "${categoryTables.join('", "')}". The value was "${categoryValidated}".`);
+            return;
+        }
+
+        const formDataId = formData.get('delete-id');
+        const idValidated = (formDataId && !isNaN(parseInt(formDataId as string))) ? formDataId : undefined;
+        if (!idValidated) {
+            setFormFeedback('Form error: \'Id\' value must be a number.');
+            return;
+        }
+
+        const queryString = `/api/category?category=${categoryValidated}&id=${idValidated}`;
+
+        try {
+            fetch(queryString, {
+                method: 'DELETE',
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.error) {
+                        setFormFeedback(`Form error: ${data.error}`);
+                        return;
+                    }
+
+                    if (data.code) {
+                        setFormFeedback(`Form error: ${data.code}: ${data.message}`);
+                        return;
+                    }
+
+                    setFormFeedback(`Form success: '${categoryValidated}' deleted (name: "${data.name}").`);
+                    dataChange(editType);
                 });
         } catch (error) {
             setFormFeedback('Form error: Please try again.');
@@ -143,7 +309,62 @@ const EditDataDialog = ({
                     }
 
                     setFormFeedback(`Form success: 'serving unit' deleted (name: "${data.name}").`);
-                    setChangeMade(true);
+                    dataChange(editType);
+                });
+        } catch (error) {
+            setFormFeedback('Form error: Please try again.');
+        }
+    }
+
+    function onSubmitUpdateCategory(event: React.FormEvent) {
+        event.preventDefault();
+        if (!event.target) return;
+        setFormFeedback('');
+
+        const formElement = (event.target as HTMLFormElement);
+        const formData = new FormData(formElement);
+
+        const formDataCategory = formData.get('update-category');
+        const categoryValidated: Category | undefined = (formDataCategory) ? formDataCategory as Category : undefined;
+        if (!categoryValidated || !categoryTables.includes(categoryValidated)) {
+            setFormFeedback(`Form error: Category value must be any of these values: "${categoryTables.join('", "')}". The value was "${categoryValidated}".`);
+            return;
+        }
+
+        const formDataId = formData.get('update-id');
+        const idValidated = (formDataId && !isNaN(parseInt(formDataId as string))) ? formDataId : undefined;
+        if (!idValidated) {
+            setFormFeedback('Form error: \'Id\' value must be a number.');
+            return;
+        }
+
+        const formDataName = formData.get('update-name');
+        const nameValidated = (formDataName) ? formDataName.toString() : undefined;
+        if (!nameValidated) {
+            setFormFeedback('Form error: \'Name\' value must be a string.');
+            return;
+        }
+
+        const queryString = `/api/category?category=${categoryValidated}&id=${idValidated}&name=${nameValidated}`;
+
+        try {
+            fetch(queryString, {
+                method: 'PUT',
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.error) {
+                        setFormFeedback(`Form error: ${data.error}`);
+                        return;
+                    }
+
+                    if (data.code) {
+                        setFormFeedback(`Form error: ${data.code}: ${data.message}`);
+                        return;
+                    }
+
+                    setFormFeedback(`Form success: '${categoryValidated}' updated (name: '${data.name}').`);
+                    dataChange(editType);
                 });
         } catch (error) {
             setFormFeedback('Form error: Please try again.');
@@ -198,7 +419,7 @@ const EditDataDialog = ({
                     }
 
                     setFormFeedback(`Form success: 'serving unit' updated (name: '${data.name}', namePlural: '${data.namePlural}').`);
-                    setChangeMade(true);
+                    dataChange(editType);
                 });
         } catch (error) {
             setFormFeedback('Form error: Please try again.');
@@ -207,7 +428,113 @@ const EditDataDialog = ({
 
     // Renderers
     function renderBody() {
-        if (editType === 'serving units') {
+        if (editType === 'categories') {
+            return (
+                <>
+                    <details>
+                        <summary>Add</summary>
+
+                        <form onSubmit={onSubmitAddCategory}>
+                            <InputGroup
+                                input={<select id='add-category-type' name='add-category-type' required>
+                                    <option value=''>-- Select a category type --</option>
+                                    {categoryTables.map((category) => {
+                                        return <option key={`add-category-type-${category}`} value={category}>
+                                            {category}
+                                        </option>;
+                                    })}
+                                </select>}
+                                label={<label htmlFor='add-category-type'>Type</label>}
+                            />
+
+                            <InputGroup
+                                input={<input id='add-name' name='add-name' required type='text' />}
+                                label={<label htmlFor='add-name'>Name</label>}
+                            />
+
+                            <div>
+                                <input type='submit' value='Add category' />
+                            </div>
+
+                            <hr />
+                        </form>
+                    </details>
+
+                    <details>
+                        <summary>Delete</summary>
+
+                        <form onSubmit={onSubmitDeleteCategory}>
+                            <InputGroup
+                                input={<select id='delete-category' onChange={onChangeDeleteCategory} name='delete-category' required>
+                                    {categoryTables.map((category) => {
+                                        return <option key={`delete-category-${category}`} value={category}>
+                                            {category}
+                                        </option>;
+                                    })}
+                                </select>}
+                                label={<label htmlFor='delete-category'>Type</label>}
+                            />
+
+                            <InputGroup
+                                input={<select id='delete-id' name='delete-id' required>
+                                    <option value=''>Select a category</option>
+                                    {deleteCategoryOptions.map((category) => {
+                                        return <option key={`delete-id-${category.name}`} value={category.id}>
+                                            {category.name}
+                                        </option>;
+                                    })}
+                                </select>}
+                                label={<label htmlFor='delete-id'>Name</label>}
+                            />
+
+                            <div>
+                                <input type='submit' value='Delete category' />
+                            </div>
+
+                            <hr />
+                        </form>
+                    </details>
+
+                    <details>
+                        <summary>Update</summary>
+
+                        <form onSubmit={onSubmitUpdateCategory}>
+                            <InputGroup
+                                input={<select id='update-category' onChange={onChangeUpdateCategory} name='update-category' required>
+                                    {categoryTables.map((category) => {
+                                        return <option key={`update-category-${category}`} value={category}>
+                                            {category}
+                                        </option>;
+                                    })}
+                                </select>}
+                                label={<label htmlFor='update-category'>Type</label>}
+                            />
+
+                            <InputGroup
+                                input={<select id='update-id' name='update-id' required>
+                                    <option value=''>Select a category</option>
+                                    {updateCategoryOptions.map((category) => {
+                                        return <option key={`update-id-${category.name}`} value={category.id}>
+                                            {category.name}
+                                        </option>;
+                                    })}
+                                </select>}
+                                label={<label htmlFor='update-id'>Name</label>}
+                            />
+
+                            <InputGroup
+                                input={<input id='update-name' name='update-name' required type='text' />}
+                                label={<label htmlFor='update-name'>Name</label>}
+                            />
+
+                            <div>
+                                <input type='submit' value='Update serving unit' />
+                            </div>
+                        </form>
+                    </details>
+                </>
+            );
+        } if (editType === 'serving units') {
             return (
                 <>
                     <details>
@@ -303,7 +630,7 @@ const EditDataDialog = ({
             >
                 <div className={styles.header}>
                     <h2 id='dialog-header' ref={headerRef} tabIndex={-1}>Edit {editType}</h2>
-                    <button aria-label='Close dialog' className='icon-only' onClick={() => closeDialog(editType, changeMade)}>
+                    <button aria-label='Close dialog' className='icon-only' onClick={() => closeDialog(editType)}>
                         <Icon ariaHidden={true} Icon={bxX} />
                     </button>
                 </div>

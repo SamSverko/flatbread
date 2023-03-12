@@ -39,9 +39,9 @@ const Admin: NextPage<AdminProps> = ({
     // States
     const [formFeedback, setFormFeedback] = React.useState('');
     const [showDialog, setShowDialog] = React.useState(false);
-    const [editType, setEditType] = React.useState<'serving units' | 'categories'>('serving units');
+    const [editType, setEditType] = React.useState<'serving units' | 'categories' | ''>('');
     const [localCourseTypes, setLocalCourseTypes] = React.useState(courseTypes);
-    const [localCuisines, setLocalcuisines] = React.useState(cuisines);
+    const [localCuisines, setLocalCuisines] = React.useState(cuisines);
     const [localDietaryRestrictions, setLocalDietaryRestrictions] = React.useState(dietaryRestrictions);
     const [localDishTypes, setLocalDishTypes] = React.useState(dishTypes);
     const [localServingUnits, setLocalServingUnits] = React.useState(servingUnits);
@@ -148,15 +148,31 @@ const Admin: NextPage<AdminProps> = ({
     }
 
     // Helpers
-    function closeDialog(editType: string, changeMade: boolean) {
+    function closeDialog(editType: string) {
         setShowDialog(false);
 
-        const button = editServingsButtonRef.current;
-        if (button) (button as HTMLButtonElement).focus();
+        if (editType === 'categories') {
+            const button = editCategoryButtonRef.current;
+            if (button) (button as HTMLButtonElement).focus();
+        } else if (editType === 'serving units') {
+            const button = editServingsButtonRef.current;
+            if (button) (button as HTMLButtonElement).focus();
+        }
+    }
 
-        if (!changeMade) return;
-
-        if (editType === 'serving units') {
+    function dataChange(editType: string) {
+        if (editType === 'categories') {
+            fetch('/api/categories?orderBy=asc&orderByField=name')
+                .then((response) => response.json())
+                .then((data) => {
+                    if (!data.error) {
+                        setLocalCourseTypes(data.courseTypes);
+                        setLocalCuisines(data.cuisines);
+                        setLocalDietaryRestrictions(data.dietaryRestrictions);
+                        setLocalDishTypes(data.dishTypes);
+                    }
+                });
+        } if (editType === 'serving units') {
             fetch('/api/serving-units?orderBy=asc&orderByField=name')
                 .then((response) => response.json())
                 .then((data) => {
@@ -270,6 +286,39 @@ const Admin: NextPage<AdminProps> = ({
                         label={<label htmlFor='course-types'>Course types</label>}
                     />
 
+                    <InputGroup
+                        input={<select id='cuisines' multiple name='cuisines' required>
+                            {localCuisines.map((cuisine) => {
+                                return <option key={`cuisines-${cuisine.name}`} value={cuisine.name}>
+                                    {cuisine.name}
+                                </option>;
+                            })}
+                        </select>}
+                        label={<label htmlFor='cuisines'>Cuisines</label>}
+                    />
+
+                    <InputGroup
+                        input={<select id='dietary-restrictions' multiple name='dietary-restrictions'>
+                            {localDietaryRestrictions.map((dietaryRestriction) => {
+                                return <option key={`dietary-restrictions-${dietaryRestriction.name}`} value={dietaryRestriction.name}>
+                                    {dietaryRestriction.name}
+                                </option>;
+                            })}
+                        </select>}
+                        label={<label htmlFor='dietary-restrictions'>Dietary restrictions</label>}
+                    />
+
+                    <InputGroup
+                        input={<select id='dish-types' multiple name='dish-types' required>
+                            {localDishTypes.map((dishType) => {
+                                return <option key={`dish-types-${dishType.name}`} value={dishType.name}>
+                                    {dishType.name}
+                                </option>;
+                            })}
+                        </select>}
+                        label={<label htmlFor='dish-types'>Dish types</label>}
+                    />
+
                     <div>
                         <input type='submit' value='Submit' />
                     </div>
@@ -283,6 +332,11 @@ const Admin: NextPage<AdminProps> = ({
             {showDialog &&
                 <EditDataDialog
                     closeDialog={closeDialog}
+                    courseTypes={localCourseTypes}
+                    dataChange={dataChange}
+                    cuisines={localCuisines}
+                    dietaryRestrictions={localDietaryRestrictions}
+                    dishTypes={localDishTypes}
                     editType={editType}
                     servingUnits={localServingUnits}
                 />
