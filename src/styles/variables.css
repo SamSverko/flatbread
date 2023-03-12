@@ -72,6 +72,7 @@
     --transition-delay: 0s;
 
     /* z-index */
+    --z-index-dialog: 12;
     --z-index-category-list: 11;
     --z-index-nav: 10;
 

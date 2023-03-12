@@ -1,0 +1,63 @@
+@use '../../styles/mixins.scss';
+
+.container {
+    backdrop-filter: blur(20px);
+    // background-color: rgba(236 236 236 / 75%);
+    display: block;
+    height: 100%;
+    left: 0;
+    overflow-y: auto;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: var(--z-index-dialog);
+
+    .background {
+        box-sizing: border-box;
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: calc(var(--z-index-dialog) + 1);
+    }
+
+    .dialog {
+        @include mixins.card;
+
+        // background-color: white;
+        // box-shadow: rgba(0 0 0 / 10%) 0 0 8px 1px;
+        // display: flex;
+        // flex-direction: column;
+        left: 50%;
+        // max-width: var(--card-max-width);
+        position: absolute;
+        top: 50px;
+        transform: translateX(-50%);
+        // width: 100%;
+        z-index: calc(var(--z-index-dialog) + 2);
+
+        .header {
+            align-items: center;
+            display: flex;
+            justify-content: space-between;
+
+            h2:focus {
+                @include mixins.focus-outline;
+            }
+        }
+
+        .body {
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-5);
+
+            form {
+                display: flex;
+                flex-direction: column;
+                gap: var(--spacing-5);
+                margin: var(--spacing-5) 0 0;
+            }
+        }
+    }
+}

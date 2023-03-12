@@ -298,7 +298,8 @@ input {
 
     &[type='number'],
     &[type='search'],
-    &[type='text'] {
+    &[type='text'],
+    &[type='url'] {
         appearance: none;
         background-color: white;
         border: var(--border);

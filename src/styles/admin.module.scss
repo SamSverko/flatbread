@@ -2,5 +2,80 @@
     display: flex;
     flex-direction: column;
     gap: var(--spacing-5);
-    margin: var(--spacing-5) 0;
+
+    .inline-time-inputs {
+        --input-group-width: 82px;
+
+        display: flex;
+
+        > div:first-child {
+            width: var(--input-group-width);
+
+            label {
+                width: 100%;
+            }
+        }
+
+        > div:last-child {
+            margin-left: -2px;
+            width: var(--input-group-width);
+
+            label {
+                width: 100%;
+            }
+        }
+
+        @media only screen and (max-width: 246px) {
+            & {
+                --input-group-width: 100%;
+
+                flex-wrap: wrap;
+                gap: var(--spacing-5);
+            }
+        }
+    }
+
+    .inline-serving-inputs {
+        display: flex;
+
+        > div:first-child {
+            width: 80px;
+
+            label {
+                width: 100%;
+            }
+        }
+
+        > div:last-child {
+            flex-grow: 1;
+            margin-left: -2px;
+            width: auto;
+
+            label {
+                width: 100%;
+            }
+        }
+
+        @media only screen and (max-width: 340px) {
+            & {
+                flex-wrap: wrap;
+                gap: var(--spacing-5);
+
+                > div:first-child {
+                    width: 100%;
+        
+                    label {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+
+    .section-heading {
+        align-items: center;
+        display: flex;
+        gap: var(--spacing-1);
+        justify-content: space-between;
+    }
 }
