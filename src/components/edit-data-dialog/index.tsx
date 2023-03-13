@@ -9,7 +9,7 @@ import bxX from '../../../public/icons/bx-x.svg';
 
 import styles from './index.module.scss';
 
-import type { CourseType, Cuisine, DietaryRestriction, DishType, QuantityFraction, ServingUnit } from '@prisma/client';
+import type { CourseType, Cuisine, DietaryRestriction, DishType, IngredientUnit, QuantityFraction, ServingUnit } from '@prisma/client';
 import type { Category } from '../../types';
 
 type ComponentProps = {
@@ -19,7 +19,8 @@ type ComponentProps = {
     dataChange: (editType: string) => void;
     dietaryRestrictions: DietaryRestriction[];
     dishTypes: DishType[];
-    editType: 'categories' | 'serving units' | 'quantity fractions' | '';
+    editType: 'categories' | 'ingredient units' | 'serving units' | 'quantity fractions' | '';
+    ingredientUnits: IngredientUnit[];
     quantityFractions: QuantityFraction[];
     servingUnits: ServingUnit[];
 }
@@ -32,6 +33,7 @@ const EditDataDialog = ({
     dietaryRestrictions,
     dishTypes,
     editType,
+    ingredientUnits,
     quantityFractions,
     servingUnits,
 }: ComponentProps) => {
@@ -174,6 +176,59 @@ const EditDataDialog = ({
                     }
 
                     setFormFeedback(`Form success: New '${categoryValidated}' created (name: '${nameValidated}').`);
+                    dataChange(editType);
+                });
+        } catch (error) {
+            setFormFeedback('Form error: Please try again.');
+        }
+    }
+
+    function onSubmitAddIngredientUnit(event: React.FormEvent) {
+        event.preventDefault();
+        if (!event.target) return;
+        setFormFeedback('');
+
+        const formElement = (event.target as HTMLFormElement);
+        const formData = new FormData(formElement);
+
+        const formDataName = formData.get('add-name');
+        const nameValidated = (formDataName) ? formDataName.toString() : undefined;
+        if (!nameValidated) {
+            return setFormFeedback('Form error: \'Name\' value must be a string.');
+            
+        }
+
+        const formDataNameAbbr = formData.get('add-name-abbr');
+        const nameAbbrValidated = (formDataNameAbbr) ? formDataNameAbbr.toString() : undefined;
+        if (!nameAbbrValidated) {
+            return setFormFeedback('Form error: \'Name (abbreviated)\' value must be a string.');
+        }
+
+        const formDataNamePlural = formData.get('add-name-abbr');
+        const namePluralValidated = (formDataNamePlural) ? formDataNamePlural.toString() : undefined;
+        if (!namePluralValidated) {
+            return setFormFeedback('Form error: \'Name (plural)\' value must be a string.');
+        }
+
+        const queryString = `/api/ingredient-unit?name=${nameValidated}&nameAbbr=${nameAbbrValidated}&namePlural=${namePluralValidated}`;
+
+        try {
+            fetch(queryString, {
+                method: 'POST',
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.error) {
+                        setFormFeedback(`Form error: ${data.error}`);
+                        return;
+                    }
+
+                    if (data.code) {
+                        setFormFeedback(`Form error: ${data.code}: ${data.message}`);
+                        return;
+                    }
+
+                    setFormFeedback(`Form success: New 'ingredient unit' created (name: "${nameValidated}", nameAbbr: "${nameAbbrValidated}", namePlural: "${namePluralValidated}").`);
                     dataChange(editType);
                 });
         } catch (error) {
@@ -324,6 +379,46 @@ const EditDataDialog = ({
         }
     }
 
+    function onSubmitDeleteIngredientUnit(event: React.FormEvent) {
+        event.preventDefault();
+        if (!event.target) return;
+        setFormFeedback('');
+
+        const formElement = (event.target as HTMLFormElement);
+        const formData = new FormData(formElement);
+
+        const formDataId = formData.get('delete-id');
+        const idValidated = (formDataId && !isNaN(parseInt(formDataId as string))) ? formDataId : undefined;
+        if (!idValidated) {
+            return setFormFeedback('Form error: \'Id\' value must be a number.');
+        }
+
+        const queryString = `/api/ingredient-unit?id=${idValidated}`;
+
+        try {
+            fetch(queryString, {
+                method: 'DELETE',
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.error) {
+                        setFormFeedback(`Form error: ${data.error}`);
+                        return;
+                    }
+
+                    if (data.code) {
+                        setFormFeedback(`Form error: ${data.code}: ${data.message}`);
+                        return;
+                    }
+
+                    setFormFeedback(`Form success: 'ingredient unit' deleted (name: "${data.name}").`);
+                    dataChange(editType);
+                });
+        } catch (error) {
+            setFormFeedback('Form error: Please try again.');
+        }
+    }
+
     function onSubmitDeleteQuantityFraction(event: React.FormEvent) {
         event.preventDefault();
         if (!event.target) return;
@@ -453,6 +548,68 @@ const EditDataDialog = ({
                     }
 
                     setFormFeedback(`Form success: '${categoryValidated}' updated (name: '${data.name}').`);
+                    dataChange(editType);
+                });
+        } catch (error) {
+            setFormFeedback('Form error: Please try again.');
+        }
+    }
+
+    function onSubmitUpdateIngredientUnit(event: React.FormEvent) {
+        event.preventDefault();
+        if (!event.target) return;
+        setFormFeedback('');
+
+        const formElement = (event.target as HTMLFormElement);
+        const formData = new FormData(formElement);
+
+        const formDataId = formData.get('update-id');
+        const idValidated = (formDataId && !isNaN(parseInt(formDataId as string))) ? formDataId : undefined;
+        if (!idValidated) {
+            setFormFeedback('Form error: \'Id\' value must be a number.');
+            return;
+        }
+
+        const formDataName = formData.get('update-name');
+        const nameValidated = (formDataName) ? formDataName.toString() : undefined;
+        if (!nameValidated) {
+            setFormFeedback('Form error: \'Name\' value must be a string.');
+            return;
+        }
+
+        const formDataNameAbbr = formData.get('update-name-abbr');
+        const nameAbbrValidated = (formDataNameAbbr) ? formDataNameAbbr.toString() : undefined;
+        if (!nameAbbrValidated) {
+            setFormFeedback('Form error: \'Name (abbreviated)\' value must be a string.');
+            return;
+        }
+
+        const formDataNamePlural = formData.get('update-name-plural');
+        const namePluralValidated = (formDataNamePlural) ? formDataNamePlural.toString() : undefined;
+        if (!namePluralValidated) {
+            setFormFeedback('Form error: \'Name (plural)\' value must be a string.');
+            return;
+        }
+
+        const queryString = `/api/ingredient-unit?id=${idValidated}&name=${nameValidated}&nameAbbr=${nameAbbrValidated}&namePlural=${namePluralValidated}`;
+
+        try {
+            fetch(queryString, {
+                method: 'PUT',
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.error) {
+                        setFormFeedback(`Form error: ${data.error}`);
+                        return;
+                    }
+
+                    if (data.code) {
+                        setFormFeedback(`Form error: ${data.code}: ${data.message}`);
+                        return;
+                    }
+
+                    setFormFeedback(`Form success: 'ingredient unit' updated (name: '${data.name}', nameAbbr: '${data.nameAbbr}', namePlural: '${data.namePlural}').`);
                     dataChange(editType);
                 });
         } catch (error) {
@@ -667,6 +824,98 @@ const EditDataDialog = ({
                             <InputGroup
                                 input={<input id='update-name' name='update-name' required type='text' />}
                                 label={<label htmlFor='update-name'>Name</label>}
+                            />
+
+                            <div>
+                                <input type='submit' value='Update serving unit' />
+                            </div>
+                        </form>
+                    </details>
+                </>
+            );
+        } else if (editType === 'ingredient units') {
+            return (
+                <>
+                    <details>
+                        <summary>Add</summary>
+
+                        <form onSubmit={onSubmitAddIngredientUnit}>
+                            <InputGroup
+                                input={<input id='add-name' name='add-name' required type='text' />}
+                                label={<label htmlFor='add-name'>Name</label>}
+                            />
+
+                            <InputGroup
+                                input={<input id='add-name-abbr' name='add-name-abbr' required type='text' />}
+                                label={<label htmlFor='add-name-abbr'>Name (abbreviated)</label>}
+                            />
+
+                            <InputGroup
+                                input={<input id='add-name-plural' name='add-name-plural' required type='text' />}
+                                label={<label htmlFor='add-name-plural'>Name (plural)</label>}
+                            />
+
+                            <div>
+                                <input type='submit' value='Add ingredient unit' />
+                            </div>
+
+                            <hr />
+                        </form>
+                    </details>
+
+                    <details>
+                        <summary>Delete</summary>
+
+                        <form onSubmit={onSubmitDeleteIngredientUnit}>
+                            <InputGroup
+                                input={<select id='delete-id' name='delete-id' required>
+                                    <option value=''>-- Select an ingredient unit --</option>
+                                    {ingredientUnits.map((ingredientUnit) => {
+                                        return <option key={`delete-id-${ingredientUnit.id}`} value={ingredientUnit.id}>
+                                            {ingredientUnit.name}
+                                        </option>;
+                                    })}
+                                </select>}
+                                label={<label htmlFor='delete-id'>Name</label>}
+                            />
+
+                            <div>
+                                <input type='submit' value='Delete quantity fraction' />
+                            </div>
+
+                            <hr />
+                        </form>
+                    </details>
+
+                    <details>
+                        <summary>Update</summary>
+
+                        <form onSubmit={onSubmitUpdateIngredientUnit}>
+                            <InputGroup
+                                input={<select id='update-id' name='update-id' required>
+                                    <option value=''>-- Select an ingredient unit --</option>
+                                    {ingredientUnits.map((ingredientUnit) => {
+                                        return <option key={`update-id-${ingredientUnit.id}`} value={ingredientUnit.id}>
+                                            {ingredientUnit.name}
+                                        </option>;
+                                    })}
+                                </select>}
+                                label={<label htmlFor='update-id'>Ingredient unit</label>}
+                            />
+
+                            <InputGroup
+                                input={<input id='update-name' name='update-name' required type='text' />}
+                                label={<label htmlFor='update-name'>Name</label>}
+                            />
+
+                            <InputGroup
+                                input={<input id='update-name-abbr' name='update-name-abbr' required type='text' />}
+                                label={<label htmlFor='update-name-abbr'>Name (abbreviated)</label>}
+                            />
+
+                            <InputGroup
+                                input={<input id='update-name-plural' name='update-name-plural' required type='text' />}
+                                label={<label htmlFor='update-name-plural'>Name (plural)</label>}
                             />
 
                             <div>
