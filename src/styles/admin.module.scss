@@ -4,7 +4,7 @@
     gap: var(--spacing-5);
 
     .inline-time-inputs {
-        --input-group-width: 82px;
+        --input-group-width: 92px;
 
         display: flex;
 
@@ -39,7 +39,7 @@
         display: flex;
 
         > div:first-child {
-            width: 80px;
+            width: 91px;
 
             label {
                 width: 100%;
@@ -75,7 +75,67 @@
     .section-heading {
         align-items: center;
         display: flex;
-        gap: var(--spacing-1);
+        gap: var(--spacing-2);
         justify-content: space-between;
+
+        div {
+            align-items: center;
+            display: flex;
+            gap: var(--spacing-2);
+            justify-content: center;
+        }
+
+        @media only screen and (max-width: 237px) {
+            & {
+                flex-wrap: wrap;
+                gap: var(--spacing-5);
+            }
+        }
     }
+
+    .inline-quantity-inputs {
+        display: flex;
+
+        > div:first-child {
+            min-width: 68px;
+            width: 68px;
+
+            label {
+                width: 100%;
+            }
+        }
+
+        > div:last-child {
+            margin-left: -2px;
+
+            label {
+                width: 100%;
+            }
+        }
+
+        @media only screen and (max-width: 335px) {
+            & {
+                flex-wrap: wrap;
+                gap: var(--spacing-5);
+
+                > div:first-child,
+                > div:last-child {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
+
+.section-submit {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-5);
+}
+
+.section-submit-alt {
+    align-items: flex-end;
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-5);
 }

@@ -133,7 +133,7 @@ const Index: NextPage<IndexProps> = ({
 
                 <form className={styles['search-form']} onSubmit={handleFormOnSubmit}>
                     <InputGroup
-                        input={<input id='input-title' name='title' type='search' />}
+                        input={<input enterKeyHint='search' id='input-title' inputMode='search' name='title' type='search' />}
                         label={<label htmlFor='input-title'>Title</label>}
                     />
 

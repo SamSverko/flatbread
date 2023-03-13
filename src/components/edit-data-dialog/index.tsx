@@ -9,7 +9,7 @@ import bxX from '../../../public/icons/bx-x.svg';
 
 import styles from './index.module.scss';
 
-import type { CourseType, Cuisine, DietaryRestriction, DishType, ServingUnit } from '@prisma/client';
+import type { CourseType, Cuisine, DietaryRestriction, DishType, QuantityFraction, ServingUnit } from '@prisma/client';
 import type { Category } from '../../types';
 
 type ComponentProps = {
@@ -19,7 +19,8 @@ type ComponentProps = {
     dataChange: (editType: string) => void;
     dietaryRestrictions: DietaryRestriction[];
     dishTypes: DishType[];
-    editType: 'categories' | 'serving units' | '';
+    editType: 'categories' | 'serving units' | 'quantity fractions' | '';
+    quantityFractions: QuantityFraction[];
     servingUnits: ServingUnit[];
 }
 
@@ -31,6 +32,7 @@ const EditDataDialog = ({
     dietaryRestrictions,
     dishTypes,
     editType,
+    quantityFractions,
     servingUnits,
 }: ComponentProps) => {
     // Refs
@@ -179,6 +181,53 @@ const EditDataDialog = ({
         }
     }
 
+    function onSubmitAddQuantityFraction(event: React.FormEvent) {
+        event.preventDefault();
+        if (!event.target) return;
+        setFormFeedback('');
+
+        const formElement = (event.target as HTMLFormElement);
+        const formData = new FormData(formElement);
+
+        const formDataName = formData.get('add-name');
+        const nameValidated = (formDataName) ? formDataName.toString() : undefined;
+        if (!nameValidated) {
+            return setFormFeedback('Form error: \'Name\' value must be a string.');
+            
+        }
+
+        const formDataValue = formData.get('add-value');
+        const valueValidated = (formDataValue) ? formDataValue.toString() : undefined;
+        if (!valueValidated) {
+            return setFormFeedback('Form error: \'Value\' value must be a number (can be a decimal).');
+        }
+
+        const queryString = `/api/quantity-fraction?name=${nameValidated}&value=${valueValidated}`;
+
+        try {
+            fetch(queryString, {
+                method: 'POST',
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.error) {
+                        setFormFeedback(`Form error: ${data.error}`);
+                        return;
+                    }
+
+                    if (data.code) {
+                        setFormFeedback(`Form error: ${data.code}: ${data.message}`);
+                        return;
+                    }
+
+                    setFormFeedback(`Form success: New 'quantity fraction' created (name: "${nameValidated}", value: "${formDataValue}").`);
+                    dataChange(editType);
+                });
+        } catch (error) {
+            setFormFeedback('Form error: Please try again.');
+        }
+    }
+
     function onSubmitAddServingUnit(event: React.FormEvent) {
         event.preventDefault();
         if (!event.target) return;
@@ -275,6 +324,46 @@ const EditDataDialog = ({
         }
     }
 
+    function onSubmitDeleteQuantityFraction(event: React.FormEvent) {
+        event.preventDefault();
+        if (!event.target) return;
+        setFormFeedback('');
+
+        const formElement = (event.target as HTMLFormElement);
+        const formData = new FormData(formElement);
+
+        const formDataId = formData.get('delete-id');
+        const idValidated = (formDataId && !isNaN(parseInt(formDataId as string))) ? formDataId : undefined;
+        if (!idValidated) {
+            return setFormFeedback('Form error: \'Id\' value must be a number.');
+        }
+
+        const queryString = `/api/quantity-fraction?id=${idValidated}`;
+
+        try {
+            fetch(queryString, {
+                method: 'DELETE',
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.error) {
+                        setFormFeedback(`Form error: ${data.error}`);
+                        return;
+                    }
+
+                    if (data.code) {
+                        setFormFeedback(`Form error: ${data.code}: ${data.message}`);
+                        return;
+                    }
+
+                    setFormFeedback(`Form success: 'quantity fraction' deleted (name: "${data.name}").`);
+                    dataChange(editType);
+                });
+        } catch (error) {
+            setFormFeedback('Form error: Please try again.');
+        }
+    }
+
     function onSubmitDeleteServingUnit(event: React.FormEvent) {
         event.preventDefault();
         if (!event.target) return;
@@ -364,6 +453,59 @@ const EditDataDialog = ({
                     }
 
                     setFormFeedback(`Form success: '${categoryValidated}' updated (name: '${data.name}').`);
+                    dataChange(editType);
+                });
+        } catch (error) {
+            setFormFeedback('Form error: Please try again.');
+        }
+    }
+
+    function onSubmitUpdateQuantityFraction(event: React.FormEvent) {
+        event.preventDefault();
+        if (!event.target) return;
+        setFormFeedback('');
+
+        const formElement = (event.target as HTMLFormElement);
+        const formData = new FormData(formElement);
+
+        const formDataId = formData.get('update-id');
+        const idValidated = (formDataId && !isNaN(parseInt(formDataId as string))) ? formDataId : undefined;
+        if (!idValidated) {
+            return setFormFeedback('Form error: \'Id\' value must be a number.');
+        }
+
+        const formDataName = formData.get('update-name');
+        const nameValidated = (formDataName) ? formDataName.toString() : undefined;
+        if (!nameValidated) {
+            return setFormFeedback('Form error: \'Name\' value must be a string.');
+            
+        }
+
+        const formDataValue = formData.get('update-value');
+        const valueValidated = (formDataValue) ? formDataValue.toString() : undefined;
+        if (!valueValidated) {
+            return setFormFeedback('Form error: \'Value\' value must be a number (can be a decimal).');
+        }
+
+        const queryString = `/api/quantity-fraction?id=${idValidated}&name=${nameValidated}&value=${valueValidated}`;
+
+        try {
+            fetch(queryString, {
+                method: 'PUT',
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.error) {
+                        setFormFeedback(`Form error: ${data.error}`);
+                        return;
+                    }
+
+                    if (data.code) {
+                        setFormFeedback(`Form error: ${data.code}: ${data.message}`);
+                        return;
+                    }
+
+                    setFormFeedback(`Form success: 'quantity fraction' updated (name: '${data.name}', value: '${data.value}').`);
                     dataChange(editType);
                 });
         } catch (error) {
@@ -534,7 +676,89 @@ const EditDataDialog = ({
                     </details>
                 </>
             );
-        } if (editType === 'serving units') {
+        } else if (editType === 'quantity fractions') {
+            return (
+                <>
+                    <details>
+                        <summary>Add</summary>
+
+                        <form onSubmit={onSubmitAddQuantityFraction}>
+                            <InputGroup
+                                input={<input id='add-name' name='add-name' required type='text' />}
+                                label={<label htmlFor='add-name'>Name</label>}
+                            />
+
+                            <InputGroup
+                                input={<input id='add-value' inputMode='decimal' name='add-value' required step='0.001' type='number' />}
+                                label={<label htmlFor='add-value'>Value</label>}
+                            />
+
+                            <div>
+                                <input type='submit' value='Add category' />
+                            </div>
+
+                            <hr />
+                        </form>
+                    </details>
+
+                    <details>
+                        <summary>Delete</summary>
+
+                        <form onSubmit={onSubmitDeleteQuantityFraction}>
+                            <InputGroup
+                                input={<select id='delete-id' name='delete-id' required>
+                                    <option value=''>Select a category</option>
+                                    {quantityFractions.map((quantityFraction) => {
+                                        return <option key={`delete-id-${quantityFraction.id}`} value={quantityFraction.id}>
+                                            {quantityFraction.name}
+                                        </option>;
+                                    })}
+                                </select>}
+                                label={<label htmlFor='delete-id'>Name</label>}
+                            />
+
+                            <div>
+                                <input type='submit' value='Delete quantity fraction' />
+                            </div>
+
+                            <hr />
+                        </form>
+                    </details>
+
+                    <details>
+                        <summary>Update</summary>
+
+                        <form onSubmit={onSubmitUpdateQuantityFraction}>
+                            <InputGroup
+                                input={<select id='update-id' name='update-id' required>
+                                    <option value=''>-- Select a category --</option>
+                                    {quantityFractions.map((quantityFraction) => {
+                                        return <option key={`update-id-${quantityFraction.id}`} value={quantityFraction.id}>
+                                            {quantityFraction.name}
+                                        </option>;
+                                    })}
+                                </select>}
+                                label={<label htmlFor='update-id'>Name</label>}
+                            />
+
+                            <InputGroup
+                                input={<input id='update-name' name='update-name' required type='text' />}
+                                label={<label htmlFor='update-name'>Name</label>}
+                            />
+
+                            <InputGroup
+                                input={<input id='update-value' inputMode='decimal' name='update-value' required step='0.001' type='number' />}
+                                label={<label htmlFor='update-value'>Value</label>}
+                            />
+
+                            <div>
+                                <input type='submit' value='Update serving unit' />
+                            </div>
+                        </form>
+                    </details>
+                </>
+            );
+        } else if (editType === 'serving units') {
             return (
                 <>
                     <details>

@@ -8,20 +8,23 @@ import InputGroup from '../../components/input-group';
 
 import authOptions from '../api/auth/[...nextauth]';
 import { prisma } from '../../prisma/db';
-import { getCategoryFormat, getServingUnitFormat } from '../../prisma/utils';
+import { getCategoryFormat, getQuantityFractionFormat, getServingUnitFormat } from '../../prisma/utils';
 
+import bxRuler from '../../../public/icons/bx-ruler.svg';
 import bxsEditAlt from '../../../public/icons/bxs-edit-alt.svg';
 
 import styles from '../../styles/admin.module.scss';
 
-import type { CourseType, Cuisine, DietaryRestriction, DishType, ServingUnit } from '@prisma/client';
+import type { CourseType, Cuisine, DietaryRestriction, DishType, QuantityFraction, ServingUnit } from '@prisma/client';
 import type { GetServerSideProps, NextPage } from 'next';
+import type { RecipeIngredient } from '../../prisma/types';
 
 type AdminProps = {
     courseTypes: CourseType[];
     cuisines: Cuisine[];
     dietaryRestrictions: DietaryRestriction[];
     dishTypes: DishType[];
+    quantityFractions: QuantityFraction[];
     servingUnits: ServingUnit[];
 }
 
@@ -30,21 +33,26 @@ const Admin: NextPage<AdminProps> = ({
     cuisines,
     dietaryRestrictions,
     dishTypes,
+    quantityFractions,
     servingUnits,
 }: AdminProps) => {
     // Refs
     const editCategoryButtonRef = React.useRef(null);
+    const editFractionsButtonRef = React.useRef(null);
     const editServingsButtonRef = React.useRef(null);
 
     // States
     const [formFeedback, setFormFeedback] = React.useState('');
     const [showDialog, setShowDialog] = React.useState(false);
-    const [editType, setEditType] = React.useState<'serving units' | 'categories' | ''>('');
+    const [editType, setEditType] = React.useState<'categories' | 'quantity fractions' | 'serving units' | ''>('');
     const [localCourseTypes, setLocalCourseTypes] = React.useState(courseTypes);
     const [localCuisines, setLocalCuisines] = React.useState(cuisines);
     const [localDietaryRestrictions, setLocalDietaryRestrictions] = React.useState(dietaryRestrictions);
     const [localDishTypes, setLocalDishTypes] = React.useState(dishTypes);
+    const [localQuantityFractions, setLocalQuantityFractions] = React.useState(quantityFractions);
     const [localServingUnits, setLocalServingUnits] = React.useState(servingUnits);
+    const [quantityTypeIsSingle, setQuantityTypeIsSingle] = React.useState(true);
+    const [recipeIngredients, setRecipeIngredients] = React.useState([]);
 
     // Event listeners
     function handleEditCategoryOnClick(event: React.MouseEvent<HTMLButtonElement>) {
@@ -121,7 +129,7 @@ const Admin: NextPage<AdminProps> = ({
         }
 
         const formDataServingUnit = formData.get('serving-unit');
-        const servingUnitValidated = (formDataServingUnit) ? localServingUnits.map(servingUnit => servingUnit.name).includes(formDataServingUnit as string) : undefined;
+        const servingUnitValidated = (localServingUnits.map(servingUnit => servingUnit.name).includes(formDataServingUnit as string)) ? formDataServingUnit : undefined;
         if (!servingUnitValidated) {
             return setFormFeedback('Form error: Serving unit value must be an existing serving unit.');
         }
@@ -145,6 +153,53 @@ const Admin: NextPage<AdminProps> = ({
         };
 
         console.log(recipeToAdd);
+    }
+
+    function handleOnClickEditQuantityFractions(event: React.MouseEvent<HTMLButtonElement>) {
+        if (!event.target) return;
+
+        setEditType('quantity fractions');
+        setShowDialog(true);
+    }
+
+    function handleOnClickToggleQuantityType() {
+        setQuantityTypeIsSingle(quantityTypeIsSingle => !quantityTypeIsSingle);
+    }
+
+    function handleOnSubmitAddIngredient(event: React.FormEvent) {
+        event.preventDefault();
+        if (!event.target) return;
+
+        setFormFeedback('');
+        const formElement = (event.target as HTMLFormElement);
+        const formData = new FormData(formElement);
+        const ingredientToAdd: RecipeIngredient = {
+            name: 'CHANGE ME',
+            isOptional: false,
+            substitutions: [],
+        };
+
+        const formDataSection = formData.get('section');
+        const sectionValidated = (formDataSection) ? formDataSection.toString().trim() : undefined;
+        if (sectionValidated) {
+            ingredientToAdd.section = sectionValidated;
+        }
+
+        const formDataQuantityWhole = formData.get('ingredient-quantity-whole');
+        const quantityWholeValidated = (formDataQuantityWhole) ? parseInt(formDataQuantityWhole as string) : undefined;
+        if (quantityWholeValidated && !isNaN(quantityWholeValidated)) {
+            ingredientToAdd.quantityWhole = quantityWholeValidated;
+        }
+
+        const formDataQuantityFraction = formData.get('ingredient-quantity-fraction');
+        const quantityFractionValidated = (localQuantityFractions.map(quantityFraction => quantityFraction.name).includes(formDataQuantityFraction as string)) ? formDataQuantityFraction?.toString() : undefined;
+        if (quantityFractionValidated) {
+            ingredientToAdd.quantityFraction = quantityFractionValidated;
+        } else {
+            return setFormFeedback('Form error: \'Quantity fraction\' value must be an existing quantity fraction.');
+        }
+
+        console.log(ingredientToAdd);
     }
 
     // Helpers
@@ -172,7 +227,15 @@ const Admin: NextPage<AdminProps> = ({
                         setLocalDishTypes(data.dishTypes);
                     }
                 });
-        } if (editType === 'serving units') {
+        } else if (editType === 'quantity fractions') {
+            fetch('/api/quantity-fractions?orderBy=asc&orderByField=value')
+                .then((response) => response.json())
+                .then((data) => {
+                    if (!data.error) {
+                        setLocalQuantityFractions(data);
+                    }
+                });
+        } else if (editType === 'serving units') {
             fetch('/api/serving-units?orderBy=asc&orderByField=name')
                 .then((response) => response.json())
                 .then((data) => {
@@ -191,26 +254,28 @@ const Admin: NextPage<AdminProps> = ({
             </Card>
 
             <Card>
-                <form className={styles.form} onSubmit={handleFormOnSubmit}>
+                <form className={styles.form} id='add-recipe' onSubmit={handleFormOnSubmit}>
                     <h2>Add new recipe</h2>
 
+                    <p>All fields marked with an asterisk (<b>*</b>) are required.</p>
+
                     <InputGroup
-                        input={<input id='title' name='title' required type='text' />}
-                        label={<label htmlFor='title'>Title</label>}
+                        input={<input aria-required='true' id='title' name='title' required type='text' />}
+                        label={<label htmlFor='title'>Title *</label>}
                     />
 
                     <InputGroup
-                        input={<input id='slug' name='slug' required type='text' />}
-                        label={<label htmlFor='slug'>Slug</label>}
+                        input={<input aria-required='true' id='slug' name='slug' required type='text' />}
+                        label={<label htmlFor='slug'>Slug *</label>}
                     />
 
                     <InputGroup
-                        input={<input id='source-name' name='source-name' required type='text' />}
-                        label={<label htmlFor='source-name'>Source name</label>}
+                        input={<input aria-required='true' id='source-name' name='source-name' required type='text' />}
+                        label={<label htmlFor='source-name'>Source name *</label>}
                     />
 
                     <InputGroup
-                        input={<input id='source-url' name='source-url' type='url' />}
+                        input={<input id='source-url' inputMode='url' name='source-url' type='url' />}
                         label={<label htmlFor='source-url'>Source URL</label>}
                     />
 
@@ -218,13 +283,13 @@ const Admin: NextPage<AdminProps> = ({
 
                     <div className={styles['inline-time-inputs']}>
                         <InputGroup
-                            input={<input defaultValue={0} id='prep-time-hours' max={99} min={0} name='prep-time-hours' step={1} type='number' />}
-                            label={<label htmlFor='prep-time-hours'>Hours</label>}
+                            input={<input aria-required='true' defaultValue={0} id='prep-time-hours' inputMode='numeric' max={99} min={0} name='prep-time-hours' step={1} type='number' />}
+                            label={<label htmlFor='prep-time-hours'>Hours *</label>}
                         />
 
                         <InputGroup
-                            input={<input defaultValue={30} id='prep-time-mins' max={59} min={0} name='prep-time-mins' step={1} type='number' />}
-                            label={<label htmlFor='prep-time-mins'>Minutes</label>}
+                            input={<input aria-required='true' defaultValue={30} id='prep-time-mins' inputMode='numeric' max={59} min={0} name='prep-time-mins' step={1} type='number' />}
+                            label={<label htmlFor='prep-time-mins'>Minutes *</label>}
                         />
                     </div>
 
@@ -232,13 +297,13 @@ const Admin: NextPage<AdminProps> = ({
 
                     <div className={styles['inline-time-inputs']}>
                         <InputGroup
-                            input={<input defaultValue={0} id='cook-time-hours' max={99} min={0} name='cook-time-hours' step={1} type='number' />}
-                            label={<label htmlFor='cook-time-hours'>Hours</label>}
+                            input={<input aria-required='true' defaultValue={0} id='cook-time-hours' inputMode='numeric' max={99} min={0} name='cook-time-hours' step={1} type='number' />}
+                            label={<label htmlFor='cook-time-hours'>Hours *</label>}
                         />
 
                         <InputGroup
-                            input={<input defaultValue={30} id='cook-time-mins' max={59} min={0} name='cook-time-mins' step={1} type='number' />}
-                            label={<label htmlFor='cook-time-mins'>Minutes</label>}
+                            input={<input aria-required='true' defaultValue={30} id='cook-time-mins' inputMode='numeric' max={59} min={0} name='cook-time-mins' step={1} type='number' />}
+                            label={<label htmlFor='cook-time-mins'>Minutes *</label>}
                         />
                     </div>
 
@@ -251,20 +316,20 @@ const Admin: NextPage<AdminProps> = ({
 
                     <div className={styles['inline-serving-inputs']}>
                         <InputGroup
-                            input={<input defaultValue={0} id='serving-amount' max={999} min={0} name='serving-amount' step={1} type='number' />}
-                            label={<label htmlFor='serving-amount'>Amount</label>}
+                            input={<input aria-required='true' defaultValue={0} id='serving-amount' inputMode='numeric' max={999} min={0} name='serving-amount' step={1} type='number' />}
+                            label={<label htmlFor='serving-amount'>Amount *</label>}
                         />
 
                         <InputGroup
-                            input={<select id='serving-unit' name='serving-unit' required>
-                                <option value=''>--Select a serving unit--</option>
+                            input={<select aria-required='true' id='serving-unit' name='serving-unit' required>
+                                <option value=''>-- Select a serving unit --</option>
                                 {localServingUnits.map((servingUnit) => {
                                     return <option key={`serving-unit-${servingUnit.name}`} value={servingUnit.name}>
                                         {servingUnit.namePlural}
                                     </option>;
                                 })}
                             </select>}
-                            label={<label htmlFor='serving-unit'>Unit</label>}
+                            label={<label htmlFor='serving-unit'>Unit *</label>}
                         />
                     </div>
 
@@ -276,25 +341,25 @@ const Admin: NextPage<AdminProps> = ({
                     </div>
 
                     <InputGroup
-                        input={<select id='course-types' multiple name='course-types' required>
+                        input={<select aria-required='true' id='course-types' multiple name='course-types' required>
                             {localCourseTypes.map((courseType) => {
                                 return <option key={`course-types-${courseType.name}`} value={courseType.name}>
                                     {courseType.name}
                                 </option>;
                             })}
                         </select>}
-                        label={<label htmlFor='course-types'>Course types</label>}
+                        label={<label htmlFor='course-types'>Course types *</label>}
                     />
 
                     <InputGroup
-                        input={<select id='cuisines' multiple name='cuisines' required>
+                        input={<select aria-required='true' id='cuisines' multiple name='cuisines' required>
                             {localCuisines.map((cuisine) => {
                                 return <option key={`cuisines-${cuisine.name}`} value={cuisine.name}>
                                     {cuisine.name}
                                 </option>;
                             })}
                         </select>}
-                        label={<label htmlFor='cuisines'>Cuisines</label>}
+                        label={<label htmlFor='cuisines'>Cuisines *</label>}
                     />
 
                     <InputGroup
@@ -309,35 +374,144 @@ const Admin: NextPage<AdminProps> = ({
                     />
 
                     <InputGroup
-                        input={<select id='dish-types' multiple name='dish-types' required>
+                        input={<select aria-required='true' id='dish-types' multiple name='dish-types' required>
                             {localDishTypes.map((dishType) => {
                                 return <option key={`dish-types-${dishType.name}`} value={dishType.name}>
                                     {dishType.name}
                                 </option>;
                             })}
                         </select>}
-                        label={<label htmlFor='dish-types'>Dish types</label>}
+                        label={<label htmlFor='dish-types'>Dish types *</label>}
+                    />
+                </form>
+
+                <form className={styles.form} id='add-ingredient' onSubmit={handleOnSubmitAddIngredient}>
+                    <p><b>Ingredients</b></p>
+
+                    <InputGroup
+                        input={<input id='ingredient-section' name='ingredient-section' type='text' />}
+                        label={<label htmlFor='ingredient-section'>Section</label>}
                     />
 
+                    <div className={styles['section-heading']}>
+                        <p><b>Quantity {(quantityTypeIsSingle) ? '(single)' : '(range)'}</b></p>
+                        <div>
+                            <button aria-label='Toggle between range and single value quantity' aria-pressed={(quantityTypeIsSingle) ? false : true} className='icon-only' onClick={handleOnClickToggleQuantityType} type='button'>
+                                <Icon ariaHidden={true} Icon={bxRuler} />
+                            </button>
+                            <button aria-label='Edit quantity fractions' className='icon-only' onClick={handleOnClickEditQuantityFractions} ref={editFractionsButtonRef} type='button'>
+                                <Icon ariaHidden={true} Icon={bxsEditAlt} />
+                            </button>
+                        </div>
+                    </div>
+
+                    {quantityTypeIsSingle &&
+                        <div className={styles['inline-quantity-inputs']}>
+                            <InputGroup
+                                input={<input defaultValue={0} id='ingredient-quantity-whole' inputMode='numeric' max={999} min={0} name='ingredient-quantity-whole' step={1} type='number' />}
+                                label={<label htmlFor='ingredient-quantity-whole'>Whole</label>}
+                            />
+
+                            <InputGroup
+                                input={<select aria-required='true' id='ingredient-quantity-fraction' name='ingredient-quantity-fraction'>
+                                    <option value=''>-- Select a fraction --</option>
+                                    {localQuantityFractions.map((quantityFraction) => {
+                                        return <option key={`ingredient-quantity-fraction-${quantityFraction.id}`} value={quantityFraction.name}>
+                                            {quantityFraction.name}
+                                        </option>;
+                                    })}
+                                </select>}
+                                label={<label htmlFor='ingredient-quantity-fraction'>Fraction</label>}
+                            />
+                        </div>
+                    }
+
+                    {!quantityTypeIsSingle &&
+                        <>
+                            <p><b>Minimum</b></p>
+
+                            <div className={styles['inline-quantity-inputs']}>
+                                <InputGroup
+                                    input={<input defaultValue={0} id='ingredient-quantity-min-whole' inputMode='numeric' max={999} min={0} name='ingredient-quantity-min-whole' step={1} type='number' />}
+                                    label={<label htmlFor='ingredient-quantity-min-whole'>Whole</label>}
+                                />
+
+                                <InputGroup
+                                    input={<select aria-required='true' id='ingredient-quantity-min-fraction' name='ingredient-quantity-min-fraction'>
+                                        <option value=''>-- Select a fraction --</option>
+                                        {localQuantityFractions.map((quantityFraction) => {
+                                            return <option key={`ingredient-quantity-min-fraction-${quantityFraction.id}`} value={Number(quantityFraction.value.toFixed(3))}>
+                                                {quantityFraction.name}
+                                            </option>;
+                                        })}
+                                    </select>}
+                                    label={<label htmlFor='ingredient-quantity-min-fraction'>Fraction</label>}
+                                />
+                            </div>
+
+                            <p><b>Maximum</b></p>
+
+                            <div className={styles['inline-quantity-inputs']}>
+                                <InputGroup
+                                    input={<input defaultValue={0} id='ingredient-quantity-max-whole' inputMode='numeric' max={999} min={0} name='ingredient-quantity-max-whole' step={1} type='number' />}
+                                    label={<label htmlFor='ingredient-quantity-max-whole'>Whole</label>}
+                                />
+
+                                <InputGroup
+                                    input={<select aria-required='true' id='ingredient-quantity-max-fraction' name='ingredient-quantity-max-fraction'>
+                                        <option value=''>-- Select a fraction --</option>
+                                        {localQuantityFractions.map((quantityFraction) => {
+                                            return <option key={`ingredient-quantity-max-fraction-${quantityFraction.id}`} value={Number(quantityFraction.value.toFixed(3))}>
+                                                {quantityFraction.name}
+                                            </option>;
+                                        })}
+                                    </select>}
+                                    label={<label htmlFor='ingredient-quantity-max-fraction'>Fraction</label>}
+                                />
+                            </div>
+                        </>
+                    }
+
+                    <div className={styles['section-submit-alt']}>
+                        <div>
+                            <input form='add-ingredient' type='submit' value='Add ingredient' />
+                        </div>
+                    </div>
+                </form>
+
+                <>
+                    {recipeIngredients.length > 0 &&
+                        <ul>
+                            {(recipeIngredients as RecipeIngredient[]).map((ingredient, index) => {
+                                return (
+                                    <li key={`ingredient-${index}`}>{ingredient.name}</li>
+                                );
+                            })}
+                        </ul>
+                    }
+                </>
+
+                <div className={styles['section-submit']}>
                     <div>
-                        <input type='submit' value='Submit' />
+                        <input form='add-recipe' type='submit' value='Submit' />
                     </div>
 
                     {formFeedback.length > 0 &&
                         <p aria-live='assertive'>{formFeedback}</p>
                     }
-                </form>
+                </div>
             </Card>
 
             {showDialog &&
                 <EditDataDialog
                     closeDialog={closeDialog}
                     courseTypes={localCourseTypes}
-                    dataChange={dataChange}
                     cuisines={localCuisines}
+                    dataChange={dataChange}
                     dietaryRestrictions={localDietaryRestrictions}
                     dishTypes={localDishTypes}
                     editType={editType}
+                    quantityFractions={localQuantityFractions}
                     servingUnits={localServingUnits}
                 />
             }
@@ -358,13 +532,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             },
         };
     }
-
-    const servingUnits = await prisma.servingUnit.findMany({
-        select: getServingUnitFormat(false),
-        orderBy: {
-            name: 'asc',
-        },
-    });
 
     const courseTypes = await prisma.courseType.findMany({
         select: getCategoryFormat(false),
@@ -394,15 +561,22 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         },
     });
 
+    const quantityFractions = await prisma.quantityFraction.findMany({
+        select: getQuantityFractionFormat(false),
+        orderBy: {
+            value: 'asc',
+        },
+    });
+
+    const servingUnits = await prisma.servingUnit.findMany({
+        select: getServingUnitFormat(false),
+        orderBy: {
+            name: 'asc',
+        },
+    });
+
     return {
         props: {
-            servingUnits: (servingUnits as ServingUnit[]).map(servingUnit => {
-                return {
-                    id: servingUnit.id,
-                    name: servingUnit.name,
-                    namePlural: servingUnit.namePlural,
-                };
-            }),
             courseTypes: courseTypes.map(category => {
                 return {
                     id: category.id,
@@ -425,6 +599,20 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                 return {
                     id: category.id,
                     name: category.name,
+                };
+            }),
+            quantityFractions: (quantityFractions as QuantityFraction[]).map(quantityFraction => {
+                return {
+                    id: quantityFraction.id,
+                    name: quantityFraction.name,
+                    value: Number(quantityFraction.value.toFixed(3)),
+                };
+            }),
+            servingUnits: (servingUnits as ServingUnit[]).map(servingUnit => {
+                return {
+                    id: servingUnit.id,
+                    name: servingUnit.name,
+                    namePlural: servingUnit.namePlural,
                 };
             }),
             session: session,
