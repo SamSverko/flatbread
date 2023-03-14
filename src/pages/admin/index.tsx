@@ -287,26 +287,31 @@ const Admin: NextPage<AdminProps> = ({
 
                     <p>All fields marked with an asterisk (<b>*</b>) are required.</p>
 
+                    {/* title ============================================= */}
                     <InputGroup
                         input={<input aria-required='true' id='title' name='title' required type='text' />}
                         label={<label htmlFor='title'>Title *</label>}
                     />
 
+                    {/* slug ============================================== */}
                     <InputGroup
                         input={<input aria-required='true' id='slug' name='slug' required type='text' />}
                         label={<label htmlFor='slug'>Slug *</label>}
                     />
 
+                    {/* sourceName ======================================== */}
                     <InputGroup
                         input={<input aria-required='true' id='source-name' name='source-name' required type='text' />}
                         label={<label htmlFor='source-name'>Source name *</label>}
                     />
 
+                    {/* sourceURL ========================================= */}
                     <InputGroup
                         input={<input id='source-url' inputMode='url' name='source-url' type='url' />}
                         label={<label htmlFor='source-url'>Source URL</label>}
                     />
 
+                    {/* prepTimeMin ======================================= */}
                     <p><b>Prep time</b></p>
 
                     <div className={styles['inline-time-inputs']}>
@@ -321,6 +326,7 @@ const Admin: NextPage<AdminProps> = ({
                         />
                     </div>
 
+                    {/* cookTimeMin ======================================= */}
                     <p><b>Cook time</b></p>
 
                     <div className={styles['inline-time-inputs']}>
@@ -342,6 +348,8 @@ const Admin: NextPage<AdminProps> = ({
                         </button>
                     </div>
 
+                    {/* servingAmount ===================================== */}
+                    {/* servingUnit ======================================= */}
                     <div className={styles['inline-serving-inputs']}>
                         <InputGroup
                             input={<input aria-required='true' defaultValue={0} id='serving-amount' inputMode='numeric' max={999} min={0} name='serving-amount' step={1} type='number' />}
@@ -368,6 +376,7 @@ const Admin: NextPage<AdminProps> = ({
                         </button>
                     </div>
 
+                    {/* courseTypes ======================================= */}
                     <InputGroup
                         input={<select aria-required='true' id='course-types' multiple name='course-types' required>
                             {localCourseTypes.map((courseType) => {
@@ -379,6 +388,7 @@ const Admin: NextPage<AdminProps> = ({
                         label={<label htmlFor='course-types'>Course types *</label>}
                     />
 
+                    {/* cuisines ========================================== */}
                     <InputGroup
                         input={<select aria-required='true' id='cuisines' multiple name='cuisines' required>
                             {localCuisines.map((cuisine) => {
@@ -390,6 +400,7 @@ const Admin: NextPage<AdminProps> = ({
                         label={<label htmlFor='cuisines'>Cuisines *</label>}
                     />
 
+                    {/* dietaryRestrictions =============================== */}
                     <InputGroup
                         input={<select id='dietary-restrictions' multiple name='dietary-restrictions'>
                             {localDietaryRestrictions.map((dietaryRestriction) => {
@@ -401,6 +412,7 @@ const Admin: NextPage<AdminProps> = ({
                         label={<label htmlFor='dietary-restrictions'>Dietary restrictions</label>}
                     />
 
+                    {/* dishTypes ========================================= */}
                     <InputGroup
                         input={<select aria-required='true' id='dish-types' multiple name='dish-types' required>
                             {localDishTypes.map((dishType) => {
@@ -415,9 +427,11 @@ const Admin: NextPage<AdminProps> = ({
 
                 <hr />
 
+                {/* ingredients =========================================== */}
                 <form className={styles.form} id='add-ingredient' onSubmit={handleOnSubmitAddIngredient}>
                     <p><b>Ingredients</b></p>
 
+                    {/* ingredient / section ============================== */}
                     <InputGroup
                         input={<input id='ingredient-section' name='ingredient-section' type='text' />}
                         label={<label htmlFor='ingredient-section'>Section</label>}
@@ -435,6 +449,8 @@ const Admin: NextPage<AdminProps> = ({
                         </div>
                     </div>
 
+                    {/* ingredient / quantityWhole ======================== */}
+                    {/* ingredient / quantityFraction ===================== */}
                     {quantityTypeIsSingle &&
                         <div className={styles['inline-quantity-inputs']}>
                             <InputGroup
@@ -456,6 +472,10 @@ const Admin: NextPage<AdminProps> = ({
                         </div>
                     }
 
+                    {/* ingredient / quantityMinWhole ===================== */}
+                    {/* ingredient / quantityMinFraction ================== */}
+                    {/* ingredient / quantityMaxWhole ===================== */}
+                    {/* ingredient / quantityMaxFraction ================== */}
                     {!quantityTypeIsSingle &&
                         <>
                             <p><b>Minimum</b></p>
@@ -509,6 +529,7 @@ const Admin: NextPage<AdminProps> = ({
                         </button>
                     </div>
 
+                    {/* ingredient / unit ================================= */}
                     <InputGroup
                         input={<select aria-required='true' id='ingredient-unit' name='ingredient-unit' required>
                             <option value=''>-- Select a unit --</option>
@@ -528,6 +549,7 @@ const Admin: NextPage<AdminProps> = ({
                         </button>
                     </div>
 
+                    {/* ingredient / name ================================= */}
                     <InputGroup
                         input={<select aria-required='true' id='ingredient' name='ingredient' required>
                             <option value=''>-- Select an ingredient --</option>
@@ -538,6 +560,30 @@ const Admin: NextPage<AdminProps> = ({
                             })}
                         </select>}
                         label={<label htmlFor='ingredient'>Name *</label>}
+                    />
+
+                    {/* ingredient / alteration =========================== */}
+                    <InputGroup
+                        input={<input id='ingredient-alteration' name='ingredient-alteration' type='text' />}
+                        label={<label htmlFor='ingredient-alteration'>Alteration</label>}
+                    />
+
+                    {/* ingredient / isOptional =========================== */}
+                    <div className={styles['checkbox']}>
+                        <input id='ingredient-is-optional' type='checkbox' />
+                        <label className='no-styles' htmlFor='ingredient-is-optional'>Optional</label>
+                    </div>
+
+                    {/* ingredient / substitutions ======================== */}
+                    <InputGroup
+                        input={<select id='ingredient-substitutions' multiple name='ingredient-substitutions'>
+                            {localIngredients.map((ingredient) => {
+                                return <option key={`ingredient-substitutions-${ingredient.name}`} value={ingredient.name}>
+                                    {ingredient.name}
+                                </option>;
+                            })}
+                        </select>}
+                        label={<label htmlFor='ingredient-substitutions'>Substitutions</label>}
                     />
 
                     <div className={styles['section-submit-alt']}>
