@@ -38,7 +38,10 @@ const EditDataDialog = ({
     servingUnits,
 }: ComponentProps) => {
     // Refs
+    const categoryUpdateNameRef = React.useRef(null);
     const headerRef = React.useRef(null);
+    const quantityFractionUpdateNameRef = React.useRef(null);
+    const quantityFractionUpdateValueRef = React.useRef(null);
     const servingUnitUpdateNameRef = React.useRef(null);
     const servingUnitUpdateNamePluralRef = React.useRef(null);
 
@@ -80,6 +83,12 @@ const EditDataDialog = ({
     }, [courseTypes, cuisines, dietaryRestrictions, dishTypes]);
 
     // Event listeners
+    function onKeyUpDialog(event: React.KeyboardEvent) {
+        if (event.key === 'Escape') {
+            closeDialog(editType);
+        }
+    }
+
     function onChangeDeleteCategory(event: React.ChangeEvent<HTMLSelectElement>) {
         if (!event.target) return;
         const select = event.target as HTMLSelectElement;
@@ -115,6 +124,47 @@ const EditDataDialog = ({
         } else if (select.value === 'dishType') {
             setCurrentUpdateCategoryType('dishType');
             setUpdateCategoryOptions(dishTypes);
+        }
+    }
+
+    function onChangeUpdateCategoryName(event: React.ChangeEvent<HTMLSelectElement>) {
+        if (!event.target) return;
+        if (!categoryUpdateNameRef.current) return;
+
+        const select = event.target as HTMLSelectElement;
+        const inputName = categoryUpdateNameRef.current as HTMLInputElement;
+
+        let selectedCategory;
+
+        if (currentUpdateCategoryType === 'courseType') {
+            selectedCategory = courseTypes.find(category => category.id === parseInt(select.value));
+        } else if (currentUpdateCategoryType === 'cuisine') {
+            selectedCategory = cuisines.find(category => category.id === parseInt(select.value));
+        } else if (currentUpdateCategoryType === 'dietaryRestriction') {
+            selectedCategory = dietaryRestrictions.find(category => category.id === parseInt(select.value));
+        } else if (currentUpdateCategoryType === 'dishType') {
+            selectedCategory = dishTypes.find(category => category.id === parseInt(select.value));
+        }
+
+        if (selectedCategory) {
+            inputName.value = selectedCategory.name;
+        }
+    }
+
+    function onChangeUpdateQuantityFractionValues(event: React.ChangeEvent<HTMLSelectElement>) {
+        if (!event.target) return;
+        if (!quantityFractionUpdateNameRef.current) return;
+        if (!quantityFractionUpdateValueRef.current) return;
+
+        const select = event.target as HTMLSelectElement;
+        const inputName = quantityFractionUpdateNameRef.current as HTMLInputElement;
+        const inputValue = quantityFractionUpdateValueRef.current as HTMLInputElement;
+
+        const selectedQuantityFraction = quantityFractions.find(quantityFraction => quantityFraction.id === parseInt(select.value));
+
+        if (selectedQuantityFraction) {
+            inputName.value = selectedQuantityFraction.name;
+            inputValue.value = selectedQuantityFraction.value.toString();
         }
     }
 
@@ -783,7 +833,7 @@ const EditDataDialog = ({
                                         </option>;
                                     })}
                                 </select>}
-                                label={<label htmlFor='delete-id'>Name</label>}
+                                label={<label htmlFor='delete-id'>Category</label>}
                             />
 
                             <div>
@@ -810,24 +860,24 @@ const EditDataDialog = ({
                             />
 
                             <InputGroup
-                                input={<select id='update-id' name='update-id' required>
-                                    <option value=''>Select a category</option>
+                                input={<select id='update-id' name='update-id' onChange={onChangeUpdateCategoryName} required>
+                                    <option value=''>-- Select a category --</option>
                                     {updateCategoryOptions.map((category) => {
                                         return <option key={`update-id-${category.name}`} value={category.id}>
                                             {category.name}
                                         </option>;
                                     })}
                                 </select>}
-                                label={<label htmlFor='update-id'>Name</label>}
+                                label={<label htmlFor='update-id'>Category</label>}
                             />
 
                             <InputGroup
-                                input={<input id='update-name' name='update-name' required type='text' />}
+                                input={<input id='update-name' name='update-name' ref={categoryUpdateNameRef} required type='text' />}
                                 label={<label htmlFor='update-name'>Name</label>}
                             />
 
                             <div>
-                                <input type='submit' value='Update serving unit' />
+                                <input type='submit' value='Update category' />
                             </div>
                         </form>
                     </details>
@@ -943,7 +993,7 @@ const EditDataDialog = ({
                             />
 
                             <div>
-                                <input type='submit' value='Add category' />
+                                <input type='submit' value='Add quantity fraction' />
                             </div>
 
                             <hr />
@@ -956,14 +1006,14 @@ const EditDataDialog = ({
                         <form onSubmit={onSubmitDeleteQuantityFraction}>
                             <InputGroup
                                 input={<select id='delete-id' name='delete-id' required>
-                                    <option value=''>Select a category</option>
+                                    <option value=''>-- Select a quantity fraction --</option>
                                     {quantityFractions.map((quantityFraction) => {
                                         return <option key={`delete-id-${quantityFraction.id}`} value={quantityFraction.id}>
                                             {quantityFraction.name}
                                         </option>;
                                     })}
                                 </select>}
-                                label={<label htmlFor='delete-id'>Name</label>}
+                                label={<label htmlFor='delete-id'>Quantity fraction</label>}
                             />
 
                             <div>
@@ -979,29 +1029,29 @@ const EditDataDialog = ({
 
                         <form onSubmit={onSubmitUpdateQuantityFraction}>
                             <InputGroup
-                                input={<select id='update-id' name='update-id' required>
-                                    <option value=''>-- Select a category --</option>
+                                input={<select id='update-id' name='update-id' onChange={onChangeUpdateQuantityFractionValues} required>
+                                    <option value=''>-- Select a quantity fraction --</option>
                                     {quantityFractions.map((quantityFraction) => {
                                         return <option key={`update-id-${quantityFraction.id}`} value={quantityFraction.id}>
                                             {quantityFraction.name}
                                         </option>;
                                     })}
                                 </select>}
-                                label={<label htmlFor='update-id'>Name</label>}
+                                label={<label htmlFor='update-id'>Quantity fraction</label>}
                             />
 
                             <InputGroup
-                                input={<input id='update-name' name='update-name' required type='text' />}
+                                input={<input id='update-name' name='update-name' ref={quantityFractionUpdateNameRef} required type='text' />}
                                 label={<label htmlFor='update-name'>Name</label>}
                             />
 
                             <InputGroup
-                                input={<input id='update-value' inputMode='decimal' name='update-value' required step='0.001' type='number' />}
+                                input={<input id='update-value' inputMode='decimal' name='update-value' ref={quantityFractionUpdateValueRef} required step='0.001' type='number' />}
                                 label={<label htmlFor='update-value'>Value</label>}
                             />
 
                             <div>
-                                <input type='submit' value='Update serving unit' />
+                                <input type='submit' value='Update quantity fraction' />
                             </div>
                         </form>
                     </details>
@@ -1021,7 +1071,7 @@ const EditDataDialog = ({
 
                             <InputGroup
                                 input={<input id='add-name-plural' name='add-name-plural' required type='text' />}
-                                label={<label htmlFor='add-name-plural'>Name (when plural)</label>}
+                                label={<label htmlFor='add-name-plural'>Name (plural)</label>}
                             />
 
                             <div>
@@ -1038,7 +1088,7 @@ const EditDataDialog = ({
                         <form onSubmit={onSubmitDeleteServingUnit}>
                             <InputGroup
                                 input={<select id='delete-id' name='delete-id'>
-                                    <option value=''>-- Select a course type --</option>
+                                    <option value=''>-- Select a serving unit --</option>
                                     {servingUnits.map((servingUnit) => {
                                         return <option key={`delete-id-${servingUnit.id}`} value={servingUnit.id}>
                                             {servingUnit.name}
@@ -1077,7 +1127,7 @@ const EditDataDialog = ({
 
                             <InputGroup
                                 input={<input id='update-name-plural' name='update-name-plural' ref={servingUnitUpdateNamePluralRef} required type='text' />}
-                                label={<label htmlFor='update-name-plural'>Name (when plural)</label>}
+                                label={<label htmlFor='update-name-plural'>Name (plural)</label>}
                             />
 
                             <div>
@@ -1099,6 +1149,7 @@ const EditDataDialog = ({
                 aria-modal='true'
                 aria-labelledby='dialog-header'
                 className={styles.dialog}
+                onKeyUp={onKeyUpDialog}
                 role='dialog'
             >
                 <div className={styles.header}>
