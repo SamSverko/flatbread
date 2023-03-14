@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { v4 } from 'uuid';
 
 import Card from '../components/card';
 import Icon from '../components/icon';
@@ -74,6 +75,7 @@ const List: NextPage<ListProps> = ({ quantityFractions }: ListProps) => {
 
         if (nameValidated.length > 0 && quantityValidated > 0) {
             const itemToAdd: SavedIngredient = {
+                id: v4(),
                 isComplete: false,
                 name: {
                     name: nameValidated,
@@ -99,14 +101,14 @@ const List: NextPage<ListProps> = ({ quantityFractions }: ListProps) => {
 
     function handleOrderOnClick(event: React.MouseEvent<HTMLButtonElement>, movement: 'down' | 'up') {
         const target = event.target as HTMLButtonElement;
-        const ingredientName = target.getAttribute('data-name');
+        const ingredientId = target.getAttribute('data-id');
 
-        if (!ingredientName) return;
+        if (!ingredientId) return;
 
         const localListItems = localStorage.getItem(LSKey.shoppingList);
         if (localListItems) {
             const localListArray: SavedIngredient[] = JSON.parse(localListItems);
-            const currentListItemIndex = localListArray.findIndex(listItem => listItem.name.name === ingredientName);
+            const currentListItemIndex = localListArray.findIndex(listItem => listItem.id === ingredientId);
 
             if (movement === 'up' && currentListItemIndex > 0) {
                 const currentPlannedRecipe = localListArray.splice(currentListItemIndex, 1);
@@ -122,15 +124,15 @@ const List: NextPage<ListProps> = ({ quantityFractions }: ListProps) => {
 
     function handleRemoveOnClick(event: React.MouseEvent<HTMLButtonElement>) {
         const target = event.target as HTMLButtonElement;
-        const ingredientName = target.getAttribute('data-name');
+        const ingredientId = target.getAttribute('data-id');
 
-        if (!ingredientName) return;
+        if (!ingredientId) return;
 
         const localListItems = localStorage.getItem(LSKey.shoppingList);
 
         if (localListItems) {
             const localListArray: SavedIngredient[] = JSON.parse(localListItems);
-            const currentListItemIndex = localListArray.findIndex(listItem => listItem.name.name === ingredientName);
+            const currentListItemIndex = localListArray.findIndex(listItem => listItem.id === ingredientId);
             localListArray.splice(currentListItemIndex, 1);
 
             updateShoppingList(localListArray);
@@ -206,18 +208,16 @@ const List: NextPage<ListProps> = ({ quantityFractions }: ListProps) => {
                     {listItems.length > 0 &&
                         <ul className={styles.list}>
                             {listItems.map((listItem, index) => {
-                                const listItemId = `list-item-${(listItem.name.name).replaceAll(' ', '-')}`;
-
-                                return <li key={`${listItemId}-${index}`}>
+                                return <li key={listItem.id}>
                                     <div className={styles.left}>
                                         <input
                                             checked={listItem.isComplete}
                                             data-name={listItem.name.name}
-                                            id={listItemId}
+                                            id={listItem.id}
                                             onChange={handleCheckboxOnChange}
                                             type='checkbox'
                                         />
-                                        <label className='no-styles' htmlFor={listItemId}>
+                                        <label className='no-styles' htmlFor={listItem.id}>
                                             {renderLabelContents(listItem)}
                                         </label>
                                     </div>
@@ -225,7 +225,7 @@ const List: NextPage<ListProps> = ({ quantityFractions }: ListProps) => {
                                         <button
                                             aria-label='Move up in list by one'
                                             className='icon-only'
-                                            data-name={listItem.name.name}
+                                            data-id={listItem.id}
                                             disabled={index === 0}
                                             onClick={(event) => handleOrderOnClick(event, 'up')}
                                         >
@@ -234,7 +234,7 @@ const List: NextPage<ListProps> = ({ quantityFractions }: ListProps) => {
                                         <button
                                             aria-label='Move down in list by one'
                                             className='icon-only'
-                                            data-name={listItem.name.name}
+                                            data-id={listItem.id}
                                             disabled={index === listItems.length - 1}
                                             onClick={(event) => handleOrderOnClick(event, 'down')}
                                         >
@@ -243,7 +243,7 @@ const List: NextPage<ListProps> = ({ quantityFractions }: ListProps) => {
                                         <button
                                             aria-label='Remove from list'
                                             className='icon-only'
-                                            data-name={listItem.name.name}
+                                            data-id={listItem.id}
                                             onClick={handleRemoveOnClick}
                                         >
                                             <Icon ariaHidden={true} Icon={bxTrash} />
@@ -261,7 +261,7 @@ const List: NextPage<ListProps> = ({ quantityFractions }: ListProps) => {
 
                 <form className={styles.form} onSubmit={handleFormOnSubmit}>
                     <InputGroup
-                        input={<input id='add-to-shopping-list-quantity' name='quantity' required type='number' />}
+                        input={<input defaultValue={0} id='add-to-shopping-list-quantity' inputMode='numeric' min={0} name='quantity' required type='number' />}
                         label={<label htmlFor='add-to-shopping-list-quantity'>Amount</label>}
                     />
                     <InputGroup

@@ -38,6 +38,7 @@ export type Route = {
 }
 
 export type SavedIngredient = {
+    id: string;
     isComplete: boolean;
     name: {
         name: string;

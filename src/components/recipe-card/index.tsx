@@ -83,6 +83,7 @@ const RecipeCard = ({
         }
         
         const ingredientToAdd: SavedIngredient = {
+            id: ingredient.id.toString(),
             isComplete: false,
             name: {
                 name: ingredient.name.name,
@@ -103,7 +104,7 @@ const RecipeCard = ({
             localStorage.setItem(LSKey.shoppingList, `[${JSON.stringify(ingredientToAdd)}]`);
         } else {
             const shoppingListArray: SavedIngredient[] = JSON.parse(shoppingList);
-            const ingredientToAddIndex = shoppingListArray.findIndex(listItem => listItem.name.name === ingredientToAdd.name.name);
+            const ingredientToAddIndex = shoppingListArray.findIndex(listItem => listItem.id === ingredientToAdd.id);
             
             if (ingredientToAddIndex === -1) {
                 shoppingListArray.push(ingredientToAdd);

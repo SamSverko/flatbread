@@ -498,7 +498,7 @@
 								{
 									"key": "orderByField",
 									"value": "name",
-									"description": "\"createdAt\" | \"name\" | \"namePlural\"",
+									"description": "\"createdAt\" | \"name\" | \"value\"",
 									"disabled": true
 								}
 							]

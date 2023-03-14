@@ -69,6 +69,7 @@ export const PaginationCard = ({
                     button={<input type='submit' value='Go' />}
                     input={<input
                         id='input-jump-to-page'
+                        inputMode='numeric'
                         max={buttonCount}
                         min={1}
                         name='jump-to-page'
