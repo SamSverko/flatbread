@@ -1,23 +1,23 @@
 import { getServerSession } from 'next-auth/next';
 import * as React from 'react';
 
-import Card from '../../components/card';
-import EditDataDialog from '../../components/edit-data-dialog';
-import Icon from '../../components/icon';
-import InputGroup from '../../components/input-group';
+import Card from '../components/card';
+import EditDataDialog from '../components/edit-data-dialog';
+import Icon from '../components/icon';
+import InputGroup from '../components/input-group';
 
-import authOptions from '../api/auth/[...nextauth]';
-import { prisma } from '../../prisma/db';
-import { getCategoryFormat, getIngredientFormat, getIngredientUnitFormat, getQuantityFractionFormat, getServingUnitFormat } from '../../prisma/utils';
+import authOptions from './api/auth/[...nextauth]';
+import { prisma } from '../prisma/db';
+import { getCategoryFormat, getIngredientFormat, getIngredientUnitFormat, getQuantityFractionFormat, getServingUnitFormat } from '../prisma/utils';
 
-import bxRuler from '../../../public/icons/bx-ruler.svg';
-import bxsEditAlt from '../../../public/icons/bxs-edit-alt.svg';
+import bxRuler from '../../public/icons/bx-ruler.svg';
+import bxsEditAlt from '../../public/icons/bxs-edit-alt.svg';
 
-import styles from '../../styles/admin.module.scss';
+import styles from '../styles/admin.module.scss';
 
 import type { CourseType, Cuisine, DietaryRestriction, DishType, Ingredient, IngredientUnit, QuantityFraction, ServingUnit } from '@prisma/client';
 import type { GetServerSideProps, NextPage } from 'next';
-import type { RecipeIngredient } from '../../prisma/types';
+import type { RecipeIngredient } from '../prisma/types';
 
 type AdminProps = {
     courseTypes: CourseType[];
