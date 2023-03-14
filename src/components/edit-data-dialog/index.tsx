@@ -40,6 +40,9 @@ const EditDataDialog = ({
     // Refs
     const categoryUpdateNameRef = React.useRef(null);
     const headerRef = React.useRef(null);
+    const ingredientUnitUpdateNameRef = React.useRef(null);
+    const ingredientUnitUpdateNameAbbrRef = React.useRef(null);
+    const ingredientUnitUpdateNamePluralRef = React.useRef(null);
     const quantityFractionUpdateNameRef = React.useRef(null);
     const quantityFractionUpdateValueRef = React.useRef(null);
     const servingUnitUpdateNameRef = React.useRef(null);
@@ -148,6 +151,26 @@ const EditDataDialog = ({
 
         if (selectedCategory) {
             inputName.value = selectedCategory.name;
+        }
+    }
+
+    function onChangeUpdateIngredientUnitValues(event: React.ChangeEvent<HTMLSelectElement>) {
+        if (!event.target) return;
+        if (!ingredientUnitUpdateNameRef.current) return;
+        if (!ingredientUnitUpdateNameAbbrRef.current) return;
+        if (!ingredientUnitUpdateNamePluralRef.current) return;
+
+        const select = event.target as HTMLSelectElement;
+        const inputName = ingredientUnitUpdateNameRef.current as HTMLInputElement;
+        const inputNameAbbr = ingredientUnitUpdateNameAbbrRef.current as HTMLInputElement;
+        const inputNamePlural = ingredientUnitUpdateNamePluralRef.current as HTMLInputElement;
+
+        const selectedIngredientUnit = ingredientUnits.find(ingredientUnit => ingredientUnit.id === parseInt(select.value));
+
+        if (selectedIngredientUnit) {
+            inputName.value = selectedIngredientUnit.name;
+            inputNameAbbr.value = selectedIngredientUnit.nameAbbr;
+            inputNamePlural.value = selectedIngredientUnit.namePlural;
         }
     }
 
@@ -826,7 +849,7 @@ const EditDataDialog = ({
 
                             <InputGroup
                                 input={<select id='delete-id' name='delete-id' required>
-                                    <option value=''>Select a category</option>
+                                    <option value=''>-- Select a category --</option>
                                     {deleteCategoryOptions.map((category) => {
                                         return <option key={`delete-id-${category.name}`} value={category.id}>
                                             {category.name}
@@ -930,7 +953,7 @@ const EditDataDialog = ({
                             />
 
                             <div>
-                                <input type='submit' value='Delete quantity fraction' />
+                                <input type='submit' value='Delete ingredient unit' />
                             </div>
 
                             <hr />
@@ -942,7 +965,7 @@ const EditDataDialog = ({
 
                         <form onSubmit={onSubmitUpdateIngredientUnit}>
                             <InputGroup
-                                input={<select id='update-id' name='update-id' required>
+                                input={<select id='update-id' name='update-id' onChange={onChangeUpdateIngredientUnitValues} required>
                                     <option value=''>-- Select an ingredient unit --</option>
                                     {ingredientUnits.map((ingredientUnit) => {
                                         return <option key={`update-id-${ingredientUnit.id}`} value={ingredientUnit.id}>
@@ -954,22 +977,22 @@ const EditDataDialog = ({
                             />
 
                             <InputGroup
-                                input={<input id='update-name' name='update-name' required type='text' />}
+                                input={<input id='update-name' name='update-name' ref={ingredientUnitUpdateNameRef} required type='text' />}
                                 label={<label htmlFor='update-name'>Name</label>}
                             />
 
                             <InputGroup
-                                input={<input id='update-name-abbr' name='update-name-abbr' required type='text' />}
+                                input={<input id='update-name-abbr' name='update-name-abbr' ref={ingredientUnitUpdateNameAbbrRef} required type='text' />}
                                 label={<label htmlFor='update-name-abbr'>Name (abbreviated)</label>}
                             />
 
                             <InputGroup
-                                input={<input id='update-name-plural' name='update-name-plural' required type='text' />}
+                                input={<input id='update-name-plural' name='update-name-plural' ref={ingredientUnitUpdateNamePluralRef} required type='text' />}
                                 label={<label htmlFor='update-name-plural'>Name (plural)</label>}
                             />
 
                             <div>
-                                <input type='submit' value='Update serving unit' />
+                                <input type='submit' value='Update ingredient unit' />
                             </div>
                         </form>
                     </details>
