@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import * as React from 'react';
+import { v4 } from 'uuid';
 
 import Card from '../components/card';
 import Icon from '../components/icon';
@@ -45,6 +46,7 @@ const Plan: NextPage = () => {
 
         if (titleValidated.length > 0) {
             const recipeToAdd: PlannedRecipe = {
+                id: v4(),
                 isComplete: false,
                 title: titleValidated,
             };
@@ -65,12 +67,13 @@ const Plan: NextPage = () => {
 
     function handleInputOnChange(event: React.ChangeEvent<HTMLInputElement>) {
         const checkbox = event.target as HTMLInputElement;
-        const recipeTitle = (checkbox.nextSibling as HTMLLabelElement).innerText;
+        const recipeId = checkbox.getAttribute('id');
+
 
         const localPlannedRecipes = localStorage.getItem(LSKey.plannedRecipes);
-        if (localPlannedRecipes) {
+        if (localPlannedRecipes && recipeId) {
             const localPlannedRecipeArray: PlannedRecipe[] = JSON.parse(localPlannedRecipes);
-            const currentRecipeIndex = localPlannedRecipeArray.findIndex(plannedRecipe => plannedRecipe.title === recipeTitle);
+            const currentRecipeIndex = localPlannedRecipeArray.findIndex(plannedRecipe => plannedRecipe.id === recipeId);
             localPlannedRecipeArray[currentRecipeIndex].isComplete = checkbox.checked;
 
             updatePlannedRecipes(localPlannedRecipeArray);
@@ -79,12 +82,12 @@ const Plan: NextPage = () => {
 
     function handleOrderOnClick(event: React.MouseEvent<HTMLButtonElement>, movement: 'down' | 'up') {
         const target = event.target as HTMLButtonElement;
-        const currentRecipeTitle = target.getAttribute('data-title');
+        const currentRecipeId = target.getAttribute('data-id');
 
         const localPlannedRecipes = localStorage.getItem(LSKey.plannedRecipes);
-        if (localPlannedRecipes && currentRecipeTitle) {
+        if (localPlannedRecipes && currentRecipeId) {
             const localPlannedRecipeArray: PlannedRecipe[] = JSON.parse(localPlannedRecipes);
-            const currentRecipeIndex = localPlannedRecipeArray.findIndex(plannedRecipe => plannedRecipe.title === currentRecipeTitle);
+            const currentRecipeIndex = localPlannedRecipeArray.findIndex(plannedRecipe => plannedRecipe.id === currentRecipeId);
 
             if (movement === 'up' && currentRecipeIndex > 0) {
                 const currentPlannedRecipe = localPlannedRecipeArray.splice(currentRecipeIndex, 1);
@@ -100,12 +103,12 @@ const Plan: NextPage = () => {
 
     function handleRemoveOnClick(event: React.MouseEvent<HTMLButtonElement>) {
         const target = event.target as HTMLButtonElement;
-        const currentRecipeTitle = target.getAttribute('data-title');
+        const currentRecipeId = target.getAttribute('data-id');
 
         const localPlannedRecipes = localStorage.getItem(LSKey.plannedRecipes);
-        if (localPlannedRecipes && currentRecipeTitle) {
+        if (localPlannedRecipes && currentRecipeId) {
             const localPlannedRecipeArray: PlannedRecipe[] = JSON.parse(localPlannedRecipes);
-            const currentRecipeIndex = localPlannedRecipeArray.findIndex(plannedRecipe => plannedRecipe.title === currentRecipeTitle);
+            const currentRecipeIndex = localPlannedRecipeArray.findIndex(plannedRecipe => plannedRecipe.id === currentRecipeId);
             localPlannedRecipeArray.splice(currentRecipeIndex, 1);
 
             updatePlannedRecipes(localPlannedRecipeArray);
@@ -150,12 +153,10 @@ const Plan: NextPage = () => {
                     {plannedRecipes.length > 0 &&
                         <ul className={styles.list}>
                             {plannedRecipes.map((plannedRecipe, index) => {
-                                const plannedRecipeId = `planned-recipe-${(plannedRecipe.title).replaceAll(' ', '-')}`;
-
-                                return <li key={`${plannedRecipeId}-${index}`}>
+                                return <li key={plannedRecipe.id}>
                                     <div className={styles.left}>
-                                        <input checked={plannedRecipe.isComplete} id={plannedRecipeId} onChange={handleInputOnChange} type='checkbox' />
-                                        <label className='no-styles' htmlFor={plannedRecipeId}>
+                                        <input checked={plannedRecipe.isComplete} id={plannedRecipe.id} onChange={handleInputOnChange} type='checkbox' />
+                                        <label className='no-styles' htmlFor={plannedRecipe.id}>
                                             {plannedRecipe.url &&
                                                 <Link href={plannedRecipe.url}>
                                                     {plannedRecipe.title}
@@ -170,7 +171,7 @@ const Plan: NextPage = () => {
                                         <button
                                             aria-label='Move up in list by one'
                                             className='icon-only'
-                                            data-title={plannedRecipe.title}
+                                            data-id={plannedRecipe.id}
                                             disabled={index === 0}
                                             onClick={(event) => handleOrderOnClick(event, 'up')}
                                         >
@@ -179,7 +180,7 @@ const Plan: NextPage = () => {
                                         <button
                                             aria-label='Move down in list by one'
                                             className='icon-only'
-                                            data-title={plannedRecipe.title}
+                                            data-id={plannedRecipe.id}
                                             disabled={index === plannedRecipes.length - 1}
                                             onClick={(event) => handleOrderOnClick(event, 'down')}
                                         >
@@ -188,7 +189,7 @@ const Plan: NextPage = () => {
                                         <button
                                             aria-label='Remove from list'
                                             className='icon-only'
-                                            data-title={plannedRecipe.title}
+                                            data-id={plannedRecipe.id}
                                             onClick={handleRemoveOnClick}
                                         >
                                             <Icon ariaHidden={true} Icon={bxTrash} />

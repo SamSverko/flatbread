@@ -79,14 +79,14 @@ const Saved: NextPage = () => {
             {savedRecipes && 
                 (savedRecipes as RecipeFormatted[])
                     .slice(currentPaginationPage * recipesPerPage, (currentPaginationPage * recipesPerPage) + recipesPerPage)
-                    .map((recipe, index) => {
+                    .map((recipe) => {
                         const isPlanned = (plannedRecipes.findIndex((savedRecipe: PlannedRecipe) => savedRecipe.title === recipe.title) === -1) ? false : true;
                         const isSaved = (savedRecipes.findIndex((savedRecipe: RecipeFormatted) => savedRecipe.slug === recipe.slug) === -1) ? false : true;
 
                         return <RecipeCard
                             isPlanned={isPlanned}
                             isSaved={isSaved}
-                            key={`key-recipe-${recipe.slug}-${index}`}
+                            key={recipe.id}
                             onRemoveFromSaved={getSavedRecipes}
                             recipe={recipe}
                         />;

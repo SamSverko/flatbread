@@ -13,6 +13,7 @@ import type {
 export type Category = 'courseType' | 'cuisine' | 'dietaryRestriction' | 'dishType';
 
 export type PlannedRecipe = {
+    id: string;
     title: string;
     isComplete: boolean;
     url?: string;

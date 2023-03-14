@@ -147,6 +147,7 @@ const RecipeCard = ({
     function handlePlanRecipeOnClick() {
         const plannedRecipes = localStorage.getItem(LSKey.plannedRecipes);
         const currentRecipe: PlannedRecipe = {
+            id: recipe.id.toString(),
             title: recipe.title,
             isComplete: false,
             url: `${window.location.origin}/recipe/${recipe.slug}`,
@@ -157,7 +158,7 @@ const RecipeCard = ({
             setIsPlannedState(true);
         } else {
             const plannedRecipesArray = JSON.parse(plannedRecipes);
-            const plannedRecipeIndex = plannedRecipesArray.findIndex((plannedRecipe: PlannedRecipe) => plannedRecipe.title === recipe.title);
+            const plannedRecipeIndex = plannedRecipesArray.findIndex((plannedRecipe: PlannedRecipe) => plannedRecipe.id === recipe.id);
 
             if (plannedRecipeIndex === -1) {
                 plannedRecipesArray.push(currentRecipe);
