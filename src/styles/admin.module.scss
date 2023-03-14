@@ -146,3 +146,30 @@
     flex-direction: column;
     gap: var(--spacing-5);
 }
+
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-2);
+    list-style-type: none;
+    margin: var(--spacing-5) 0 0;
+    padding: 0;
+
+    li {
+        align-items: center;
+        display: flex;
+        gap: var(--spacing-2);
+        justify-content: space-between;
+
+        &.header {
+            margin: var(--spacing-2) 0;
+        }
+
+        .right {
+            align-items: center;
+            display: flex;
+            gap: var(--spacing-2);
+            justify-content: flex-end;
+        }
+    }
+}

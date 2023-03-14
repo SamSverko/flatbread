@@ -23,6 +23,7 @@ export interface RecipeToSeed {
 }
 
 export interface RecipeIngredient {
+    id?: string;
     section?: string;
     quantityWhole?: number;
     quantityFraction?: string;

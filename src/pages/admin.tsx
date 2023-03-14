@@ -1,5 +1,6 @@
 import { getServerSession } from 'next-auth/next';
 import * as React from 'react';
+import { v4 } from 'uuid';
 
 import Card from '../components/card';
 import EditDataDialog from '../components/edit-data-dialog';
@@ -10,7 +11,10 @@ import authOptions from './api/auth/[...nextauth]';
 import { prisma } from '../prisma/db';
 import { getCategoryFormat, getIngredientFormat, getIngredientUnitFormat, getQuantityFractionFormat, getServingUnitFormat } from '../prisma/utils';
 
+import bxDownArrowAlt from '../../public/icons/bx-down-arrow-alt.svg';
 import bxRuler from '../../public/icons/bx-ruler.svg';
+import bxTrash from '../../public/icons/bx-trash.svg';
+import bxUpArrowAlt from '../../public/icons/bx-up-arrow-alt.svg';
 import bxsEditAlt from '../../public/icons/bxs-edit-alt.svg';
 
 import styles from '../styles/admin.module.scss';
@@ -60,7 +64,7 @@ const Admin: NextPage<AdminProps> = ({
     const [localQuantityFractions, setLocalQuantityFractions] = React.useState(quantityFractions);
     const [localServingUnits, setLocalServingUnits] = React.useState(servingUnits);
     const [quantityTypeIsSingle, setQuantityTypeIsSingle] = React.useState(true);
-    const [recipeIngredients, setRecipeIngredients] = React.useState([]);
+    const [recipeIngredients, setRecipeIngredients] = React.useState<Array<RecipeIngredient>>([]);
 
     // Event listeners
     function handleEditCategoryOnClick() {
@@ -247,6 +251,7 @@ const Admin: NextPage<AdminProps> = ({
         const substitutionsValidated = formDataSubstitutions as string[];
 
         const ingredientToAdd: RecipeIngredient = {
+            id: v4(),
             name: nameValidated,
             isOptional: isOptionalValidated,
             substitutions: substitutionsValidated,
@@ -306,7 +311,36 @@ const Admin: NextPage<AdminProps> = ({
             ingredientToAdd.alteration = alterationValidated;
         }
 
-        console.log(ingredientToAdd);
+        setRecipeIngredients(recipeIngredients => [...recipeIngredients, ingredientToAdd]);
+    }
+
+    function onClickOrderIngredient(event: React.MouseEvent<HTMLButtonElement>, movement: 'down' | 'up') {
+        const target = event.target as HTMLButtonElement;
+        const ingredientId = target.getAttribute('data-id');
+
+        if (!ingredientId) return;
+
+        const localRecipeIngredients: RecipeIngredient[] = [...recipeIngredients];
+        const currentItemIndex = localRecipeIngredients.findIndex(item => item.id === ingredientId);
+
+        if (movement === 'up' && currentItemIndex > 0) {
+            const currentRecipeIngredient = localRecipeIngredients.splice(currentItemIndex, 1);
+            localRecipeIngredients.splice(currentItemIndex - 1, 0, currentRecipeIngredient[0]);
+        } else if (movement === 'down' && localRecipeIngredients.length - 1) {
+            const currentRecipeIngredient = localRecipeIngredients.splice(currentItemIndex, 1);
+            localRecipeIngredients.splice(currentItemIndex + 1, 0, currentRecipeIngredient[0]);
+        }
+
+        setRecipeIngredients(localRecipeIngredients);
+    }
+
+    function onClickRemoveIngredient(event: React.MouseEvent<HTMLButtonElement>) {
+        const target = event.target as HTMLButtonElement;
+        const ingredientId = target.getAttribute('data-id');
+
+        if (!ingredientId) return;
+
+        setRecipeIngredients(recipeIngredients.filter(ingredient => ingredient.id !== ingredientId));
     }
 
     // Helpers
@@ -370,6 +404,121 @@ const Admin: NextPage<AdminProps> = ({
     }
 
     // Renderers
+    function renderIngredients() {
+        function parseIngredient(ingredient: RecipeIngredient) {
+            let quantity = '';
+            // let quantityValue = 0;
+
+            if (ingredient.quantityWhole) {
+                quantity += ingredient.quantityWhole;
+                // quantityValue += ingredient.quantityWhole;
+            }
+
+            if (ingredient.quantityFraction) {
+                quantity += ingredient.quantityFraction;
+                // quantityValue += Number(ingredient.quantityFraction.value);
+            }
+
+            if (ingredient.quantityMinWhole) {
+                quantity += ingredient.quantityMinWhole;
+                // quantityValue += ingredient.quantityMinWhole;
+            }
+
+            if (ingredient.quantityMinFraction) {
+                quantity += ingredient.quantityMinFraction;
+                // quantityValue += Number(ingredient.quantityMinFraction.value);
+            }
+
+            if (ingredient.quantityMaxWhole || ingredient.quantityMaxFraction) {
+                quantity += '-';
+            }
+
+            if (ingredient.quantityMaxWhole) {
+                quantity += ingredient.quantityMaxWhole;
+                // quantityValue += ingredient.quantityMaxWhole;
+            }
+
+            if (ingredient.quantityMaxFraction) {
+                quantity += ingredient.quantityMaxFraction;
+                // quantityValue += Number(ingredient.quantityMaxFraction.value);
+            }
+
+            // if (ingredient.quantityMinFraction && ingredient.quantityMaxFraction) {
+            //     quantityValue -= Number(ingredient.quantityMinFraction.value);
+            // }
+
+            // if (ingredient.quantityMinWhole && ingredient.quantityMaxWhole) {
+            //     quantityValue -= ingredient.quantityMinWhole;
+            // }
+
+            // const unit = (ingredient.unit) ? (quantityValue <= 1 ? ingredient.unit.name : ingredient.unit.namePlural) : '';
+            // const name = (quantityValue <= 1) ? ingredient.name.name : ingredient.name.namePlural;
+            const alteration = (ingredient.alteration) ? `, ${ingredient.alteration}` : '';
+            const optional = (ingredient.isOptional) ? ' (optional)' : '';
+            const section = (ingredient.section) ? `[${ingredient.section}] ` : '';
+            const substitutions = (ingredient.substitutions.length > 0)
+                ? ` (substitutions: ${ingredient.substitutions.join(', ')})`
+                : '';
+
+            return {
+                alteration: alteration,
+                id: ingredient.id,
+                name: ingredient.name,
+                optional: optional,
+                quantity: quantity,
+                // quantityValue: quantityValue,
+                section: section,
+                substitutions: substitutions,
+                unit: ingredient.unit,
+            };
+        }
+
+        return (
+            <ul className={styles.list}>
+                {recipeIngredients.map((ingredient, index) => {
+                    const parsedIngredient = parseIngredient(ingredient);
+
+                    return (
+                        <li key={parsedIngredient.id}>
+                            <div className={styles.left}>
+                                <b>{parsedIngredient.section}</b>{parsedIngredient.quantity} {parsedIngredient.unit} <b>{parsedIngredient.name}</b>
+                                <em>{parsedIngredient.alteration}</em>{parsedIngredient.optional}{parsedIngredient.substitutions}
+                            </div>
+                            <div className={styles.right}>
+                                <button
+                                    aria-label='Move up in list by one'
+                                    className='icon-only'
+                                    data-id={ingredient.id}
+                                    disabled={index === 0}
+                                    onClick={(event) => onClickOrderIngredient(event, 'up')}
+                                >
+                                    <Icon ariaHidden={true} Icon={bxUpArrowAlt} />
+                                </button>
+                                <button
+                                    aria-label='Move down in list by one'
+                                    className='icon-only'
+                                    data-id={ingredient.id}
+                                    disabled={index === recipeIngredients.length - 1}
+                                    onClick={(event) => onClickOrderIngredient(event, 'down')}
+                                >
+                                    <Icon ariaHidden={true} Icon={bxDownArrowAlt} />
+                                </button>
+                                <button
+                                    aria-label='Remove from list'
+                                    className='icon-only'
+                                    data-id={ingredient.id}
+                                    onClick={onClickRemoveIngredient}
+                                >
+                                    <Icon ariaHidden={true} Icon={bxTrash} />
+                                </button>
+                            </div>
+                        </li>
+                    );
+                })}
+            </ul>
+        );
+    }
+
     return (
         <>
             <Card>
@@ -524,7 +673,7 @@ const Admin: NextPage<AdminProps> = ({
 
                 {/* ingredients =========================================== */}
                 <form className={styles.form} id='add-ingredient' onSubmit={handleOnSubmitAddIngredient}>
-                    <p><b>Ingredients</b></p>
+                    <p><b>Add ingredient</b></p>
 
                     {/* ingredient / section ============================== */}
                     <InputGroup
@@ -690,17 +839,10 @@ const Admin: NextPage<AdminProps> = ({
 
                 <hr />
 
-                <>
-                    {recipeIngredients.length > 0 &&
-                        <ul>
-                            {(recipeIngredients as RecipeIngredient[]).map((ingredient, index) => {
-                                return (
-                                    <li key={`ingredient-${index}`}>{ingredient.name}</li>
-                                );
-                            })}
-                        </ul>
-                    }
-                </>
+                <div>
+                    <p><b>Ingredients</b></p>
+                    {renderIngredients()}
+                </div>
 
                 <div className={styles['section-submit']}>
                     <div>
