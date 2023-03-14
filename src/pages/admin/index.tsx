@@ -139,9 +139,48 @@ const Admin: NextPage<AdminProps> = ({
         }
 
         const formDataCourseTypes = formData.getAll('course-types');
+        const courseTypesFlat = localCourseTypes.map((category) => category.name);
+        formDataCourseTypes.forEach((selectedCategory) => {
+            if (!courseTypesFlat.includes(selectedCategory as string)) {
+                return setFormFeedback('Form error: \'Course type\' values must be from the list provided.');
+            }
+        });
         const courseTypesValidated = (formDataCourseTypes.length > 0) ? formDataCourseTypes.join(',') : undefined;
         if (!courseTypesValidated) {
             return setFormFeedback('Form error: Course types must have at least one selection.');
+        }
+
+        const formDataCuisines = formData.getAll('cuisines');
+        const cuisinesFlat = localCuisines.map((category) => category.name);
+        formDataCuisines.forEach((selectedCategory) => {
+            if (!cuisinesFlat.includes(selectedCategory as string)) {
+                return setFormFeedback('Form error: \'Cuisine\' values must be from the list provided.');
+            }
+        });
+        const cuisinesValidated = (formDataCuisines.length > 0) ? formDataCuisines.join(',') : undefined;
+        if (!cuisinesValidated) {
+            return setFormFeedback('Form error: \'Cuisines\' must have at least one selection.');
+        }
+
+        const formDataDietaryRestrictions = formData.getAll('dietary-restrictions');
+        const dietaryRestrictionsFlat = localDietaryRestrictions.map((category) => category.name);
+        formDataDietaryRestrictions.forEach((selectedCategory) => {
+            if (!dietaryRestrictionsFlat.includes(selectedCategory as string)) {
+                return setFormFeedback('Form error: \'Dietary restriction\' values must be from the list provided.');
+            }
+        });
+        const dietaryRestrictionsValidated = (formDataDietaryRestrictions.length > 0) ? formDataDietaryRestrictions.join(',') : undefined;
+
+        const formDataDishTypes = formData.getAll('dish-types');
+        const dishTypesFlat = localDishTypes.map((category) => category.name);
+        formDataDishTypes.forEach((selectedCategory) => {
+            if (!dishTypesFlat.includes(selectedCategory as string)) {
+                return setFormFeedback('Form error: \'Dish type\' values must be from the list provided.');
+            }
+        });
+        const dishTypesValidated = (formDataDishTypes.length > 0) ? formDataDishTypes.join(',') : undefined;
+        if (!dishTypesValidated) {
+            return setFormFeedback('Form error: \'Dish types\' must have at least one selection.');
         }
 
         const recipeToAdd = {
@@ -154,6 +193,9 @@ const Admin: NextPage<AdminProps> = ({
             servingAmount: servingAmountValidated,
             servingUnit: servingUnitValidated,
             courseTypes: courseTypesValidated,
+            cuisines: cuisinesValidated,
+            dietaryRestrictions: dietaryRestrictionsValidated,
+            dishTypes: dishTypesValidated,
         };
 
         console.log(recipeToAdd);
