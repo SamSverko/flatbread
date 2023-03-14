@@ -12,14 +12,8 @@ export interface RecipeToSeed {
     dietaryRestrictions: string[];
     dishTypes: string[];
     ingredients: RecipeIngredient[];
-    steps: {
-        section?: string;
-        details: string;
-    }[];
-    notes: {
-        section?: string;
-        details: string;
-    }[];
+    steps: RecipeStepNote[];
+    notes: RecipeStepNote[];
 }
 
 export interface RecipeIngredient {
@@ -36,4 +30,10 @@ export interface RecipeIngredient {
     alteration?: string;
     isOptional: boolean;
     substitutions: string[];
+}
+
+export interface RecipeStepNote {
+    id?: string;
+    section?: string;
+    details: string;
 }

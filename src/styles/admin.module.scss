@@ -173,3 +173,15 @@
         }
     }
 }
+
+.details {
+    form {
+        margin-top: var(--spacing-5);
+    }
+}
+
+.list-results {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-5);
+}
