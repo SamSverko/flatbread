@@ -8,14 +8,14 @@ import InputGroup from '../../components/input-group';
 
 import authOptions from '../api/auth/[...nextauth]';
 import { prisma } from '../../prisma/db';
-import { getCategoryFormat, getIngredientUnitFormat, getQuantityFractionFormat, getServingUnitFormat } from '../../prisma/utils';
+import { getCategoryFormat, getIngredientFormat, getIngredientUnitFormat, getQuantityFractionFormat, getServingUnitFormat } from '../../prisma/utils';
 
 import bxRuler from '../../../public/icons/bx-ruler.svg';
 import bxsEditAlt from '../../../public/icons/bxs-edit-alt.svg';
 
 import styles from '../../styles/admin.module.scss';
 
-import type { CourseType, Cuisine, DietaryRestriction, DishType, IngredientUnit, QuantityFraction, ServingUnit } from '@prisma/client';
+import type { CourseType, Cuisine, DietaryRestriction, DishType, Ingredient, IngredientUnit, QuantityFraction, ServingUnit } from '@prisma/client';
 import type { GetServerSideProps, NextPage } from 'next';
 import type { RecipeIngredient } from '../../prisma/types';
 
@@ -24,6 +24,7 @@ type AdminProps = {
     cuisines: Cuisine[];
     dietaryRestrictions: DietaryRestriction[];
     dishTypes: DishType[];
+    ingredients: Ingredient[];
     ingredientUnits: IngredientUnit[];
     quantityFractions: QuantityFraction[];
     servingUnits: ServingUnit[];
@@ -34,6 +35,7 @@ const Admin: NextPage<AdminProps> = ({
     cuisines,
     dietaryRestrictions,
     dishTypes,
+    ingredients,
     ingredientUnits,
     quantityFractions,
     servingUnits,
@@ -41,17 +43,19 @@ const Admin: NextPage<AdminProps> = ({
     // Refs
     const editCategoryButtonRef = React.useRef(null);
     const editFractionsButtonRef = React.useRef(null);
+    const editIngredientsButtonRef = React.useRef(null);
     const editIngredientUnitsButtonRef = React.useRef(null);
     const editServingsButtonRef = React.useRef(null);
 
     // States
     const [formFeedback, setFormFeedback] = React.useState('');
     const [showDialog, setShowDialog] = React.useState(false);
-    const [editType, setEditType] = React.useState<'categories' | 'ingredient units' | 'quantity fractions' | 'serving units' | ''>('');
+    const [editType, setEditType] = React.useState<'categories' | 'ingredients' | 'ingredient units' | 'quantity fractions' | 'serving units' | ''>('');
     const [localCourseTypes, setLocalCourseTypes] = React.useState(courseTypes);
     const [localCuisines, setLocalCuisines] = React.useState(cuisines);
     const [localDietaryRestrictions, setLocalDietaryRestrictions] = React.useState(dietaryRestrictions);
     const [localDishTypes, setLocalDishTypes] = React.useState(dishTypes);
+    const [localIngredients, setLocalIngredients] = React.useState(ingredients);
     const [localIngredientUnits, setLocalIngredientUnits] = React.useState(ingredientUnits);
     const [localQuantityFractions, setLocalQuantityFractions] = React.useState(quantityFractions);
     const [localServingUnits, setLocalServingUnits] = React.useState(servingUnits);
@@ -155,6 +159,11 @@ const Admin: NextPage<AdminProps> = ({
         console.log(recipeToAdd);
     }
 
+    function handleOnClickEditIngredients() {
+        setEditType('ingredients');
+        setShowDialog(true);
+    }
+
     function handleOnClickEditIngredientUnits() {
         setEditType('ingredient units');
         setShowDialog(true);
@@ -228,6 +237,14 @@ const Admin: NextPage<AdminProps> = ({
                         setLocalCuisines(data.cuisines);
                         setLocalDietaryRestrictions(data.dietaryRestrictions);
                         setLocalDishTypes(data.dishTypes);
+                    }
+                });
+        } else if (editType === 'ingredients') {
+            fetch('/api/ingredients?orderBy=asc&orderByField=name')
+                .then((response) => response.json())
+                .then((data) => {
+                    if (!data.error) {
+                        setLocalIngredients(data);
                     }
                 });
         } else if (editType === 'ingredient units') {
@@ -336,7 +353,7 @@ const Admin: NextPage<AdminProps> = ({
                                 <option value=''>-- Select a serving unit --</option>
                                 {localServingUnits.map((servingUnit) => {
                                     return <option key={`serving-unit-${servingUnit.name}`} value={servingUnit.name}>
-                                        {servingUnit.namePlural}
+                                        {servingUnit.name}
                                     </option>;
                                 })}
                             </select>}
@@ -497,11 +514,30 @@ const Admin: NextPage<AdminProps> = ({
                             <option value=''>-- Select a unit --</option>
                             {localIngredientUnits.map((ingredientUnit) => {
                                 return <option key={`ingredient-unit-${ingredientUnit.name}`} value={ingredientUnit.name}>
-                                    {ingredientUnit.namePlural}
+                                    {ingredientUnit.name}
                                 </option>;
                             })}
                         </select>}
                         label={<label htmlFor='ingredient-unit'>Unit *</label>}
+                    />
+
+                    <div className={styles['section-heading']}>
+                        <p><b>Name</b></p>
+                        <button aria-label='Edit ingredient names' className='icon-only' onClick={handleOnClickEditIngredients} ref={editIngredientsButtonRef} type='button'>
+                            <Icon ariaHidden={true} Icon={bxsEditAlt} />
+                        </button>
+                    </div>
+
+                    <InputGroup
+                        input={<select aria-required='true' id='ingredient' name='ingredient' required>
+                            <option value=''>-- Select an ingredient --</option>
+                            {localIngredients.map((ingredient) => {
+                                return <option key={`ingredient-unit-${ingredient.name}`} value={ingredient.name}>
+                                    {ingredient.name}
+                                </option>;
+                            })}
+                        </select>}
+                        label={<label htmlFor='ingredient'>Name *</label>}
                     />
 
                     <div className={styles['section-submit-alt']}>
@@ -545,6 +581,7 @@ const Admin: NextPage<AdminProps> = ({
                     dietaryRestrictions={localDietaryRestrictions}
                     dishTypes={localDishTypes}
                     editType={editType}
+                    ingredients={localIngredients}
                     ingredientUnits={localIngredientUnits}
                     quantityFractions={localQuantityFractions}
                     servingUnits={localServingUnits}
@@ -596,6 +633,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         },
     });
 
+    const ingredients = await prisma.ingredient.findMany({
+        select: getIngredientFormat(false),
+        orderBy: {
+            name: 'asc',
+        },
+    });
+
     const ingredientUnits = await prisma.ingredientUnit.findMany({
         select: getIngredientUnitFormat(false),
         orderBy: {
@@ -641,6 +685,13 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                 return {
                     id: category.id,
                     name: category.name,
+                };
+            }),
+            ingredients: (ingredients as Ingredient[]).map(ingredient => {
+                return {
+                    id: ingredient.id,
+                    name: ingredient.name,
+                    namePlural: ingredient.namePlural,
                 };
             }),
             ingredientUnits: (ingredientUnits as IngredientUnit[]).map(ingredientUnits => {
