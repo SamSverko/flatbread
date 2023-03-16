@@ -118,7 +118,7 @@ const Admin: NextPage<AdminProps> = ({
         if (isNaN(prepTimeMinsValidated) || prepTimeMinsValidated < 0) {
             return setFormFeedback('Form error: Prep time minutes value must be a positive whole number.');
         }
-        const prepTimeValidated = (prepTimeHoursValidated * 60) + prepTimeMinsValidated;
+        const prepTimeValidated = ((prepTimeHoursValidated * 60) + prepTimeMinsValidated).toString();
 
         const formDataCookTimeHours = formData.get('cook-time-hours');
         const cookTimeHoursValidated = (formDataCookTimeHours) ? parseInt(formDataCookTimeHours as string) : 0;
@@ -130,16 +130,16 @@ const Admin: NextPage<AdminProps> = ({
         if (isNaN(cookTimeMinsValidated) || cookTimeMinsValidated < 0) {
             return setFormFeedback('Form error: Cook time minutes value must be a positive whole number.');
         }
-        const cookTimeValidated = (cookTimeHoursValidated * 60) + cookTimeMinsValidated;
+        const cookTimeValidated = ((cookTimeHoursValidated * 60) + cookTimeMinsValidated).toString();
 
         const formDataServingAmount = formData.get('serving-amount');
-        const servingAmountValidated = (formDataServingAmount) ? parseInt(formDataServingAmount as string) : undefined;
+        const servingAmountValidated = (formDataServingAmount) ? formDataServingAmount as string : undefined;
         if (!servingAmountValidated) {
             return setFormFeedback('Form error: Serving amount value must be a positive whole number.');
         }
 
         const formDataServingUnit = formData.get('serving-unit');
-        const servingUnitValidated = (localServingUnits.map(servingUnit => servingUnit.name).includes(formDataServingUnit as string)) ? formDataServingUnit : undefined;
+        const servingUnitValidated = (localServingUnits.map(servingUnit => servingUnit.name).includes(formDataServingUnit as string)) ? formDataServingUnit as string : undefined;
         if (!servingUnitValidated) {
             return setFormFeedback('Form error: Serving unit value must be an existing serving unit.');
         }
@@ -189,22 +189,68 @@ const Admin: NextPage<AdminProps> = ({
             return setFormFeedback('Form error: \'Dish types\' must have at least one selection.');
         }
 
-        const recipeToAdd = {
+        if (recipeIngredients.length === 0) {
+            return setFormFeedback('Form error: There must be at least one \'Ingredient\' provided.');
+        }
+
+        if (recipeSteps.length === 0) {
+            return setFormFeedback('Form error: There must be at least one \'Step\' provided.');
+        }
+
+        const recipeFormBody: { [key: string]: string } = {
             title: titleValidated,
             slug: slugValidated,
             sourceName: sourceNameValidated,
-            sourceURL: sourceURLValidated,
-            prepTimeMin: prepTimeValidated,
-            cookTimeMin: cookTimeValidated,
+            prepTimeMins: prepTimeValidated,
+            cookTimeMins: cookTimeValidated,
             servingAmount: servingAmountValidated,
             servingUnit: servingUnitValidated,
             courseTypes: courseTypesValidated,
             cuisines: cuisinesValidated,
-            dietaryRestrictions: dietaryRestrictionsValidated,
             dishTypes: dishTypesValidated,
+            ingredients: JSON.stringify(recipeIngredients),
+            steps: JSON.stringify(recipeSteps),
         };
 
-        console.log(recipeToAdd);
+        if (sourceURLValidated) recipeFormBody.sourceURL = sourceURLValidated;
+        if (dietaryRestrictionsValidated) recipeFormBody.dietaryRestrictions = dietaryRestrictionsValidated;
+        if (recipeNotes.length > 0) recipeFormBody.notes = JSON.stringify(recipeNotes);
+
+        let formBody: unknown[] | string = [];
+        for (const property in recipeFormBody) {
+            const encodedKey = encodeURIComponent(property);
+            const encodedValue = encodeURIComponent(recipeFormBody[property]);
+            formBody.push(encodedKey + '=' + encodedValue);
+        }
+        formBody = formBody.join('&');
+
+        try {
+            fetch('/api/recipe', {
+                body: formBody,
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                method: 'POST',
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.error) {
+                        setFormFeedback(`Form error: ${data.error}`);
+                        return;
+                    }
+
+                    if (data.code) {
+                        setFormFeedback(`Form error: ${data.code}: ${data.message}`);
+                        return;
+                    }
+
+                    console.log(data);
+                    setFormFeedback('Form success: New \'recipe\' created.');
+                });
+        } catch (error) {
+            setFormFeedback('Form error: Please try again.');
+        }
     }
 
     function handleOnClickEditIngredients() {
@@ -671,7 +717,7 @@ const Admin: NextPage<AdminProps> = ({
                         label={<label htmlFor='source-url'>Source URL</label>}
                     />
 
-                    {/* prepTimeMin ======================================= */}
+                    {/* prepTimeMins ====================================== */}
                     <p><b>Prep time</b></p>
 
                     <div className={styles['inline-time-inputs']}>
@@ -686,7 +732,7 @@ const Admin: NextPage<AdminProps> = ({
                         />
                     </div>
 
-                    {/* cookTimeMin ======================================= */}
+                    {/* cookTimeMins ====================================== */}
                     <p><b>Cook time</b></p>
 
                     <div className={styles['inline-time-inputs']}>
@@ -712,7 +758,7 @@ const Admin: NextPage<AdminProps> = ({
                     {/* servingUnit ======================================= */}
                     <div className={styles['inline-serving-inputs']}>
                         <InputGroup
-                            input={<input aria-required='true' defaultValue={0} id='serving-amount' inputMode='numeric' max={999} min={0} name='serving-amount' step={1} type='number' />}
+                            input={<input aria-required='true' defaultValue={4} id='serving-amount' inputMode='numeric' max={999} min={1} name='serving-amount' step={1} type='number' />}
                             label={<label htmlFor='serving-amount'>Amount *</label>}
                         />
 
@@ -1122,7 +1168,7 @@ const Admin: NextPage<AdminProps> = ({
 
                 <div className={styles['section-submit']}>
                     <div>
-                        <input form='add-recipe' type='submit' value='Submit' />
+                        <input form='add-recipe' type='submit' value='Add new recipe' />
                     </div>
 
                     {formFeedback.length > 0 &&

@@ -137,6 +137,10 @@
 
         li {
             align-items: flex-start;
+
+            label {
+                width: 100%;
+            }
         }
     }
 }
