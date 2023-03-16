@@ -610,14 +610,14 @@
 									"disabled": true
 								},
 								{
-									"key": "prepTimeMin",
+									"key": "prepTimeMins",
 									"value": "10",
 									"description": "number",
 									"type": "text",
 									"disabled": true
 								},
 								{
-									"key": "cookTimeMin",
+									"key": "cookTimeMins",
 									"value": "0",
 									"description": "number",
 									"type": "text",
@@ -735,7 +735,7 @@
 								{
 									"key": "orderByField",
 									"value": "sourceName",
-									"description": "\"createdAt\" | \"title\" | \"sourceName\" | \"prepTimeMin\" | \"cookTimeMin\" | \"servingAmount\"",
+									"description": "\"createdAt\" | \"title\" | \"sourceName\" | \"prepTimeMins\" | \"cookTimeMins\" | \"servingAmount\"",
 									"disabled": true
 								},
 								{
@@ -816,14 +816,14 @@
 									"disabled": true
 								},
 								{
-									"key": "prepTimeMin",
+									"key": "prepTimeMins",
 									"value": "10",
 									"description": "number",
 									"type": "text",
 									"disabled": true
 								},
 								{
-									"key": "cookTimeMin",
+									"key": "cookTimeMins",
 									"value": "0",
 									"description": "number",
 									"type": "text",
@@ -919,7 +919,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{API_BASE_URL}}/recipe?id=9f93cca8-0a0f-4439-8b40-961001c62c12",
+							"raw": "{{API_BASE_URL}}/recipe",
 							"host": [
 								"{{API_BASE_URL}}"
 							],
@@ -930,7 +930,8 @@
 								{
 									"key": "id",
 									"value": "9f93cca8-0a0f-4439-8b40-961001c62c12",
-									"description": "string"
+									"description": "string",
+									"disabled": true
 								}
 							]
 						}

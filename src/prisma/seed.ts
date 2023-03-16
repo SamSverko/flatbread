@@ -186,8 +186,8 @@ const recipeNanaimoBars: RecipeToSeed = {
     title: 'Nanaimo Bars',
     slug: 'nanaimo-bars',
     sourceName: 'Mary-Ann Derocher',
-    prepTimeMin: 30,
-    cookTimeMin: 10,
+    prepTimeMins: 30,
+    cookTimeMins: 10,
     servingAmount: 25,
     servingUnit: 'square',
     courseTypes: ['dessert', 'snack'],
@@ -336,8 +336,8 @@ const recipeChickenNoodleSoup: RecipeToSeed = {
     slug: 'thick-and-creamy-chicken-noodle-soup',
     sourceName: 'Canadian Living',
     sourceURL: 'https://www.canadianliving.com/food/lunch-and-dinner/recipe/thick-and-creamy-chicken-noodle-soup',
-    prepTimeMin: 30,
-    cookTimeMin: 30,
+    prepTimeMins: 30,
+    cookTimeMins: 30,
     servingAmount: 4,
     servingUnit: 'serving',
     courseTypes: ['dinner', 'lunch'],
@@ -651,8 +651,8 @@ async function seedDB() {
             slug: recipeNanaimoBars.slug,
             sourceName: recipeNanaimoBars.sourceName,
             sourceURL: recipeNanaimoBars.sourceURL,
-            prepTimeMin: recipeNanaimoBars.prepTimeMin,
-            cookTimeMin: recipeNanaimoBars.cookTimeMin,
+            prepTimeMins: recipeNanaimoBars.prepTimeMins,
+            cookTimeMins: recipeNanaimoBars.cookTimeMins,
             servingAmount: recipeNanaimoBars.servingAmount,
             servingUnit: {
                 connect: {
@@ -782,8 +782,8 @@ async function seedDB() {
             slug: recipeChickenNoodleSoup.slug,
             sourceName: recipeChickenNoodleSoup.sourceName,
             sourceURL: recipeChickenNoodleSoup.sourceURL,
-            prepTimeMin: recipeChickenNoodleSoup.prepTimeMin,
-            cookTimeMin: recipeChickenNoodleSoup.cookTimeMin,
+            prepTimeMins: recipeChickenNoodleSoup.prepTimeMins,
+            cookTimeMins: recipeChickenNoodleSoup.cookTimeMins,
             servingAmount: recipeChickenNoodleSoup.servingAmount,
             servingUnit: {
                 connect: {

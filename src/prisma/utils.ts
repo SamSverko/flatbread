@@ -66,8 +66,8 @@ export function getRecipeFormat(condensed = false): Prisma.RecipeSelect {
         slug: true,
         sourceName: true,
         sourceURL: true,
-        prepTimeMin: true,
-        cookTimeMin: true,
+        prepTimeMins: true,
+        cookTimeMins: true,
         servingAmount: true,
         servingUnit: {
             select: {
@@ -223,24 +223,24 @@ export function validateQueryParamCondensed(res: NextApiResponse, value: string 
     }
 }
 
-export function validateQueryParamCookTimeMin(res: NextApiResponse, value: string | string[]) {
-    const cookTimeMin = value?.toString().trim();
+export function validateQueryParamCookTimeMins(res: NextApiResponse, value: string | string[]) {
+    const cookTimeMins = value?.toString().trim();
 
-    if (!cookTimeMin) {
+    if (!cookTimeMins) {
         return res.status(400).json({
-            error: 'Missing query parameter `cookTimeMin`. Fix: Provide a number value.',
+            error: 'Missing query parameter `cookTimeMins`. Fix: Provide a number value.',
         });
     }
 
-    const cookTimeMinNum = parseInt(cookTimeMin);
+    const cookTimeMinsNum = parseInt(cookTimeMins);
 
-    if (isNaN(cookTimeMinNum)) {
+    if (isNaN(cookTimeMinsNum)) {
         return res.status(400).json({
-            error: 'Invalid value for query parameter `cookTimeMin`. Fix: Provide a number value.',
+            error: 'Invalid value for query parameter `cookTimeMins`. Fix: Provide a number value.',
         });
     }
 
-    return cookTimeMinNum;
+    return cookTimeMinsNum;
 }
 
 export function validateQueryParamCourseTypes(res: NextApiResponse, value: string | string[]) {
@@ -434,24 +434,24 @@ export function validateQueryParamOrderByField(
     };
 }
 
-export function validateQueryParamPrepTimeMin(res: NextApiResponse, value: string | string[]) {
-    const prepTimeMin = value?.toString();
+export function validateQueryParamPrepTimeMins(res: NextApiResponse, value: string | string[]) {
+    const prepTimeMins = value?.toString();
 
-    if (!prepTimeMin) {
+    if (!prepTimeMins) {
         return res.status(400).json({
-            error: 'Missing query parameter `prepTimeMin`. Fix: Provide a number value.',
+            error: 'Missing query parameter `prepTimeMins`. Fix: Provide a number value.',
         });
     }
 
-    const prepTimeMinNum = parseInt(prepTimeMin);
+    const prepTimeMinsNum = parseInt(prepTimeMins);
 
-    if (isNaN(prepTimeMinNum)) {
+    if (isNaN(prepTimeMinsNum)) {
         return res.status(400).json({
-            error: 'Invalid value for query parameter `prepTimeMin`. Fix: Provide a number value.',
+            error: 'Invalid value for query parameter `prepTimeMins`. Fix: Provide a number value.',
         });
     }
 
-    return prepTimeMinNum;
+    return prepTimeMinsNum;
 }
 
 export function validateQueryParamRandom(res: NextApiResponse, value: string | string[]) {

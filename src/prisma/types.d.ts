@@ -3,8 +3,8 @@ export interface RecipeToSeed {
     slug: string;
     sourceName: string;
     sourceURL?: string;
-    prepTimeMin: number;
-    cookTimeMin: number;
+    prepTimeMins: number;
+    cookTimeMins: number;
     servingAmount: number;
     servingUnit: string;
     courseTypes: string[];

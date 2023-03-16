@@ -4,14 +4,14 @@ import { Prisma } from '@prisma/client';
 import authOptions from './auth/[...nextauth]';
 import { prisma } from '../../prisma/db';
 import {
-    validateQueryParamCookTimeMin,
+    validateQueryParamCookTimeMins,
     validateQueryParamCourseTypes,
     validateQueryParamCuisines,
     validateQueryParamDietaryRestrictions,
     validateQueryParamDishTypes,
     validateQueryParamIngredients,
     validateQueryParamNotes,
-    validateQueryParamPrepTimeMin,
+    validateQueryParamPrepTimeMins,
     validateQueryParamServingAmount,
     validateQueryParamServingUnit,
     validateQueryParamSlug,
@@ -32,8 +32,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         slug,
         sourceName,
         sourceURL,
-        prepTimeMin,
-        cookTimeMin,
+        prepTimeMins,
+        cookTimeMins,
         servingAmount,
         servingUnit,
         courseTypes,
@@ -54,8 +54,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         slugValidated,
         sourceNameValidated,
         sourceURLValidated,
-        prepTimeMinValidated,
-        cookTimeMinValidated,
+        prepTimeMinsValidated,
+        cookTimeMinsValidated,
         servingAmountValidated,
         servingUnitValidated,
         courseTypesValidated,
@@ -136,11 +136,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if (sourceURLValidated === undefined) return;
         }
 
-        prepTimeMinValidated = validateQueryParamPrepTimeMin(res, prepTimeMin);
-        if (prepTimeMinValidated === undefined) return;
+        prepTimeMinsValidated = validateQueryParamPrepTimeMins(res, prepTimeMins);
+        if (prepTimeMinsValidated === undefined) return;
 
-        cookTimeMinValidated = validateQueryParamCookTimeMin(res, cookTimeMin);
-        if (cookTimeMinValidated === undefined) return;
+        cookTimeMinsValidated = validateQueryParamCookTimeMins(res, cookTimeMins);
+        if (cookTimeMinsValidated === undefined) return;
 
         servingAmountValidated = validateQueryParamServingAmount(res, servingAmount);
         if (servingAmountValidated === undefined) return;
@@ -179,8 +179,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     slug: slugValidated,
                     sourceName: sourceNameValidated,
                     sourceURL: sourceURLValidated,
-                    prepTimeMin: prepTimeMinValidated,
-                    cookTimeMin: cookTimeMinValidated,
+                    prepTimeMins: prepTimeMinsValidated,
+                    cookTimeMins: cookTimeMinsValidated,
                     servingAmount: servingAmountValidated,
                     servingUnit: {
                         connect: {
@@ -332,14 +332,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if (sourceURLValidated === undefined) return;
         }
 
-        if (prepTimeMin) {
-            prepTimeMinValidated = validateQueryParamPrepTimeMin(res, prepTimeMin);
-            if (prepTimeMinValidated === undefined) return;
+        if (prepTimeMins) {
+            prepTimeMinsValidated = validateQueryParamPrepTimeMins(res, prepTimeMins);
+            if (prepTimeMinsValidated === undefined) return;
         }
 
-        if (cookTimeMin) {
-            cookTimeMinValidated = validateQueryParamCookTimeMin(res, cookTimeMin);
-            if (cookTimeMinValidated === undefined) return;
+        if (cookTimeMins) {
+            cookTimeMinsValidated = validateQueryParamCookTimeMins(res, cookTimeMins);
+            if (cookTimeMinsValidated === undefined) return;
         }
 
         if (servingAmount) {
@@ -398,8 +398,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     slug: slugValidated,
                     sourceName: sourceNameValidated,
                     sourceURL: sourceURLValidated,
-                    prepTimeMin: prepTimeMinValidated,
-                    cookTimeMin: cookTimeMinValidated,
+                    prepTimeMins: prepTimeMinsValidated,
+                    cookTimeMins: cookTimeMinsValidated,
                     servingAmount: servingAmountValidated,
                     servingUnit: servingUnitValidated ? {
                         connect: {

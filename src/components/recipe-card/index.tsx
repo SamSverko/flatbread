@@ -516,9 +516,9 @@ const RecipeCard = ({
         }
 
         function renderFormattedTime() {
-            const totalTime = getTimeString(recipe.prepTimeMin + recipe.cookTimeMin);
-            const prepTime = getTimeString(recipe.prepTimeMin);
-            const cookTime = getTimeString(recipe.cookTimeMin);
+            const totalTime = getTimeString(recipe.prepTimeMins + recipe.cookTimeMins);
+            const prepTime = getTimeString(recipe.prepTimeMins);
+            const cookTime = getTimeString(recipe.cookTimeMins);
     
             return (<span><b>{totalTime}</b> ({prepTime} prep + {cookTime} cook)</span>);
         }

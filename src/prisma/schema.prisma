@@ -21,8 +21,8 @@ model Recipe {
     slug                String               @unique
     sourceName          String
     sourceURL           String?
-    prepTimeMin         Int
-    cookTimeMin         Int
+    prepTimeMins        Int
+    cookTimeMins        Int
     servingAmount       Int
     servingUnit         ServingUnit          @relation(fields: [servingUnitId], references: [id])
     servingUnitId       Int

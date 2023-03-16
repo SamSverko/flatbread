@@ -79,7 +79,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         if (orderBy || orderByField) {
-            const orderByFieldValidation = validateQueryParamOrderByField(res, orderBy, orderByField, ['createdAt', 'title', 'sourceName', 'prepTimeMin', 'cookTimeMin', 'servingAmount']);
+            const orderByFieldValidation = validateQueryParamOrderByField(res, orderBy, orderByField, ['createdAt', 'title', 'sourceName', 'prepTimeMins', 'cookTimeMins', 'servingAmount']);
             if (orderByFieldValidation === undefined) return;
 
             orderByValidated = orderByFieldValidation.orderBy;
