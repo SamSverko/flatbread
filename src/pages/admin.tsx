@@ -13,6 +13,7 @@ import { prisma } from '../prisma/db';
 import { getCategoryFormat, getIngredientFormat, getIngredientUnitFormat, getQuantityFractionFormat, getServingUnitFormat } from '../prisma/utils';
 
 import bxDownArrowAlt from '../../public/icons/bx-down-arrow-alt.svg';
+import bxRefresh from '../../public/icons/bx-refresh.svg';
 import bxRuler from '../../public/icons/bx-ruler.svg';
 import bxTrash from '../../public/icons/bx-trash.svg';
 import bxUpArrowAlt from '../../public/icons/bx-up-arrow-alt.svg';
@@ -1446,6 +1447,14 @@ const Admin: NextPage<AdminProps> = ({
                 <div className={styles['section-submit']}>
                     <div>
                         <input form='submit-recipe' type='submit' value={formSubmitValue} />
+                        <button
+                            aria-label='Refresh page'
+                            className='icon-only'
+                            onClick={() => router.reload()}
+                            type='button'
+                        >
+                            <Icon ariaHidden={true} Icon={bxRefresh} />
+                        </button>
                     </div>
 
                     {formFeedback.length > 0 &&
