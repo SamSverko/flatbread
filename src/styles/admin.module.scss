@@ -1,3 +1,5 @@
+@use './mixins.scss';
+
 .form {
     display: flex;
     flex-direction: column;
@@ -198,4 +200,10 @@
     display: flex;
     flex-direction: column;
     gap: var(--spacing-5);
+}
+
+.form-feedback {
+    &:focus {
+        @include mixins.focus-outline;
+    }
 }

@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth/next';
 import * as React from 'react';
 import { v4 } from 'uuid';
 
+import AlertDialog from '../components/alert-dialog';
 import Card from '../components/card';
 import EditDataDialog from '../components/edit-data-dialog';
 import Icon from '../components/icon';
@@ -56,10 +57,10 @@ const Admin: NextPage<AdminProps> = ({
     const editIngredientsButtonRef = React.useRef(null);
     const editIngredientUnitsButtonRef = React.useRef(null);
     const editServingsButtonRef = React.useRef(null);
+    const formFeedbackRef = React.useRef(null);
 
     // States
     const [editRecipeId, setEditRecipeId] = React.useState<string | undefined>(undefined);
-    const [formFeedback, setFormFeedback] = React.useState('');
 
     const [formTitle, setFormTitle] = React.useState('');
     const [formSlug, setFormSlug] = React.useState('');
@@ -75,9 +76,15 @@ const Admin: NextPage<AdminProps> = ({
     const [formCuisines, setFormCuisines] = React.useState<Array<string>>([]);
     const [formDietaryRestrictions, setFormDietaryRestrictions] = React.useState<Array<string>>([]);
     const [formDishTypes, setFormDishTypes] = React.useState<Array<string>>([]);
+    const [formRecipeIngredients, setFormRecipeIngredients] = React.useState<Array<RecipeIngredient>>([]);
+    const [formRecipeNotes, setFormRecipeNotes] = React.useState<Array<RecipeStepNote>>([]);
+    const [formRecipeSteps, setFormRecipeSteps] = React.useState<Array<RecipeStepNote>>([]);
+
     const [formSubmitValue, setFormSubmitValue] = React.useState('Add new recipe');
+    const [formFeedback, setFormFeedback] = React.useState('');
 
     const [showDialog, setShowDialog] = React.useState(false);
+    const [showAlert, setShowAlert] = React.useState(false);
     const [editType, setEditType] = React.useState<'categories' | 'ingredients' | 'ingredient units' | 'quantity fractions' | 'serving units' | ''>('');
 
     const [localCourseTypes, setLocalCourseTypes] = React.useState(courseTypes);
@@ -90,10 +97,6 @@ const Admin: NextPage<AdminProps> = ({
     const [localServingUnits, setLocalServingUnits] = React.useState(servingUnits);
 
     const [quantityTypeIsSingle, setQuantityTypeIsSingle] = React.useState(true);
-
-    const [recipeIngredients, setRecipeIngredients] = React.useState<Array<RecipeIngredient>>([]);
-    const [recipeNotes, setRecipeNotes] = React.useState<Array<RecipeStepNote>>([]);
-    const [recipeSteps, setRecipeSteps] = React.useState<Array<RecipeStepNote>>([]);
 
     // Effects
     React.useEffect(() => {
@@ -109,6 +112,35 @@ const Admin: NextPage<AdminProps> = ({
                 });
         }
     }, []);
+
+    React.useEffect(() => {
+        if (router.query.setFormFeedback) {
+            setFormTitle('');
+            setFormSlug('');
+            setFormSourceName('');
+            setFormSourceURL('');
+            setFormPrepTimeHours(0);
+            setFormPrepTimeMins(30);
+            setFormCookTimeHours(0);
+            setFormCookTimeMins(30);
+            setFormServingAmount(4);
+            setFormServingUnit('serving');
+            setFormCourseTypes([]);
+            setFormCuisines([]);
+            setFormDietaryRestrictions([]);
+            setFormDishTypes([]);
+            setFormRecipeIngredients([]);
+            setFormRecipeNotes([]);
+            setFormRecipeSteps([]);
+
+            setEditRecipeId(undefined);
+            setFormSubmitValue('Add new recipe');
+            setFormFeedback(router.query.setFormFeedback.toString());
+
+            const formFeedbackElement = formFeedbackRef.current;
+            if (formFeedbackElement) (formFeedbackElement as HTMLElement).focus();
+        }
+    }, [router.query.setFormFeedback]);
 
     // Event listeners
     function handleEditCategoryOnClick() {
@@ -216,11 +248,11 @@ const Admin: NextPage<AdminProps> = ({
             return setFormFeedback('Form error: \'Dish types\' must have at least one selection.');
         }
 
-        if (recipeIngredients.length === 0) {
+        if (formRecipeIngredients.length === 0) {
             return setFormFeedback('Form error: There must be at least one \'Ingredient\' provided.');
         }
 
-        if (recipeSteps.length === 0) {
+        if (formRecipeSteps.length === 0) {
             return setFormFeedback('Form error: There must be at least one \'Step\' provided.');
         }
 
@@ -235,13 +267,13 @@ const Admin: NextPage<AdminProps> = ({
             courseTypes: courseTypesValidated,
             cuisines: cuisinesValidated,
             dishTypes: dishTypesValidated,
-            ingredients: JSON.stringify(recipeIngredients),
-            steps: JSON.stringify(recipeSteps),
+            ingredients: JSON.stringify(formRecipeIngredients),
+            steps: JSON.stringify(formRecipeSteps),
         };
 
         if (sourceURLValidated) recipeFormBody.sourceURL = sourceURLValidated;
         if (dietaryRestrictionsValidated) recipeFormBody.dietaryRestrictions = dietaryRestrictionsValidated;
-        if (recipeNotes.length > 0) recipeFormBody.notes = JSON.stringify(recipeNotes);
+        if (formRecipeNotes.length > 0) recipeFormBody.notes = JSON.stringify(formRecipeNotes);
 
         let formBody: unknown[] | string = [];
         for (const property in recipeFormBody) {
@@ -277,6 +309,10 @@ const Admin: NextPage<AdminProps> = ({
         } catch (error) {
             setFormFeedback('Form error: Please try again.');
         }
+    }
+
+    function handleOnClickDeleteRecipe() {
+        setShowAlert(true);
     }
 
     function handleOnClickEditIngredients() {
@@ -385,7 +421,7 @@ const Admin: NextPage<AdminProps> = ({
             ingredientToAdd.alteration = alterationValidated;
         }
 
-        setRecipeIngredients(recipeIngredients => [...recipeIngredients, ingredientToAdd]);
+        setFormRecipeIngredients(formRecipeIngredients => [...formRecipeIngredients, ingredientToAdd]);
     }
 
     function handleOnSubmitAddNote(event: React.FormEvent) {
@@ -413,7 +449,7 @@ const Admin: NextPage<AdminProps> = ({
             noteToAdd.section = sectionValidated;
         }
 
-        setRecipeNotes(recipeNotes => [...recipeNotes, noteToAdd]);
+        setFormRecipeNotes(formRecipeNotes => [...formRecipeNotes, noteToAdd]);
     }
 
     function handleOnSubmitAddStep(event: React.FormEvent) {
@@ -441,7 +477,7 @@ const Admin: NextPage<AdminProps> = ({
             stepToAdd.section = sectionValidated;
         }
 
-        setRecipeSteps(recipeSteps => [...recipeSteps, stepToAdd]);
+        setFormRecipeSteps(formRecipeSteps => [...formRecipeSteps, stepToAdd]);
     }
 
     function onClickOrderIngredient(event: React.MouseEvent<HTMLButtonElement>, movement: 'down' | 'up') {
@@ -450,7 +486,7 @@ const Admin: NextPage<AdminProps> = ({
 
         if (!ingredientId) return;
 
-        const localRecipeIngredients: RecipeIngredient[] = [...recipeIngredients];
+        const localRecipeIngredients: RecipeIngredient[] = [...formRecipeIngredients];
         const currentItemIndex = localRecipeIngredients.findIndex(item => item.id === ingredientId);
 
         if (movement === 'up' && currentItemIndex > 0) {
@@ -461,7 +497,7 @@ const Admin: NextPage<AdminProps> = ({
             localRecipeIngredients.splice(currentItemIndex + 1, 0, currentRecipeIngredient[0]);
         }
 
-        setRecipeIngredients(localRecipeIngredients);
+        setFormRecipeIngredients(localRecipeIngredients);
     }
 
     function onClickOrderNote(event: React.MouseEvent<HTMLButtonElement>, movement: 'down' | 'up') {
@@ -470,7 +506,7 @@ const Admin: NextPage<AdminProps> = ({
 
         if (!noteId) return;
 
-        const localRecipeNotes: RecipeStepNote[] = [...recipeNotes];
+        const localRecipeNotes: RecipeStepNote[] = [...formRecipeNotes];
         const currentItemIndex = localRecipeNotes.findIndex(item => item.id === noteId);
 
         if (movement === 'up' && currentItemIndex > 0) {
@@ -481,7 +517,7 @@ const Admin: NextPage<AdminProps> = ({
             localRecipeNotes.splice(currentItemIndex + 1, 0, currentRecipeNote[0]);
         }
 
-        setRecipeNotes(localRecipeNotes);
+        setFormRecipeNotes(localRecipeNotes);
     }
 
     function onClickOrderStep(event: React.MouseEvent<HTMLButtonElement>, movement: 'down' | 'up') {
@@ -490,7 +526,7 @@ const Admin: NextPage<AdminProps> = ({
 
         if (!stepId) return;
 
-        const localRecipeSteps: RecipeStepNote[] = [...recipeSteps];
+        const localRecipeSteps: RecipeStepNote[] = [...formRecipeSteps];
         const currentItemIndex = localRecipeSteps.findIndex(item => item.id === stepId);
 
         if (movement === 'up' && currentItemIndex > 0) {
@@ -501,7 +537,7 @@ const Admin: NextPage<AdminProps> = ({
             localRecipeSteps.splice(currentItemIndex + 1, 0, currentRecipeStep[0]);
         }
 
-        setRecipeSteps(localRecipeSteps);
+        setFormRecipeSteps(localRecipeSteps);
     }
 
     function onClickRemoveIngredient(event: React.MouseEvent<HTMLButtonElement>) {
@@ -510,7 +546,7 @@ const Admin: NextPage<AdminProps> = ({
 
         if (!ingredientId) return;
 
-        setRecipeIngredients(recipeIngredients.filter(ingredient => ingredient.id !== ingredientId));
+        setFormRecipeIngredients(formRecipeIngredients.filter(ingredient => ingredient.id !== ingredientId));
     }
 
     function onClickRemoveNote(event: React.MouseEvent<HTMLButtonElement>) {
@@ -519,7 +555,7 @@ const Admin: NextPage<AdminProps> = ({
 
         if (!noteId) return;
 
-        setRecipeNotes(recipeNotes.filter(note => note.id !== noteId));
+        setFormRecipeNotes(formRecipeNotes.filter(note => note.id !== noteId));
     }
 
     function onClickRemoveStep(event: React.MouseEvent<HTMLButtonElement>) {
@@ -528,7 +564,7 @@ const Admin: NextPage<AdminProps> = ({
 
         if (!stepId) return;
 
-        setRecipeSteps(recipeSteps.filter(step => step.id !== stepId));
+        setFormRecipeSteps(formRecipeSteps.filter(step => step.id !== stepId));
     }
 
     // Helpers
@@ -603,6 +639,34 @@ const Admin: NextPage<AdminProps> = ({
         }
     }
 
+    function deleteAlertAction(type: 'yes' | 'no') {
+        setShowAlert(false);
+
+        if (type === 'yes') {
+            try {
+                fetch(`/api/recipe?id=${editRecipeId}`, {
+                    method: 'DELETE',
+                })
+                    .then((response) => response.json())
+                    .then((data) => {
+                        if (data.error) {
+                            setFormFeedback(`Form error: ${data.error}`);
+                            return;
+                        }
+
+                        if (data.code) {
+                            setFormFeedback(`Form error: ${data.code}: ${data.message}`);
+                            return;
+                        }
+
+                        router.replace('/admin?setFormFeedback=Form success: Recipe deleted!');
+                    });
+            } catch (error) {
+                setFormFeedback('Form error: Please try again.');
+            }
+        }
+    }
+
     function parseRecipeDataForInputs(recipe: RecipeFormatted) {
         setEditRecipeId(recipe.id);
         setFormSubmitValue('Update recipe');
@@ -649,7 +713,7 @@ const Admin: NextPage<AdminProps> = ({
 
             return mappedIngredient;
         });
-        setRecipeIngredients(formattedRecipeIngredients);
+        setFormRecipeIngredients(formattedRecipeIngredients);
 
         const formattedRecipeSteps: RecipeStepNote[] = recipe.steps.map(step => {
             const mappedStep: RecipeStepNote = {
@@ -661,7 +725,7 @@ const Admin: NextPage<AdminProps> = ({
 
             return mappedStep;
         });
-        setRecipeSteps(formattedRecipeSteps);
+        setFormRecipeSteps(formattedRecipeSteps);
 
         const formattedRecipeNotes: RecipeStepNote[] = recipe.notes.map(note => {
             const mappedNote: RecipeStepNote = {
@@ -673,7 +737,7 @@ const Admin: NextPage<AdminProps> = ({
 
             return mappedNote;
         });
-        setRecipeNotes(formattedRecipeNotes);
+        setFormRecipeNotes(formattedRecipeNotes);
     }
 
     // Renderers
@@ -748,7 +812,7 @@ const Admin: NextPage<AdminProps> = ({
 
         return (
             <ul className={styles.list}>
-                {recipeIngredients.map((ingredient, index) => {
+                {formRecipeIngredients.map((ingredient, index) => {
                     const parsedIngredient = parseIngredient(ingredient);
 
                     return (
@@ -771,7 +835,7 @@ const Admin: NextPage<AdminProps> = ({
                                     aria-label='Move down in list by one'
                                     className='icon-only'
                                     data-id={ingredient.id}
-                                    disabled={index === recipeIngredients.length - 1}
+                                    disabled={index === formRecipeIngredients.length - 1}
                                     onClick={(event) => onClickOrderIngredient(event, 'down')}
                                 >
                                     <Icon ariaHidden={true} Icon={bxDownArrowAlt} />
@@ -1278,7 +1342,7 @@ const Admin: NextPage<AdminProps> = ({
                 </details>
 
                 <>
-                    {recipeIngredients.length > 0 &&
+                    {formRecipeIngredients.length > 0 &&
                         <div>
                             <p><b>Ingredients</b></p>
                             {renderIngredients()}
@@ -1314,11 +1378,11 @@ const Admin: NextPage<AdminProps> = ({
                 </details>
 
                 <>
-                    {recipeSteps.length > 0 &&
+                    {formRecipeSteps.length > 0 &&
                         <div>
                             <p><b>Steps</b></p>
                             <ul className={styles.list}>
-                                {recipeSteps.map((step, index) => {
+                                {formRecipeSteps.map((step, index) => {
                                     function renderSection(section: string) {
                                         return <b>[{section}]{' '}</b>;
                                     }
@@ -1342,7 +1406,7 @@ const Admin: NextPage<AdminProps> = ({
                                                     aria-label='Move down in list by one'
                                                     className='icon-only'
                                                     data-id={step.id}
-                                                    disabled={index === recipeSteps.length - 1}
+                                                    disabled={index === formRecipeSteps.length - 1}
                                                     onClick={(event) => onClickOrderStep(event, 'down')}
                                                 >
                                                     <Icon ariaHidden={true} Icon={bxDownArrowAlt} />
@@ -1392,11 +1456,11 @@ const Admin: NextPage<AdminProps> = ({
                 </details>
 
                 <>
-                    {recipeNotes.length > 0 &&
+                    {formRecipeNotes.length > 0 &&
                         <div>
                             <p><b>Notes</b></p>
                             <ul className={styles.list}>
-                                {recipeNotes.map((note, index) => {
+                                {formRecipeNotes.map((note, index) => {
                                     function renderSection(section: string) {
                                         return <b>[{section}]{' '}</b>;
                                     }
@@ -1420,7 +1484,7 @@ const Admin: NextPage<AdminProps> = ({
                                                     aria-label='Move down in list by one'
                                                     className='icon-only'
                                                     data-id={note.id}
-                                                    disabled={index === recipeNotes.length - 1}
+                                                    disabled={index === formRecipeNotes.length - 1}
                                                     onClick={(event) => onClickOrderNote(event, 'down')}
                                                 >
                                                     <Icon ariaHidden={true} Icon={bxDownArrowAlt} />
@@ -1447,18 +1511,35 @@ const Admin: NextPage<AdminProps> = ({
                 <div className={styles['section-submit']}>
                     <div>
                         <input form='submit-recipe' type='submit' value={formSubmitValue} />
-                        <button
-                            aria-label='Refresh page'
-                            className='icon-only'
-                            onClick={() => router.reload()}
-                            type='button'
-                        >
-                            <Icon ariaHidden={true} Icon={bxRefresh} />
-                        </button>
+                        <div>
+                            {editRecipeId &&
+                                <button
+                                    aria-label='Delete recipe'
+                                    className='icon-only'
+                                    onClick={handleOnClickDeleteRecipe}
+                                    type='button'
+                                >
+                                    <Icon ariaHidden={true} Icon={bxTrash} />
+                                </button>
+                            }
+                            <button
+                                aria-label='Refresh page'
+                                className='icon-only'
+                                onClick={() => router.reload()}
+                                type='button'
+                            >
+                                <Icon ariaHidden={true} Icon={bxRefresh} />
+                            </button>
+                        </div>
                     </div>
 
                     {formFeedback.length > 0 &&
-                        <p aria-live='assertive'>{formFeedback}</p>
+                        <p
+                            aria-live='assertive'
+                            className={styles['form-feedback']}
+                            ref={formFeedbackRef}
+                            tabIndex={-1}
+                        >{formFeedback}</p>
                     }
                 </div>
             </Card>
@@ -1477,6 +1558,13 @@ const Admin: NextPage<AdminProps> = ({
                     quantityFractions={localQuantityFractions}
                     servingUnits={localServingUnits}
                 />
+            }
+
+            {showAlert &&
+                <AlertDialog action={deleteAlertAction} header='Confirmation'>
+                    <p>Are you sure you want to delete recipe <b>{formTitle}</b>?</p>
+                    <p><b>This action cannot be reversed!</b></p>
+                </AlertDialog>
             }
         </>
     );
