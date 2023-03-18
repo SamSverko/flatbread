@@ -60,7 +60,7 @@ export function getRecipeStepOrNoteFormat(condensed = false): Prisma.RecipeStepS
 
 export function getRecipeFormat(condensed = false): Prisma.RecipeSelect {
     return {
-        id: (condensed) ? false : true,
+        id: true,
         createdAt: (condensed) ? false : true,
         title: true,
         slug: true,

@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { getServerSession } from 'next-auth/next';
 import * as React from 'react';
 import { v4 } from 'uuid';
@@ -22,6 +23,7 @@ import styles from '../styles/admin.module.scss';
 import type { CourseType, Cuisine, DietaryRestriction, DishType, Ingredient, IngredientUnit, QuantityFraction, ServingUnit } from '@prisma/client';
 import type { GetServerSideProps, NextPage } from 'next';
 import type { RecipeIngredient, RecipeStepNote } from '../prisma/types';
+import type { RecipeFormatted } from '../types';
 
 type AdminProps = {
     courseTypes: CourseType[];
@@ -44,6 +46,9 @@ const Admin: NextPage<AdminProps> = ({
     quantityFractions,
     servingUnits,
 }: AdminProps) => {
+    // Hooks
+    const router = useRouter();
+
     // Refs
     const editCategoryButtonRef = React.useRef(null);
     const editFractionsButtonRef = React.useRef(null);
@@ -52,9 +57,28 @@ const Admin: NextPage<AdminProps> = ({
     const editServingsButtonRef = React.useRef(null);
 
     // States
+    const [editRecipeId, setEditRecipeId] = React.useState<string | undefined>(undefined);
     const [formFeedback, setFormFeedback] = React.useState('');
+
+    const [formTitle, setFormTitle] = React.useState('');
+    const [formSlug, setFormSlug] = React.useState('');
+    const [formSourceName, setFormSourceName] = React.useState('');
+    const [formSourceURL, setFormSourceURL] = React.useState('');
+    const [formPrepTimeHours, setFormPrepTimeHours] = React.useState(0);
+    const [formPrepTimeMins, setFormPrepTimeMins] = React.useState(30);
+    const [formCookTimeHours, setFormCookTimeHours] = React.useState(0);
+    const [formCookTimeMins, setFormCookTimeMins] = React.useState(30);
+    const [formServingAmount, setFormServingAmount] = React.useState(4);
+    const [formServingUnit, setFormServingUnit] = React.useState('serving');
+    const [formCourseTypes, setFormCourseTypes] = React.useState<Array<string>>([]);
+    const [formCuisines, setFormCuisines] = React.useState<Array<string>>([]);
+    const [formDietaryRestrictions, setFormDietaryRestrictions] = React.useState<Array<string>>([]);
+    const [formDishTypes, setFormDishTypes] = React.useState<Array<string>>([]);
+    const [formSubmitValue, setFormSubmitValue] = React.useState('Add new recipe');
+
     const [showDialog, setShowDialog] = React.useState(false);
     const [editType, setEditType] = React.useState<'categories' | 'ingredients' | 'ingredient units' | 'quantity fractions' | 'serving units' | ''>('');
+
     const [localCourseTypes, setLocalCourseTypes] = React.useState(courseTypes);
     const [localCuisines, setLocalCuisines] = React.useState(cuisines);
     const [localDietaryRestrictions, setLocalDietaryRestrictions] = React.useState(dietaryRestrictions);
@@ -63,10 +87,27 @@ const Admin: NextPage<AdminProps> = ({
     const [localIngredientUnits, setLocalIngredientUnits] = React.useState(ingredientUnits);
     const [localQuantityFractions, setLocalQuantityFractions] = React.useState(quantityFractions);
     const [localServingUnits, setLocalServingUnits] = React.useState(servingUnits);
+
     const [quantityTypeIsSingle, setQuantityTypeIsSingle] = React.useState(true);
+
     const [recipeIngredients, setRecipeIngredients] = React.useState<Array<RecipeIngredient>>([]);
-    const [recipeSteps, setRecipeSteps] = React.useState<Array<RecipeStepNote>>([]);
     const [recipeNotes, setRecipeNotes] = React.useState<Array<RecipeStepNote>>([]);
+    const [recipeSteps, setRecipeSteps] = React.useState<Array<RecipeStepNote>>([]);
+
+    // Effects
+    React.useEffect(() => {
+        if (router.query.slug) {
+            fetch(`/api/recipes?condensed=true&slug=${router.query.slug}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    if (data.error) {
+                        console.error(data.error);
+                    } else {
+                        parseRecipeDataForInputs(data);
+                    }
+                });
+        }
+    }, []);
 
     // Event listeners
     function handleEditCategoryOnClick() {
@@ -84,107 +125,92 @@ const Admin: NextPage<AdminProps> = ({
         if (!event.target) return;
 
         setFormFeedback('');
-        const formElement = (event.target as HTMLFormElement);
-        const formData = new FormData(formElement);
 
-        const formDataTitle = formData.get('title');
-        const titleValidated = (formDataTitle) ? formDataTitle.toString().trim() : undefined;
+        const titleValidated = (formTitle) ? formTitle.toString().trim() : undefined;
         if (!titleValidated) {
             return setFormFeedback('Form error: Title value must be a string.');
         }
 
-        const formDataSlug = formData.get('slug');
-        const slugValidated = (formDataSlug) ? formDataSlug.toString().trim() : undefined;
-        if (!slugValidated) {
+        const slugValidated = (formSlug) ? formSlug.toString().trim() : undefined;
+        const slugRegEx = /^[a-z0-9]+(?:-[a-z0-9]+)*$/g;
+        if (!slugValidated || !slugRegEx.test(slugValidated)) {
             return setFormFeedback('Form error: Slug value must be a string (no spaces allowed, separate words with hyphens).');
         }
 
-        const formDataSourceName = formData.get('source-name');
-        const sourceNameValidated = (formDataSourceName) ? formDataSourceName.toString().trim() : undefined;
+        const sourceNameValidated = (formSourceName) ? formSourceName.toString().trim() : undefined;
         if (!sourceNameValidated) {
             return setFormFeedback('Form error: Source name value must be a string.');
         }
 
-        const formDataURL = formData.get('source-url');
-        const sourceURLValidated = (formDataURL) ? formDataURL.toString().trim() : undefined;
+        const sourceURLValidated = (formSourceURL) ? formSourceURL.toString().trim() : undefined;
 
-        const formDataPrepTimeHours = formData.get('prep-time-hours');
-        const prepTimeHoursValidated = (formDataPrepTimeHours) ? parseInt(formDataPrepTimeHours as string) : 0;
+        const prepTimeHoursValidated = (formPrepTimeHours) ? formPrepTimeHours : 0;
         if (isNaN(prepTimeHoursValidated) || prepTimeHoursValidated < 0) {
             return setFormFeedback('Form error: Prep time hours value must be a positive whole number.');
         }
-        const formDataPrepTimeMins = formData.get('prep-time-mins');
-        const prepTimeMinsValidated = (formDataPrepTimeMins) ? parseInt(formDataPrepTimeMins as string) : 0;
+        const prepTimeMinsValidated = (formPrepTimeMins) ? formPrepTimeMins : 0;
         if (isNaN(prepTimeMinsValidated) || prepTimeMinsValidated < 0) {
             return setFormFeedback('Form error: Prep time minutes value must be a positive whole number.');
         }
         const prepTimeValidated = ((prepTimeHoursValidated * 60) + prepTimeMinsValidated).toString();
 
-        const formDataCookTimeHours = formData.get('cook-time-hours');
-        const cookTimeHoursValidated = (formDataCookTimeHours) ? parseInt(formDataCookTimeHours as string) : 0;
+        const cookTimeHoursValidated = (formCookTimeHours) ? formCookTimeHours : 0;
         if (isNaN(cookTimeHoursValidated) || cookTimeHoursValidated < 0) {
             return setFormFeedback('Form error: Cook time hours value must be a positive whole number.');
         }
-        const formDataCookTimeMins = formData.get('cook-time-mins');
-        const cookTimeMinsValidated = (formDataCookTimeMins) ? parseInt(formDataCookTimeMins as string) : 0;
+        const cookTimeMinsValidated = (formCookTimeMins) ? formCookTimeMins : 0;
         if (isNaN(cookTimeMinsValidated) || cookTimeMinsValidated < 0) {
             return setFormFeedback('Form error: Cook time minutes value must be a positive whole number.');
         }
         const cookTimeValidated = ((cookTimeHoursValidated * 60) + cookTimeMinsValidated).toString();
 
-        const formDataServingAmount = formData.get('serving-amount');
-        const servingAmountValidated = (formDataServingAmount) ? formDataServingAmount as string : undefined;
+        const servingAmountValidated = (formServingAmount) ? formServingAmount.toString() : undefined;
         if (!servingAmountValidated) {
             return setFormFeedback('Form error: Serving amount value must be a positive whole number.');
         }
 
-        const formDataServingUnit = formData.get('serving-unit');
-        const servingUnitValidated = (localServingUnits.map(servingUnit => servingUnit.name).includes(formDataServingUnit as string)) ? formDataServingUnit as string : undefined;
+        const servingUnitValidated = (localServingUnits.map(servingUnit => servingUnit.name).includes(formServingUnit)) ? formServingUnit : undefined;
         if (!servingUnitValidated) {
             return setFormFeedback('Form error: Serving unit value must be an existing serving unit.');
         }
 
-        const formDataCourseTypes = formData.getAll('course-types');
         const courseTypesFlat = localCourseTypes.map((category) => category.name);
-        formDataCourseTypes.forEach((selectedCategory) => {
-            if (!courseTypesFlat.includes(selectedCategory as string)) {
+        formCourseTypes.forEach((selectedCategory) => {
+            if (!courseTypesFlat.includes(selectedCategory)) {
                 return setFormFeedback('Form error: \'Course type\' values must be from the list provided.');
             }
         });
-        const courseTypesValidated = (formDataCourseTypes.length > 0) ? formDataCourseTypes.join(',') : undefined;
+        const courseTypesValidated = (formCourseTypes.length > 0) ? formCourseTypes.join(',') : undefined;
         if (!courseTypesValidated) {
             return setFormFeedback('Form error: Course types must have at least one selection.');
         }
 
-        const formDataCuisines = formData.getAll('cuisines');
         const cuisinesFlat = localCuisines.map((category) => category.name);
-        formDataCuisines.forEach((selectedCategory) => {
-            if (!cuisinesFlat.includes(selectedCategory as string)) {
+        formCuisines.forEach((selectedCategory) => {
+            if (!cuisinesFlat.includes(selectedCategory)) {
                 return setFormFeedback('Form error: \'Cuisine\' values must be from the list provided.');
             }
         });
-        const cuisinesValidated = (formDataCuisines.length > 0) ? formDataCuisines.join(',') : undefined;
+        const cuisinesValidated = (formCuisines.length > 0) ? formCuisines.join(',') : undefined;
         if (!cuisinesValidated) {
             return setFormFeedback('Form error: \'Cuisines\' must have at least one selection.');
         }
 
-        const formDataDietaryRestrictions = formData.getAll('dietary-restrictions');
         const dietaryRestrictionsFlat = localDietaryRestrictions.map((category) => category.name);
-        formDataDietaryRestrictions.forEach((selectedCategory) => {
-            if (!dietaryRestrictionsFlat.includes(selectedCategory as string)) {
+        formDietaryRestrictions.forEach((selectedCategory) => {
+            if (!dietaryRestrictionsFlat.includes(selectedCategory)) {
                 return setFormFeedback('Form error: \'Dietary restriction\' values must be from the list provided.');
             }
         });
-        const dietaryRestrictionsValidated = (formDataDietaryRestrictions.length > 0) ? formDataDietaryRestrictions.join(',') : undefined;
+        const dietaryRestrictionsValidated = (formDietaryRestrictions.length > 0) ? formDietaryRestrictions.join(',') : undefined;
 
-        const formDataDishTypes = formData.getAll('dish-types');
         const dishTypesFlat = localDishTypes.map((category) => category.name);
-        formDataDishTypes.forEach((selectedCategory) => {
-            if (!dishTypesFlat.includes(selectedCategory as string)) {
+        formDishTypes.forEach((selectedCategory) => {
+            if (!dishTypesFlat.includes(selectedCategory)) {
                 return setFormFeedback('Form error: \'Dish type\' values must be from the list provided.');
             }
         });
-        const dishTypesValidated = (formDataDishTypes.length > 0) ? formDataDishTypes.join(',') : undefined;
+        const dishTypesValidated = (formDishTypes.length > 0) ? formDishTypes.join(',') : undefined;
         if (!dishTypesValidated) {
             return setFormFeedback('Form error: \'Dish types\' must have at least one selection.');
         }
@@ -225,13 +251,13 @@ const Admin: NextPage<AdminProps> = ({
         formBody = formBody.join('&');
 
         try {
-            fetch('/api/recipe', {
+            fetch(`/api/recipe${(editRecipeId) ? `?id=${editRecipeId}` : ''}`, {
                 body: formBody,
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                method: 'POST',
+                method: (editRecipeId) ? 'PUT' : 'POST',
             })
                 .then((response) => response.json())
                 .then((data) => {
@@ -245,8 +271,7 @@ const Admin: NextPage<AdminProps> = ({
                         return;
                     }
 
-                    console.log(data);
-                    setFormFeedback('Form success: New \'recipe\' created.');
+                    setFormFeedback(`Form success: ${(editRecipeId) ? 'Recipe updated' : 'New recipe added'}!`);
                 });
         } catch (error) {
             setFormFeedback('Form error: Please try again.');
@@ -518,6 +543,18 @@ const Admin: NextPage<AdminProps> = ({
         }
     }
 
+    function convertMinsToHrs(mins: number) {
+        const hours = (mins / 60);
+        const rhours = Math.floor(hours);
+        const minutes = (hours - rhours) * 60;
+        const rminutes = Math.round(minutes);
+
+        return {
+            hours: rhours,
+            minutes: rminutes,
+        };
+    }
+
     function dataChange(editType: string) {
         if (editType === 'categories') {
             fetch('/api/categories?orderBy=asc&orderByField=name')
@@ -563,6 +600,79 @@ const Admin: NextPage<AdminProps> = ({
                     }
                 });
         }
+    }
+
+    function parseRecipeDataForInputs(recipe: RecipeFormatted) {
+        setEditRecipeId(recipe.id);
+        setFormSubmitValue('Update recipe');
+
+        setFormTitle(recipe.title);
+        setFormSlug(recipe.slug);
+        setFormSourceName(recipe.sourceName);
+
+        if (recipe.sourceURL) setFormSourceURL(recipe.sourceURL);
+
+        const convertedPrepTime = convertMinsToHrs(recipe.prepTimeMins);
+        setFormPrepTimeHours(convertedPrepTime.hours);
+        setFormPrepTimeMins(convertedPrepTime.minutes);
+
+        const convertedCookTime = convertMinsToHrs(recipe.cookTimeMins);
+        setFormCookTimeHours(convertedCookTime.hours);
+        setFormCookTimeMins(convertedCookTime.minutes);
+
+        setFormServingAmount(recipe.servingAmount);
+        setFormServingUnit(recipe.servingUnit.name);
+
+        setFormCourseTypes(recipe.courseTypes.map(category => category.name));
+        setFormCuisines(recipe.cuisines.map(category => category.name));
+        setFormDietaryRestrictions(recipe.dietaryRestrictions.map(category => category.name));
+        setFormDishTypes(recipe.dishTypes.map(category => category.name));
+
+        const formattedRecipeIngredients: RecipeIngredient[] = recipe.ingredients.map(ingredient => {
+            const mappedIngredient: RecipeIngredient = {
+                id: (ingredient.id) ? ingredient.id.toString() : v4(),
+                name: ingredient.name.name,
+                isOptional: ingredient.isOptional,
+                substitutions: ingredient.substitutions.map(substitution => substitution.name),
+            };
+
+            if (ingredient.section) mappedIngredient.section = ingredient.section;
+            if (ingredient.quantityWhole) mappedIngredient.quantityWhole = ingredient.quantityWhole;
+            if (ingredient.quantityFraction) mappedIngredient.quantityFraction = ingredient.quantityFraction.name;
+            if (ingredient.quantityMinWhole) mappedIngredient.quantityMinWhole = ingredient.quantityMinWhole;
+            if (ingredient.quantityMinFraction) mappedIngredient.quantityMinFraction = ingredient.quantityMinFraction.name;
+            if (ingredient.quantityMaxWhole) mappedIngredient.quantityMaxWhole = ingredient.quantityMaxWhole;
+            if (ingredient.quantityMaxFraction) mappedIngredient.quantityMaxFraction = ingredient.quantityMaxFraction.name;
+            if (ingredient.unit) mappedIngredient.unit = ingredient.unit.name;
+            if (ingredient.alteration) mappedIngredient.alteration = ingredient.alteration;
+
+            return mappedIngredient;
+        });
+        setRecipeIngredients(formattedRecipeIngredients);
+
+        const formattedRecipeSteps: RecipeStepNote[] = recipe.steps.map(step => {
+            const mappedStep: RecipeStepNote = {
+                id: (step.id) ? step.id.toString() : v4(),
+                details: step.details,
+            };
+
+            if (step.section) mappedStep.section = step.section;
+
+            return mappedStep;
+        });
+        setRecipeSteps(formattedRecipeSteps);
+
+        const formattedRecipeNotes: RecipeStepNote[] = recipe.notes.map(note => {
+            const mappedNote: RecipeStepNote = {
+                id: (note.id) ? note.id.toString() : v4(),
+                details: note.details,
+            };
+
+            if (note.section) mappedNote.section = note.section;
+
+            return mappedNote;
+        });
+        setRecipeNotes(formattedRecipeNotes);
     }
 
     // Renderers
@@ -688,32 +798,67 @@ const Admin: NextPage<AdminProps> = ({
             </Card>
 
             <Card>
-                <form className={styles.form} id='add-recipe' onSubmit={handleFormOnSubmit}>
+                <form
+                    className={styles.form}
+                    id='submit-recipe'
+                    onSubmit={handleFormOnSubmit}
+                >
                     <h2>Add new recipe</h2>
 
                     <p>All fields marked with an asterisk (<b>*</b>) are required.</p>
 
                     {/* title ============================================= */}
                     <InputGroup
-                        input={<input aria-required='true' id='title' name='title' required type='text' />}
+                        input={<input
+                            aria-required='true'
+                            id='title'
+                            name='title'
+                            onChange={event => setFormTitle(event.target.value)}
+                            required
+                            type='text'
+                            value={formTitle}
+                        />}
                         label={<label htmlFor='title'>Title *</label>}
                     />
 
                     {/* slug ============================================== */}
                     <InputGroup
-                        input={<input aria-required='true' id='slug' name='slug' required type='text' />}
+                        input={<input
+                            aria-required='true'
+                            id='slug'
+                            name='slug'
+                            onChange={event => setFormSlug(event.target.value)}
+                            required
+                            type='text'
+                            value={formSlug}
+                        />}
                         label={<label htmlFor='slug'>Slug *</label>}
                     />
 
                     {/* sourceName ======================================== */}
                     <InputGroup
-                        input={<input aria-required='true' id='source-name' name='source-name' required type='text' />}
+                        input={<input
+                            aria-required='true'
+                            id='source-name'
+                            name='source-name'
+                            onChange={event => setFormSourceName(event.target.value)}
+                            required
+                            type='text'
+                            value={formSourceName}
+                        />}
                         label={<label htmlFor='source-name'>Source name *</label>}
                     />
 
                     {/* sourceURL ========================================= */}
                     <InputGroup
-                        input={<input id='source-url' inputMode='url' name='source-url' type='url' />}
+                        input={<input
+                            id='source-url'
+                            inputMode='url'
+                            name='source-url'
+                            onChange={event => setFormSourceURL(event.target.value)}
+                            type='url'
+                            value={formSourceURL}
+                        />}
                         label={<label htmlFor='source-url'>Source URL</label>}
                     />
 
@@ -722,12 +867,34 @@ const Admin: NextPage<AdminProps> = ({
 
                     <div className={styles['inline-time-inputs']}>
                         <InputGroup
-                            input={<input aria-required='true' defaultValue={0} id='prep-time-hours' inputMode='numeric' max={99} min={0} name='prep-time-hours' step={1} type='number' />}
+                            input={<input
+                                aria-required='true'
+                                id='prep-time-hours'
+                                inputMode='numeric'
+                                max={99}
+                                min={0}
+                                name='prep-time-hours'
+                                onChange={event => setFormPrepTimeHours(parseInt(event.target.value))}
+                                step={1}
+                                type='number'
+                                value={formPrepTimeHours}
+                            />}
                             label={<label htmlFor='prep-time-hours'>Hours *</label>}
                         />
 
                         <InputGroup
-                            input={<input aria-required='true' defaultValue={30} id='prep-time-mins' inputMode='numeric' max={59} min={0} name='prep-time-mins' step={1} type='number' />}
+                            input={<input
+                                aria-required='true'
+                                id='prep-time-mins'
+                                inputMode='numeric'
+                                max={59}
+                                min={0}
+                                name='prep-time-mins'
+                                onChange={event => setFormPrepTimeMins(parseInt(event.target.value))}
+                                step={1}
+                                type='number'
+                                value={formPrepTimeMins}
+                            />}
                             label={<label htmlFor='prep-time-mins'>Minutes *</label>}
                         />
                     </div>
@@ -737,19 +904,47 @@ const Admin: NextPage<AdminProps> = ({
 
                     <div className={styles['inline-time-inputs']}>
                         <InputGroup
-                            input={<input aria-required='true' defaultValue={0} id='cook-time-hours' inputMode='numeric' max={99} min={0} name='cook-time-hours' step={1} type='number' />}
+                            input={<input
+                                aria-required='true'
+                                id='cook-time-hours'
+                                inputMode='numeric'
+                                max={99}
+                                min={0}
+                                name='cook-time-hours'
+                                onChange={event => setFormCookTimeHours(parseInt(event.target.value))}
+                                step={1}
+                                type='number'
+                                value={formCookTimeHours}
+                            />}
                             label={<label htmlFor='cook-time-hours'>Hours *</label>}
                         />
 
                         <InputGroup
-                            input={<input aria-required='true' defaultValue={30} id='cook-time-mins' inputMode='numeric' max={59} min={0} name='cook-time-mins' step={1} type='number' />}
+                            input={<input
+                                aria-required='true'
+                                id='cook-time-mins'
+                                inputMode='numeric'
+                                max={59}
+                                min={0}
+                                name='cook-time-mins'
+                                onChange={event => setFormCookTimeMins(parseInt(event.target.value))}
+                                step={1}
+                                type='number'
+                                value={formCookTimeMins}
+                            />}
                             label={<label htmlFor='cook-time-mins'>Minutes *</label>}
                         />
                     </div>
 
                     <div className={styles['section-heading']}>
                         <p><b>Serving</b></p>
-                        <button aria-label='Edit serving units' className='icon-only' onClick={handleEditServingUnitOnClick} ref={editServingsButtonRef} type='button'>
+                        <button
+                            aria-label='Edit serving units'
+                            className='icon-only'
+                            onClick={handleEditServingUnitOnClick}
+                            ref={editServingsButtonRef}
+                            type='button'
+                        >
                             <Icon ariaHidden={true} Icon={bxsEditAlt} />
                         </button>
                     </div>
@@ -758,16 +953,37 @@ const Admin: NextPage<AdminProps> = ({
                     {/* servingUnit ======================================= */}
                     <div className={styles['inline-serving-inputs']}>
                         <InputGroup
-                            input={<input aria-required='true' defaultValue={4} id='serving-amount' inputMode='numeric' max={999} min={1} name='serving-amount' step={1} type='number' />}
+                            input={<input
+                                aria-required='true'
+                                id='serving-amount'
+                                inputMode='numeric'
+                                max={999}
+                                min={1}
+                                name='serving-amount'
+                                onChange={event => setFormServingAmount(parseInt(event.target.value))}
+                                step={1}
+                                type='number'
+                                value={formServingAmount}
+                            />}
                             label={<label htmlFor='serving-amount'>Amount *</label>}
                         />
 
                         <InputGroup
-                            input={<select aria-required='true' id='serving-unit' name='serving-unit' required>
+                            input={<select
+                                aria-required='true'
+                                id='serving-unit'
+                                name='serving-unit'
+                                onChange={event => setFormServingUnit(event.target.value)}
+                                required
+                                value={formServingUnit}
+                            >
                                 <option value=''>-- Select a serving unit --</option>
                                 {localServingUnits.map((servingUnit) => {
-                                    return <option key={`serving-unit-${servingUnit.name}`} value={servingUnit.name}>
-                                        {servingUnit.name}
+                                    return <option
+                                        key={`serving-unit-${servingUnit.name}`}
+                                        value={servingUnit.name}
+                                    >
+                                        {servingUnit.namePlural}
                                     </option>;
                                 })}
                             </select>}
@@ -777,16 +993,37 @@ const Admin: NextPage<AdminProps> = ({
 
                     <div className={styles['section-heading']}>
                         <p><b>Categories</b></p>
-                        <button aria-label='Edit categories' className='icon-only' onClick={handleEditCategoryOnClick} ref={editCategoryButtonRef} type='button'>
+                        <button
+                            aria-label='Edit categories'
+                            className='icon-only'
+                            onClick={handleEditCategoryOnClick}
+                            ref={editCategoryButtonRef}
+                            type='button'
+                        >
                             <Icon ariaHidden={true} Icon={bxsEditAlt} />
                         </button>
                     </div>
 
                     {/* courseTypes ======================================= */}
                     <InputGroup
-                        input={<select aria-required='true' id='course-types' multiple name='course-types' required>
+                        input={<select
+                            aria-required='true'
+                            id='course-types'
+                            multiple
+                            name='course-types'
+                            onChange={event => {
+                                const options = [...event.target.selectedOptions];
+                                const values = options.map(option => option.value);
+                                setFormCourseTypes(values);
+                            }}
+                            required
+                            value={formCourseTypes}
+                        >
                             {localCourseTypes.map((courseType) => {
-                                return <option key={`course-types-${courseType.name}`} value={courseType.name}>
+                                return <option
+                                    key={`course-types-${courseType.name}`}
+                                    value={courseType.name}
+                                >
                                     {courseType.name}
                                 </option>;
                             })}
@@ -796,9 +1033,24 @@ const Admin: NextPage<AdminProps> = ({
 
                     {/* cuisines ========================================== */}
                     <InputGroup
-                        input={<select aria-required='true' id='cuisines' multiple name='cuisines' required>
+                        input={<select
+                            aria-required='true'
+                            id='cuisines'
+                            multiple
+                            name='cuisines'
+                            onChange={event => {
+                                const options = [...event.target.selectedOptions];
+                                const values = options.map(option => option.value);
+                                setFormCuisines(values);
+                            }}
+                            required
+                            value={formCuisines}
+                        >
                             {localCuisines.map((cuisine) => {
-                                return <option key={`cuisines-${cuisine.name}`} value={cuisine.name}>
+                                return <option
+                                    key={`cuisines-${cuisine.name}`}
+                                    value={cuisine.name}
+                                >
                                     {cuisine.name}
                                 </option>;
                             })}
@@ -808,9 +1060,22 @@ const Admin: NextPage<AdminProps> = ({
 
                     {/* dietaryRestrictions =============================== */}
                     <InputGroup
-                        input={<select id='dietary-restrictions' multiple name='dietary-restrictions'>
+                        input={<select
+                            id='dietary-restrictions'
+                            multiple
+                            name='dietary-restrictions'
+                            onChange={event => {
+                                const options = [...event.target.selectedOptions];
+                                const values = options.map(option => option.value);
+                                setFormDietaryRestrictions(values);
+                            }}
+                            value={formDietaryRestrictions}
+                        >
                             {localDietaryRestrictions.map((dietaryRestriction) => {
-                                return <option key={`dietary-restrictions-${dietaryRestriction.name}`} value={dietaryRestriction.name}>
+                                return <option
+                                    key={`dietary-restrictions-${dietaryRestriction.name}`}
+                                    value={dietaryRestriction.name}
+                                >
                                     {dietaryRestriction.name}
                                 </option>;
                             })}
@@ -820,7 +1085,19 @@ const Admin: NextPage<AdminProps> = ({
 
                     {/* dishTypes ========================================= */}
                     <InputGroup
-                        input={<select aria-required='true' id='dish-types' multiple name='dish-types' required>
+                        input={<select
+                            aria-required='true'
+                            id='dish-types'
+                            multiple
+                            name='dish-types'
+                            onChange={event => {
+                                const options = [...event.target.selectedOptions];
+                                const values = options.map(option => option.value);
+                                setFormDishTypes(values);
+                            }}
+                            required
+                            value={formDishTypes}
+                        >
                             {localDishTypes.map((dishType) => {
                                 return <option key={`dish-types-${dishType.name}`} value={dishType.name}>
                                     {dishType.name}
@@ -1168,7 +1445,7 @@ const Admin: NextPage<AdminProps> = ({
 
                 <div className={styles['section-submit']}>
                     <div>
-                        <input form='add-recipe' type='submit' value='Add new recipe' />
+                        <input form='submit-recipe' type='submit' value={formSubmitValue} />
                     </div>
 
                     {formFeedback.length > 0 &&
