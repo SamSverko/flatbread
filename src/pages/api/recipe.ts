@@ -168,8 +168,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         stepsValidated = validateQueryParamSteps(res, steps);
         if (stepsValidated === undefined) return;
 
-        notesValidated = validateQueryParamNotes(res, notes);
-        if (notesValidated === undefined) return;
+        if (notes) {
+            notesValidated = validateQueryParamNotes(res, notes);
+            if (notesValidated === undefined) return;
+        }
 
         // QUERY ==============================================================
         try {
@@ -271,7 +273,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             }),
                         },
                     },
-                    notes: {
+                    notes: notesValidated ? {
                         createMany: {
                             data: (notesValidated as Prisma.RecipeNoteCreateInput[]).map((recipeNote, index) => {
                                 return {
@@ -281,7 +283,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                                 };
                             }),
                         },
-                    },
+                    } : undefined,
                 },
                 include: {
                     servingUnit: true,

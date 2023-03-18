@@ -5,6 +5,7 @@ import {
     validateQueryParamCondensed,
     validateQueryParamOrderByField,
     validateQueryParamRandom,
+    validateQueryParamRecipeId,
     validateQueryParamSlug,
     validateQueryParamTitleSearch,
 } from '../../prisma/utils';
@@ -33,6 +34,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         cuisines,
         dietaryRestrictions,
         dishTypes,
+        id,
         orderBy,
         orderByField,
         random,
@@ -45,6 +47,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         cuisinesValidated,
         dietaryRestrictionsValidated,
         dishTypesValidated,
+        idValidated,
         orderByValidated,
         orderByFieldValidated,
         randomValidated,
@@ -78,6 +81,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             if (dishTypesValidated === undefined) return;
         }
 
+        if (id) {
+            idValidated = validateQueryParamRecipeId(res, id);
+            if (idValidated === undefined) return;
+        }
+
         if (orderBy || orderByField) {
             const orderByFieldValidation = validateQueryParamOrderByField(res, orderBy, orderByField, ['createdAt', 'title', 'sourceName', 'prepTimeMins', 'cookTimeMins', 'servingAmount']);
             if (orderByFieldValidation === undefined) return;
@@ -102,7 +110,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
 
         // QUERY ==================================================================
-        if (slugValidated) { // `slug` parameter takes precedence over all other filters
+        if (idValidated) { // `id` parameter takes precedence over all other filters
+            const recipe = await prisma.recipe.findUnique({
+                where: {
+                    id: idValidated,
+                },
+                select: getRecipeFormat(condensedValidated),
+            });
+
+            if (!recipe) {
+                return res.status(404).json({ error: 'Recipe not found. Fix: Try another `id` value.' });
+            }
+
+            return res.status(200).json(recipe);
+        } else if (slugValidated) { // `slug` parameter takes precedence over all other filters
             const recipe = await prisma.recipe.findUnique({
                 where: {
                     slug: slugValidated,

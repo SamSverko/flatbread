@@ -96,8 +96,8 @@ const Admin: NextPage<AdminProps> = ({
 
     // Effects
     React.useEffect(() => {
-        if (router.query.slug) {
-            fetch(`/api/recipes?condensed=true&slug=${router.query.slug}`)
+        if (router.query.id) {
+            fetch(`/api/recipes?condensed=true&id=${router.query.id}`)
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.error) {

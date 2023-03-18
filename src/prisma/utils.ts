@@ -468,6 +468,18 @@ export function validateQueryParamRandom(res: NextApiResponse, value: string | s
     }
 }
 
+export function validateQueryParamRecipeId(res: NextApiResponse, value: string | string[] | undefined) {
+    if (!value) {
+        return res.status(400).json({
+            error: 'Missing query parameter `id`. Fix: Provide a string value.',
+        });
+    }
+
+    const id = value?.toString().trim();
+
+    return id;
+}
+
 export function validateQueryParamServingAmount(res: NextApiResponse, value: string | string[]) {
     const servingAmount = value?.toString();
 
