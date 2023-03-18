@@ -399,7 +399,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     title: titleValidated,
                     slug: slugValidated,
                     sourceName: sourceNameValidated,
-                    sourceURL: sourceURLValidated,
+                    sourceURL: sourceURLValidated ? sourceURLValidated : null,
                     prepTimeMins: prepTimeMinsValidated,
                     cookTimeMins: cookTimeMinsValidated,
                     servingAmount: servingAmountValidated,
@@ -424,14 +424,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             };
                         }),
                     } : undefined,
-                    dietaryRestrictions: dietaryRestrictionsValidated ? {
+                    dietaryRestrictions: {
                         set: [],
-                        connect: (dietaryRestrictionsValidated).map((dietaryRestriction) => {
+                        connect: dietaryRestrictionsValidated ? (dietaryRestrictionsValidated).map((dietaryRestriction) => {
                             return {
                                 name: dietaryRestriction,
                             };
-                        }),
-                    } : undefined,
+                        }) : undefined,
+                    },
                     dishTypes: dishTypesValidated ? {
                         set: [],
                         connect: (dishTypesValidated).map((dishTypes) => {
@@ -502,11 +502,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                             }),
                         },
                     } : undefined,
-                    notes: notesValidated ? {
+                    notes: {
                         deleteMany: {
                             recipeId: idValidated,
                         },
-                        createMany: {
+                        createMany: notesValidated ? {
                             data: (notesValidated as Prisma.RecipeNoteCreateInput[]).map((recipeNote, index) => {
                                 return {
                                     order: index,
@@ -514,8 +514,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                                     details: recipeNote.details,
                                 };
                             }),
-                        },
-                    } : undefined,
+                        } : undefined,
+                    },
                 },
                 include: {
                     servingUnit: true,
