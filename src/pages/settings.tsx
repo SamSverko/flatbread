@@ -1,4 +1,5 @@
-import { signIn } from 'next-auth/react';
+import Link from 'next/link';
+import { signIn, signOut, useSession } from 'next-auth/react';
 import * as React from 'react';
 
 import Card from '../components/card';
@@ -17,6 +18,9 @@ import type { NextPage } from 'next';
 import type { PlannedRecipe, SavedIngredient } from '../types';
 
 const Settings: NextPage = () => {
+    // Hooks
+    const { data: session } = useSession();
+
     // States
     const [listItems, setListItems] = React.useState<Array<SavedIngredient>>([]);
     const [plannedRecipes, setPlannedRecipes] = React.useState<Array<PlannedRecipe>>([]);
@@ -112,8 +116,14 @@ const Settings: NextPage = () => {
 
                     <p>At this time, only admins can edit recipe data.</p>
 
-                    <div>
-                        <button onClick={() => signIn('github', { callbackUrl: 'http://localhost:3000/admin' })}>Sign in as admin</button>
+                    <div className={styles.buttons}>
+                        {!session && <button onClick={() => signIn('github', { callbackUrl: 'http://localhost:3000/admin' })}>Sign in as admin</button>}
+                        {session &&
+                            <>
+                                <Link href='/admin'>Admin page</Link>
+                                <button className='secondary' onClick={() => signOut()}>Sign out</button>
+                            </>
+                        }
                     </div>
                 </div>
             </Card>

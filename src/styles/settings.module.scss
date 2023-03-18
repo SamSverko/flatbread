@@ -20,4 +20,12 @@
             justify-content: flex-start;
         }
     }
+
+    .buttons {
+        align-items: center;
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spacing-2);
+        justify-content: space-between;
+    }
 }

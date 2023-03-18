@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import * as React from 'react';
 
 import Card from '../card';
@@ -10,6 +11,7 @@ import bxBowlHot from '../../../public/icons/bx-bowl-hot.svg';
 import bxCalendarCheck from '../../../public/icons/bx-calendar-check.svg';
 import bxCalendarPlus from '../../../public/icons/bx-calendar-plus.svg';
 import bxCollapseVertical from '../../../public/icons/bx-collapse-vertical.svg';
+import bxEditAlt from '../../../public/icons/bxs-edit-alt.svg';
 import bxExpandVertical from '../../../public/icons/bx-expand-vertical.svg';
 import bxHeart from '../../../public/icons/bx-heart.svg';
 import bxsHeart from '../../../public/icons/bxs-heart.svg';
@@ -30,6 +32,7 @@ import type {
 } from '../../types';
 
 type ComponentProps = {
+    adminViewer?: boolean;
     isPlanned: boolean;
     isSaved: boolean;
     onRemoveFromSaved?: () => void;
@@ -37,11 +40,15 @@ type ComponentProps = {
 }
 
 const RecipeCard = ({
+    adminViewer = false,
     isPlanned = false,
     isSaved = false,
     onRemoveFromSaved,
     recipe,
 }: ComponentProps) => {
+    // Hooks
+    const router = useRouter();
+
     // States
     const [isCategoriesExpanded, setIsCategoriesExpanded] = React.useState(false);
     const [isCopiedSelected, setIsCopiedSelected] = React.useState(false);
@@ -67,7 +74,7 @@ const RecipeCard = ({
         if ((target as HTMLButtonElement).getAttribute('aria-pressed') === 'true') return;
 
         const shoppingList = localStorage.getItem(LSKey.shoppingList);
-        
+
         let quantity = 0;
         if (ingredient.quantityMaxWhole) {
             quantity += ingredient.quantityMaxWhole;
@@ -81,7 +88,7 @@ const RecipeCard = ({
         if (ingredient.quantityFraction) {
             quantity += Number(Number(ingredient.quantityFraction.value).toFixed(3));
         }
-        
+
         const ingredientToAdd: SavedIngredient = {
             id: ingredient.id.toString(),
             isComplete: false,
@@ -105,7 +112,7 @@ const RecipeCard = ({
         } else {
             const shoppingListArray: SavedIngredient[] = JSON.parse(shoppingList);
             const ingredientToAddIndex = shoppingListArray.findIndex(listItem => listItem.id === ingredientToAdd.id);
-            
+
             if (ingredientToAddIndex === -1) {
                 shoppingListArray.push(ingredientToAdd);
             } else {
@@ -132,6 +139,10 @@ const RecipeCard = ({
         } catch (error) {
             console.error('Failed to copy recipe link to clipboard: ', error);
         }
+    }
+
+    function handleEditOnClick() {
+        router.push(`/admin?id=${recipe.id}`);
     }
 
     function handleExpandAllOnClick() {
@@ -223,7 +234,7 @@ const RecipeCard = ({
                     <ul>
                         {categories.map((category, index) => {
                             return <li key={`key-${recipe.slug}-${id}-${index}`}>{category.name}</li>;
-                        })} 
+                        })}
                     </ul>
                 </div>
             );
@@ -255,10 +266,10 @@ const RecipeCard = ({
                         onClick={handleSaveRecipeOnClick}
                     >
                         {!isSavedState &&
-                            <Icon ariaLabel='Add to saved recipes' Icon={bxHeart} />                        
+                            <Icon ariaLabel='Add to saved recipes' Icon={bxHeart} />
                         }
                         {isSavedState &&
-                            <Icon ariaLabel='Remove to saved recipes' Icon={bxsHeart} />                        
+                            <Icon ariaLabel='Remove to saved recipes' Icon={bxsHeart} />
                         }
                     </button>
                     <button
@@ -280,6 +291,14 @@ const RecipeCard = ({
                     >
                         <Icon ariaLabel='Copy recipe link to clipboard' Icon={bxLink} />
                     </button>
+                    {adminViewer &&
+                        <button
+                            className='icon-only'
+                            onClick={handleEditOnClick}
+                        >
+                            <Icon ariaLabel='Edit recipe' Icon={bxEditAlt} />
+                        </button>
+                    }
                 </div>
                 <div>
                     <button
@@ -314,36 +333,36 @@ const RecipeCard = ({
         function parseIngredient(ingredient: RecipeIngredientResponse) {
             let quantity = '';
             let quantityValue = 0;
-    
+
             if (ingredient.quantityWhole) {
                 quantity += ingredient.quantityWhole;
                 quantityValue += ingredient.quantityWhole;
             }
-    
+
             if (ingredient.quantityFraction) {
                 quantity += ingredient.quantityFraction.name;
                 quantityValue += Number(ingredient.quantityFraction.value);
             }
-    
+
             if (ingredient.quantityMinWhole) {
                 quantity += ingredient.quantityMinWhole;
                 quantityValue += ingredient.quantityMinWhole;
             }
-    
+
             if (ingredient.quantityMinFraction) {
                 quantity += ingredient.quantityMinFraction.name;
                 quantityValue += Number(ingredient.quantityMinFraction.value);
             }
-    
+
             if (ingredient.quantityMaxWhole || ingredient.quantityMaxFraction) {
                 quantity += '-';
             }
-    
+
             if (ingredient.quantityMaxWhole) {
                 quantity += ingredient.quantityMaxWhole;
                 quantityValue += ingredient.quantityMaxWhole;
             }
-    
+
             if (ingredient.quantityMaxFraction) {
                 quantity += ingredient.quantityMaxFraction.name;
                 quantityValue += Number(ingredient.quantityMaxFraction.value);
@@ -356,7 +375,7 @@ const RecipeCard = ({
             if (ingredient.quantityMinWhole && ingredient.quantityMaxWhole) {
                 quantityValue -= ingredient.quantityMinWhole;
             }
-    
+
             const unit = (ingredient.unit) ? (quantityValue <= 1 ? ingredient.unit.name : ingredient.unit.namePlural) : '';
             const name = (quantityValue <= 1) ? ingredient.name.name : ingredient.name.namePlural;
             const alteration = (ingredient.alteration) ? `, ${ingredient.alteration}` : '';
@@ -364,7 +383,7 @@ const RecipeCard = ({
             const substitutions = (ingredient.substitutions.length > 0)
                 ? ` (substitutions: ${ingredient.substitutions.map((substitution) => substitution.name).join(', ')})`
                 : '';
-    
+
             return {
                 alteration: alteration,
                 name: name,
@@ -414,7 +433,7 @@ const RecipeCard = ({
                                 </li>
                             );
                         }
-                    })} 
+                    })}
                 </ul>
 
                 <hr />
@@ -447,7 +466,7 @@ const RecipeCard = ({
                         } else {
                             return <li key={`key-${noteId}`}>{note.details}</li>;
                         }
-                    })} 
+                    })}
                 </ul>
             </details>
         );
@@ -483,7 +502,7 @@ const RecipeCard = ({
                                 </li>
                             );
                         }
-                    })} 
+                    })}
                 </ul>
 
                 <hr />
@@ -505,7 +524,7 @@ const RecipeCard = ({
         function getTimeString(totalMinutes: number) {
             const hours = Math.floor(totalMinutes / 60);
             const minutes = totalMinutes % 60;
-    
+
             if (hours === 0) {
                 return `${minutes} min`;
             } else if (minutes === 0) {
@@ -519,7 +538,7 @@ const RecipeCard = ({
             const totalTime = getTimeString(recipe.prepTimeMins + recipe.cookTimeMins);
             const prepTime = getTimeString(recipe.prepTimeMins);
             const cookTime = getTimeString(recipe.cookTimeMins);
-    
+
             return (<span><b>{totalTime}</b> ({prepTime} prep + {cookTime} cook)</span>);
         }
 
@@ -531,7 +550,7 @@ const RecipeCard = ({
                 {type === 'source' &&
                     <a href={recipe.sourceURL ? recipe.sourceURL : undefined} rel='noreferrer' target='_blank'>
                         {recipe.sourceName}
-                        {recipe.sourceURL && 
+                        {recipe.sourceURL &&
                             <Icon ariaLabel='Open link in new tab' Icon={bxLinkExternal} />
                         }
                     </a>

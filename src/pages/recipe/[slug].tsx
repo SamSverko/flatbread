@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
 
 import Card from '../../components/card';
 import RecipeCard from '../../components/recipe-card';
@@ -10,6 +11,8 @@ import type { NextPage } from 'next';
 import type { PlannedRecipe, RecipeFormatted } from '../../types';
 
 const RecipePage: NextPage = () => {
+    // Hooks
+    const { data: session } = useSession();
     const router = useRouter();
     const { slug } = router.query;
 
@@ -62,7 +65,12 @@ const RecipePage: NextPage = () => {
     if (isLoading) return <Card><h2>Fetching recipe...</h2></Card>;
     if (!recipe) return <Card><h2>No recipe found!</h2></Card>;
 
-    return <RecipeCard isPlanned={isPlanned} isSaved={isSaved} recipe={recipe} />;
+    return <RecipeCard
+        adminViewer={(session) ? true : false}
+        isPlanned={isPlanned}
+        isSaved={isSaved}
+        recipe={recipe}
+    />;
 };
 
 export default RecipePage;

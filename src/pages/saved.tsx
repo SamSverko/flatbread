@@ -1,3 +1,4 @@
+import { useSession } from 'next-auth/react';
 import * as React from 'react';
 
 import Card from '../components/card';
@@ -12,6 +13,9 @@ import type { NextPage } from 'next';
 import type { PlannedRecipe, RecipeFormatted } from '../types';
 
 const Saved: NextPage = () => {
+    // Hooks
+    const { data: session } = useSession();
+
     // Refs
     const resultsParagraphRef = React.useRef(null);
 
@@ -84,6 +88,7 @@ const Saved: NextPage = () => {
                         const isSaved = (savedRecipes.findIndex((savedRecipe: RecipeFormatted) => savedRecipe.slug === recipe.slug) === -1) ? false : true;
 
                         return <RecipeCard
+                            adminViewer={(session) ? true : false}
                             isPlanned={isPlanned}
                             isSaved={isSaved}
                             key={recipe.id}
