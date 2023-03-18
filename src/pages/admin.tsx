@@ -939,12 +939,15 @@ const Admin: NextPage<AdminProps> = ({
                                 max={99}
                                 min={0}
                                 name='prep-time-hours'
-                                onChange={event => setFormPrepTimeHours(parseInt(event.target.value))}
+                                onChange={(event) => {
+                                    const value = parseInt(event.target.value);
+                                    setFormPrepTimeHours((!isNaN(value) ? value : 0));
+                                }}
                                 step={1}
                                 type='number'
                                 value={formPrepTimeHours}
                             />}
-                            label={<label htmlFor='prep-time-hours'>Hours *</label>}
+                            label={<label htmlFor='prep-time-hours'>Hours</label>}
                         />
 
                         <InputGroup
@@ -955,12 +958,15 @@ const Admin: NextPage<AdminProps> = ({
                                 max={59}
                                 min={0}
                                 name='prep-time-mins'
-                                onChange={event => setFormPrepTimeMins(parseInt(event.target.value))}
+                                onChange={(event) => {
+                                    const value = parseInt(event.target.value);
+                                    setFormPrepTimeMins((!isNaN(value) ? value : 0));
+                                }}
                                 step={1}
                                 type='number'
                                 value={formPrepTimeMins}
                             />}
-                            label={<label htmlFor='prep-time-mins'>Minutes *</label>}
+                            label={<label htmlFor='prep-time-mins'>Minutes</label>}
                         />
                     </div>
 
@@ -976,12 +982,15 @@ const Admin: NextPage<AdminProps> = ({
                                 max={99}
                                 min={0}
                                 name='cook-time-hours'
-                                onChange={event => setFormCookTimeHours(parseInt(event.target.value))}
+                                onChange={(event) => {
+                                    const value = parseInt(event.target.value);
+                                    setFormCookTimeHours((!isNaN(value) ? value : 0));
+                                }}
                                 step={1}
                                 type='number'
                                 value={formCookTimeHours}
                             />}
-                            label={<label htmlFor='cook-time-hours'>Hours *</label>}
+                            label={<label htmlFor='cook-time-hours'>Hours</label>}
                         />
 
                         <InputGroup
@@ -992,12 +1001,15 @@ const Admin: NextPage<AdminProps> = ({
                                 max={59}
                                 min={0}
                                 name='cook-time-mins'
-                                onChange={event => setFormCookTimeMins(parseInt(event.target.value))}
+                                onChange={(event) => {
+                                    const value = parseInt(event.target.value);
+                                    setFormCookTimeMins((!isNaN(value) ? value : 0));
+                                }}
                                 step={1}
                                 type='number'
                                 value={formCookTimeMins}
                             />}
-                            label={<label htmlFor='cook-time-mins'>Minutes *</label>}
+                            label={<label htmlFor='cook-time-mins'>Minutes</label>}
                         />
                     </div>
 
@@ -1025,7 +1037,10 @@ const Admin: NextPage<AdminProps> = ({
                                 max={999}
                                 min={1}
                                 name='serving-amount'
-                                onChange={event => setFormServingAmount(parseInt(event.target.value))}
+                                onChange={(event) => {
+                                    const value = parseInt(event.target.value);
+                                    setFormServingAmount((!isNaN(value) ? value : 0));
+                                }}
                                 step={1}
                                 type='number'
                                 value={formServingAmount}
