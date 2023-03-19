@@ -103,6 +103,24 @@ const Admin: NextPage<AdminProps> = ({
     const [formRecipeSteps, setFormRecipeSteps] = React.useState<Array<RecipeStepNote>>([]);
     const [formRecipeNotes, setFormRecipeNotes] = React.useState<Array<RecipeStepNote>>([]);
 
+    const [formStepSection, setFormStepSection] = React.useState('');
+    const [formStepDetails, setFormStepDetails] = React.useState('');
+    const [formNoteSection, setFormNoteSection] = React.useState('');
+    const [formNoteDetails, setFormNoteDetails] = React.useState('');
+
+    const [formIngredientSection, setFormIngredientSection] = React.useState('');
+    const [formIngredientQuantityWhole, setFormIngredientQuantityWhole] = React.useState<number | string>('');
+    const [formIngredientQuantityFraction, setFormIngredientQuantityFraction] = React.useState('');
+    const [formIngredientQuantityMinWhole, setFormIngredientQuantityMinWhole] = React.useState('');
+    const [formIngredientQuantityMinFraction, setFormIngredientQuantityMinFraction] = React.useState('');
+    const [formIngredientQuantityMaxWhole, setFormIngredientQuantityMaxWhole] = React.useState('');
+    const [formIngredientQuantityMaxFraction, setFormIngredientQuantityMaxFraction] = React.useState('');
+    const [formIngredientUnit, setFormIngredientUnit] = React.useState('');
+    const [formIngredientName, setFormIngredientName] = React.useState('');
+    const [formIngredientAlteration, setFormIngredientAlteration] = React.useState('');
+    const [formIngredientIsOptional, setFormIngredientIsOptional] = React.useState(false);
+    const [formIngredientSubstitutions, setFormIngredientSubstitutions] = React.useState<Array<string>>([]);
+
     const [formSubmitValue, setFormSubmitValue] = React.useState('Add new recipe');
     const [formFeedback, setFormFeedback] = React.useState('');
 
@@ -387,26 +405,21 @@ const Admin: NextPage<AdminProps> = ({
         if (!event.target) return;
 
         setFormFeedback('');
-        const formElement = (event.target as HTMLFormElement);
-        const formData = new FormData(formElement);
 
-        const formDataName = formData.get('ingredient-name');
-        const nameValidated = (formDataName) ? formDataName.toString().trim() : undefined;
+        const nameValidated = (formIngredientName) ? formIngredientName.toString().trim() : undefined;
         if (!nameValidated) {
             return setFormFeedback('Form error: \'Name\' value must be a string.');
         }
 
-        const formDataIsOptional = formData.get('ingredient-is-optional');
-        const isOptionalValidated = (formDataIsOptional) ? true : false;
+        const isOptionalValidated = (formIngredientIsOptional) ? true : false;
 
-        const formDataSubstitutions = formData.getAll('ingredient-substitutions');
         const ingredientsFlat = localIngredients.map((ingredient) => ingredient.name);
-        formDataSubstitutions.forEach((selectedSubstitute) => {
+        formIngredientSubstitutions.forEach((selectedSubstitute) => {
             if (!ingredientsFlat.includes(selectedSubstitute as string)) {
                 return setFormFeedback('Form error: \'Substitution\' values must be from the list provided.');
             }
         });
-        const substitutionsValidated = formDataSubstitutions as string[];
+        const substitutionsValidated = formIngredientSubstitutions as string[];
 
         const ingredientToAdd: RecipeIngredient = {
             id: v4(),
@@ -415,61 +428,63 @@ const Admin: NextPage<AdminProps> = ({
             substitutions: substitutionsValidated,
         };
 
-        const formDataSection = formData.get('ingredient-section');
-        const sectionValidated = (formDataSection) ? formDataSection.toString().trim() : undefined;
+        const sectionValidated = (formIngredientSection) ? formIngredientSection.toString().trim() : undefined;
         if (sectionValidated) {
             ingredientToAdd.section = sectionValidated;
         }
 
-        const formDataQuantityWhole = formData.get('ingredient-quantity-whole');
-        const quantityWholeValidated = (formDataQuantityWhole) ? parseInt(formDataQuantityWhole as string) : undefined;
+        const quantityWholeValidated = (formIngredientQuantityWhole) ? parseInt(formIngredientQuantityWhole as string) : undefined;
         if (quantityWholeValidated && !isNaN(quantityWholeValidated)) {
             ingredientToAdd.quantityWhole = quantityWholeValidated;
         }
 
-        const formDataQuantityFraction = formData.get('ingredient-quantity-fraction');
-        const quantityFractionValidated = (localQuantityFractions.map(quantityFraction => quantityFraction.name).includes(formDataQuantityFraction as string)) ? formDataQuantityFraction?.toString() : undefined;
+        const quantityFractionValidated = (localQuantityFractions.map(quantityFraction => quantityFraction.name).includes(formIngredientQuantityFraction as string)) ? formIngredientQuantityFraction?.toString() : undefined;
         if (quantityFractionValidated) {
             ingredientToAdd.quantityFraction = quantityFractionValidated;
         }
 
-        const formDataQuantityMinWhole = formData.get('ingredient-quantity-min-whole');
-        const quantityMinWholeValidated = (formDataQuantityMinWhole) ? parseInt(formDataQuantityMinWhole as string) : undefined;
+        const quantityMinWholeValidated = (formIngredientQuantityMinWhole) ? parseInt(formIngredientQuantityMinWhole as string) : undefined;
         if (quantityMinWholeValidated && !isNaN(quantityMinWholeValidated)) {
             ingredientToAdd.quantityMinWhole = quantityMinWholeValidated;
         }
 
-        const formDataQuantityMinFraction = formData.get('ingredient-quantity-min-fraction');
-        const quantityMinFractionValidated = (localQuantityFractions.map(quantityFraction => quantityFraction.name).includes(formDataQuantityMinFraction as string)) ? formDataQuantityMinFraction?.toString() : undefined;
+        const quantityMinFractionValidated = (localQuantityFractions.map(quantityFraction => quantityFraction.name).includes(formIngredientQuantityMinFraction as string)) ? formIngredientQuantityMinFraction?.toString() : undefined;
         if (quantityMinFractionValidated) {
             ingredientToAdd.quantityMinFraction = quantityMinFractionValidated;
         }
 
-        const formDataQuantityMaxWhole = formData.get('ingredient-quantity-max-whole');
-        const quantityMaxWholeValidated = (formDataQuantityMaxWhole) ? parseInt(formDataQuantityMaxWhole as string) : undefined;
+        const quantityMaxWholeValidated = (formIngredientQuantityMaxWhole) ? parseInt(formIngredientQuantityMaxWhole as string) : undefined;
         if (quantityMaxWholeValidated && !isNaN(quantityMaxWholeValidated)) {
             ingredientToAdd.quantityMaxWhole = quantityMaxWholeValidated;
         }
 
-        const formDataQuantityMaxFraction = formData.get('ingredient-quantity-max-fraction');
-        const quantityMaxFractionValidated = (localQuantityFractions.map(quantityFraction => quantityFraction.name).includes(formDataQuantityMaxFraction as string)) ? formDataQuantityMaxFraction?.toString() : undefined;
+        const quantityMaxFractionValidated = (localQuantityFractions.map(quantityFraction => quantityFraction.name).includes(formIngredientQuantityMaxFraction as string)) ? formIngredientQuantityMaxFraction?.toString() : undefined;
         if (quantityMaxFractionValidated) {
             ingredientToAdd.quantityMaxFraction = quantityMaxFractionValidated;
         }
 
-        const formDataUnit = formData.get('ingredient-unit');
-        const unitValidated = (localIngredientUnits.map(ingredientUnit => ingredientUnit.name).includes(formDataUnit as string)) ? formDataUnit?.toString() : undefined;
+        const unitValidated = (localIngredientUnits.map(ingredientUnit => ingredientUnit.name).includes(formIngredientUnit as string)) ? formIngredientUnit?.toString() : undefined;
         if (unitValidated) {
             ingredientToAdd.unit = unitValidated;
         }
 
-        const formDataAlteration = formData.get('ingredient-alteration');
-        const alterationValidated = (formDataAlteration) ? formDataAlteration.toString().trim() : undefined;
+        const alterationValidated = (formIngredientAlteration) ? formIngredientAlteration.toString().trim() : undefined;
         if (alterationValidated) {
             ingredientToAdd.alteration = alterationValidated;
         }
 
         setFormRecipeIngredients(formRecipeIngredients => [...formRecipeIngredients, ingredientToAdd]);
+        setFormIngredientQuantityWhole('');
+        setFormIngredientQuantityFraction('');
+        setFormIngredientQuantityMinWhole('');
+        setFormIngredientQuantityMinFraction('');
+        setFormIngredientQuantityMaxWhole('');
+        setFormIngredientQuantityMaxFraction('');
+        setFormIngredientUnit('');
+        setFormIngredientName('');
+        setFormIngredientAlteration('');
+        setFormIngredientIsOptional(false);
+        setFormIngredientSubstitutions([]);
     }
 
     function handleOnSubmitAddNote(event: React.FormEvent) {
@@ -477,11 +492,8 @@ const Admin: NextPage<AdminProps> = ({
         if (!event.target) return;
 
         setFormFeedback('');
-        const formElement = (event.target as HTMLFormElement);
-        const formData = new FormData(formElement);
 
-        const formDataDetails = formData.get('note-details');
-        const detailsValidated = (formDataDetails) ? formDataDetails.toString().trim() : undefined;
+        const detailsValidated = (formNoteDetails) ? formNoteDetails.toString().trim() : undefined;
         if (!detailsValidated) {
             return setFormFeedback('Form error: \'Details\' value must be a string.');
         }
@@ -491,13 +503,13 @@ const Admin: NextPage<AdminProps> = ({
             details: detailsValidated,
         };
 
-        const formDataSection = formData.get('note-section');
-        const sectionValidated = (formDataSection) ? formDataSection.toString().trim() : undefined;
+        const sectionValidated = (formNoteSection) ? formNoteSection.toString().trim() : undefined;
         if (sectionValidated) {
             noteToAdd.section = sectionValidated;
         }
 
         setFormRecipeNotes(formRecipeNotes => [...formRecipeNotes, noteToAdd]);
+        setFormNoteDetails('');
     }
 
     function handleOnSubmitAddStep(event: React.FormEvent) {
@@ -505,11 +517,8 @@ const Admin: NextPage<AdminProps> = ({
         if (!event.target) return;
 
         setFormFeedback('');
-        const formElement = (event.target as HTMLFormElement);
-        const formData = new FormData(formElement);
 
-        const formDataDetails = formData.get('step-details');
-        const detailsValidated = (formDataDetails) ? formDataDetails.toString().trim() : undefined;
+        const detailsValidated = (formStepDetails) ? formStepDetails.toString().trim() : undefined;
         if (!detailsValidated) {
             return setFormFeedback('Form error: \'Details\' value must be a string.');
         }
@@ -519,13 +528,13 @@ const Admin: NextPage<AdminProps> = ({
             details: detailsValidated,
         };
 
-        const formDataSection = formData.get('step-section');
-        const sectionValidated = (formDataSection) ? formDataSection.toString().trim() : undefined;
+        const sectionValidated = (formStepSection) ? formStepSection.toString().trim() : undefined;
         if (sectionValidated) {
             stepToAdd.section = sectionValidated;
         }
 
         setFormRecipeSteps(formRecipeSteps => [...formRecipeSteps, stepToAdd]);
+        setFormStepDetails('');
     }
 
     function onClickOrderIngredient(event: React.MouseEvent<HTMLButtonElement>, movement: 'down' | 'up') {
@@ -1306,7 +1315,9 @@ const Admin: NextPage<AdminProps> = ({
                                 id='ingredient-section'
                                 maxLength={sectionMaxCharLength}
                                 name='ingredient-section'
+                                onChange={event => setFormIngredientSection(event.target.value)}
                                 type='text'
+                                value={formIngredientSection}
                             />}
                             label={<label htmlFor='ingredient-section'>
                                 Section
@@ -1346,15 +1357,19 @@ const Admin: NextPage<AdminProps> = ({
                             <div className={styles['inline-quantity-inputs']}>
                                 <InputGroup
                                     input={<input
-                                        defaultValue={0}
                                         disabled={isLoading}
                                         id='ingredient-quantity-whole'
                                         inputMode='numeric'
                                         max={quantityWholeMaxValue}
                                         min={0}
                                         name='ingredient-quantity-whole'
+                                        onChange={(event) => {
+                                            const value = parseInt(event.target.value);
+                                            setFormIngredientQuantityWhole((!isNaN(value) ? value : ''));
+                                        }}
                                         step={1}
                                         type='number'
+                                        value={formIngredientQuantityWhole}
                                     />}
                                     label={<label
                                         htmlFor='ingredient-quantity-whole'
@@ -1367,6 +1382,8 @@ const Admin: NextPage<AdminProps> = ({
                                         disabled={isLoading}
                                         id='ingredient-quantity-fraction'
                                         name='ingredient-quantity-fraction'
+                                        onChange={event => setFormIngredientQuantityFraction(event.target.value)}
+                                        value={formIngredientQuantityFraction}
                                     >
                                         <option value=''>
                                             -- Select a fraction --
@@ -1398,15 +1415,16 @@ const Admin: NextPage<AdminProps> = ({
                                 <div className={styles['inline-quantity-inputs']}>
                                     <InputGroup
                                         input={<input
-                                            defaultValue={0}
                                             disabled={isLoading}
                                             id='ingredient-quantity-min-whole'
                                             inputMode='numeric'
                                             max={quantityWholeMaxValue}
                                             min={0}
                                             name='ingredient-quantity-min-whole'
+                                            onChange={event => setFormIngredientQuantityMinWhole(event.target.value)}
                                             step={1}
                                             type='number'
+                                            value={formIngredientQuantityMinWhole}
                                         />}
                                         label={<label
                                             htmlFor='ingredient-quantity-min-whole'
@@ -1421,6 +1439,8 @@ const Admin: NextPage<AdminProps> = ({
                                             disabled={isLoading}
                                             id='ingredient-quantity-min-fraction'
                                             name='ingredient-quantity-min-fraction'
+                                            onChange={event => setFormIngredientQuantityMinFraction(event.target.value)}
+                                            value={formIngredientQuantityMinFraction}
                                         >
                                             <option value=''>-- Select a fraction --</option>
                                             {localQuantityFractions.map((quantityFraction) => {
@@ -1445,15 +1465,16 @@ const Admin: NextPage<AdminProps> = ({
                                 <div className={styles['inline-quantity-inputs']}>
                                     <InputGroup
                                         input={<input
-                                            defaultValue={0}
                                             disabled={isLoading}
                                             id='ingredient-quantity-max-whole'
                                             inputMode='numeric'
                                             max={quantityWholeMaxValue}
                                             min={0}
                                             name='ingredient-quantity-max-whole'
+                                            onChange={event => setFormIngredientQuantityMaxWhole(event.target.value)}
                                             step={1}
                                             type='number'
+                                            value={formIngredientQuantityMaxWhole}
                                         />}
                                         label={<label
                                             htmlFor='ingredient-quantity-max-whole'
@@ -1466,6 +1487,8 @@ const Admin: NextPage<AdminProps> = ({
                                             disabled={isLoading}
                                             id='ingredient-quantity-max-fraction'
                                             name='ingredient-quantity-max-fraction'
+                                            onChange={event => setFormIngredientQuantityMaxFraction(event.target.value)}
+                                            value={formIngredientQuantityMaxFraction}
                                         >
                                             <option value=''>-- Select a fraction --</option>
                                             {localQuantityFractions.map((quantityFraction) => {
@@ -1506,6 +1529,8 @@ const Admin: NextPage<AdminProps> = ({
                                 disabled={isLoading}
                                 id='ingredient-unit'
                                 name='ingredient-unit'
+                                onChange={event => setFormIngredientUnit(event.target.value)}
+                                value={formIngredientUnit}
                             >
                                 <option value=''>-- Select a unit --</option>
                                 {localIngredientUnits.map((ingredientUnit) => {
@@ -1543,7 +1568,9 @@ const Admin: NextPage<AdminProps> = ({
                                 disabled={isLoading}
                                 id='ingredient-name'
                                 name='ingredient-name'
+                                onChange={event => setFormIngredientName(event.target.value)}
                                 required
+                                value={formIngredientName}
                             >
                                 <option value=''>-- Select an ingredient --</option>
                                 {localIngredients.map((ingredient) => {
@@ -1567,7 +1594,9 @@ const Admin: NextPage<AdminProps> = ({
                                 id='ingredient-alteration'
                                 maxLength={alterationMaxCharLength}
                                 name='ingredient-alteration'
+                                onChange={event => setFormIngredientAlteration(event.target.value)}
                                 type='text'
+                                value={formIngredientAlteration}
                             />}
                             label={<label htmlFor='ingredient-alteration'>
                                 Alteration
@@ -1577,9 +1606,11 @@ const Admin: NextPage<AdminProps> = ({
                         {/* ingredient / isOptional =========================== */}
                         <div className={styles['checkbox']}>
                             <input
+                                checked={formIngredientIsOptional}
                                 disabled={isLoading}
                                 id='ingredient-is-optional'
                                 name='ingredient-is-optional'
+                                onChange={() => setFormIngredientIsOptional(formIngredientIsOptional => !formIngredientIsOptional)}
                                 type='checkbox'
                             />
                             <label
@@ -1595,6 +1626,12 @@ const Admin: NextPage<AdminProps> = ({
                                 id='ingredient-substitutions'
                                 multiple
                                 name='ingredient-substitutions'
+                                onChange={event => {
+                                    const options = [...event.target.selectedOptions];
+                                    const values = options.map(option => option.value);
+                                    setFormIngredientSubstitutions(values);
+                                }}
+                                value={formIngredientSubstitutions}
                             >
                                 {localIngredients.map((ingredient) => {
                                     return <option
@@ -1650,7 +1687,9 @@ const Admin: NextPage<AdminProps> = ({
                                 id='step-section'
                                 maxLength={sectionMaxCharLength}
                                 name='step-section'
+                                onChange={event => setFormStepSection(event.target.value)}
                                 type='text'
+                                value={formStepSection}
                             />}
                             label={<label htmlFor='step-section'>
                                 Section
@@ -1664,7 +1703,9 @@ const Admin: NextPage<AdminProps> = ({
                                 id='step-details'
                                 maxLength={detailsMaxCharLength}
                                 name='step-details'
+                                onChange={event => setFormStepDetails(event.target.value)}
                                 required
+                                value={formStepDetails}
                             ></textarea>}
                             label={<label htmlFor='step-details'>
                                 Details
@@ -1754,7 +1795,9 @@ const Admin: NextPage<AdminProps> = ({
                                 id='note-section'
                                 maxLength={sectionMaxCharLength}
                                 name='note-section'
+                                onChange={event => setFormNoteSection(event.target.value)}
                                 type='text'
+                                value={formNoteSection}
                             />}
                             label={<label htmlFor='note-section'>
                                 Section
@@ -1768,7 +1811,9 @@ const Admin: NextPage<AdminProps> = ({
                                 id='note-details'
                                 maxLength={detailsMaxCharLength}
                                 name='note-details'
+                                onChange={event => setFormNoteDetails(event.target.value)}
                                 required
+                                value={formNoteDetails}
                             ></textarea>}
                             label={<label htmlFor='note-details'>
                                 Details
