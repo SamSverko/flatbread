@@ -51,8 +51,8 @@ To get the website running locally, please do the following:
 
 - **Front end framework:** [Next.js](https://nextjs.org/) - A React framework for developing single page and multi-page JavaScript applications and websites.
 - **Object Relational Mapping (ORM):** [Prisma](https://www.prisma.io/) - A next-generation Node.js and TypeScript ORM for PostgreSQL, MySQL, SQL Server, SQLite, MongoDB, and CockroachDB.
-- **Database:** [PostgreSQL](https://www.postgresql.org/) - The World's Most Advanced Open Source Relational Database.
-- **App hosting:** [Vercel](https://aws.amazon.com/ec2/) - A cloud platform for static sites and serverless functions.
+- **App hosting:** [Vercel](https://vercel.com/) - A cloud platform for static sites and serverless functions.
+- **Database hosting (PostgreSQL):** [Render](https://render.com/) - Render is a unified cloud to build and run all your apps and websites.
 
 ---
 
