@@ -15,7 +15,8 @@
         width: 100%;
 
         input,
-        select {
+        select,
+        textarea {
             margin: calc(var(--border-width) * -1) 0 0;
             width: 100%;
         }

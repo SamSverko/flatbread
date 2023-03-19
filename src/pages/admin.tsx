@@ -78,8 +78,8 @@ const Admin: NextPage<AdminProps> = ({
     const [formDietaryRestrictions, setFormDietaryRestrictions] = React.useState<Array<string>>([]);
     const [formDishTypes, setFormDishTypes] = React.useState<Array<string>>([]);
     const [formRecipeIngredients, setFormRecipeIngredients] = React.useState<Array<RecipeIngredient>>([]);
-    const [formRecipeNotes, setFormRecipeNotes] = React.useState<Array<RecipeStepNote>>([]);
     const [formRecipeSteps, setFormRecipeSteps] = React.useState<Array<RecipeStepNote>>([]);
+    const [formRecipeNotes, setFormRecipeNotes] = React.useState<Array<RecipeStepNote>>([]);
 
     const [formSubmitValue, setFormSubmitValue] = React.useState('Add new recipe');
     const [formFeedback, setFormFeedback] = React.useState('');
@@ -1623,13 +1623,12 @@ const Admin: NextPage<AdminProps> = ({
 
                         {/* step / details ================================ */}
                         <InputGroup
-                            input={<input
+                            input={<textarea
                                 disabled={isLoading}
                                 id='step-details'
                                 name='step-details'
                                 required
-                                type='text'
-                            />}
+                            ></textarea>}
                             label={<label htmlFor='step-details'>
                                 Details
                             </label>}
@@ -1726,13 +1725,12 @@ const Admin: NextPage<AdminProps> = ({
 
                         {/* note / details ================================ */}
                         <InputGroup
-                            input={<input
+                            input={<textarea
                                 disabled={isLoading}
                                 id='note-details'
                                 name='note-details'
                                 required
-                                type='text'
-                            />}
+                            ></textarea>}
                             label={<label htmlFor='note-details'>
                                 Details
                             </label>}
