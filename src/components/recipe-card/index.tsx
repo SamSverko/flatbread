@@ -69,60 +69,15 @@ const RecipeCard = ({
     }, [isCategoriesExpanded, isIngredientsExpanded, isNotesExpanded, isStepsExpanded]);
 
     // Event listeners
-    function onClickAddIngredient(event: React.MouseEvent<HTMLButtonElement>, ingredient: RecipeIngredientResponse) {
+    function onClickAddIngredient(event: React.MouseEvent<HTMLButtonElement>, ingredient: RecipeIngredientResponse | 'all') {
         const target = event.target;
         if ((target as HTMLButtonElement).getAttribute('aria-pressed') === 'true') return;
 
-        const shoppingList = localStorage.getItem(LSKey.shoppingList);
 
-        let quantity = 0;
-        if (ingredient.quantityMaxWhole) {
-            quantity += ingredient.quantityMaxWhole;
-        }
-        if (ingredient.quantityMaxFraction) {
-            quantity += Number(Number(ingredient.quantityMaxFraction.value).toFixed(3));
-        }
-        if (ingredient.quantityWhole) {
-            quantity += ingredient.quantityWhole;
-        }
-        if (ingredient.quantityFraction) {
-            quantity += Number(Number(ingredient.quantityFraction.value).toFixed(3));
-        }
-
-        const ingredientToAdd: SavedIngredient = {
-            id: ingredient.id.toString(),
-            isComplete: false,
-            name: {
-                name: ingredient.name.name,
-                namePlural: ingredient.name.namePlural,
-            },
-            quantity: quantity,
-        };
-
-        if (ingredient.unit) {
-            ingredientToAdd.unit = {
-                name: ingredient.unit.name,
-                nameAbbr: ingredient.unit.nameAbbr,
-                namePlural: ingredient.unit.namePlural,
-            };
-        }
-
-        if (!shoppingList) {
-            localStorage.setItem(LSKey.shoppingList, `[${JSON.stringify(ingredientToAdd)}]`);
+        if (ingredient === 'all') {
+            recipe.ingredients.forEach((ingredient) => addIngredientToList(ingredient));
         } else {
-            const shoppingListArray: SavedIngredient[] = JSON.parse(shoppingList);
-            const ingredientToAddIndex = shoppingListArray.findIndex(listItem => listItem.id === ingredientToAdd.id);
-
-            if (ingredientToAddIndex === -1) {
-                shoppingListArray.push(ingredientToAdd);
-            } else {
-                const newQuantity = shoppingListArray[ingredientToAddIndex].quantity + ingredientToAdd.quantity;
-
-                shoppingListArray[ingredientToAddIndex].quantity = Number(newQuantity.toFixed(3));
-                shoppingListArray[ingredientToAddIndex].isComplete = false;
-            }
-
-            localStorage.setItem(LSKey.shoppingList, JSON.stringify(shoppingListArray));
+            addIngredientToList(ingredient);
         }
 
         if (!target) return;
@@ -220,6 +175,61 @@ const RecipeCard = ({
                 setIsSavedState(false);
                 if (onRemoveFromSaved) onRemoveFromSaved();
             }
+        }
+    }
+
+    // Helpers
+    function addIngredientToList(ingredient: RecipeIngredientResponse) {
+        const shoppingList = localStorage.getItem(LSKey.shoppingList);
+
+        let quantity = 0;
+        if (ingredient.quantityMaxWhole) {
+            quantity += ingredient.quantityMaxWhole;
+        }
+        if (ingredient.quantityMaxFraction) {
+            quantity += Number(Number(ingredient.quantityMaxFraction.value).toFixed(3));
+        }
+        if (ingredient.quantityWhole) {
+            quantity += ingredient.quantityWhole;
+        }
+        if (ingredient.quantityFraction) {
+            quantity += Number(Number(ingredient.quantityFraction.value).toFixed(3));
+        }
+
+        const ingredientToAdd: SavedIngredient = {
+            id: ingredient.id.toString(),
+            isComplete: false,
+            name: {
+                name: ingredient.name.name,
+                namePlural: ingredient.name.namePlural,
+            },
+            quantity: quantity,
+        };
+
+        if (ingredient.unit) {
+            ingredientToAdd.unit = {
+                name: ingredient.unit.name,
+                nameAbbr: ingredient.unit.nameAbbr,
+                namePlural: ingredient.unit.namePlural,
+            };
+        }
+
+        if (!shoppingList) {
+            localStorage.setItem(LSKey.shoppingList, `[${JSON.stringify(ingredientToAdd)}]`);
+        } else {
+            const shoppingListArray: SavedIngredient[] = JSON.parse(shoppingList);
+            const ingredientToAddIndex = shoppingListArray.findIndex(listItem => listItem.id === ingredientToAdd.id);
+
+            if (ingredientToAddIndex === -1) {
+                shoppingListArray.push(ingredientToAdd);
+            } else {
+                const newQuantity = shoppingListArray[ingredientToAddIndex].quantity + ingredientToAdd.quantity;
+
+                shoppingListArray[ingredientToAddIndex].quantity = Number(newQuantity.toFixed(3));
+                shoppingListArray[ingredientToAddIndex].isComplete = false;
+            }
+
+            localStorage.setItem(LSKey.shoppingList, JSON.stringify(shoppingListArray));
         }
     }
 
@@ -401,7 +411,11 @@ const RecipeCard = ({
 
                 <div className={styles['add-all-container']}>
                     <span>Add all</span>
-                    <button className='icon-only' disabled>
+                    <button
+                        aria-pressed={false}
+                        className='icon-only'
+                        onClick={(event) => onClickAddIngredient(event, 'all')}
+                    >
                         <Icon ariaLabel='Add all ingredients to shopping list' Icon={bxListPlus} />
                     </button>
                 </div>
