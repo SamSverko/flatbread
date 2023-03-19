@@ -2,6 +2,7 @@ import { Prisma } from '@prisma/client';
 import { v4 } from 'uuid';
 
 import { prisma } from './db';
+import { slugRegEx } from '../utils';
 
 import type { RecipeToSeed } from './types';
 
@@ -469,9 +470,7 @@ function logCompletedSeed(tableName: string) {
 }
 
 function validateRecipe(recipe: RecipeToSeed) {
-    const slugRegex = new RegExp(/^[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*$/);
-
-    if (!slugRegex.test(recipe.slug)) {
+    if (!slugRegEx.test(recipe.slug)) {
         throw `Recipe '${recipe.title}' slug format is invalid.`;
     }
 }

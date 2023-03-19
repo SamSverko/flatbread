@@ -1,5 +1,7 @@
 import { Prisma } from '@prisma/client';
 
+import { slugRegEx } from '../utils';
+
 import type { NextApiResponse } from 'next';
 import type { Category } from '../types';
 
@@ -606,7 +608,6 @@ export function validateQueryParamShowOnly(res: NextApiResponse, value: string |
 
 export function validateQueryParamSlug(res: NextApiResponse, value: string | string[]) {
     const slug = value?.toString().toLowerCase().trim();
-    const slugRegEx = /^[a-z0-9]+(?:-[a-z0-9]+)*$/g;
 
     if (!slug) {
         return res.status(400).json({

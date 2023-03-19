@@ -10,6 +10,7 @@ import Icon from '../components/icon';
 import InputGroup from '../components/input-group';
 
 import authOptions from './api/auth/[...nextauth]';
+import { slugChars, slugRegEx } from '../utils';
 import { prisma } from '../prisma/db';
 import { getCategoryFormat, getIngredientFormat, getIngredientUnitFormat, getQuantityFractionFormat, getServingUnitFormat } from '../prisma/utils';
 
@@ -165,7 +166,6 @@ const Admin: NextPage<AdminProps> = ({
         }
 
         const slugValidated = (formSlug) ? formSlug.toString().trim() : undefined;
-        const slugRegEx = /^[a-z0-9]+(?:-[a-z0-9]+)*$/g;
         if (!slugValidated || !slugRegEx.test(slugValidated)) {
             return setFormFeedback('Form error: Slug value must be a string (no spaces allowed, separate words with hyphens).');
         }
@@ -332,6 +332,17 @@ const Admin: NextPage<AdminProps> = ({
 
     function handleOnClickToggleQuantityType() {
         setQuantityTypeIsSingle(quantityTypeIsSingle => !quantityTypeIsSingle);
+    }
+
+    function handleOnBlurTitle(event: React.FocusEvent<HTMLInputElement>) {
+        const target = event.target;
+        if (!target) return;
+        const value = (target as HTMLInputElement).value;
+
+        const valueForSlugArray = value.toLowerCase().replaceAll(' ', '-').split('');
+        const valueForSlug = valueForSlugArray.filter(character => slugChars.includes(character)).join('');
+
+        setFormSlug(valueForSlug);
     }
 
     function handleOnSubmitAddIngredient(event: React.FormEvent) {
@@ -878,6 +889,7 @@ const Admin: NextPage<AdminProps> = ({
                             aria-required='true'
                             id='title'
                             name='title'
+                            onBlur={handleOnBlurTitle}
                             onChange={event => setFormTitle(event.target.value)}
                             required
                             type='text'

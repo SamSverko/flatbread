@@ -5,6 +5,9 @@ export const LSKey = { // LS = Local Storage
     shoppingList: 'shopping-list' as const,
 };
 
+export const slugChars = 'abcdefghijklmnopqrstuvwxyz01234567890-'.split('');
+export const slugRegEx = /^[a-z0-9]+(?:-[a-z0-9]+)*$/g;
+
 // Functions
 export function capitalizeFirstLetter(text: string) {
     return text.charAt(0).toUpperCase() + text.slice(1);
