@@ -11,6 +11,19 @@ export const categoryTables: Category[] = [
     'dishType',
 ];
 
+// there are 10,080 minutes in one week - figuring a recipe won't take longer than that?
+export const cookTimeMinsMaxValue = 10080;
+export const idMaxValue = 999999999;
+export const nameMaxCharLength = 128;
+export const prepTimeMinsMaxValue = 10080;
+export const recipeIdMaxCharLength = 128;
+export const servingAmountMaxValue = 9999;
+export const slugMaxCharLength = 128;
+export const sourceNameMaxCharLength = 128;
+export const sourceURLMaxCharLength = 256;
+export const titleMaxCharLength = 128;
+export const valueMaxValue = 9999;
+
 // Format API data
 export function getCategoryFormat(condensed = false): Prisma.CourseTypeSelect {
     return {
@@ -240,6 +253,12 @@ export function validateQueryParamCookTimeMins(res: NextApiResponse, value: stri
         });
     }
 
+    if (cookTimeMinsNum > cookTimeMinsMaxValue) {
+        return res.status(400).json({
+            error: `Invalid value for query parameter \`cookTimeMins\`. Fix: The number value must not exceed ${cookTimeMinsMaxValue}.`,
+        });
+    }
+
     return cookTimeMinsNum;
 }
 
@@ -320,6 +339,12 @@ export function validateQueryParamId(res: NextApiResponse, value: string | strin
 
     const id = parseInt(value?.toString().trim());
 
+    if (id > idMaxValue) {
+        return res.status(400).json({
+            error: `Invalid value for query parameter \`id\`. Fix: The number value must not exceed ${idMaxValue}.`,
+        });
+    }
+
     return id;
 }
 
@@ -351,6 +376,12 @@ export function validateQueryParamName(res: NextApiResponse, value: string | str
         });
     }
 
+    if (name.length > nameMaxCharLength) {
+        return res.status(400).json({
+            error: `Invalid value for query parameter \`name\`. Fix: The string length must not exceed ${nameMaxCharLength} characters.`,
+        });
+    }
+
     return name;
 }
 
@@ -363,6 +394,12 @@ export function validateQueryParamNameAbbr(res: NextApiResponse, value: string |
         });
     }
 
+    if (nameAbbr.length > nameMaxCharLength) {
+        return res.status(400).json({
+            error: `Invalid value for query parameter \`nameAbbr\`. Fix: The string length must not exceed ${nameMaxCharLength} characters.`,
+        });
+    }
+
     return nameAbbr;
 }
 
@@ -372,6 +409,12 @@ export function validateQueryParamNamePlural(res: NextApiResponse, value: string
     if (!namePlural) {
         return res.status(400).json({
             error: 'Missing query parameter `namePlural`. Fix: Provide a string value.',
+        });
+    }
+
+    if (namePlural.length > nameMaxCharLength) {
+        return res.status(400).json({
+            error: `Invalid value for query parameter \`namePlural\`. Fix: The string length must not exceed ${nameMaxCharLength} characters.`,
         });
     }
 
@@ -451,6 +494,12 @@ export function validateQueryParamPrepTimeMins(res: NextApiResponse, value: stri
         });
     }
 
+    if (prepTimeMinsNum > prepTimeMinsMaxValue) {
+        return res.status(400).json({
+            error: `Invalid value for query parameter \`prepTimeMins\`. Fix: The number value must not exceed ${prepTimeMinsMaxValue}.`,
+        });
+    }
+
     return prepTimeMinsNum;
 }
 
@@ -477,6 +526,12 @@ export function validateQueryParamRecipeId(res: NextApiResponse, value: string |
 
     const id = value?.toString().trim();
 
+    if (id.length > recipeIdMaxCharLength) {
+        return res.status(400).json({
+            error: `Invalid value for query parameter \`id\`. Fix: The string length must not exceed ${recipeIdMaxCharLength} characters.`,
+        });
+    }
+
     return id;
 }
 
@@ -497,6 +552,12 @@ export function validateQueryParamServingAmount(res: NextApiResponse, value: str
         });
     }
 
+    if (servingAmountNum > servingAmountMaxValue) {
+        return res.status(400).json({
+            error: `Invalid value for query parameter \`servingAmount\`. Fix: The number value must not exceed ${servingAmountMaxValue}.`,
+        });
+    }
+
     return servingAmountNum;
 }
 
@@ -506,6 +567,12 @@ export function validateQueryParamServingUnit(res: NextApiResponse, value: strin
     if (!servingUnit) {
         return res.status(400).json({
             error: 'Missing query parameter `servingUnit`. Fix: Provide a string value.',
+        });
+    }
+
+    if (servingUnit.length > nameMaxCharLength) {
+        return res.status(400).json({
+            error: `Invalid value for query parameter \`servingUnit\`. Fix: The string length must not exceed ${nameMaxCharLength} characters.`,
         });
     }
 
@@ -553,6 +620,12 @@ export function validateQueryParamSlug(res: NextApiResponse, value: string | str
         });
     }
 
+    if (slug.length > slugMaxCharLength) {
+        return res.status(400).json({
+            error: `Invalid value for query parameter \`slug\`. Fix: The string length must not exceed ${slugMaxCharLength} characters.`,
+        });
+    }    
+
     return slug;
 }
 
@@ -565,6 +638,12 @@ export function validateQueryParamSourceName(res: NextApiResponse, value: string
         });
     }
 
+    if (sourceName.length > sourceNameMaxCharLength) {
+        return res.status(400).json({
+            error: `Invalid value for query parameter \`sourceName\`. Fix: The string length must not exceed ${sourceNameMaxCharLength} characters.`,
+        });
+    }
+
     return sourceName;
 }
 
@@ -574,6 +653,12 @@ export function validateQueryParamSourceURL(res: NextApiResponse, value: string 
     if (!sourceURL) {
         return res.status(400).json({
             error: 'Missing query parameter `sourceURL`. Fix: Provide a string value (URL).',
+        });
+    }
+
+    if (sourceURL.length > sourceURLMaxCharLength) {
+        return res.status(400).json({
+            error: `Invalid value for query parameter \`sourceURL\`. Fix: The string length must not exceed ${sourceURLMaxCharLength} characters.`,
         });
     }
 
@@ -615,6 +700,12 @@ export function validateQueryParamTitle(res: NextApiResponse, value: string | st
         });
     }
 
+    if (title.length > titleMaxCharLength) {
+        return res.status(400).json({
+            error: `Invalid value for query parameter \`title\`. Fix: The string length must not exceed ${titleMaxCharLength} characters.`,
+        });
+    }
+
     return title;
 }
 
@@ -627,19 +718,13 @@ export function validateQueryParamTitleSearch(res: NextApiResponse, value: strin
         });
     }
 
-    return title;
-}
-
-export function validateQueryParamUUID(res: NextApiResponse, value: string | string[] | undefined) {
-    const uuid = value?.toString().trim();
-
-    if (!uuid) {
+    if (title.length > titleMaxCharLength) {
         return res.status(400).json({
-            error: 'Missing query parameter `id`. Fix: Provide a string value.',
+            error: `Invalid value for query parameter \`title\`. Fix: The string length must not exceed ${titleMaxCharLength} characters.`,
         });
     }
 
-    return uuid;
+    return title;
 }
 
 export function validateQueryParamValue(res: NextApiResponse, value: string | string[] | undefined) {
@@ -650,6 +735,12 @@ export function validateQueryParamValue(res: NextApiResponse, value: string | st
     }
 
     const paramValue = parseFloat(value?.toString().trim());
+
+    if (paramValue > valueMaxValue) {
+        return res.status(400).json({
+            error: `Invalid value for query parameter \`value\`. Fix: The number value must not exceed ${valueMaxValue}.`,
+        });
+    }
 
     return paramValue;
 }

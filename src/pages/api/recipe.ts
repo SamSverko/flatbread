@@ -12,6 +12,7 @@ import {
     validateQueryParamIngredients,
     validateQueryParamNotes,
     validateQueryParamPrepTimeMins,
+    validateQueryParamRecipeId,
     validateQueryParamServingAmount,
     validateQueryParamServingUnit,
     validateQueryParamSlug,
@@ -19,7 +20,6 @@ import {
     validateQueryParamSourceURL,
     validateQueryParamSteps,
     validateQueryParamTitle,
-    validateQueryParamUUID,
 } from '../../prisma/utils';
 
 import type { NextApiResponse, NextApiRequest } from 'next';
@@ -72,7 +72,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (method === 'DELETE') {
         // VALIDATION =========================================================
-        idValidated = validateQueryParamUUID(res, id);
+        idValidated = validateQueryParamRecipeId(res, id);
         if (idValidated === undefined) return;
 
         // QUERY ==============================================================
@@ -311,7 +311,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         }
     } else if (method === 'PUT') {
         // VALIDATION =========================================================
-        idValidated = validateQueryParamUUID(res, id);
+        idValidated = validateQueryParamRecipeId(res, id);
         if (idValidated === undefined) return;
 
         if (title) {
