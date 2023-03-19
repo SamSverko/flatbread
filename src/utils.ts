@@ -6,7 +6,7 @@ export const LSKey = { // LS = Local Storage
 };
 
 export const slugChars = 'abcdefghijklmnopqrstuvwxyz01234567890-'.split('');
-export const slugRegEx = /^[a-z0-9]+(?:-[a-z0-9]+)*$/g;
+export const slugRegEx = /^[a-z0-9]+(?:-[a-z0-9]+)*$/g; // importing this sometimes causes tests to give false negatives
 
 // Functions
 export function capitalizeFirstLetter(text: string) {

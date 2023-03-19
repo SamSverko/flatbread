@@ -69,7 +69,7 @@ const RecipeCard = ({
     }, [isCategoriesExpanded, isIngredientsExpanded, isNotesExpanded, isStepsExpanded]);
 
     // Event listeners
-    function handleAddIngredientOnClick(event: React.MouseEvent<HTMLButtonElement>, ingredient: RecipeIngredientResponse) {
+    function onClickAddIngredient(event: React.MouseEvent<HTMLButtonElement>, ingredient: RecipeIngredientResponse) {
         const target = event.target;
         if ((target as HTMLButtonElement).getAttribute('aria-pressed') === 'true') return;
 
@@ -131,7 +131,7 @@ const RecipeCard = ({
         window.setTimeout(() => (target as HTMLButtonElement).setAttribute('aria-pressed', 'false'), 500);
     }
 
-    async function handleCopyLinkOnClick() {
+    async function onClickCopyLink() {
         try {
             await navigator.clipboard.writeText(`${window.location.origin}/recipe/${recipe.slug}`);
             setIsCopiedSelected(true);
@@ -141,11 +141,11 @@ const RecipeCard = ({
         }
     }
 
-    function handleEditOnClick() {
+    function onClickEditRecipe() {
         router.push(`/admin?id=${recipe.id}`);
     }
 
-    function handleExpandAllOnClick() {
+    function onClickExpandAll() {
         const updateExpandedValue = (isExpandSelected) ? false : true;
         setIsExpandSelected(updateExpandedValue);
 
@@ -155,7 +155,7 @@ const RecipeCard = ({
         setIsStepsExpanded(updateExpandedValue);
     }
 
-    function handlePlanRecipeOnClick() {
+    function onClickPlanRecipe() {
         const plannedRecipes = localStorage.getItem(LSKey.plannedRecipes);
         const currentRecipe: PlannedRecipe = {
             id: recipe.id.toString(),
@@ -183,7 +183,7 @@ const RecipeCard = ({
         }
     }
 
-    function handleSummaryOnClick(event: React.MouseEvent<HTMLLIElement>) {
+    function onClickSummary(event: React.MouseEvent<HTMLLIElement>) {
         event.preventDefault();
         if (!event.target) return;
 
@@ -200,7 +200,7 @@ const RecipeCard = ({
         }
     }
 
-    function handleSaveRecipeOnClick() {
+    function onClickSaveRecipe() {
         const savedRecipes = localStorage.getItem(LSKey.savedRecipes);
 
         if (!savedRecipes) {
@@ -242,7 +242,7 @@ const RecipeCard = ({
 
         return (
             <details className={styles.categories} open={isCategoriesExpanded}>
-                <summary onClick={handleSummaryOnClick}>Categories</summary>
+                <summary onClick={onClickSummary}>Categories</summary>
 
                 <div className={styles['details-content']}>
                     {renderCategory('Cuisines', recipe.cuisines)}
@@ -263,7 +263,7 @@ const RecipeCard = ({
                     <button
                         aria-pressed={isSavedState}
                         className='icon-only'
-                        onClick={handleSaveRecipeOnClick}
+                        onClick={onClickSaveRecipe}
                     >
                         {!isSavedState &&
                             <Icon ariaLabel='Add to saved recipes' Icon={bxHeart} />
@@ -275,7 +275,7 @@ const RecipeCard = ({
                     <button
                         aria-pressed={isPlannedState}
                         className='icon-only'
-                        onClick={handlePlanRecipeOnClick}
+                        onClick={onClickPlanRecipe}
                     >
                         {!isPlannedState &&
                             <Icon ariaLabel='Add to meal plan' Icon={bxCalendarPlus} />
@@ -287,14 +287,14 @@ const RecipeCard = ({
                     <button
                         aria-pressed={isCopiedSelected}
                         className='icon-only'
-                        onClick={handleCopyLinkOnClick}
+                        onClick={onClickCopyLink}
                     >
                         <Icon ariaLabel='Copy recipe link to clipboard' Icon={bxLink} />
                     </button>
                     {adminViewer &&
                         <button
                             className='icon-only'
-                            onClick={handleEditOnClick}
+                            onClick={onClickEditRecipe}
                         >
                             <Icon ariaLabel='Edit recipe' Icon={bxEditAlt} />
                         </button>
@@ -304,7 +304,7 @@ const RecipeCard = ({
                     <button
                         aria-pressed={isExpandSelected}
                         className='icon-only'
-                        onClick={handleExpandAllOnClick}
+                        onClick={onClickExpandAll}
                     >
                         {!isExpandSelected &&
                             <Icon ariaLabel='Expand all recipe sections' Icon={bxExpandVertical} />
@@ -397,7 +397,7 @@ const RecipeCard = ({
 
         return (
             <details className={styles.ingredients} open={isIngredientsExpanded}>
-                <summary onClick={handleSummaryOnClick}>Ingredients</summary>
+                <summary onClick={onClickSummary}>Ingredients</summary>
 
                 <div className={styles['add-all-container']}>
                     <span>Add all</span>
@@ -426,7 +426,7 @@ const RecipeCard = ({
                                     <button
                                         aria-pressed={false}
                                         className='icon-only'
-                                        onClick={(event) => handleAddIngredientOnClick(event, ingredient)}
+                                        onClick={(event) => onClickAddIngredient(event, ingredient)}
                                     >
                                         <Icon ariaLabel='Add ingredient to shopping list' Icon={bxListPlus} />
                                     </button>
@@ -455,7 +455,7 @@ const RecipeCard = ({
 
         return (
             <details className={styles.notes} open={isNotesExpanded}>
-                <summary onClick={handleSummaryOnClick}>Notes</summary>
+                <summary onClick={onClickSummary}>Notes</summary>
 
                 <ul>
                     {formattedNotes.map((note, index) => {
@@ -486,7 +486,7 @@ const RecipeCard = ({
 
         return (
             <details className={styles.steps} open={isStepsExpanded}>
-                <summary onClick={handleSummaryOnClick}>Steps</summary>
+                <summary onClick={onClickSummary}>Steps</summary>
 
                 <ul>
                     {formattedSteps.map((step, index) => {

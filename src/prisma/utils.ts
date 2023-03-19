@@ -105,7 +105,7 @@ export function getRecipeFormat(condensed = false): Prisma.RecipeSelect {
         },
         ingredients: {
             select: {
-                id: (condensed) ? false : true,
+                id: true,
                 createdAt: (condensed) ? false : true,
                 order: true,
                 section: true,
