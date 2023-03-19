@@ -12,7 +12,6 @@ import InputGroup from '../components/input-group';
 import authOptions from './api/auth/[...nextauth]';
 import { slugChars, slugRegEx } from '../utils';
 import { prisma } from '../prisma/db';
-import { getCategoryFormat, getIngredientFormat, getIngredientUnitFormat, getQuantityFractionFormat, getServingUnitFormat } from '../prisma/utils';
 
 import bxDownArrowAlt from '../../public/icons/bx-down-arrow-alt.svg';
 import bxRefresh from '../../public/icons/bx-refresh.svg';
@@ -1611,57 +1610,84 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
         };
     }
 
+    const categorySelect = {
+        id: true,
+        createdAt: false,
+        name: true,
+    };
+
     const courseTypes = await prisma.courseType.findMany({
-        select: getCategoryFormat(false),
+        select: categorySelect,
         orderBy: {
             name: 'asc',
         },
     });
 
     const cuisines = await prisma.cuisine.findMany({
-        select: getCategoryFormat(false),
+        select: categorySelect,
         orderBy: {
             name: 'asc',
         },
     });
 
     const dietaryRestrictions = await prisma.dietaryRestriction.findMany({
-        select: getCategoryFormat(false),
+        select: categorySelect,
         orderBy: {
             name: 'asc',
         },
     });
 
     const dishTypes = await prisma.dishType.findMany({
-        select: getCategoryFormat(false),
+        select: categorySelect,
         orderBy: {
             name: 'asc',
         },
     });
 
     const ingredients = await prisma.ingredient.findMany({
-        select: getIngredientFormat(false),
+        select: {
+            id: true,
+            createdAt: false,
+            name: true,
+            namePlural: true,
+        },
         orderBy: {
             name: 'asc',
         },
     });
 
     const ingredientUnits = await prisma.ingredientUnit.findMany({
-        select: getIngredientUnitFormat(false),
+        select: {
+            id: true,
+            createdAt: false,
+            name: true,
+            nameAbbr: true,
+            namePlural: true,
+        },
         orderBy: {
             name: 'asc',
         },
     });
 
     const quantityFractions = await prisma.quantityFraction.findMany({
-        select: getQuantityFractionFormat(false),
+        select: {
+            id: true,
+            createdAt: false,
+            name: true,
+            value: true,
+        },
         orderBy: {
             value: 'asc',
         },
     });
 
     const servingUnits = await prisma.servingUnit.findMany({
-        select: getServingUnitFormat(false),
+        select: {
+            id: true,
+            createdAt: false,
+            name: true,
+            namePlural: true,
+        },
         orderBy: {
             name: 'asc',
         },
@@ -1669,45 +1695,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     return {
         props: {
-            courseTypes: courseTypes.map(category => {
-                return {
-                    id: category.id,
-                    name: category.name,
-                };
-            }),
-            dietaryRestrictions: dietaryRestrictions.map(category => {
-                return {
-                    id: category.id,
-                    name: category.name,
-                };
-            }),
-            cuisines: cuisines.map(category => {
-                return {
-                    id: category.id,
-                    name: category.name,
-                };
-            }),
-            dishTypes: dishTypes.map(category => {
-                return {
-                    id: category.id,
-                    name: category.name,
-                };
-            }),
-            ingredients: (ingredients as Ingredient[]).map(ingredient => {
-                return {
-                    id: ingredient.id,
-                    name: ingredient.name,
-                    namePlural: ingredient.namePlural,
-                };
-            }),
-            ingredientUnits: (ingredientUnits as IngredientUnit[]).map(ingredientUnits => {
-                return {
-                    id: ingredientUnits.id,
-                    name: ingredientUnits.name,
-                    nameAbbr: ingredientUnits.nameAbbr,
-                    namePlural: ingredientUnits.namePlural,
-                };
-            }),
+            courseTypes: courseTypes,
+            dietaryRestrictions: dietaryRestrictions,
+            cuisines: cuisines,
+            dishTypes: dishTypes,
+            ingredients: ingredients,
+            ingredientUnits: ingredientUnits,
             quantityFractions: (quantityFractions as QuantityFraction[]).map(quantityFraction => {
                 return {
                     id: quantityFraction.id,
@@ -1715,13 +1708,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
                     value: Number(quantityFraction.value.toFixed(3)),
                 };
             }),
-            servingUnits: (servingUnits as ServingUnit[]).map(servingUnit => {
-                return {
-                    id: servingUnit.id,
-                    name: servingUnit.name,
-                    namePlural: servingUnit.namePlural,
-                };
-            }),
+            servingUnits: servingUnits,
             session: session,
         },
     };

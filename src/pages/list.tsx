@@ -6,7 +6,6 @@ import Icon from '../components/icon';
 import InputGroup from '../components/input-group';
 
 import { prisma } from '../prisma/db';
-import { getQuantityFractionFormat } from '../prisma/utils';
 import { LSKey } from '../utils';
 
 import bxDownArrowAlt from '../../public/icons/bx-down-arrow-alt.svg';
@@ -279,7 +278,12 @@ export default List;
 
 export async function getStaticProps() {
     const quantityFractions = await prisma.quantityFraction.findMany({
-        select: getQuantityFractionFormat(true),
+        select: {
+            id: false,
+            createdAt: false,
+            name: true,
+            value: true,
+        },
         orderBy: {
             name: 'asc',
         },

@@ -8,7 +8,6 @@ import RecipeCard from '../components/recipe-card';
 
 import { prisma } from '../prisma/db';
 import { capitalizeFirstLetter, LSKey } from '../utils';
-import { getCategoryFormat } from '../prisma/utils';
 
 import styles from '../styles/index.module.scss';
 
@@ -248,29 +247,35 @@ const Index: NextPage<IndexProps> = ({
 export default Index;
 
 export async function getStaticProps() {
+    const categorySelect = {
+        id: false,
+        createdAt: false,
+        name: true,
+    };
+
     const courseTypes = await prisma.courseType.findMany({
-        select: getCategoryFormat(true),
+        select: categorySelect,
         orderBy: {
             name: 'asc',
         },
     });
 
     const cuisines = await prisma.cuisine.findMany({
-        select: getCategoryFormat(true),
+        select: categorySelect,
         orderBy: {
             name: 'asc',
         },
     });
 
     const dietaryRestrictions = await prisma.dietaryRestriction.findMany({
-        select: getCategoryFormat(true),
+        select: categorySelect,
         orderBy: {
             name: 'asc',
         },
     });
 
     const dishTypes = await prisma.dishType.findMany({
-        select: getCategoryFormat(true),
+        select: categorySelect,
         orderBy: {
             name: 'asc',
         },
