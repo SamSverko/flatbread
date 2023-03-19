@@ -89,11 +89,11 @@ const Admin: NextPage<AdminProps> = ({
     const [formSlug, setFormSlug] = React.useState('');
     const [formSourceName, setFormSourceName] = React.useState('');
     const [formSourceURL, setFormSourceURL] = React.useState('');
-    const [formPrepTimeHours, setFormPrepTimeHours] = React.useState(0);
-    const [formPrepTimeMins, setFormPrepTimeMins] = React.useState(30);
-    const [formCookTimeHours, setFormCookTimeHours] = React.useState(0);
-    const [formCookTimeMins, setFormCookTimeMins] = React.useState(30);
-    const [formServingAmount, setFormServingAmount] = React.useState(4);
+    const [formPrepTimeHours, setFormPrepTimeHours] = React.useState<number | string>('');
+    const [formPrepTimeMins, setFormPrepTimeMins] = React.useState<number | string>(30);
+    const [formCookTimeHours, setFormCookTimeHours] = React.useState<number | string>('');
+    const [formCookTimeMins, setFormCookTimeMins] = React.useState<number | string>(30);
+    const [formServingAmount, setFormServingAmount] = React.useState<number | string>(4);
     const [formServingUnit, setFormServingUnit] = React.useState('serving');
     const [formCourseTypes, setFormCourseTypes] = React.useState<Array<string>>([]);
     const [formCuisines, setFormCuisines] = React.useState<Array<string>>([]);
@@ -145,9 +145,9 @@ const Admin: NextPage<AdminProps> = ({
             setFormSlug('');
             setFormSourceName('');
             setFormSourceURL('');
-            setFormPrepTimeHours(0);
+            setFormPrepTimeHours('');
             setFormPrepTimeMins(30);
-            setFormCookTimeHours(0);
+            setFormCookTimeHours('');
             setFormCookTimeMins(30);
             setFormServingAmount(4);
             setFormServingUnit('serving');
@@ -207,21 +207,21 @@ const Admin: NextPage<AdminProps> = ({
 
         const sourceURLValidated = (formSourceURL) ? formSourceURL.toString().trim() : undefined;
 
-        const prepTimeHoursValidated = (formPrepTimeHours) ? formPrepTimeHours : 0;
+        const prepTimeHoursValidated = (typeof formPrepTimeHours === 'number') ? formPrepTimeHours : 0;
         if (isNaN(prepTimeHoursValidated) || prepTimeHoursValidated < 0) {
             return setFormFeedback('Form error: Prep time hours value must be a positive whole number.');
         }
-        const prepTimeMinsValidated = (formPrepTimeMins) ? formPrepTimeMins : 0;
+        const prepTimeMinsValidated = (typeof formPrepTimeMins === 'number') ? formPrepTimeMins : 0;
         if (isNaN(prepTimeMinsValidated) || prepTimeMinsValidated < 0) {
             return setFormFeedback('Form error: Prep time minutes value must be a positive whole number.');
         }
         const prepTimeValidated = ((prepTimeHoursValidated * 60) + prepTimeMinsValidated).toString();
 
-        const cookTimeHoursValidated = (formCookTimeHours) ? formCookTimeHours : 0;
+        const cookTimeHoursValidated = (typeof formCookTimeHours === 'number') ? formCookTimeHours : 0;
         if (isNaN(cookTimeHoursValidated) || cookTimeHoursValidated < 0) {
             return setFormFeedback('Form error: Cook time hours value must be a positive whole number.');
         }
-        const cookTimeMinsValidated = (formCookTimeMins) ? formCookTimeMins : 0;
+        const cookTimeMinsValidated = (typeof formCookTimeMins === 'number') ? formCookTimeMins : 0;
         if (isNaN(cookTimeMinsValidated) || cookTimeMinsValidated < 0) {
             return setFormFeedback('Form error: Cook time minutes value must be a positive whole number.');
         }
@@ -1006,7 +1006,7 @@ const Admin: NextPage<AdminProps> = ({
                                     name='prep-time-hours'
                                     onChange={(event) => {
                                         const value = parseInt(event.target.value);
-                                        setFormPrepTimeHours((!isNaN(value) ? value : 0));
+                                        setFormPrepTimeHours((!isNaN(value) ? value : ''));
                                     }}
                                     step={1}
                                     type='number'
@@ -1028,7 +1028,7 @@ const Admin: NextPage<AdminProps> = ({
                                     name='prep-time-mins'
                                     onChange={(event) => {
                                         const value = parseInt(event.target.value);
-                                        setFormPrepTimeMins((!isNaN(value) ? value : 0));
+                                        setFormPrepTimeMins((!isNaN(value) ? value : ''));
                                     }}
                                     step={1}
                                     type='number'
@@ -1055,7 +1055,7 @@ const Admin: NextPage<AdminProps> = ({
                                     name='cook-time-hours'
                                     onChange={(event) => {
                                         const value = parseInt(event.target.value);
-                                        setFormCookTimeHours((!isNaN(value) ? value : 0));
+                                        setFormCookTimeHours((!isNaN(value) ? value : ''));
                                     }}
                                     step={1}
                                     type='number'
@@ -1077,7 +1077,7 @@ const Admin: NextPage<AdminProps> = ({
                                     name='cook-time-mins'
                                     onChange={(event) => {
                                         const value = parseInt(event.target.value);
-                                        setFormCookTimeMins((!isNaN(value) ? value : 0));
+                                        setFormCookTimeMins((!isNaN(value) ? value : ''));
                                     }}
                                     step={1}
                                     type='number'
