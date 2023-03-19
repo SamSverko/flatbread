@@ -73,7 +73,7 @@ const List: NextPage<ListProps> = ({ quantityFractions }: ListProps) => {
         const formDataQuantity = formData.get('quantity');
         const quantityValidated = (formDataQuantity) ? Number(formDataQuantity.toString()) : 0;
 
-        if (nameValidated.length > 0 && quantityValidated > 0) {
+        if (nameValidated.length > 0 && quantityValidated >= 0) {
             const itemToAdd: SavedIngredient = {
                 id: v4(),
                 isComplete: false,
