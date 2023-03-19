@@ -61,6 +61,7 @@ const Admin: NextPage<AdminProps> = ({
 
     // States
     const [editRecipeId, setEditRecipeId] = React.useState<string | undefined>(undefined);
+    const [isLoading, setIsLoading] = React.useState(false);
 
     const [formTitle, setFormTitle] = React.useState('');
     const [formSlug, setFormSlug] = React.useState('');
@@ -101,13 +102,16 @@ const Admin: NextPage<AdminProps> = ({
     // Effects
     React.useEffect(() => {
         if (router.query.id) {
+            setIsLoading(true);
             fetch(`/api/recipes?condensed=true&id=${router.query.id}`)
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.error) {
                         console.error(data.error);
+                        setIsLoading(false);
                     } else {
                         parseRecipeDataForInputs(data);
+                        setIsLoading(false);
                     }
                 });
         }
@@ -283,6 +287,9 @@ const Admin: NextPage<AdminProps> = ({
         formBody = formBody.join('&');
 
         try {
+            setIsLoading(true);
+            setFormFeedback(`${(editRecipeId) ? 'Updating recipe' : 'Adding new recipe'}...`);
+
             fetch(`/api/recipe${(editRecipeId) ? `?id=${editRecipeId}` : ''}`, {
                 body: formBody,
                 headers: {
@@ -294,18 +301,22 @@ const Admin: NextPage<AdminProps> = ({
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.error) {
+                        setIsLoading(false);
                         setFormFeedback(`Form error: ${data.error}`);
                         return;
                     }
 
                     if (data.code) {
+                        setIsLoading(false);
                         setFormFeedback(`Form error: ${data.code}: ${data.message}`);
                         return;
                     }
 
+                    setIsLoading(false);
                     setFormFeedback(`Form success: ${(editRecipeId) ? 'Recipe updated' : 'New recipe added'}!`);
                 });
         } catch (error) {
+            setIsLoading(false);
             setFormFeedback('Form error: Please try again.');
         }
     }
@@ -872,6 +883,10 @@ const Admin: NextPage<AdminProps> = ({
                 <h2>Admin</h2>
             </Card>
 
+            <Card hide={!isLoading}>
+                <h2>Populating form with recipe data...</h2>
+            </Card>
+
             <Card>
                 <form
                     className={styles.form}
@@ -880,12 +895,15 @@ const Admin: NextPage<AdminProps> = ({
                 >
                     <h2>Add new recipe</h2>
 
-                    <p>All fields marked with an asterisk (<b>*</b>) are required.</p>
+                    <p>
+                        All fields marked with an asterisk (<b>*</b>) are required.
+                    </p>
 
                     {/* title ============================================= */}
                     <InputGroup
                         input={<input
                             aria-required='true'
+                            disabled={isLoading}
                             id='title'
                             name='title'
                             onBlur={handleOnBlurTitle}
@@ -901,6 +919,7 @@ const Admin: NextPage<AdminProps> = ({
                     <InputGroup
                         input={<input
                             aria-required='true'
+                            disabled={isLoading}
                             id='slug'
                             name='slug'
                             onChange={event => setFormSlug(event.target.value)}
@@ -915,6 +934,7 @@ const Admin: NextPage<AdminProps> = ({
                     <InputGroup
                         input={<input
                             aria-required='true'
+                            disabled={isLoading}
                             id='source-name'
                             name='source-name'
                             onChange={event => setFormSourceName(event.target.value)}
@@ -922,12 +942,15 @@ const Admin: NextPage<AdminProps> = ({
                             type='text'
                             value={formSourceName}
                         />}
-                        label={<label htmlFor='source-name'>Source name *</label>}
+                        label={<label htmlFor='source-name'>
+                            Source name *
+                        </label>}
                     />
 
                     {/* sourceURL ========================================= */}
                     <InputGroup
                         input={<input
+                            disabled={isLoading}
                             id='source-url'
                             inputMode='url'
                             name='source-url'
@@ -945,6 +968,7 @@ const Admin: NextPage<AdminProps> = ({
                         <InputGroup
                             input={<input
                                 aria-required='true'
+                                disabled={isLoading}
                                 id='prep-time-hours'
                                 inputMode='numeric'
                                 max={99}
@@ -958,12 +982,15 @@ const Admin: NextPage<AdminProps> = ({
                                 type='number'
                                 value={formPrepTimeHours}
                             />}
-                            label={<label htmlFor='prep-time-hours'>Hours</label>}
+                            label={<label htmlFor='prep-time-hours'>
+                                Hours
+                            </label>}
                         />
 
                         <InputGroup
                             input={<input
                                 aria-required='true'
+                                disabled={isLoading}
                                 id='prep-time-mins'
                                 inputMode='numeric'
                                 max={59}
@@ -977,7 +1004,9 @@ const Admin: NextPage<AdminProps> = ({
                                 type='number'
                                 value={formPrepTimeMins}
                             />}
-                            label={<label htmlFor='prep-time-mins'>Minutes</label>}
+                            label={<label htmlFor='prep-time-mins'>
+                                Minutes
+                            </label>}
                         />
                     </div>
 
@@ -988,6 +1017,7 @@ const Admin: NextPage<AdminProps> = ({
                         <InputGroup
                             input={<input
                                 aria-required='true'
+                                disabled={isLoading}
                                 id='cook-time-hours'
                                 inputMode='numeric'
                                 max={99}
@@ -1001,12 +1031,15 @@ const Admin: NextPage<AdminProps> = ({
                                 type='number'
                                 value={formCookTimeHours}
                             />}
-                            label={<label htmlFor='cook-time-hours'>Hours</label>}
+                            label={<label htmlFor='cook-time-hours'>
+                                Hours
+                            </label>}
                         />
 
                         <InputGroup
                             input={<input
                                 aria-required='true'
+                                disabled={isLoading}
                                 id='cook-time-mins'
                                 inputMode='numeric'
                                 max={59}
@@ -1020,7 +1053,9 @@ const Admin: NextPage<AdminProps> = ({
                                 type='number'
                                 value={formCookTimeMins}
                             />}
-                            label={<label htmlFor='cook-time-mins'>Minutes</label>}
+                            label={<label htmlFor='cook-time-mins'>
+                                Minutes
+                            </label>}
                         />
                     </div>
 
@@ -1029,6 +1064,7 @@ const Admin: NextPage<AdminProps> = ({
                         <button
                             aria-label='Edit serving units'
                             className='icon-only'
+                            disabled={isLoading}
                             onClick={handleEditServingUnitOnClick}
                             ref={editServingsButtonRef}
                             type='button'
@@ -1043,6 +1079,7 @@ const Admin: NextPage<AdminProps> = ({
                         <InputGroup
                             input={<input
                                 aria-required='true'
+                                disabled={isLoading}
                                 id='serving-amount'
                                 inputMode='numeric'
                                 max={999}
@@ -1056,19 +1093,24 @@ const Admin: NextPage<AdminProps> = ({
                                 type='number'
                                 value={formServingAmount}
                             />}
-                            label={<label htmlFor='serving-amount'>Amount *</label>}
+                            label={<label htmlFor='serving-amount'>
+                                Amount *
+                            </label>}
                         />
 
                         <InputGroup
                             input={<select
                                 aria-required='true'
+                                disabled={isLoading}
                                 id='serving-unit'
                                 name='serving-unit'
                                 onChange={event => setFormServingUnit(event.target.value)}
                                 required
                                 value={formServingUnit}
                             >
-                                <option value=''>-- Select a serving unit --</option>
+                                <option value=''>
+                                    -- Select a serving unit --
+                                </option>
                                 {localServingUnits.map((servingUnit) => {
                                     return <option
                                         key={`serving-unit-${servingUnit.name}`}
@@ -1078,7 +1120,9 @@ const Admin: NextPage<AdminProps> = ({
                                     </option>;
                                 })}
                             </select>}
-                            label={<label htmlFor='serving-unit'>Unit *</label>}
+                            label={<label htmlFor='serving-unit'>
+                                Unit *
+                            </label>}
                         />
                     </div>
 
@@ -1087,6 +1131,7 @@ const Admin: NextPage<AdminProps> = ({
                         <button
                             aria-label='Edit categories'
                             className='icon-only'
+                            disabled={isLoading}
                             onClick={handleEditCategoryOnClick}
                             ref={editCategoryButtonRef}
                             type='button'
@@ -1099,6 +1144,7 @@ const Admin: NextPage<AdminProps> = ({
                     <InputGroup
                         input={<select
                             aria-required='true'
+                            disabled={isLoading}
                             id='course-types'
                             multiple
                             name='course-types'
@@ -1119,13 +1165,16 @@ const Admin: NextPage<AdminProps> = ({
                                 </option>;
                             })}
                         </select>}
-                        label={<label htmlFor='course-types'>Course types *</label>}
+                        label={<label htmlFor='course-types'>
+                            Course types *
+                        </label>}
                     />
 
                     {/* cuisines ========================================== */}
                     <InputGroup
                         input={<select
                             aria-required='true'
+                            disabled={isLoading}
                             id='cuisines'
                             multiple
                             name='cuisines'
@@ -1152,6 +1201,7 @@ const Admin: NextPage<AdminProps> = ({
                     {/* dietaryRestrictions =============================== */}
                     <InputGroup
                         input={<select
+                            disabled={isLoading}
                             id='dietary-restrictions'
                             multiple
                             name='dietary-restrictions'
@@ -1171,13 +1221,16 @@ const Admin: NextPage<AdminProps> = ({
                                 </option>;
                             })}
                         </select>}
-                        label={<label htmlFor='dietary-restrictions'>Dietary restrictions</label>}
+                        label={<label htmlFor='dietary-restrictions'>
+                            Dietary restrictions
+                        </label>}
                     />
 
                     {/* dishTypes ========================================= */}
                     <InputGroup
                         input={<select
                             aria-required='true'
+                            disabled={isLoading}
                             id='dish-types'
                             multiple
                             name='dish-types'
@@ -1190,12 +1243,17 @@ const Admin: NextPage<AdminProps> = ({
                             value={formDishTypes}
                         >
                             {localDishTypes.map((dishType) => {
-                                return <option key={`dish-types-${dishType.name}`} value={dishType.name}>
+                                return <option
+                                    key={`dish-types-${dishType.name}`}
+                                    value={dishType.name}
+                                >
                                     {dishType.name}
                                 </option>;
                             })}
                         </select>}
-                        label={<label htmlFor='dish-types'>Dish types *</label>}
+                        label={<label htmlFor='dish-types'>
+                            Dish types *
+                        </label>}
                     />
                 </form>
 
@@ -1203,20 +1261,46 @@ const Admin: NextPage<AdminProps> = ({
                 <details className={styles.details}>
                     <summary>Add ingredients</summary>
 
-                    <form className={styles.form} id='add-ingredient' onSubmit={handleOnSubmitAddIngredient}>
+                    <form
+                        className={styles.form}
+                        id='add-ingredient'
+                        onSubmit={handleOnSubmitAddIngredient}
+                    >
                         {/* ingredient / section ============================== */}
                         <InputGroup
-                            input={<input id='ingredient-section' name='ingredient-section' type='text' />}
-                            label={<label htmlFor='ingredient-section'>Section</label>}
+                            input={<input
+                                disabled={isLoading}
+                                id='ingredient-section'
+                                name='ingredient-section'
+                                type='text'
+                            />}
+                            label={<label htmlFor='ingredient-section'>
+                                Section
+                            </label>}
                         />
 
                         <div className={styles['section-heading']}>
-                            <p><b>Quantity {(quantityTypeIsSingle) ? '(single)' : '(range)'}</b></p>
+                            <p><b>
+                                Quantity {(quantityTypeIsSingle) ? '(single)' : '(range)'}
+                            </b></p>
                             <div>
-                                <button aria-label='Toggle between range and single value quantity' aria-pressed={(quantityTypeIsSingle) ? false : true} className='icon-only' onClick={handleOnClickToggleQuantityType} type='button'>
+                                <button
+                                    aria-label='Toggle between range and single value quantity'
+                                    aria-pressed={(quantityTypeIsSingle) ? false : true}
+                                    className='icon-only'
+                                    disabled={isLoading}
+                                    onClick={handleOnClickToggleQuantityType} type='button'
+                                >
                                     <Icon ariaHidden={true} Icon={bxRuler} />
                                 </button>
-                                <button aria-label='Edit quantity fractions' className='icon-only' onClick={handleOnClickEditQuantityFractions} ref={editFractionsButtonRef} type='button'>
+                                <button
+                                    aria-label='Edit quantity fractions'
+                                    className='icon-only'
+                                    disabled={isLoading}
+                                    onClick={handleOnClickEditQuantityFractions}
+                                    ref={editFractionsButtonRef}
+                                    type='button'
+                                >
                                     <Icon ariaHidden={true} Icon={bxsEditAlt} />
                                 </button>
                             </div>
@@ -1227,20 +1311,44 @@ const Admin: NextPage<AdminProps> = ({
                         {quantityTypeIsSingle &&
                             <div className={styles['inline-quantity-inputs']}>
                                 <InputGroup
-                                    input={<input defaultValue={0} id='ingredient-quantity-whole' inputMode='numeric' max={999} min={0} name='ingredient-quantity-whole' step={1} type='number' />}
-                                    label={<label htmlFor='ingredient-quantity-whole'>Whole</label>}
+                                    input={<input
+                                        defaultValue={0}
+                                        disabled={isLoading}
+                                        id='ingredient-quantity-whole'
+                                        inputMode='numeric'
+                                        max={999}
+                                        min={0}
+                                        name='ingredient-quantity-whole'
+                                        step={1}
+                                        type='number'
+                                    />}
+                                    label={<label
+                                        htmlFor='ingredient-quantity-whole'
+                                    >Whole</label>}
                                 />
 
                                 <InputGroup
-                                    input={<select aria-required='true' id='ingredient-quantity-fraction' name='ingredient-quantity-fraction'>
-                                        <option value=''>-- Select a fraction --</option>
+                                    input={<select
+                                        aria-required='true'
+                                        disabled={isLoading}
+                                        id='ingredient-quantity-fraction'
+                                        name='ingredient-quantity-fraction'
+                                    >
+                                        <option value=''>
+                                            -- Select a fraction --
+                                        </option>
                                         {localQuantityFractions.map((quantityFraction) => {
-                                            return <option key={`ingredient-quantity-fraction-${quantityFraction.id}`} value={quantityFraction.name}>
+                                            return <option
+                                                key={`ingredient-quantity-fraction-${quantityFraction.id}`}
+                                                value={quantityFraction.name}
+                                            >
                                                 {quantityFraction.name}
                                             </option>;
                                         })}
                                     </select>}
-                                    label={<label htmlFor='ingredient-quantity-fraction'>Fraction</label>}
+                                    label={<label
+                                        htmlFor='ingredient-quantity-fraction'
+                                    >Fraction</label>}
                                 />
                             </div>
                         }
@@ -1255,20 +1363,46 @@ const Admin: NextPage<AdminProps> = ({
 
                                 <div className={styles['inline-quantity-inputs']}>
                                     <InputGroup
-                                        input={<input defaultValue={0} id='ingredient-quantity-min-whole' inputMode='numeric' max={999} min={0} name='ingredient-quantity-min-whole' step={1} type='number' />}
-                                        label={<label htmlFor='ingredient-quantity-min-whole'>Whole</label>}
+                                        input={<input
+                                            defaultValue={0}
+                                            disabled={isLoading}
+                                            id='ingredient-quantity-min-whole'
+                                            inputMode='numeric'
+                                            max={999}
+                                            min={0}
+                                            name='ingredient-quantity-min-whole'
+                                            step={1}
+                                            type='number'
+                                        />}
+                                        label={<label
+                                            htmlFor='ingredient-quantity-min-whole'
+                                        >
+                                            Whole
+                                        </label>}
                                     />
 
                                     <InputGroup
-                                        input={<select aria-required='true' id='ingredient-quantity-min-fraction' name='ingredient-quantity-min-fraction'>
+                                        input={<select
+                                            aria-required='true'
+                                            disabled={isLoading}
+                                            id='ingredient-quantity-min-fraction'
+                                            name='ingredient-quantity-min-fraction'
+                                        >
                                             <option value=''>-- Select a fraction --</option>
                                             {localQuantityFractions.map((quantityFraction) => {
-                                                return <option key={`ingredient-quantity-min-fraction-${quantityFraction.id}`} value={quantityFraction.name}>
+                                                return <option
+                                                    key={`ingredient-quantity-min-fraction-${quantityFraction.id}`}
+                                                    value={quantityFraction.name}
+                                                >
                                                     {quantityFraction.name}
                                                 </option>;
                                             })}
                                         </select>}
-                                        label={<label htmlFor='ingredient-quantity-min-fraction'>Fraction</label>}
+                                        label={<label
+                                            htmlFor='ingredient-quantity-min-fraction'
+                                        >
+                                            Fraction
+                                        </label>}
                                     />
                                 </div>
 
@@ -1276,20 +1410,42 @@ const Admin: NextPage<AdminProps> = ({
 
                                 <div className={styles['inline-quantity-inputs']}>
                                     <InputGroup
-                                        input={<input defaultValue={0} id='ingredient-quantity-max-whole' inputMode='numeric' max={999} min={0} name='ingredient-quantity-max-whole' step={1} type='number' />}
-                                        label={<label htmlFor='ingredient-quantity-max-whole'>Whole</label>}
+                                        input={<input
+                                            defaultValue={0}
+                                            disabled={isLoading}
+                                            id='ingredient-quantity-max-whole'
+                                            inputMode='numeric'
+                                            max={999}
+                                            min={0}
+                                            name='ingredient-quantity-max-whole'
+                                            step={1}
+                                            type='number'
+                                        />}
+                                        label={<label
+                                            htmlFor='ingredient-quantity-max-whole'
+                                        >Whole</label>}
                                     />
 
                                     <InputGroup
-                                        input={<select aria-required='true' id='ingredient-quantity-max-fraction' name='ingredient-quantity-max-fraction'>
+                                        input={<select
+                                            aria-required='true'
+                                            disabled={isLoading}
+                                            id='ingredient-quantity-max-fraction'
+                                            name='ingredient-quantity-max-fraction'
+                                        >
                                             <option value=''>-- Select a fraction --</option>
                                             {localQuantityFractions.map((quantityFraction) => {
-                                                return <option key={`ingredient-quantity-max-fraction-${quantityFraction.id}`} value={quantityFraction.name}>
+                                                return <option
+                                                    key={`ingredient-quantity-max-fraction-${quantityFraction.id}`}
+                                                    value={quantityFraction.name}
+                                                >
                                                     {quantityFraction.name}
                                                 </option>;
                                             })}
                                         </select>}
-                                        label={<label htmlFor='ingredient-quantity-max-fraction'>Fraction</label>}
+                                        label={<label
+                                            htmlFor='ingredient-quantity-max-fraction'
+                                        >Fraction</label>}
                                     />
                                 </div>
                             </>
@@ -1297,71 +1453,136 @@ const Admin: NextPage<AdminProps> = ({
 
                         <div className={styles['section-heading']}>
                             <p><b>Unit</b></p>
-                            <button aria-label='Edit ingredient units' className='icon-only' onClick={handleOnClickEditIngredientUnits} ref={editIngredientUnitsButtonRef} type='button'>
+                            <button
+                                aria-label='Edit ingredient units'
+                                className='icon-only'
+                                disabled={isLoading}
+                                onClick={handleOnClickEditIngredientUnits}
+                                ref={editIngredientUnitsButtonRef}
+                                type='button'
+                            >
                                 <Icon ariaHidden={true} Icon={bxsEditAlt} />
                             </button>
                         </div>
 
                         {/* ingredient / unit ================================= */}
                         <InputGroup
-                            input={<select aria-required='true' id='ingredient-unit' name='ingredient-unit'>
+                            input={<select
+                                aria-required='true'
+                                disabled={isLoading}
+                                id='ingredient-unit'
+                                name='ingredient-unit'
+                            >
                                 <option value=''>-- Select a unit --</option>
                                 {localIngredientUnits.map((ingredientUnit) => {
-                                    return <option key={`ingredient-unit-${ingredientUnit.name}`} value={ingredientUnit.name}>
+                                    return <option
+                                        key={`ingredient-unit-${ingredientUnit.name}`}
+                                        value={ingredientUnit.name}
+                                    >
                                         {ingredientUnit.name}
                                     </option>;
                                 })}
                             </select>}
-                            label={<label htmlFor='ingredient-unit'>Unit</label>}
+                            label={<label htmlFor='ingredient-unit'>
+                                Unit
+                            </label>}
                         />
 
                         <div className={styles['section-heading']}>
                             <p><b>Name</b></p>
-                            <button aria-label='Edit ingredient names' className='icon-only' onClick={handleOnClickEditIngredients} ref={editIngredientsButtonRef} type='button'>
+                            <button
+                                aria-label='Edit ingredient names'
+                                className='icon-only'
+                                disabled={isLoading}
+                                onClick={handleOnClickEditIngredients}
+                                ref={editIngredientsButtonRef}
+                                type='button'
+                            >
                                 <Icon ariaHidden={true} Icon={bxsEditAlt} />
                             </button>
                         </div>
 
                         {/* ingredient / name ================================= */}
                         <InputGroup
-                            input={<select aria-required='true' id='ingredient-name' name='ingredient-name' required>
+                            input={<select
+                                aria-required='true'
+                                disabled={isLoading}
+                                id='ingredient-name'
+                                name='ingredient-name'
+                                required
+                            >
                                 <option value=''>-- Select an ingredient --</option>
                                 {localIngredients.map((ingredient) => {
-                                    return <option key={`ingredient-unit-${ingredient.name}`} value={ingredient.name}>
+                                    return <option
+                                        key={`ingredient-unit-${ingredient.name}`}
+                                        value={ingredient.name}
+                                    >
                                         {ingredient.name}
                                     </option>;
                                 })}
                             </select>}
-                            label={<label htmlFor='ingredient-name'>Name *</label>}
+                            label={<label htmlFor='ingredient-name'>
+                                Name *
+                            </label>}
                         />
 
                         {/* ingredient / alteration =========================== */}
                         <InputGroup
-                            input={<input id='ingredient-alteration' name='ingredient-alteration' type='text' />}
-                            label={<label htmlFor='ingredient-alteration'>Alteration</label>}
+                            input={<input
+                                disabled={isLoading}
+                                id='ingredient-alteration'
+                                name='ingredient-alteration'
+                                type='text'
+                            />}
+                            label={<label htmlFor='ingredient-alteration'>
+                                Alteration
+                            </label>}
                         />
 
                         {/* ingredient / isOptional =========================== */}
                         <div className={styles['checkbox']}>
-                            <input id='ingredient-is-optional' name='ingredient-is-optional' type='checkbox' />
-                            <label className='no-styles' htmlFor='ingredient-is-optional'>Optional</label>
+                            <input
+                                disabled={isLoading}
+                                id='ingredient-is-optional'
+                                name='ingredient-is-optional'
+                                type='checkbox'
+                            />
+                            <label
+                                className='no-styles'
+                                htmlFor='ingredient-is-optional'
+                            >Optional</label>
                         </div>
 
                         {/* ingredient / substitutions ======================== */}
                         <InputGroup
-                            input={<select id='ingredient-substitutions' multiple name='ingredient-substitutions'>
+                            input={<select
+                                disabled={isLoading}
+                                id='ingredient-substitutions'
+                                multiple
+                                name='ingredient-substitutions'
+                            >
                                 {localIngredients.map((ingredient) => {
-                                    return <option key={`ingredient-substitutions-${ingredient.name}`} value={ingredient.name}>
+                                    return <option
+                                        key={`ingredient-substitutions-${ingredient.name}`}
+                                        value={ingredient.name}
+                                    >
                                         {ingredient.name}
                                     </option>;
                                 })}
                             </select>}
-                            label={<label htmlFor='ingredient-substitutions'>Substitutions</label>}
+                            label={<label htmlFor='ingredient-substitutions'>
+                                Substitutions
+                            </label>}
                         />
 
                         <div className={styles['section-submit-alt']}>
                             <div>
-                                <input form='add-ingredient' type='submit' value='Add ingredient' />
+                                <input
+                                    disabled={isLoading}
+                                    form='add-ingredient'
+                                    type='submit'
+                                    value='Add ingredient'
+                                />
                             </div>
                         </div>
                     </form>
@@ -1382,22 +1603,46 @@ const Admin: NextPage<AdminProps> = ({
                 <details className={styles.details}>
                     <summary>Add steps</summary>
 
-                    <form className={styles.form} id='add-step' onSubmit={handleOnSubmitAddStep}>
+                    <form
+                        className={styles.form}
+                        id='add-step'
+                        onSubmit={handleOnSubmitAddStep}
+                    >
                         {/* step / section ================================ */}
                         <InputGroup
-                            input={<input id='step-section' name='step-section' type='text' />}
-                            label={<label htmlFor='step-section'>Section</label>}
+                            input={<input
+                                disabled={isLoading}
+                                id='step-section'
+                                name='step-section'
+                                type='text'
+                            />}
+                            label={<label htmlFor='step-section'>
+                                Section
+                            </label>}
                         />
 
                         {/* step / details ================================ */}
                         <InputGroup
-                            input={<input id='step-details' name='step-details' required type='text' />}
-                            label={<label htmlFor='step-details'>Details</label>}
+                            input={<input
+                                disabled={isLoading}
+                                id='step-details'
+                                name='step-details'
+                                required
+                                type='text'
+                            />}
+                            label={<label htmlFor='step-details'>
+                                Details
+                            </label>}
                         />
 
                         <div className={styles['section-submit-alt']}>
                             <div>
-                                <input form='add-step' type='submit' value='Add step' />
+                                <input
+                                    disabled={isLoading}
+                                    form='add-step'
+                                    type='submit'
+                                    value='Add step'
+                                />
                             </div>
                         </div>
                     </form>
@@ -1423,7 +1668,7 @@ const Admin: NextPage<AdminProps> = ({
                                                     aria-label='Move up in list by one'
                                                     className='icon-only'
                                                     data-id={step.id}
-                                                    disabled={index === 0}
+                                                    disabled={(index === 0) || isLoading}
                                                     onClick={(event) => onClickOrderStep(event, 'up')}
                                                 >
                                                     <Icon ariaHidden={true} Icon={bxUpArrowAlt} />
@@ -1432,7 +1677,7 @@ const Admin: NextPage<AdminProps> = ({
                                                     aria-label='Move down in list by one'
                                                     className='icon-only'
                                                     data-id={step.id}
-                                                    disabled={index === formRecipeSteps.length - 1}
+                                                    disabled={(index === formRecipeSteps.length - 1) || isLoading}
                                                     onClick={(event) => onClickOrderStep(event, 'down')}
                                                 >
                                                     <Icon ariaHidden={true} Icon={bxDownArrowAlt} />
@@ -1441,6 +1686,7 @@ const Admin: NextPage<AdminProps> = ({
                                                     aria-label='Remove from list'
                                                     className='icon-only'
                                                     data-id={step.id}
+                                                    disabled={isLoading}
                                                     onClick={onClickRemoveStep}
                                                 >
                                                     <Icon ariaHidden={true} Icon={bxTrash} />
@@ -1460,22 +1706,46 @@ const Admin: NextPage<AdminProps> = ({
                 <details className={styles.details}>
                     <summary>Add notes</summary>
 
-                    <form className={styles.form} id='add-note' onSubmit={handleOnSubmitAddNote}>
+                    <form
+                        className={styles.form}
+                        id='add-note'
+                        onSubmit={handleOnSubmitAddNote}
+                    >
                         {/* note / section ================================ */}
                         <InputGroup
-                            input={<input id='note-section' name='note-section' type='text' />}
-                            label={<label htmlFor='note-section'>Section</label>}
+                            input={<input
+                                disabled={isLoading}
+                                id='note-section'
+                                name='note-section'
+                                type='text'
+                            />}
+                            label={<label htmlFor='note-section'>
+                                Section
+                            </label>}
                         />
 
                         {/* note / details ================================ */}
                         <InputGroup
-                            input={<input id='note-details' name='note-details' required type='text' />}
-                            label={<label htmlFor='note-details'>Details</label>}
+                            input={<input
+                                disabled={isLoading}
+                                id='note-details'
+                                name='note-details'
+                                required
+                                type='text'
+                            />}
+                            label={<label htmlFor='note-details'>
+                                Details
+                            </label>}
                         />
 
                         <div className={styles['section-submit-alt']}>
                             <div>
-                                <input form='add-note' type='submit' value='Add note' />
+                                <input
+                                    disabled={isLoading}
+                                    form='add-note'
+                                    type='submit'
+                                    value='Add note'
+                                />
                             </div>
                         </div>
                     </form>
@@ -1501,7 +1771,7 @@ const Admin: NextPage<AdminProps> = ({
                                                     aria-label='Move up in list by one'
                                                     className='icon-only'
                                                     data-id={note.id}
-                                                    disabled={index === 0}
+                                                    disabled={(index === 0) || isLoading}
                                                     onClick={(event) => onClickOrderNote(event, 'up')}
                                                 >
                                                     <Icon ariaHidden={true} Icon={bxUpArrowAlt} />
@@ -1510,7 +1780,7 @@ const Admin: NextPage<AdminProps> = ({
                                                     aria-label='Move down in list by one'
                                                     className='icon-only'
                                                     data-id={note.id}
-                                                    disabled={index === formRecipeNotes.length - 1}
+                                                    disabled={(index === formRecipeSteps.length - 1) || isLoading}
                                                     onClick={(event) => onClickOrderNote(event, 'down')}
                                                 >
                                                     <Icon ariaHidden={true} Icon={bxDownArrowAlt} />
@@ -1519,6 +1789,7 @@ const Admin: NextPage<AdminProps> = ({
                                                     aria-label='Remove from list'
                                                     className='icon-only'
                                                     data-id={note.id}
+                                                    disabled={isLoading}
                                                     onClick={onClickRemoveNote}
                                                 >
                                                     <Icon ariaHidden={true} Icon={bxTrash} />
@@ -1536,12 +1807,13 @@ const Admin: NextPage<AdminProps> = ({
 
                 <div className={styles['section-submit']}>
                     <div>
-                        <input form='submit-recipe' type='submit' value={formSubmitValue} />
+                        <input disabled={isLoading} form='submit-recipe' type='submit' value={formSubmitValue} />
                         <div>
                             {editRecipeId &&
                                 <button
                                     aria-label='Delete recipe'
                                     className='icon-only'
+                                    disabled={isLoading}
                                     onClick={handleOnClickDeleteRecipe}
                                     type='button'
                                 >
@@ -1551,6 +1823,7 @@ const Admin: NextPage<AdminProps> = ({
                             <button
                                 aria-label='Refresh page'
                                 className='icon-only'
+                                disabled={isLoading}
                                 onClick={() => router.reload()}
                                 type='button'
                             >
