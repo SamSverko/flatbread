@@ -8,6 +8,7 @@ import RecipeCard from '../components/recipe-card';
 
 import { prisma } from '../prisma/db';
 import { capitalizeFirstLetter, LSKey } from '../utils';
+import { titleMaxCharLength } from '../prisma/utils';
 
 import styles from '../styles/index.module.scss';
 
@@ -136,8 +137,17 @@ const Index: NextPage<IndexProps> = ({
 
                 <form className={styles['search-form']} onSubmit={onSubmitForm}>
                     <InputGroup
-                        input={<input enterKeyHint='search' id='input-title' inputMode='search' name='title' type='search' />}
-                        label={<label htmlFor='input-title'>Title</label>}
+                        input={<input
+                            enterKeyHint='search'
+                            id='input-title'
+                            inputMode='search'
+                            maxLength={titleMaxCharLength}
+                            name='title'
+                            type='search'
+                        />}
+                        label={<label htmlFor='input-title'>
+                            Title
+                        </label>}
                     />
 
                     <p>All recipes will be returned by&nbsp;default.</p>

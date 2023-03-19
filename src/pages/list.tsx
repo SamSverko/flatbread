@@ -6,6 +6,7 @@ import Icon from '../components/icon';
 import InputGroup from '../components/input-group';
 
 import { prisma } from '../prisma/db';
+import { nameMaxCharLength, quantityWholeMaxValue } from '../prisma/utils';
 import { LSKey } from '../utils';
 
 import bxDownArrowAlt from '../../public/icons/bx-down-arrow-alt.svg';
@@ -260,13 +261,36 @@ const List: NextPage<ListProps> = ({ quantityFractions }: ListProps) => {
 
                 <form className={styles.form} onSubmit={handleFormOnSubmit}>
                     <InputGroup
-                        input={<input defaultValue={0} id='add-to-shopping-list-quantity' inputMode='numeric' min={0} name='quantity' required type='number' />}
-                        label={<label htmlFor='add-to-shopping-list-quantity'>Amount</label>}
+                        input={<input
+                            defaultValue={0}
+                            id='add-to-shopping-list-quantity'
+                            inputMode='numeric'
+                            max={quantityWholeMaxValue}
+                            min={0}
+                            name='quantity'
+                            required
+                            type='number'
+                        />}
+                        label={<label htmlFor='add-to-shopping-list-quantity'>
+                            Amount
+                        </label>}
                     />
                     <InputGroup
-                        button={<input name='submit' type='submit' value='Add' />}
-                        input={<input id='add-to-shopping-list-name' name='name' required type='text' />}
-                        label={<label htmlFor='add-to-shopping-list-name'>Name</label>}
+                        button={<input
+                            name='submit'
+                            type='submit'
+                            value='Add'
+                        />}
+                        input={<input
+                            id='add-to-shopping-list-name'
+                            maxLength={nameMaxCharLength}
+                            name='name'
+                            required
+                            type='text'
+                        />}
+                        label={<label
+                            htmlFor='add-to-shopping-list-name'
+                        >Name</label>}
                     />
                 </form>
             </Card>

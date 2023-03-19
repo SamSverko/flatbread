@@ -7,6 +7,7 @@ import Icon from '../components/icon';
 import InputGroup from '../components/input-group';
 
 import { LSKey } from '../utils';
+import { nameMaxCharLength } from '../prisma/utils';
 
 import bxDownArrowAlt from '../../public/icons/bx-down-arrow-alt.svg';
 import bxTrash from '../../public/icons/bx-trash.svg';
@@ -207,9 +208,21 @@ const Plan: NextPage = () => {
 
                 <form onSubmit={handleFormOnSubmit}>
                     <InputGroup
-                        button={<input name='submit' type='submit' value='Add' />}
-                        input={<input id='input-add-to-meal-plan' name='title' required type='text' />}
-                        label={<label htmlFor='input-add-to-meal-plan'>Item</label>}
+                        button={<input
+                            name='submit'
+                            type='submit'
+                            value='Add'
+                        />}
+                        input={<input
+                            id='input-add-to-meal-plan'
+                            maxLength={nameMaxCharLength}
+                            name='title'
+                            required
+                            type='text'
+                        />}
+                        label={<label
+                            htmlFor='input-add-to-meal-plan'
+                        >Item</label>}
                     />
                 </form>
             </Card>

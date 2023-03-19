@@ -60,12 +60,14 @@
         width: auto;
 
         label {
-            width: 100%;
+            width: 80px;
         }
     }
 
     > div:nth-child(2) {
+        flex-grow: 1;
         margin-left: -2px;
+        width: auto;
     }
 
     @media only screen and (max-width: 295px) {

@@ -3,7 +3,11 @@ import * as React from 'react';
 import Icon from '../icon';
 import InputGroup from '../input-group';
 
-import { categoryTables } from '../../prisma/utils';
+import {
+    categoryTables,
+    nameMaxCharLength,
+    valueMaxValue,
+} from '../../prisma/utils';
 
 import bxX from '../../../public/icons/bx-x.svg';
 
@@ -971,7 +975,11 @@ const EditDataDialog = ({
 
                         <form onSubmit={onSubmitAddCategory}>
                             <InputGroup
-                                input={<select id='add-category-type' name='add-category-type' required>
+                                input={<select
+                                    id='add-category-type'
+                                    name='add-category-type'
+                                    required
+                                >
                                     <option value=''>-- Select a category type --</option>
                                     {categoryTables.map((category) => {
                                         return <option key={`add-category-type-${category}`} value={category}>
@@ -979,12 +987,22 @@ const EditDataDialog = ({
                                         </option>;
                                     })}
                                 </select>}
-                                label={<label htmlFor='add-category-type'>Type</label>}
+                                label={<label
+                                    htmlFor='add-category-type'
+                                >Type</label>}
                             />
 
                             <InputGroup
-                                input={<input id='add-name' name='add-name' required type='text' />}
-                                label={<label htmlFor='add-name'>Name</label>}
+                                input={<input
+                                    id='add-name'
+                                    maxLength={nameMaxCharLength}
+                                    name='add-name'
+                                    required
+                                    type='text'
+                                />}
+                                label={<label
+                                    htmlFor='add-name'
+                                >Name</label>}
                             />
 
                             <div>
@@ -1000,18 +1018,29 @@ const EditDataDialog = ({
 
                         <form onSubmit={onSubmitDeleteCategory}>
                             <InputGroup
-                                input={<select id='delete-category' onChange={onChangeDeleteCategory} name='delete-category' required>
+                                input={<select
+                                    id='delete-category'
+                                    onChange={onChangeDeleteCategory}
+                                    name='delete-category'
+                                    required
+                                >
                                     {categoryTables.map((category) => {
                                         return <option key={`delete-category-${category}`} value={category}>
                                             {category}
                                         </option>;
                                     })}
                                 </select>}
-                                label={<label htmlFor='delete-category'>Type</label>}
+                                label={<label
+                                    htmlFor='delete-category'
+                                >Type</label>}
                             />
 
                             <InputGroup
-                                input={<select id='delete-id' name='delete-id' required>
+                                input={<select
+                                    id='delete-id'
+                                    name='delete-id'
+                                    required
+                                >
                                     <option value=''>-- Select a category --</option>
                                     {deleteCategoryOptions.map((category) => {
                                         return <option key={`delete-id-${category.name}`} value={category.id}>
@@ -1019,7 +1048,9 @@ const EditDataDialog = ({
                                         </option>;
                                     })}
                                 </select>}
-                                label={<label htmlFor='delete-id'>Category</label>}
+                                label={<label
+                                    htmlFor='delete-id'
+                                >Category</label>}
                             />
 
                             <div>
@@ -1035,18 +1066,30 @@ const EditDataDialog = ({
 
                         <form onSubmit={onSubmitUpdateCategory}>
                             <InputGroup
-                                input={<select id='update-category' onChange={onChangeUpdateCategory} name='update-category' required>
+                                input={<select
+                                    id='update-category'
+                                    onChange={onChangeUpdateCategory}
+                                    name='update-category'
+                                    required
+                                >
                                     {categoryTables.map((category) => {
                                         return <option key={`update-category-${category}`} value={category}>
                                             {category}
                                         </option>;
                                     })}
                                 </select>}
-                                label={<label htmlFor='update-category'>Type</label>}
+                                label={<label
+                                    htmlFor='update-category'
+                                >Type</label>}
                             />
 
                             <InputGroup
-                                input={<select id='update-id' name='update-id' onChange={onChangeUpdateCategoryName} required>
+                                input={<select
+                                    id='update-id'
+                                    name='update-id'
+                                    onChange={onChangeUpdateCategoryName}
+                                    required
+                                >
                                     <option value=''>-- Select a category --</option>
                                     {updateCategoryOptions.map((category) => {
                                         return <option key={`update-id-${category.name}`} value={category.id}>
@@ -1054,11 +1097,20 @@ const EditDataDialog = ({
                                         </option>;
                                     })}
                                 </select>}
-                                label={<label htmlFor='update-id'>Category</label>}
+                                label={<label
+                                    htmlFor='update-id'
+                                >Category</label>}
                             />
 
                             <InputGroup
-                                input={<input id='update-name' name='update-name' ref={categoryUpdateNameRef} required type='text' />}
+                                input={<input
+                                    id='update-name'
+                                    maxLength={nameMaxCharLength}
+                                    name='update-name'
+                                    ref={categoryUpdateNameRef}
+                                    required
+                                    type='text'
+                                />}
                                 label={<label htmlFor='update-name'>Name</label>}
                             />
 
@@ -1077,17 +1129,36 @@ const EditDataDialog = ({
 
                         <form onSubmit={onSubmitAddIngredient}>
                             <InputGroup
-                                input={<input id='add-name' name='add-name' required type='text' />}
-                                label={<label htmlFor='add-name'>Name</label>}
+                                input={<input
+                                    id='add-name'
+                                    maxLength={nameMaxCharLength}
+                                    name='add-name'
+                                    required
+                                    type='text'
+                                />}
+                                label={<label
+                                    htmlFor='add-name'
+                                >Name</label>}
                             />
 
                             <InputGroup
-                                input={<input id='add-name-plural' name='add-name-plural' required type='text' />}
-                                label={<label htmlFor='add-name-plural'>Name (plural)</label>}
+                                input={<input
+                                    id='add-name-plural'
+                                    maxLength={nameMaxCharLength}
+                                    name='add-name-plural'
+                                    required
+                                    type='text'
+                                />}
+                                label={<label
+                                    htmlFor='add-name-plural'
+                                >Name (plural)</label>}
                             />
 
                             <div>
-                                <input type='submit' value='Add ingredient' />
+                                <input
+                                    type='submit'
+                                    value='Add ingredient'
+                                />
                             </div>
 
                             <hr />
@@ -1099,7 +1170,11 @@ const EditDataDialog = ({
 
                         <form onSubmit={onSubmitDeleteIngredient}>
                             <InputGroup
-                                input={<select id='delete-id' name='delete-id' required>
+                                input={<select
+                                    id='delete-id'
+                                    name='delete-id'
+                                    required
+                                >
                                     <option value=''>-- Select an ingredient --</option>
                                     {ingredients.map((ingredient) => {
                                         return <option key={`delete-id-${ingredient.id}`} value={ingredient.id}>
@@ -1107,11 +1182,16 @@ const EditDataDialog = ({
                                         </option>;
                                     })}
                                 </select>}
-                                label={<label htmlFor='delete-id'>Ingredient</label>}
+                                label={<label
+                                    htmlFor='delete-id'
+                                >Ingredient</label>}
                             />
 
                             <div>
-                                <input type='submit' value='Delete ingredient' />
+                                <input
+                                    type='submit'
+                                    value='Delete ingredient'
+                                />
                             </div>
 
                             <hr />
@@ -1123,7 +1203,12 @@ const EditDataDialog = ({
 
                         <form onSubmit={onSubmitUpdateIngredient}>
                             <InputGroup
-                                input={<select id='update-id' name='update-id' onChange={onChangeUpdateIngredientValues} required>
+                                input={<select
+                                    id='update-id'
+                                    name='update-id'
+                                    onChange={onChangeUpdateIngredientValues}
+                                    required
+                                >
                                     <option value=''>-- Select an ingredient --</option>
                                     {ingredients.map((ingredient) => {
                                         return <option key={`update-id-${ingredient.id}`} value={ingredient.id}>
@@ -1131,21 +1216,44 @@ const EditDataDialog = ({
                                         </option>;
                                     })}
                                 </select>}
-                                label={<label htmlFor='update-id'>Ingredient</label>}
+                                label={<label
+                                    htmlFor='update-id'
+                                >Ingredient</label>}
                             />
 
                             <InputGroup
-                                input={<input id='update-name' name='update-name' ref={ingredientUpdateNameRef} required type='text' />}
-                                label={<label htmlFor='update-name'>Name</label>}
+                                input={<input
+                                    id='update-name'
+                                    maxLength={nameMaxCharLength}
+                                    name='update-name'
+                                    ref={ingredientUpdateNameRef}
+                                    required
+                                    type='text'
+                                />}
+                                label={<label
+                                    htmlFor='update-name'
+                                >Name</label>}
                             />
 
                             <InputGroup
-                                input={<input id='update-name-plural' name='update-name-plural' ref={ingredientUpdateNamePluralRef} required type='text' />}
-                                label={<label htmlFor='update-name-plural'>Name (plural)</label>}
+                                input={<input
+                                    id='update-name-plural'
+                                    maxLength={nameMaxCharLength}
+                                    name='update-name-plural'
+                                    ref={ingredientUpdateNamePluralRef}
+                                    required
+                                    type='text'
+                                />}
+                                label={<label
+                                    htmlFor='update-name-plural'
+                                >Name (plural)</label>}
                             />
 
                             <div>
-                                <input type='submit' value='Update ingredient' />
+                                <input
+                                    type='submit'
+                                    value='Update ingredient'
+                                />
                             </div>
                         </form>
                     </details>
@@ -1159,22 +1267,49 @@ const EditDataDialog = ({
 
                         <form onSubmit={onSubmitAddIngredientUnit}>
                             <InputGroup
-                                input={<input id='add-name' name='add-name' required type='text' />}
-                                label={<label htmlFor='add-name'>Name</label>}
+                                input={<input
+                                    id='add-name'
+                                    maxLength={nameMaxCharLength}
+                                    name='add-name'
+                                    required
+                                    type='text'
+                                />}
+                                label={<label
+                                    htmlFor='add-name'
+                                >Name</label>}
                             />
 
                             <InputGroup
-                                input={<input id='add-name-abbr' name='add-name-abbr' required type='text' />}
-                                label={<label htmlFor='add-name-abbr'>Name (abbreviated)</label>}
+                                input={<input
+                                    id='add-name-abbr'
+                                    maxLength={nameMaxCharLength}
+                                    name='add-name-abbr'
+                                    required
+                                    type='text'
+                                />}
+                                label={<label
+                                    htmlFor='add-name-abbr'
+                                >Name (abbreviated)</label>}
                             />
 
                             <InputGroup
-                                input={<input id='add-name-plural' name='add-name-plural' required type='text' />}
-                                label={<label htmlFor='add-name-plural'>Name (plural)</label>}
+                                input={<input
+                                    id='add-name-plural'
+                                    maxLength={nameMaxCharLength}
+                                    name='add-name-plural'
+                                    required
+                                    type='text'
+                                />}
+                                label={<label
+                                    htmlFor='add-name-plural'
+                                >Name (plural)</label>}
                             />
 
                             <div>
-                                <input type='submit' value='Add ingredient unit' />
+                                <input
+                                    type='submit'
+                                    value='Add ingredient unit'
+                                />
                             </div>
 
                             <hr />
@@ -1186,7 +1321,11 @@ const EditDataDialog = ({
 
                         <form onSubmit={onSubmitDeleteIngredientUnit}>
                             <InputGroup
-                                input={<select id='delete-id' name='delete-id' required>
+                                input={<select
+                                    id='delete-id'
+                                    name='delete-id'
+                                    required
+                                >
                                     <option value=''>-- Select an ingredient unit --</option>
                                     {ingredientUnits.map((ingredientUnit) => {
                                         return <option key={`delete-id-${ingredientUnit.id}`} value={ingredientUnit.id}>
@@ -1194,11 +1333,16 @@ const EditDataDialog = ({
                                         </option>;
                                     })}
                                 </select>}
-                                label={<label htmlFor='delete-id'>Ingredient unit</label>}
+                                label={<label
+                                    htmlFor='delete-id'
+                                >Ingredient unit</label>}
                             />
 
                             <div>
-                                <input type='submit' value='Delete ingredient unit' />
+                                <input
+                                    type='submit'
+                                    value='Delete ingredient unit'
+                                />
                             </div>
 
                             <hr />
@@ -1210,7 +1354,12 @@ const EditDataDialog = ({
 
                         <form onSubmit={onSubmitUpdateIngredientUnit}>
                             <InputGroup
-                                input={<select id='update-id' name='update-id' onChange={onChangeUpdateIngredientUnitValues} required>
+                                input={<select
+                                    id='update-id'
+                                    name='update-id'
+                                    onChange={onChangeUpdateIngredientUnitValues}
+                                    required
+                                >
                                     <option value=''>-- Select an ingredient unit --</option>
                                     {ingredientUnits.map((ingredientUnit) => {
                                         return <option key={`update-id-${ingredientUnit.id}`} value={ingredientUnit.id}>
@@ -1218,26 +1367,58 @@ const EditDataDialog = ({
                                         </option>;
                                     })}
                                 </select>}
-                                label={<label htmlFor='update-id'>Ingredient unit</label>}
+                                label={<label
+                                    htmlFor='update-id'
+                                >Ingredient unit</label>}
                             />
 
                             <InputGroup
-                                input={<input id='update-name' name='update-name' ref={ingredientUnitUpdateNameRef} required type='text' />}
-                                label={<label htmlFor='update-name'>Name</label>}
+                                input={<input
+                                    id='update-name'
+                                    maxLength={nameMaxCharLength}
+                                    name='update-name'
+                                    ref={ingredientUnitUpdateNameRef}
+                                    required
+                                    type='text'
+                                />}
+                                label={<label
+                                    htmlFor='update-name'
+                                >Name</label>}
                             />
 
                             <InputGroup
-                                input={<input id='update-name-abbr' name='update-name-abbr' ref={ingredientUnitUpdateNameAbbrRef} required type='text' />}
-                                label={<label htmlFor='update-name-abbr'>Name (abbreviated)</label>}
+                                input={<input
+                                    id='update-name-abbr'
+                                    maxLength={nameMaxCharLength}
+                                    name='update-name-abbr'
+                                    ref={ingredientUnitUpdateNameAbbrRef}
+                                    required
+                                    type='text'
+                                />}
+                                label={<label
+                                    htmlFor='update-name-abbr'
+                                >Name (abbreviated)</label>}
                             />
 
                             <InputGroup
-                                input={<input id='update-name-plural' name='update-name-plural' ref={ingredientUnitUpdateNamePluralRef} required type='text' />}
-                                label={<label htmlFor='update-name-plural'>Name (plural)</label>}
+                                input={<input
+                                    id='update-name-plural'
+                                    maxLength={nameMaxCharLength}
+                                    name='update-name-plural'
+                                    ref={ingredientUnitUpdateNamePluralRef}
+                                    required
+                                    type='text'
+                                />}
+                                label={<label
+                                    htmlFor='update-name-plural'
+                                >Name (plural)</label>}
                             />
 
                             <div>
-                                <input type='submit' value='Update ingredient unit' />
+                                <input
+                                    type='submit'
+                                    value='Update ingredient unit'
+                                />
                             </div>
                         </form>
                     </details>
@@ -1251,17 +1432,39 @@ const EditDataDialog = ({
 
                         <form onSubmit={onSubmitAddQuantityFraction}>
                             <InputGroup
-                                input={<input id='add-name' name='add-name' required type='text' />}
-                                label={<label htmlFor='add-name'>Name</label>}
+                                input={<input
+                                    id='add-name'
+                                    maxLength={nameMaxCharLength}
+                                    name='add-name'
+                                    required
+                                    type='text'
+                                />}
+                                label={<label
+                                    htmlFor='add-name'
+                                >Name</label>}
                             />
 
                             <InputGroup
-                                input={<input id='add-value' inputMode='decimal' name='add-value' required step='0.001' type='number' />}
-                                label={<label htmlFor='add-value'>Value</label>}
+                                input={<input
+                                    id='add-value'
+                                    inputMode='decimal'
+                                    max={valueMaxValue}
+                                    min={0}
+                                    name='add-value'
+                                    required
+                                    step='0.001'
+                                    type='number'
+                                />}
+                                label={<label
+                                    htmlFor='add-value'
+                                >Value</label>}
                             />
 
                             <div>
-                                <input type='submit' value='Add quantity fraction' />
+                                <input
+                                    type='submit'
+                                    value='Add quantity fraction'
+                                />
                             </div>
 
                             <hr />
@@ -1273,7 +1476,11 @@ const EditDataDialog = ({
 
                         <form onSubmit={onSubmitDeleteQuantityFraction}>
                             <InputGroup
-                                input={<select id='delete-id' name='delete-id' required>
+                                input={<select
+                                    id='delete-id'
+                                    name='delete-id'
+                                    required
+                                >
                                     <option value=''>-- Select a quantity fraction --</option>
                                     {quantityFractions.map((quantityFraction) => {
                                         return <option key={`delete-id-${quantityFraction.id}`} value={quantityFraction.id}>
@@ -1281,11 +1488,16 @@ const EditDataDialog = ({
                                         </option>;
                                     })}
                                 </select>}
-                                label={<label htmlFor='delete-id'>Quantity fraction</label>}
+                                label={<label
+                                    htmlFor='delete-id'
+                                >Quantity fraction</label>}
                             />
 
                             <div>
-                                <input type='submit' value='Delete quantity fraction' />
+                                <input
+                                    type='submit'
+                                    value='Delete quantity fraction'
+                                />
                             </div>
 
                             <hr />
@@ -1297,7 +1509,12 @@ const EditDataDialog = ({
 
                         <form onSubmit={onSubmitUpdateQuantityFraction}>
                             <InputGroup
-                                input={<select id='update-id' name='update-id' onChange={onChangeUpdateQuantityFractionValues} required>
+                                input={<select
+                                    id='update-id'
+                                    name='update-id'
+                                    onChange={onChangeUpdateQuantityFractionValues}
+                                    required
+                                >
                                     <option value=''>-- Select a quantity fraction --</option>
                                     {quantityFractions.map((quantityFraction) => {
                                         return <option key={`update-id-${quantityFraction.id}`} value={quantityFraction.id}>
@@ -1305,21 +1522,47 @@ const EditDataDialog = ({
                                         </option>;
                                     })}
                                 </select>}
-                                label={<label htmlFor='update-id'>Quantity fraction</label>}
+                                label={<label
+                                    htmlFor='update-id'
+                                >Quantity fraction</label>}
                             />
 
                             <InputGroup
-                                input={<input id='update-name' name='update-name' ref={quantityFractionUpdateNameRef} required type='text' />}
-                                label={<label htmlFor='update-name'>Name</label>}
+                                input={<input
+                                    id='update-name'
+                                    maxLength={nameMaxCharLength}
+                                    name='update-name'
+                                    ref={quantityFractionUpdateNameRef}
+                                    required
+                                    type='text'
+                                />}
+                                label={<label
+                                    htmlFor='update-name'
+                                >Name</label>}
                             />
 
                             <InputGroup
-                                input={<input id='update-value' inputMode='decimal' name='update-value' ref={quantityFractionUpdateValueRef} required step='0.001' type='number' />}
-                                label={<label htmlFor='update-value'>Value</label>}
+                                input={<input
+                                    id='update-value'
+                                    inputMode='decimal'
+                                    max={valueMaxValue}
+                                    min={0}
+                                    name='update-value'
+                                    ref={quantityFractionUpdateValueRef}
+                                    required
+                                    step='0.001'
+                                    type='number'
+                                />}
+                                label={<label
+                                    htmlFor='update-value'
+                                >Value</label>}
                             />
 
                             <div>
-                                <input type='submit' value='Update quantity fraction' />
+                                <input
+                                    type='submit'
+                                    value='Update quantity fraction'
+                                />
                             </div>
                         </form>
                     </details>
@@ -1333,17 +1576,36 @@ const EditDataDialog = ({
 
                         <form onSubmit={onSubmitAddServingUnit}>
                             <InputGroup
-                                input={<input id='add-name' name='add-name' required type='text' />}
-                                label={<label htmlFor='add-name'>Name</label>}
+                                input={<input
+                                    id='add-name'
+                                    maxLength={nameMaxCharLength}
+                                    name='add-name'
+                                    required
+                                    type='text'
+                                />}
+                                label={<label
+                                    htmlFor='add-name'
+                                >Name</label>}
                             />
 
                             <InputGroup
-                                input={<input id='add-name-plural' name='add-name-plural' required type='text' />}
-                                label={<label htmlFor='add-name-plural'>Name (plural)</label>}
+                                input={<input
+                                    id='add-name-plural'
+                                    maxLength={nameMaxCharLength}
+                                    name='add-name-plural'
+                                    required
+                                    type='text'
+                                />}
+                                label={<label
+                                    htmlFor='add-name-plural'
+                                >Name (plural)</label>}
                             />
 
                             <div>
-                                <input type='submit' value='Add serving unit' />
+                                <input
+                                    type='submit'
+                                    value='Add serving unit'
+                                />
                             </div>
 
                             <hr />
@@ -1355,7 +1617,10 @@ const EditDataDialog = ({
 
                         <form onSubmit={onSubmitDeleteServingUnit}>
                             <InputGroup
-                                input={<select id='delete-id' name='delete-id'>
+                                input={<select
+                                    id='delete-id'
+                                    name='delete-id'
+                                >
                                     <option value=''>-- Select a serving unit --</option>
                                     {servingUnits.map((servingUnit) => {
                                         return <option key={`delete-id-${servingUnit.id}`} value={servingUnit.id}>
@@ -1363,11 +1628,16 @@ const EditDataDialog = ({
                                         </option>;
                                     })}
                                 </select>}
-                                label={<label htmlFor='delete-id'>Serving unit</label>}
+                                label={<label
+                                    htmlFor='delete-id'
+                                >Serving unit</label>}
                             />
 
                             <div>
-                                <input type='submit' value='Delete serving unit' />
+                                <input
+                                    type='submit'
+                                    value='Delete serving unit'
+                                />
                             </div>
                         </form>
                     </details>
@@ -1377,7 +1647,11 @@ const EditDataDialog = ({
 
                         <form onSubmit={onSubmitUpdateServingUnit}>
                             <InputGroup
-                                input={<select id='update-id' onChange={onChangeUpdateServingUnitNames} name='update-id'>
+                                input={<select
+                                    id='update-id'
+                                    onChange={onChangeUpdateServingUnitNames}
+                                    name='update-id'
+                                >
                                     <option value=''>-- Select a course type --</option>
                                     {servingUnits.map((servingUnit) => {
                                         return <option key={`update-id-${servingUnit.id}`} value={servingUnit.id}>
@@ -1385,21 +1659,44 @@ const EditDataDialog = ({
                                         </option>;
                                     })}
                                 </select>}
-                                label={<label htmlFor='update-id'>Serving unit</label>}
+                                label={<label
+                                    htmlFor='update-id'
+                                >Serving unit</label>}
                             />
 
                             <InputGroup
-                                input={<input id='update-name' name='update-name' ref={servingUnitUpdateNameRef} required type='text' />}
-                                label={<label htmlFor='update-name'>Name</label>}
+                                input={<input
+                                    id='update-name'
+                                    maxLength={nameMaxCharLength}
+                                    name='update-name'
+                                    ref={servingUnitUpdateNameRef}
+                                    required
+                                    type='text'
+                                />}
+                                label={<label
+                                    htmlFor='update-name'
+                                >Name</label>}
                             />
 
                             <InputGroup
-                                input={<input id='update-name-plural' name='update-name-plural' ref={servingUnitUpdateNamePluralRef} required type='text' />}
-                                label={<label htmlFor='update-name-plural'>Name (plural)</label>}
+                                input={<input
+                                    id='update-name-plural'
+                                    maxLength={nameMaxCharLength}
+                                    name='update-name-plural'
+                                    ref={servingUnitUpdateNamePluralRef}
+                                    required
+                                    type='text'
+                                />}
+                                label={<label
+                                    htmlFor='update-name-plural'
+                                >Name (plural)</label>}
                             />
 
                             <div>
-                                <input type='submit' value='Update serving unit' />
+                                <input
+                                    type='submit'
+                                    value='Update serving unit'
+                                />
                             </div>
                         </form>
                     </details>

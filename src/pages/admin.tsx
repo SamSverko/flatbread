@@ -12,6 +12,19 @@ import InputGroup from '../components/input-group';
 import authOptions from './api/auth/[...nextauth]';
 import { slugChars, slugRegEx } from '../utils';
 import { prisma } from '../prisma/db';
+import {
+    alterationMaxCharLength,
+    cookTimeMinsMaxValue,
+    detailsMaxCharLength,
+    prepTimeMinsMaxValue,
+    quantityWholeMaxValue,
+    sectionMaxCharLength,
+    servingAmountMaxValue,
+    slugMaxCharLength,
+    sourceNameMaxCharLength,
+    sourceURLMaxCharLength,
+    titleMaxCharLength,
+} from '../prisma/utils';
 
 import bxDownArrowAlt from '../../public/icons/bx-down-arrow-alt.svg';
 import bxRefresh from '../../public/icons/bx-refresh.svg';
@@ -22,7 +35,16 @@ import bxsEditAlt from '../../public/icons/bxs-edit-alt.svg';
 
 import styles from '../styles/admin.module.scss';
 
-import type { CourseType, Cuisine, DietaryRestriction, DishType, Ingredient, IngredientUnit, QuantityFraction, ServingUnit } from '@prisma/client';
+import type {
+    CourseType,
+    Cuisine,
+    DietaryRestriction,
+    DishType,
+    Ingredient,
+    IngredientUnit,
+    QuantityFraction,
+    ServingUnit,
+} from '@prisma/client';
 import type { GetServerSideProps, NextPage } from 'next';
 import type { RecipeIngredient, RecipeStepNote } from '../prisma/types';
 import type { RecipeFormatted } from '../types';
@@ -905,6 +927,7 @@ const Admin: NextPage<AdminProps> = ({
                             aria-required='true'
                             disabled={isLoading}
                             id='title'
+                            maxLength={titleMaxCharLength}
                             name='title'
                             onBlur={handleOnBlurTitle}
                             onChange={event => setFormTitle(event.target.value)}
@@ -921,6 +944,7 @@ const Admin: NextPage<AdminProps> = ({
                             aria-required='true'
                             disabled={isLoading}
                             id='slug'
+                            maxLength={slugMaxCharLength}
                             name='slug'
                             onChange={event => setFormSlug(event.target.value)}
                             required
@@ -936,6 +960,7 @@ const Admin: NextPage<AdminProps> = ({
                             aria-required='true'
                             disabled={isLoading}
                             id='source-name'
+                            maxLength={sourceNameMaxCharLength}
                             name='source-name'
                             onChange={event => setFormSourceName(event.target.value)}
                             required
@@ -953,6 +978,7 @@ const Admin: NextPage<AdminProps> = ({
                             disabled={isLoading}
                             id='source-url'
                             inputMode='url'
+                            maxLength={sourceURLMaxCharLength}
                             name='source-url'
                             onChange={event => setFormSourceURL(event.target.value)}
                             type='url'
@@ -971,7 +997,7 @@ const Admin: NextPage<AdminProps> = ({
                                 disabled={isLoading}
                                 id='prep-time-hours'
                                 inputMode='numeric'
-                                max={99}
+                                max={prepTimeMinsMaxValue / 60}
                                 min={0}
                                 name='prep-time-hours'
                                 onChange={(event) => {
@@ -1020,7 +1046,7 @@ const Admin: NextPage<AdminProps> = ({
                                 disabled={isLoading}
                                 id='cook-time-hours'
                                 inputMode='numeric'
-                                max={99}
+                                max={cookTimeMinsMaxValue / 60}
                                 min={0}
                                 name='cook-time-hours'
                                 onChange={(event) => {
@@ -1082,7 +1108,7 @@ const Admin: NextPage<AdminProps> = ({
                                 disabled={isLoading}
                                 id='serving-amount'
                                 inputMode='numeric'
-                                max={999}
+                                max={servingAmountMaxValue}
                                 min={1}
                                 name='serving-amount'
                                 onChange={(event) => {
@@ -1271,6 +1297,7 @@ const Admin: NextPage<AdminProps> = ({
                             input={<input
                                 disabled={isLoading}
                                 id='ingredient-section'
+                                maxLength={sectionMaxCharLength}
                                 name='ingredient-section'
                                 type='text'
                             />}
@@ -1316,7 +1343,7 @@ const Admin: NextPage<AdminProps> = ({
                                         disabled={isLoading}
                                         id='ingredient-quantity-whole'
                                         inputMode='numeric'
-                                        max={999}
+                                        max={quantityWholeMaxValue}
                                         min={0}
                                         name='ingredient-quantity-whole'
                                         step={1}
@@ -1368,7 +1395,7 @@ const Admin: NextPage<AdminProps> = ({
                                             disabled={isLoading}
                                             id='ingredient-quantity-min-whole'
                                             inputMode='numeric'
-                                            max={999}
+                                            max={quantityWholeMaxValue}
                                             min={0}
                                             name='ingredient-quantity-min-whole'
                                             step={1}
@@ -1415,7 +1442,7 @@ const Admin: NextPage<AdminProps> = ({
                                             disabled={isLoading}
                                             id='ingredient-quantity-max-whole'
                                             inputMode='numeric'
-                                            max={999}
+                                            max={quantityWholeMaxValue}
                                             min={0}
                                             name='ingredient-quantity-max-whole'
                                             step={1}
@@ -1531,6 +1558,7 @@ const Admin: NextPage<AdminProps> = ({
                             input={<input
                                 disabled={isLoading}
                                 id='ingredient-alteration'
+                                maxLength={alterationMaxCharLength}
                                 name='ingredient-alteration'
                                 type='text'
                             />}
@@ -1613,6 +1641,7 @@ const Admin: NextPage<AdminProps> = ({
                             input={<input
                                 disabled={isLoading}
                                 id='step-section'
+                                maxLength={sectionMaxCharLength}
                                 name='step-section'
                                 type='text'
                             />}
@@ -1626,6 +1655,7 @@ const Admin: NextPage<AdminProps> = ({
                             input={<textarea
                                 disabled={isLoading}
                                 id='step-details'
+                                maxLength={detailsMaxCharLength}
                                 name='step-details'
                                 required
                             ></textarea>}
@@ -1715,6 +1745,7 @@ const Admin: NextPage<AdminProps> = ({
                             input={<input
                                 disabled={isLoading}
                                 id='note-section'
+                                maxLength={sectionMaxCharLength}
                                 name='note-section'
                                 type='text'
                             />}
@@ -1728,6 +1759,7 @@ const Admin: NextPage<AdminProps> = ({
                             input={<textarea
                                 disabled={isLoading}
                                 id='note-details'
+                                maxLength={detailsMaxCharLength}
                                 name='note-details'
                                 required
                             ></textarea>}

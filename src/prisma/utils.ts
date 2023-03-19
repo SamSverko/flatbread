@@ -12,11 +12,15 @@ export const categoryTables: Category[] = [
 ];
 
 // there are 10,080 minutes in one week - figuring a recipe won't take longer than that?
+export const alterationMaxCharLength = 64;
 export const cookTimeMinsMaxValue = 10080;
+export const detailsMaxCharLength = 1280;
 export const idMaxValue = 999999999;
 export const nameMaxCharLength = 128;
 export const prepTimeMinsMaxValue = 10080;
+export const quantityWholeMaxValue = 9999;
 export const recipeIdMaxCharLength = 128;
+export const sectionMaxCharLength = 64;
 export const servingAmountMaxValue = 9999;
 export const slugMaxCharLength = 128;
 export const sourceNameMaxCharLength = 128;
