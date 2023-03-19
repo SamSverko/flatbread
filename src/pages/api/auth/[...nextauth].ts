@@ -4,7 +4,7 @@ import GithubProvider from 'next-auth/providers/github';
 export default NextAuth({
     callbacks: {
         async signIn({ user }) {
-            if (user.id === process.env.FLATBREAD_ADMIN_ID) {
+            if (user.id === process.env.FLATBREAD_ADMIN_ID_1 || user.id === process.env.FLATBREAD_ADMIN_ID_2) {
                 return true;
             } else {
                 return false;
