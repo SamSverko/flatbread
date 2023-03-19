@@ -62,7 +62,7 @@ const Index: NextPage<IndexProps> = ({
     }, [currentPaginationPage, searchStatus]);
 
     // Event listeners
-    function handleClearSearchResultsOnClick() {
+    function onClickClearSearchResults() {
         setSearchStatus('pending');
         setRecipes([]);
         setCurrentPaginationPage(0);
@@ -73,7 +73,7 @@ const Index: NextPage<IndexProps> = ({
         }
     }
 
-    function handleFormOnSubmit(event: React.FormEvent) {
+    function onSubmitForm(event: React.FormEvent) {
         event.preventDefault();
         if (!event.target) return;
 
@@ -108,7 +108,7 @@ const Index: NextPage<IndexProps> = ({
         const dishTypesValidated = (formDataDishTypes) ? formDataDishTypes.join(',') : undefined;
         const randomValidated = (submitterName === 'submit-random') ? true : false;
 
-        let queryString = `/api/recipes?title=${titleValidated}`;
+        let queryString = `/api/recipes?orderBy=desc&orderByField=createdAt&title=${titleValidated}`;
         if (courseTypesValidated) queryString += `&courseTypes=${courseTypesValidated}`;
         if (cuisinesValidated) queryString += `&cuisines=${cuisinesValidated}`;
         if (dietaryRestrictionsValidated) queryString += `&dietaryRestrictions=${dietaryRestrictionsValidated}`;
@@ -134,7 +134,7 @@ const Index: NextPage<IndexProps> = ({
             <Card>
                 <h2>Search for recipes</h2>
 
-                <form className={styles['search-form']} onSubmit={handleFormOnSubmit}>
+                <form className={styles['search-form']} onSubmit={onSubmitForm}>
                     <InputGroup
                         input={<input enterKeyHint='search' id='input-title' inputMode='search' name='title' type='search' />}
                         label={<label htmlFor='input-title'>Title</label>}
@@ -211,7 +211,7 @@ const Index: NextPage<IndexProps> = ({
                     {recipes.length} recipe{recipes.length > 1 ? 's' : ''} found.
                 </p>
                 <div>
-                    <button onClick={handleClearSearchResultsOnClick}>Clear search results</button>
+                    <button onClick={onClickClearSearchResults}>Clear search results</button>
                 </div>
             </Card>
 
