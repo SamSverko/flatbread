@@ -14,7 +14,6 @@ const RecipePage: NextPage = () => {
     // Hooks
     const { data: session } = useSession();
     const router = useRouter();
-    const { slug } = router.query;
 
     // States
     const [isLoading, setIsLoading] = React.useState(true);
@@ -47,10 +46,11 @@ const RecipePage: NextPage = () => {
     }, [recipe]);
 
     React.useEffect(() => {
-        if (slug) {
-            fetch(`/api/recipes?condensed=true&slug=${slug}`)
+        if (router.query.slug) {
+            fetch(`/api/recipes?condensed=true&slug=${router.query.slug}`)
                 .then((response) => response.json())
                 .then((data) => {
+                    console.log(data);
                     if (data.error) {
                         setRecipe(null);
                     } else {
@@ -59,7 +59,7 @@ const RecipePage: NextPage = () => {
                     setIsLoading(false);
                 });
         }
-    }, [slug]);
+    }, [router.query.slug]);
 
     // Renderers
     if (isLoading) return <Card><h2>Fetching recipe...</h2></Card>;

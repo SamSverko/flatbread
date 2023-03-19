@@ -1,7 +1,5 @@
 import { Prisma } from '@prisma/client';
 
-import { slugRegEx } from '../utils';
-
 import type { NextApiResponse } from 'next';
 import type { Category } from '../types';
 
@@ -608,6 +606,7 @@ export function validateQueryParamShowOnly(res: NextApiResponse, value: string |
 
 export function validateQueryParamSlug(res: NextApiResponse, value: string | string[]) {
     const slug = value?.toString().toLowerCase().trim();
+    const slugRegEx = /^[a-z0-9]+(?:-[a-z0-9]+)*$/g; // importing this from ../utils causes it to fail sometimes?
 
     if (!slug) {
         return res.status(400).json({
@@ -615,7 +614,8 @@ export function validateQueryParamSlug(res: NextApiResponse, value: string | str
         });
     }
 
-    if (!slugRegEx.test(slug)) {
+    const slugTest = slugRegEx.test(slug);
+    if (!slugTest) {
         return res.status(400).json({
             error: 'Invalid value for query parameter `slug`. Fix: Provide a value string (allowed characters: letters, numbers, and hyphens).',
         });
