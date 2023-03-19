@@ -2,7 +2,6 @@ import { Prisma } from '@prisma/client';
 import { v4 } from 'uuid';
 
 import { prisma } from './db';
-import { slugRegEx } from '../utils';
 
 import type { RecipeToSeed } from './types';
 
@@ -470,7 +469,9 @@ function logCompletedSeed(tableName: string) {
 }
 
 function validateRecipe(recipe: RecipeToSeed) {
-    if (!slugRegEx.test(recipe.slug)) {
+    const slugRegEx = /^[a-z0-9]+(?:-[a-z0-9]+)*$/g; // importing this from another file causes it to fail sometimes?
+    const slugTest = slugRegEx.test(recipe.slug);
+    if (!slugTest) {
         throw `Recipe '${recipe.title}' slug format is invalid.`;
     }
 }

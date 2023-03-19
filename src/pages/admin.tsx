@@ -10,7 +10,7 @@ import Icon from '../components/icon';
 import InputGroup from '../components/input-group';
 
 import authOptions from './api/auth/[...nextauth]';
-import { slugChars, slugRegEx } from '../utils';
+import { slugChars } from '../utils';
 import { prisma } from '../prisma/db';
 import {
     alterationMaxCharLength,
@@ -191,7 +191,12 @@ const Admin: NextPage<AdminProps> = ({
         }
 
         const slugValidated = (formSlug) ? formSlug.toString().trim() : undefined;
-        if (!slugValidated || !slugRegEx.test(slugValidated)) {
+        if (!slugValidated) {
+            return setFormFeedback('Form error: Slug value must be a string (no spaces allowed, separate words with hyphens).');
+        }
+        const slugRegEx = /^[a-z0-9]+(?:-[a-z0-9]+)*$/g; // importing this from another file causes it to fail sometimes?
+        const slugTest = slugRegEx.test(slugValidated);
+        if (!slugTest) {
             return setFormFeedback('Form error: Slug value must be a string (no spaces allowed, separate words with hyphens).');
         }
 
@@ -905,383 +910,385 @@ const Admin: NextPage<AdminProps> = ({
                 <h2>Admin</h2>
             </Card>
 
-            <Card hide={!isLoading}>
-                <h2>Populating form with recipe data...</h2>
-            </Card>
-
             <Card>
-                <form
-                    className={styles.form}
-                    id='submit-recipe'
-                    onSubmit={handleFormOnSubmit}
-                >
-                    <h2>Add new recipe</h2>
+                <h2>Add new recipe</h2>
 
-                    <p>
-                        All fields marked with an asterisk (<b>*</b>) are required.
-                    </p>
+                <p>All fields marked with an asterisk (<b>*</b>) are required.</p>
 
-                    {/* title ============================================= */}
-                    <InputGroup
-                        input={<input
-                            aria-required='true'
-                            disabled={isLoading}
-                            id='title'
-                            maxLength={titleMaxCharLength}
-                            name='title'
-                            onBlur={handleOnBlurTitle}
-                            onChange={event => setFormTitle(event.target.value)}
-                            required
-                            type='text'
-                            value={formTitle}
-                        />}
-                        label={<label htmlFor='title'>Title *</label>}
-                    />
+                <hr />
 
-                    {/* slug ============================================== */}
-                    <InputGroup
-                        input={<input
-                            aria-required='true'
-                            disabled={isLoading}
-                            id='slug'
-                            maxLength={slugMaxCharLength}
-                            name='slug'
-                            onChange={event => setFormSlug(event.target.value)}
-                            required
-                            type='text'
-                            value={formSlug}
-                        />}
-                        label={<label htmlFor='slug'>Slug *</label>}
-                    />
+                <details className={styles.details} open>
+                    <summary>Main info</summary>
 
-                    {/* sourceName ======================================== */}
-                    <InputGroup
-                        input={<input
-                            aria-required='true'
-                            disabled={isLoading}
-                            id='source-name'
-                            maxLength={sourceNameMaxCharLength}
-                            name='source-name'
-                            onChange={event => setFormSourceName(event.target.value)}
-                            required
-                            type='text'
-                            value={formSourceName}
-                        />}
-                        label={<label htmlFor='source-name'>
-                            Source name *
-                        </label>}
-                    />
-
-                    {/* sourceURL ========================================= */}
-                    <InputGroup
-                        input={<input
-                            disabled={isLoading}
-                            id='source-url'
-                            inputMode='url'
-                            maxLength={sourceURLMaxCharLength}
-                            name='source-url'
-                            onChange={event => setFormSourceURL(event.target.value)}
-                            type='url'
-                            value={formSourceURL}
-                        />}
-                        label={<label htmlFor='source-url'>Source URL</label>}
-                    />
-
-                    {/* prepTimeMins ====================================== */}
-                    <p><b>Prep time</b></p>
-
-                    <div className={styles['inline-time-inputs']}>
+                    <form
+                        className={styles.form}
+                        id='submit-recipe'
+                        onSubmit={handleFormOnSubmit}
+                    >
+                        {/* title ============================================= */}
                         <InputGroup
                             input={<input
                                 aria-required='true'
                                 disabled={isLoading}
-                                id='prep-time-hours'
-                                inputMode='numeric'
-                                max={prepTimeMinsMaxValue / 60}
-                                min={0}
-                                name='prep-time-hours'
-                                onChange={(event) => {
-                                    const value = parseInt(event.target.value);
-                                    setFormPrepTimeHours((!isNaN(value) ? value : 0));
-                                }}
-                                step={1}
-                                type='number'
-                                value={formPrepTimeHours}
+                                id='title'
+                                maxLength={titleMaxCharLength}
+                                name='title'
+                                onBlur={handleOnBlurTitle}
+                                onChange={event => setFormTitle(event.target.value)}
+                                required
+                                type='text'
+                                value={formTitle}
                             />}
-                            label={<label htmlFor='prep-time-hours'>
-                                Hours
-                            </label>}
+                            label={<label htmlFor='title'>Title *</label>}
                         />
 
+                        {/* slug ============================================== */}
                         <InputGroup
                             input={<input
                                 aria-required='true'
                                 disabled={isLoading}
-                                id='prep-time-mins'
-                                inputMode='numeric'
-                                max={59}
-                                min={0}
-                                name='prep-time-mins'
-                                onChange={(event) => {
-                                    const value = parseInt(event.target.value);
-                                    setFormPrepTimeMins((!isNaN(value) ? value : 0));
-                                }}
-                                step={1}
-                                type='number'
-                                value={formPrepTimeMins}
+                                id='slug'
+                                maxLength={slugMaxCharLength}
+                                name='slug'
+                                onChange={event => setFormSlug(event.target.value)}
+                                required
+                                type='text'
+                                value={formSlug}
                             />}
-                            label={<label htmlFor='prep-time-mins'>
-                                Minutes
-                            </label>}
+                            label={<label htmlFor='slug'>Slug *</label>}
                         />
-                    </div>
 
-                    {/* cookTimeMins ====================================== */}
-                    <p><b>Cook time</b></p>
-
-                    <div className={styles['inline-time-inputs']}>
+                        {/* sourceName ======================================== */}
                         <InputGroup
                             input={<input
                                 aria-required='true'
                                 disabled={isLoading}
-                                id='cook-time-hours'
-                                inputMode='numeric'
-                                max={cookTimeMinsMaxValue / 60}
-                                min={0}
-                                name='cook-time-hours'
-                                onChange={(event) => {
-                                    const value = parseInt(event.target.value);
-                                    setFormCookTimeHours((!isNaN(value) ? value : 0));
-                                }}
-                                step={1}
-                                type='number'
-                                value={formCookTimeHours}
+                                id='source-name'
+                                maxLength={sourceNameMaxCharLength}
+                                name='source-name'
+                                onChange={event => setFormSourceName(event.target.value)}
+                                required
+                                type='text'
+                                value={formSourceName}
                             />}
-                            label={<label htmlFor='cook-time-hours'>
-                                Hours
+                            label={<label htmlFor='source-name'>
+                                Source name *
                             </label>}
                         />
 
+                        {/* sourceURL ========================================= */}
                         <InputGroup
                             input={<input
-                                aria-required='true'
                                 disabled={isLoading}
-                                id='cook-time-mins'
-                                inputMode='numeric'
-                                max={59}
-                                min={0}
-                                name='cook-time-mins'
-                                onChange={(event) => {
-                                    const value = parseInt(event.target.value);
-                                    setFormCookTimeMins((!isNaN(value) ? value : 0));
-                                }}
-                                step={1}
-                                type='number'
-                                value={formCookTimeMins}
+                                id='source-url'
+                                inputMode='url'
+                                maxLength={sourceURLMaxCharLength}
+                                name='source-url'
+                                onChange={event => setFormSourceURL(event.target.value)}
+                                type='url'
+                                value={formSourceURL}
                             />}
-                            label={<label htmlFor='cook-time-mins'>
-                                Minutes
-                            </label>}
-                        />
-                    </div>
-
-                    <div className={styles['section-heading']}>
-                        <p><b>Serving</b></p>
-                        <button
-                            aria-label='Edit serving units'
-                            className='icon-only'
-                            disabled={isLoading}
-                            onClick={handleEditServingUnitOnClick}
-                            ref={editServingsButtonRef}
-                            type='button'
-                        >
-                            <Icon ariaHidden={true} Icon={bxsEditAlt} />
-                        </button>
-                    </div>
-
-                    {/* servingAmount ===================================== */}
-                    {/* servingUnit ======================================= */}
-                    <div className={styles['inline-serving-inputs']}>
-                        <InputGroup
-                            input={<input
-                                aria-required='true'
-                                disabled={isLoading}
-                                id='serving-amount'
-                                inputMode='numeric'
-                                max={servingAmountMaxValue}
-                                min={1}
-                                name='serving-amount'
-                                onChange={(event) => {
-                                    const value = parseInt(event.target.value);
-                                    setFormServingAmount((!isNaN(value) ? value : 0));
-                                }}
-                                step={1}
-                                type='number'
-                                value={formServingAmount}
-                            />}
-                            label={<label htmlFor='serving-amount'>
-                                Amount *
-                            </label>}
+                            label={<label htmlFor='source-url'>Source URL</label>}
                         />
 
+                        {/* prepTimeMins ====================================== */}
+                        <p><b>Prep time</b></p>
+
+                        <div className={styles['inline-time-inputs']}>
+                            <InputGroup
+                                input={<input
+                                    aria-required='true'
+                                    disabled={isLoading}
+                                    id='prep-time-hours'
+                                    inputMode='numeric'
+                                    max={prepTimeMinsMaxValue / 60}
+                                    min={0}
+                                    name='prep-time-hours'
+                                    onChange={(event) => {
+                                        const value = parseInt(event.target.value);
+                                        setFormPrepTimeHours((!isNaN(value) ? value : 0));
+                                    }}
+                                    step={1}
+                                    type='number'
+                                    value={formPrepTimeHours}
+                                />}
+                                label={<label htmlFor='prep-time-hours'>
+                                    Hours
+                                </label>}
+                            />
+
+                            <InputGroup
+                                input={<input
+                                    aria-required='true'
+                                    disabled={isLoading}
+                                    id='prep-time-mins'
+                                    inputMode='numeric'
+                                    max={59}
+                                    min={0}
+                                    name='prep-time-mins'
+                                    onChange={(event) => {
+                                        const value = parseInt(event.target.value);
+                                        setFormPrepTimeMins((!isNaN(value) ? value : 0));
+                                    }}
+                                    step={1}
+                                    type='number'
+                                    value={formPrepTimeMins}
+                                />}
+                                label={<label htmlFor='prep-time-mins'>
+                                    Minutes
+                                </label>}
+                            />
+                        </div>
+
+                        {/* cookTimeMins ====================================== */}
+                        <p><b>Cook time</b></p>
+
+                        <div className={styles['inline-time-inputs']}>
+                            <InputGroup
+                                input={<input
+                                    aria-required='true'
+                                    disabled={isLoading}
+                                    id='cook-time-hours'
+                                    inputMode='numeric'
+                                    max={cookTimeMinsMaxValue / 60}
+                                    min={0}
+                                    name='cook-time-hours'
+                                    onChange={(event) => {
+                                        const value = parseInt(event.target.value);
+                                        setFormCookTimeHours((!isNaN(value) ? value : 0));
+                                    }}
+                                    step={1}
+                                    type='number'
+                                    value={formCookTimeHours}
+                                />}
+                                label={<label htmlFor='cook-time-hours'>
+                                    Hours
+                                </label>}
+                            />
+
+                            <InputGroup
+                                input={<input
+                                    aria-required='true'
+                                    disabled={isLoading}
+                                    id='cook-time-mins'
+                                    inputMode='numeric'
+                                    max={59}
+                                    min={0}
+                                    name='cook-time-mins'
+                                    onChange={(event) => {
+                                        const value = parseInt(event.target.value);
+                                        setFormCookTimeMins((!isNaN(value) ? value : 0));
+                                    }}
+                                    step={1}
+                                    type='number'
+                                    value={formCookTimeMins}
+                                />}
+                                label={<label htmlFor='cook-time-mins'>
+                                    Minutes
+                                </label>}
+                            />
+                        </div>
+
+                        <div className={styles['section-heading']}>
+                            <p><b>Serving</b></p>
+                            <button
+                                aria-label='Edit serving units'
+                                className='icon-only'
+                                disabled={isLoading}
+                                onClick={handleEditServingUnitOnClick}
+                                ref={editServingsButtonRef}
+                                type='button'
+                            >
+                                <Icon ariaHidden={true} Icon={bxsEditAlt} />
+                            </button>
+                        </div>
+
+                        {/* servingAmount ===================================== */}
+                        {/* servingUnit ======================================= */}
+                        <div className={styles['inline-serving-inputs']}>
+                            <InputGroup
+                                input={<input
+                                    aria-required='true'
+                                    disabled={isLoading}
+                                    id='serving-amount'
+                                    inputMode='numeric'
+                                    max={servingAmountMaxValue}
+                                    min={1}
+                                    name='serving-amount'
+                                    onChange={(event) => {
+                                        const value = parseInt(event.target.value);
+                                        setFormServingAmount((!isNaN(value) ? value : 0));
+                                    }}
+                                    step={1}
+                                    type='number'
+                                    value={formServingAmount}
+                                />}
+                                label={<label htmlFor='serving-amount'>
+                                    Amount *
+                                </label>}
+                            />
+
+                            <InputGroup
+                                input={<select
+                                    aria-required='true'
+                                    disabled={isLoading}
+                                    id='serving-unit'
+                                    name='serving-unit'
+                                    onChange={event => setFormServingUnit(event.target.value)}
+                                    required
+                                    value={formServingUnit}
+                                >
+                                    <option value=''>
+                                        -- Select a serving unit --
+                                    </option>
+                                    {localServingUnits.map((servingUnit) => {
+                                        return <option
+                                            key={`serving-unit-${servingUnit.name}`}
+                                            value={servingUnit.name}
+                                        >
+                                            {servingUnit.namePlural}
+                                        </option>;
+                                    })}
+                                </select>}
+                                label={<label htmlFor='serving-unit'>
+                                    Unit *
+                                </label>}
+                            />
+                        </div>
+
+                        <div className={styles['section-heading']}>
+                            <p><b>Categories</b></p>
+                            <button
+                                aria-label='Edit categories'
+                                className='icon-only'
+                                disabled={isLoading}
+                                onClick={handleEditCategoryOnClick}
+                                ref={editCategoryButtonRef}
+                                type='button'
+                            >
+                                <Icon ariaHidden={true} Icon={bxsEditAlt} />
+                            </button>
+                        </div>
+
+                        {/* courseTypes ======================================= */}
                         <InputGroup
                             input={<select
                                 aria-required='true'
                                 disabled={isLoading}
-                                id='serving-unit'
-                                name='serving-unit'
-                                onChange={event => setFormServingUnit(event.target.value)}
+                                id='course-types'
+                                multiple
+                                name='course-types'
+                                onChange={event => {
+                                    const options = [...event.target.selectedOptions];
+                                    const values = options.map(option => option.value);
+                                    setFormCourseTypes(values);
+                                }}
                                 required
-                                value={formServingUnit}
+                                value={formCourseTypes}
                             >
-                                <option value=''>
-                                    -- Select a serving unit --
-                                </option>
-                                {localServingUnits.map((servingUnit) => {
+                                {localCourseTypes.map((courseType) => {
                                     return <option
-                                        key={`serving-unit-${servingUnit.name}`}
-                                        value={servingUnit.name}
+                                        key={`course-types-${courseType.name}`}
+                                        value={courseType.name}
                                     >
-                                        {servingUnit.namePlural}
+                                        {courseType.name}
                                     </option>;
                                 })}
                             </select>}
-                            label={<label htmlFor='serving-unit'>
-                                Unit *
+                            label={<label htmlFor='course-types'>
+                                Course types *
                             </label>}
                         />
-                    </div>
 
-                    <div className={styles['section-heading']}>
-                        <p><b>Categories</b></p>
-                        <button
-                            aria-label='Edit categories'
-                            className='icon-only'
-                            disabled={isLoading}
-                            onClick={handleEditCategoryOnClick}
-                            ref={editCategoryButtonRef}
-                            type='button'
-                        >
-                            <Icon ariaHidden={true} Icon={bxsEditAlt} />
-                        </button>
-                    </div>
+                        {/* cuisines ========================================== */}
+                        <InputGroup
+                            input={<select
+                                aria-required='true'
+                                disabled={isLoading}
+                                id='cuisines'
+                                multiple
+                                name='cuisines'
+                                onChange={event => {
+                                    const options = [...event.target.selectedOptions];
+                                    const values = options.map(option => option.value);
+                                    setFormCuisines(values);
+                                }}
+                                required
+                                value={formCuisines}
+                            >
+                                {localCuisines.map((cuisine) => {
+                                    return <option
+                                        key={`cuisines-${cuisine.name}`}
+                                        value={cuisine.name}
+                                    >
+                                        {cuisine.name}
+                                    </option>;
+                                })}
+                            </select>}
+                            label={<label htmlFor='cuisines'>Cuisines *</label>}
+                        />
 
-                    {/* courseTypes ======================================= */}
-                    <InputGroup
-                        input={<select
-                            aria-required='true'
-                            disabled={isLoading}
-                            id='course-types'
-                            multiple
-                            name='course-types'
-                            onChange={event => {
-                                const options = [...event.target.selectedOptions];
-                                const values = options.map(option => option.value);
-                                setFormCourseTypes(values);
-                            }}
-                            required
-                            value={formCourseTypes}
-                        >
-                            {localCourseTypes.map((courseType) => {
-                                return <option
-                                    key={`course-types-${courseType.name}`}
-                                    value={courseType.name}
-                                >
-                                    {courseType.name}
-                                </option>;
-                            })}
-                        </select>}
-                        label={<label htmlFor='course-types'>
-                            Course types *
-                        </label>}
-                    />
+                        {/* dietaryRestrictions =============================== */}
+                        <InputGroup
+                            input={<select
+                                disabled={isLoading}
+                                id='dietary-restrictions'
+                                multiple
+                                name='dietary-restrictions'
+                                onChange={event => {
+                                    const options = [...event.target.selectedOptions];
+                                    const values = options.map(option => option.value);
+                                    setFormDietaryRestrictions(values);
+                                }}
+                                value={formDietaryRestrictions}
+                            >
+                                {localDietaryRestrictions.map((dietaryRestriction) => {
+                                    return <option
+                                        key={`dietary-restrictions-${dietaryRestriction.name}`}
+                                        value={dietaryRestriction.name}
+                                    >
+                                        {dietaryRestriction.name}
+                                    </option>;
+                                })}
+                            </select>}
+                            label={<label htmlFor='dietary-restrictions'>
+                                Dietary restrictions
+                            </label>}
+                        />
 
-                    {/* cuisines ========================================== */}
-                    <InputGroup
-                        input={<select
-                            aria-required='true'
-                            disabled={isLoading}
-                            id='cuisines'
-                            multiple
-                            name='cuisines'
-                            onChange={event => {
-                                const options = [...event.target.selectedOptions];
-                                const values = options.map(option => option.value);
-                                setFormCuisines(values);
-                            }}
-                            required
-                            value={formCuisines}
-                        >
-                            {localCuisines.map((cuisine) => {
-                                return <option
-                                    key={`cuisines-${cuisine.name}`}
-                                    value={cuisine.name}
-                                >
-                                    {cuisine.name}
-                                </option>;
-                            })}
-                        </select>}
-                        label={<label htmlFor='cuisines'>Cuisines *</label>}
-                    />
+                        {/* dishTypes ========================================= */}
+                        <InputGroup
+                            input={<select
+                                aria-required='true'
+                                disabled={isLoading}
+                                id='dish-types'
+                                multiple
+                                name='dish-types'
+                                onChange={event => {
+                                    const options = [...event.target.selectedOptions];
+                                    const values = options.map(option => option.value);
+                                    setFormDishTypes(values);
+                                }}
+                                required
+                                value={formDishTypes}
+                            >
+                                {localDishTypes.map((dishType) => {
+                                    return <option
+                                        key={`dish-types-${dishType.name}`}
+                                        value={dishType.name}
+                                    >
+                                        {dishType.name}
+                                    </option>;
+                                })}
+                            </select>}
+                            label={<label htmlFor='dish-types'>
+                                Dish types *
+                            </label>}
+                        />
+                    </form>
+                </details>
 
-                    {/* dietaryRestrictions =============================== */}
-                    <InputGroup
-                        input={<select
-                            disabled={isLoading}
-                            id='dietary-restrictions'
-                            multiple
-                            name='dietary-restrictions'
-                            onChange={event => {
-                                const options = [...event.target.selectedOptions];
-                                const values = options.map(option => option.value);
-                                setFormDietaryRestrictions(values);
-                            }}
-                            value={formDietaryRestrictions}
-                        >
-                            {localDietaryRestrictions.map((dietaryRestriction) => {
-                                return <option
-                                    key={`dietary-restrictions-${dietaryRestriction.name}`}
-                                    value={dietaryRestriction.name}
-                                >
-                                    {dietaryRestriction.name}
-                                </option>;
-                            })}
-                        </select>}
-                        label={<label htmlFor='dietary-restrictions'>
-                            Dietary restrictions
-                        </label>}
-                    />
-
-                    {/* dishTypes ========================================= */}
-                    <InputGroup
-                        input={<select
-                            aria-required='true'
-                            disabled={isLoading}
-                            id='dish-types'
-                            multiple
-                            name='dish-types'
-                            onChange={event => {
-                                const options = [...event.target.selectedOptions];
-                                const values = options.map(option => option.value);
-                                setFormDishTypes(values);
-                            }}
-                            required
-                            value={formDishTypes}
-                        >
-                            {localDishTypes.map((dishType) => {
-                                return <option
-                                    key={`dish-types-${dishType.name}`}
-                                    value={dishType.name}
-                                >
-                                    {dishType.name}
-                                </option>;
-                            })}
-                        </select>}
-                        label={<label htmlFor='dish-types'>
-                            Dish types *
-                        </label>}
-                    />
-                </form>
+                <hr />
 
                 {/* ingredients =========================================== */}
                 <details className={styles.details}>
@@ -1837,7 +1844,19 @@ const Admin: NextPage<AdminProps> = ({
 
                 <div className={styles['section-submit']}>
                     <div>
-                        <input disabled={isLoading} form='submit-recipe' type='submit' value={formSubmitValue} />
+                        <input
+                            disabled={isLoading ||
+                                formTitle.length === 0 ||
+                                formSlug.length === 0 ||
+                                formSourceName.length === 0 ||
+                                formCourseTypes.length === 0 ||
+                                formCuisines.length === 0 ||
+                                formDishTypes.length === 0
+                            }
+                            form='submit-recipe'
+                            type='submit'
+                            value={formSubmitValue}
+                        />
                         <div>
                             {editRecipeId &&
                                 <button
