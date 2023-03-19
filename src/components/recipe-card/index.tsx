@@ -581,7 +581,7 @@ const RecipeCard = ({
             {renderCategories()}
             {renderIngredients()}
             {renderSteps()}
-            {renderNotes()}
+            <>{recipe.notes.length > 0 && renderNotes()}</>
         </Card>
     );
 };
