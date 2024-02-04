@@ -40,6 +40,19 @@ To build the website for a production environment:
 npm run build
 ```
 
+## Versioning
+
+The project version is updated whenever code is pushed to the `main` branch.
+
+This project uses [CalVer](https://calver.org/) as the project versioning convention.
+
+CalVer scheme: `YYYY.0M.0D_MICRO`:
+
+-   `YYYY` - Full year (e.g. `2022` = 2022).
+-   `0M` - Zero-padded month (e.g. `09` = September).
+-   `0D` - Zero-padded day (e.g. `02` = Second day of the month).
+-   `_MICRO` - Version released (e.g. `_2` = second release under the same `YYYY.0M.0D` version).
+
 ## Tech stack
 
 -   Frontend framework: [Next.js](https://nextjs.org/)
