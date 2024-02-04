@@ -1,59 +1,21 @@
 {
-    "name": "flatbread",
-    "version": "2022.06.07_1",
-    "description": "\"People who love to eat are always the best people. - Julia Child\" - Flatbread",
-    "keywords": [
-        "food",
-        "hobby-project",
-        "open-source",
-        "recipes"
-    ],
-    "homepage": "https://github.com/SamSverko/flatbread",
-    "bugs": {
-        "url": "https://github.com/SamSverko/flatbread/issues",
-        "email": "sam.sverko@gmail.com"
-    },
-    "license": "MIT",
-    "author": {
-        "name": "Sam Sverko",
-        "email": "sam.sverko@gmail.com",
-        "url": "https://github.com/SamSverko"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/SamSverko/flatbread.git"
-    },
     "scripts": {
-        "dev": "next dev",
-        "build": "npm run lint && next build",
-        "start": "next start",
-        "lint": "next lint && npx stylelint \"**/*.{css,scss}\""
+        "build": "next build",
+        "dev": "next",
+        "start": "next start"
     },
     "dependencies": {
-        "contentful": "^9.1.5",
-        "next": "12.0.7",
-        "next-pwa": "^5.5.0",
-        "react": "17.0.2",
-        "react-dom": "17.0.2"
+        "gray-matter": "^4.0.3",
+        "next": "14.1.0",
+        "react": "^18",
+        "react-dom": "^18",
+        "remark": "^15.0.1",
+        "remark-html": "^16.0.1"
     },
     "devDependencies": {
-        "@types/node": "16.11.12",
-        "@types/react": "17.0.37",
-        "@typescript-eslint/eslint-plugin": "^5.7.0",
-        "@typescript-eslint/parser": "^5.7.0",
-        "babel-plugin-inline-react-svg": "^2.0.1",
-        "contentful-ts-type-generator": "github:arimkevi/contentful-ts-type-generator",
-        "eslint": "^7.32.0",
-        "eslint-config-next": "12.0.7",
-        "eslint-config-standard": "^16.0.3",
-        "eslint-plugin-import": "^2.25.3",
-        "eslint-plugin-node": "^11.1.0",
-        "eslint-plugin-promise": "^5.2.0",
-        "eslint-plugin-react": "^7.27.1",
-        "sass": "^1.49.9",
-        "stylelint": "^14.6.0",
-        "stylelint-config-standard-scss": "^3.0.0",
-        "stylelint-order": "^5.0.0",
-        "typescript": "4.5.3"
+        "@types/node": "^20",
+        "@types/react": "^18",
+        "@types/react-dom": "^18",
+        "typescript": "^5"
     }
 }
