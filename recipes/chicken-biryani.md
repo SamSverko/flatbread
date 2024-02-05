@@ -1,7 +1,7 @@
 ---
 title: "Chicken Biryani"
 source:
-    - name: "Andy Cooks"
+    - name: "Andy Hearnden"
     - url: "https://www.youtube.com/watch?v=6XlMguO9r-M"
 ---
 
@@ -41,3 +41,10 @@ source:
 1. Place the rest of the chicken and repeat with the rice, crispy onions and herbs. 
 1. Place a clean tea towel over the lid of the pot and cover the biryani. 
 1. Turn your element to medium high for 10 minutes, then turn it down to very low for 30 minutes. Take from the heat and let it rest for 20 minutes before taking the lid off and serving.
+
+## Notes
+
+- **2024-02-05:** Sam made this yesterday and it didn't turn out. A few things that might have saved it:
+    - Issue: Way too much rice for the amount of meat. Fix: Either half the rice amount (recommended) or double the chicken amount.
+    - Issue: Rice was bland. Fix: Perhaps make extra meat marinade, and set some aside for the post-parboiled rice.
+    - Issue: Entire bottom of dish was scortched. Fix: Don't cook on medium high (used level 6) for 10 minutes before very low (used level 2). Try cooking the meat alone a bit longer, then low heat when all together.
