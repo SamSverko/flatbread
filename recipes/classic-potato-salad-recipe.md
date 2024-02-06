@@ -1,8 +1,8 @@
 ---
 title: "Classic Potato Salad Recipe"
 source:
-    - name: "Serious Eats"
-    - url: "https://www.seriouseats.com/classic-potato-salad-recipe"
+    name: "Serious Eats"
+    url: "https://www.seriouseats.com/classic-potato-salad-recipe"
 ---
 
 -   Prep: 10 mins

@@ -1,8 +1,8 @@
 ---
 title: "The Easiest Chili Garlic Noodles Ever (3 Ways)"
 source:
-    - name: "Joshua Weissman"
-    - url: "https://www.joshuaweissman.com/post/chili-garlic-noodles"
+    name: "Joshua Weissman"
+    url: "https://www.joshuaweissman.com/post/chili-garlic-noodles"
 ---
 
 ## Ingredients

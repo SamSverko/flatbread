@@ -20,7 +20,7 @@ export default async function Recipe({ params }: Params) {
 
     return (
         <article>
-            <h2>{recipe.title}</h2>
+            <h1>{recipe.title}</h1>
             <div dangerouslySetInnerHTML={{ __html: content }} />
         </article>
     );

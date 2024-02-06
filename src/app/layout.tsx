@@ -55,14 +55,10 @@ export default function RootLayout({
                 <meta content="noindex,nofollow" name="robots" />
             </head>
             <body className={inter.className}>
-                <h1>Flatbread</h1>
                 <nav>
-                    <ul>
-                        <li>
-                            <a href="/">Home</a>
-                        </li>
-                    </ul>
+                    <a href="/">All recipes</a>
                 </nav>
+                <hr />
                 <div>{children}</div>
             </body>
         </html>

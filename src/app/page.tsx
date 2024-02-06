@@ -11,6 +11,12 @@ export default function Index() {
                 {allRecipes.map((recipe) => (
                     <li key={recipe.slug}>
                         <a href={`/recipe/${recipe.slug}`}>{recipe.title}</a>
+                        {recipe?.source && (
+                            <span>
+                                {" "}
+                                by <a>{recipe.source?.name}</a>
+                            </span>
+                        )}
                     </li>
                 ))}
             </ul>
