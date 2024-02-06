@@ -7,7 +7,7 @@ export default function Index() {
         <main>
             <h2>Recipes</h2>
 
-            <ul>
+            <ol>
                 {allRecipes.map((recipe) => (
                     <li key={recipe.slug}>
                         <a href={`/recipe/${recipe.slug}`}>
@@ -28,7 +28,7 @@ export default function Index() {
                         )}
                     </li>
                 ))}
-            </ul>
+            </ol>
         </main>
     );
 }

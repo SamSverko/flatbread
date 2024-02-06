@@ -7,7 +7,7 @@ source:
 
 ## Ingredients
 
-### Homemade thick noodles
+### Homemade Thick Noodles
 
 -   2 medium yukon gold potatoes, peeled and quartered
 -   1.5 cups (250g) potato starch
@@ -15,13 +15,13 @@ source:
 -   3/4 cup (175mL) room temp water,
 -   2.5 qt (2.2L) water, plus more for boiling noodles
 
-#### Other noodle options
+#### Other Noodle Options
 
 -   Lo Mein Noodles
 -   Flat Rice Noodles
 -   Chow Mein Noodles
 
-### Chili garlic sauce 1
+### Chili Garlic Sauce Option 1
 
 -   4 cloves garlic
 -   2 green onion, finely chopped
@@ -35,7 +35,7 @@ source:
 -   2 teaspoon (10g) sesame seeds, lightly ground
 -   1/3 cup (75g) vegetable oil
 
-### Chili garlic sauce option 2
+### Chili Garlic Sauce Option 2
 
 -   1 tablespoons (18g) gochujang
 -   3 tablespoons (37g) sriracha
@@ -47,7 +47,7 @@ source:
 -   1 teaspoon (3g) finely ground sichuan peppercorns
 -   2.5 tablespoons water
 
-### Chili garlic sauce option 3
+### Chili Garlic Sauce Option 3
 
 -   1 cup (26g) korean chilies
 -   4 green onions
@@ -59,7 +59,7 @@ source:
 -   1/2 cup (105g) vegetable oil
 -   ½ cup (100g) white sugar
 
-### Garnish options
+### Garnish Options
 
 -   Toasted sesame seeds
 -   Green onion, thinly sliced
@@ -67,7 +67,7 @@ source:
 
 ## Directions
 
-### Homemade thick noodles
+### Homemade Thick Noodles
 
 1. Add water to a large sauce pot and bring it to a boil.
 1. Put the potatoes into the pot, and cook the potatoes until tender.
@@ -78,19 +78,19 @@ source:
 1. When the noodles begin to float, notice the change in color and texture. They will swell, so be sure to stir the water to keep them from sticking.
 1. Test a noodle, by tasting it, once it is clear/opaque. When the noodles have finished cooking, strain and toss in sauce.
 
-### Chili garlic sauce 1
+### Chili Garlic Sauce Option 1
 
 1. In a small sauce pot or sauté pan, heat vegetable oil until it is very hot.
 1. Combine all ingredients except oil in a large heat proof bowl.
 1. Once the oil is hot, around 300-350 Fahrenheit. Pour your hot oil into that bowl and mix.
     - Allow to sit for 5 minutes before tossing noodles.
 
-### Chili garlic sauce option 2
+### Chili Garlic Sauce Option 2
 
 1. In a large bowl, add all the the ingredients and mix until well combined
 1. Reserve sauce until you are ready to toss in your noodles.
 
-### Chili garlic sauce option 3
+### Chili Garlic Sauce Option 3
 
 1. In a medium sized sauce pot, combine all of ingredients, except oil, and bring it to a boil
 1. Reduce to a simmer, and place a cartouche, or lid over the pot. Cook for 10 minutes or until everything is soft.

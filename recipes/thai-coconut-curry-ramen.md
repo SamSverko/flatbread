@@ -17,7 +17,7 @@ source:
 -   1 (13.5-ounce) can coconut milk
 -   4 cups chicken stock
 
-### For the pork
+### For The Pork
 
 -   2 teaspoons toasted sesame oil
 -   1 pound ground pork
@@ -26,7 +26,7 @@ source:
 -   2 tablespoons fish sauce
 -   Kosher salt and freshly ground black pepper, to taste
 
-### For serving
+### For Serving
 
 -   4 soft boiled eggs, peeled and halved
 -   ½ cup fresh cilantro leaves
