@@ -50,6 +50,9 @@ export default function RootLayout({
                 />
                 <meta content="#000000" name="msapplication-TileColor" />
                 <meta content="#000" name="theme-color" />
+                <meta content="nositelinkssearchbox" name="google" />
+                <meta content="noindex,nofollow" name="googlebot" />
+                <meta content="noindex,nofollow" name="robots" />
             </head>
             <body className={inter.className}>
                 <h1>Flatbread</h1>
