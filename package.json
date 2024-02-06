@@ -1,6 +1,6 @@
 {
     "name": "flatbread",
-    "version": "2024.02.04_1",
+    "version": "2024.02.05_1",
     "description": "\"People who love to eat are always the best people. - Julia Child\" - Flatbread",
     "keywords": [
         "food",
@@ -31,15 +31,15 @@
     "dependencies": {
         "gray-matter": "^4.0.3",
         "next": "14.1.0",
-        "react": "^18",
-        "react-dom": "^18",
+        "react": "^18.2.0",
+        "react-dom": "^18.2.0",
         "remark": "^15.0.1",
         "remark-html": "^16.0.1"
     },
     "devDependencies": {
-        "@types/node": "^20",
-        "@types/react": "^18",
-        "@types/react-dom": "^18",
-        "typescript": "^5"
+        "@types/node": "^20.11.16",
+        "@types/react": "^18.2.54",
+        "@types/react-dom": "^18.2.18",
+        "typescript": "^5.3.3"
     }
 }
