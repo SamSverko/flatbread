@@ -37,7 +37,7 @@ source:
 
 Large saucepan
 
-## Make-Ahead and Storage
+## Make-ahead and storage
 
 Salad can be prepared three days in advance. Store in refrigerator.
 

@@ -27,7 +27,7 @@ source:
 -   1 bunch coriander
 -   1 kg aged basmati rice
 
-## Method
+## Directions
 
 1. Start by making the crispy onions by heating up the oil in a saucepan over a medium high heat and frying the sliced onions in batches until golden brown.
 1. Next, marinate your chicken by adding the chicken, 1/3 of the crispy onions, yoghurt, chilli powder, turmeric, garam masala, ginger, garlic, one cinnamon stick, 8 cardamon pods, 1 green chilli sliced thin, 1 tsp cumin seeds, 4 cloves and a tsp of salt in a large pot. Mix well and marinate for 4-24 hours.

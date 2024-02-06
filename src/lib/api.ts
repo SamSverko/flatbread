@@ -49,5 +49,7 @@ export function getRecipeBySlug(slug: string) {
 }
 
 export function getRecipeSlugs() {
-    return fs.readdirSync(recipesDirectory);
+    return fs
+        .readdirSync(recipesDirectory)
+        .filter((slug) => slug !== "TEMPLATE.md");
 }

@@ -10,11 +10,20 @@ export default function Index() {
             <ul>
                 {allRecipes.map((recipe) => (
                     <li key={recipe.slug}>
-                        <a href={`/recipe/${recipe.slug}`}>{recipe.title}</a>
+                        <a href={`/recipe/${recipe.slug}`}>
+                            <b>{recipe.title}</b>
+                        </a>
                         {recipe?.source && (
                             <span>
                                 {" "}
-                                by <a>{recipe.source?.name}</a>
+                                by{" "}
+                                <a
+                                    href={recipe?.source?.url}
+                                    rel="noopener noreferrer"
+                                    target="_blank"
+                                >
+                                    {recipe.source?.name}
+                                </a>
                             </span>
                         )}
                     </li>
