@@ -8,26 +8,38 @@ export default function Index() {
             <h2>Recipes</h2>
 
             <ol>
-                {allRecipes.map((recipe) => (
-                    <li key={recipe.slug}>
-                        <a href={`/recipe/${recipe.slug}`}>
-                            <b>{recipe.title}</b>
-                        </a>
-                        {recipe?.source && (
-                            <span>
-                                {" "}
-                                by{" "}
-                                <a
-                                    href={recipe?.source?.url}
-                                    rel="noopener noreferrer"
-                                    target="_blank"
-                                >
-                                    {recipe.source?.name}
-                                </a>
-                            </span>
-                        )}
-                    </li>
-                ))}
+                {allRecipes.map((recipe) => {
+                    let sourceName = "";
+
+                    if (recipe.source && recipe.source.name) {
+                        sourceName = recipe.source.name;
+                    }
+
+                    return (
+                        <li key={recipe.slug}>
+                            <a href={`/recipe/${recipe.slug}`}>
+                                <b>{recipe.title}</b>
+                            </a>
+                            {sourceName && (
+                                <span>
+                                    {" "}
+                                    by{" "}
+                                    {recipe.source?.url ? (
+                                        <a
+                                            href={recipe.source.url}
+                                            rel="noopener noreferrer"
+                                            target="_blank"
+                                        >
+                                            {sourceName}
+                                        </a>
+                                    ) : (
+                                        sourceName
+                                    )}
+                                </span>
+                            )}
+                        </li>
+                    );
+                })}
             </ol>
         </main>
     );
