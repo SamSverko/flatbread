@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { getAllRecipes, getRecipeBySlug } from "@/lib/api";
-import markdownToHtml from "@/lib/markdownToHtml";
+import { markdownToHtml } from "@/lib/utils";
 
 type Params = {
     params: {

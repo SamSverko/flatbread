@@ -23,17 +23,26 @@ export function getRecipeBySlug(slug: string) {
 
     const ajv = new Ajv();
 
+    /**
+     * Make sure stays in sync with type `RecipeFrontMatter`
+     */
     const frontMatterSchema = {
         additionalProperties: false,
         properties: {
-            title: { type: "string" },
             source: {
                 type: "object",
                 properties: {
-                    name: { type: "string" },
-                    url: { type: "string" },
+                    name: {
+                        type: "string",
+                    },
+                    url: {
+                        type: "string",
+                    },
                 },
                 additionalProperties: false,
+            },
+            title: {
+                type: "string",
             },
         },
         required: ["title"],
