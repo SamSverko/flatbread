@@ -42,15 +42,15 @@ npm run build
 
 ## Versioning
 
-The project version is updated whenever code is pushed to the `main` branch.
+The project version is updated whenever code is pushed to the `main` branch. However, the project version is not updated when recipe files are added, removed, or edited.
 
 This project uses [CalVer](https://calver.org/) as the project versioning convention.
 
 CalVer scheme: `YYYY.0M.0D_MICRO`:
 
--   `YYYY` - Full year (e.g. `2022` = 2022).
+-   `YYYY` - Full year (e.g. `2024` = 2024).
 -   `0M` - Zero-padded month (e.g. `09` = September).
--   `0D` - Zero-padded day (e.g. `02` = Second day of the month).
+-   `0D` - Zero-padded day (e.g. `04` = Fourth day of the month).
 -   `_MICRO` - Version released (e.g. `_2` = second release under the same `YYYY.0M.0D` version).
 
 ## Tech stack
