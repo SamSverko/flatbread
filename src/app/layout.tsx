@@ -7,7 +7,7 @@ export const metadata: Metadata = {
     description: "A website for recipes.",
     metadataBase: new URL("https://www.flatbread.app/"),
     openGraph: {
-        images: "/favicon/android-chrome-512x512.png",
+        images: "/android-chrome-512x512.png",
     },
     title: "Flatbread",
 };
@@ -21,31 +21,31 @@ export default function RootLayout({
         <html lang="en">
             <head>
                 <link
-                    href="/favicon/apple-touch-icon.png"
+                    href="/apple-touch-icon.png"
                     rel="apple-touch-icon"
                     sizes="180x180"
                 />
                 <link
-                    href="/favicon/favicon-16x16.png"
+                    href="/favicon-16x16.png"
                     rel="icon"
                     sizes="16x16"
                     type="image/png"
                 />
                 <link
-                    href="/favicon/favicon-32x32.png"
+                    href="/favicon-32x32.png"
                     rel="icon"
                     sizes="32x32"
                     type="image/png"
                 />
-                <link href="/favicon/favicon.ico" rel="shortcut icon" />
+                <link href="/favicon.ico" rel="shortcut icon" />
                 <link
                     color="#000000"
-                    href="/favicon/safari-pinned-tab.svg"
+                    href="/safari-pinned-tab.svg"
                     rel="mask-icon"
                 />
-                <link href="/favicon/site.webmanifest" rel="manifest" />
+                <link href="/site.webmanifest" rel="manifest" />
                 <meta
-                    content="/favicon/browserconfig.xml"
+                    content="/browserconfig.xml"
                     name="msapplication-config"
                 />
                 <meta content="#000000" name="msapplication-TileColor" />
