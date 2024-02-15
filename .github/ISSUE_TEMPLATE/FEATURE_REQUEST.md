@@ -1,7 +1,10 @@
 ---
 name: Feature request
 about: Suggest an idea for this project
-title: ""
+title: ''
+labels: enhancement
+assignees: SamSverko
+
 ---
 
 ## Is your feature request related to a problem?
