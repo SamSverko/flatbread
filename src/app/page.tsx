@@ -1,46 +1,45 @@
 import { getAllRecipes } from "@/lib/api";
+import { RecipeEdit, RecipeSource } from "@/components";
 
 export default function Index() {
     const allRecipes = getAllRecipes();
 
     return (
         <main>
-            <h2>Recipes</h2>
+            <h2>All recipes</h2>
 
-            <ol>
-                {allRecipes.map((recipe) => {
-                    let sourceName = "";
-
-                    if (recipe.source && recipe.source.name) {
-                        sourceName = recipe.source.name;
-                    }
-
-                    return (
-                        <li key={recipe.slug}>
-                            <a href={`/recipe/${recipe.slug}`}>
-                                <b>{recipe.title}</b>
-                            </a>
-                            {sourceName && (
-                                <span>
-                                    {" "}
-                                    by{" "}
-                                    {recipe.source?.url ? (
-                                        <a
-                                            href={recipe.source.url}
-                                            rel="noopener noreferrer"
-                                            target="_blank"
-                                        >
-                                            {sourceName}
-                                        </a>
-                                    ) : (
-                                        sourceName
-                                    )}
-                                </span>
-                            )}
-                        </li>
-                    );
-                })}
-            </ol>
+            <table>
+                <thead>
+                    <tr>
+                        <th align="left" scope="col">
+                            Name
+                        </th>
+                        <th align="left" scope="col">
+                            Source
+                        </th>
+                        <th align="center" scope="col">
+                            Edit
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {allRecipes.map((recipe) => (
+                        <tr key={recipe.slug}>
+                            <th align="left" scope="row">
+                                <a href={`/recipe/${recipe.slug}`}>
+                                    <b>{recipe.title}</b>
+                                </a>
+                            </th>
+                            <td align="left">
+                                <RecipeSource source={recipe.source} />
+                            </td>
+                            <td align="center">
+                                <RecipeEdit slug={recipe.slug} />
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </main>
     );
 }
