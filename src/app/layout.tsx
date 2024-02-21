@@ -13,13 +13,13 @@ export const metadata: Metadata = {
     appleWebApp: {
         title: "Flatbread",
         statusBarStyle: "default",
-        startupImage: [
-            "/apple-web-app-startup-image-black.png",
-            {
-                media: "screen and (device-width: 375px) and (device-height: 667px)", // iPhone 8
-                url: "/apple-web-app-startup-image-black.png",
-            },
-        ],
+        // startupImage: [
+        //     "/apple-web-app-startup-image-black.png",
+        //     {
+        //         media: "screen and (device-width: 375px) and (device-height: 667px)", // iPhone 8
+        //         url: "/apple-web-app-startup-image-black.png",
+        //     },
+        // ],
     },
     applicationName: WEBSITE_TITLE,
     description: WEBSITE_DESCRIPTION,
@@ -41,9 +41,9 @@ export const metadata: Metadata = {
         type: "website",
         url: WEBSITE_URL,
     },
-    other: {
-        "mobile-web-app-capable": "yes",
-    },
+    // other: {
+    //     "mobile-web-app-capable": "yes",
+    // },
     robots: {
         index: false,
         follow: false,
