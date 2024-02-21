@@ -15,7 +15,7 @@ export const metadata: Metadata = {
         statusBarStyle: "default",
         startupImage: [
             {
-                media: "(device-width: 375px) and (device-height: 667px)", // iPhone 8
+                media: "screen and (device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)", // iPhone 8
                 url: "/apple-web-app-startup-image.png",
             },
         ],
