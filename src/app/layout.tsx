@@ -12,8 +12,8 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
     appleWebApp: {
         title: "Flatbread",
-        statusBarStyle: "black-translucent",
-        startupImage: ["/apple-web-app-startup-image.png"],
+        statusBarStyle: "default",
+        startupImage: ["/apple-touch-startup-image.png"],
     },
     applicationName: WEBSITE_TITLE,
     description: WEBSITE_DESCRIPTION,
