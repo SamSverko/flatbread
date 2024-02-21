@@ -30,7 +30,7 @@ export function getRecipeBySlug(slug: string) {
         additionalProperties: false,
         properties: {
             source: {
-                type: "object",
+                additionalProperties: false,
                 properties: {
                     name: {
                         type: "string",
@@ -39,7 +39,7 @@ export function getRecipeBySlug(slug: string) {
                         type: "string",
                     },
                 },
-                additionalProperties: false,
+                type: "object",
             },
             title: {
                 type: "string",

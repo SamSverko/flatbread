@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { getAllRecipes, getRecipeBySlug } from "@/lib/api";
-import { RecipeEdit, RecipeSource } from "@/components";
+import { RecipeEdit, RecipeSource, ShareRecipe } from "@/components";
 import { markdownToHtml } from "@/lib/utils";
 
 type Params = {
@@ -23,8 +23,10 @@ export default async function Recipe({ params }: Params) {
         <article>
             <h1>{recipe.title}</h1>
             <p>
-                By <RecipeSource source={recipe.source} /> (
-                <RecipeEdit slug={recipe.slug} />)
+                By <RecipeSource source={recipe.source} />
+                {" | "}
+                <RecipeEdit slug={recipe.slug} />{" "}
+                <ShareRecipe slug={recipe.slug} />
             </p>
             <div dangerouslySetInnerHTML={{ __html: content }} />
         </article>

@@ -1,5 +1,5 @@
 import { getAllRecipes } from "@/lib/api";
-import { RecipeEdit, RecipeSource } from "@/components";
+import { RecipeEdit, RecipeSource, ShareRecipe } from "@/components";
 
 export default function Index() {
     const allRecipes = getAllRecipes();
@@ -18,7 +18,7 @@ export default function Index() {
                             Source
                         </th>
                         <th align="center" scope="col">
-                            Edit
+                            Actions
                         </th>
                     </tr>
                 </thead>
@@ -34,7 +34,8 @@ export default function Index() {
                                 <RecipeSource source={recipe.source} />
                             </td>
                             <td align="center">
-                                <RecipeEdit slug={recipe.slug} />
+                                <RecipeEdit slug={recipe.slug} />{" "}
+                                <ShareRecipe slug={recipe.slug} />
                             </td>
                         </tr>
                     ))}
