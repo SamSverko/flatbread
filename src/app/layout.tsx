@@ -13,13 +13,36 @@ export const metadata: Metadata = {
     appleWebApp: {
         title: "Flatbread",
         statusBarStyle: "default",
-        // startupImage: [
-        //     "/apple-web-app-startup-image-black.png",
-        //     {
-        //         media: "screen and (device-width: 375px) and (device-height: 667px)", // iPhone 8
-        //         url: "/apple-web-app-startup-image-black.png",
-        //     },
-        // ],
+        startupImage: [
+            {
+                media: "(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)",
+                url: "/apple-touch-startup-image-640x1136.png",
+            },
+            {
+                media: "(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)",
+                url: "/apple-touch-startup-image-750x1334.png",
+            },
+            {
+                media: "(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)",
+                url: "/apple-touch-startup-image-1242x2208.png",
+            },
+            {
+                media: "(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)",
+                url: "/apple-touch-startup-image-1125x2436.png",
+            },
+            {
+                media: "(min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait)",
+                url: "/apple-touch-startup-image-1536x2048.png",
+            },
+            {
+                media: "/apple-touch-startup-image-1668x2224.png",
+                url: "(min-device-width: 834px) and (max-device-width: 834px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait)",
+            },
+            {
+                media: "/apple-touch-startup-image-2048x2732.png",
+                url: "(min-device-width: 1024px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait)",
+            },
+        ],
     },
     applicationName: WEBSITE_TITLE,
     description: WEBSITE_DESCRIPTION,
@@ -41,9 +64,6 @@ export const metadata: Metadata = {
         type: "website",
         url: WEBSITE_URL,
     },
-    // other: {
-    //     "mobile-web-app-capable": "yes",
-    // },
     robots: {
         index: false,
         follow: false,
@@ -67,43 +87,6 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <head>
-                <link
-                    rel="apple-touch-startup-image"
-                    href="/apple-touch-startup-image-640x1136.png"
-                    media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
-                />
-                <link
-                    rel="apple-touch-startup-image"
-                    href="/apple-touch-startup-image-750x1334.png"
-                    media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)"
-                />
-                <link
-                    rel="apple-touch-startup-image"
-                    href="/apple-touch-startup-image-1242x2208.png"
-                    media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
-                />
-                <link
-                    rel="apple-touch-startup-image"
-                    href="/apple-touch-startup-image-1125x2436.png"
-                    media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)"
-                />
-                <link
-                    rel="apple-touch-startup-image"
-                    href="/apple-touch-startup-image-1536x2048.png"
-                    media="(min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait)"
-                />
-                <link
-                    rel="apple-touch-startup-image"
-                    href="/apple-touch-startup-image-1668x2224.png"
-                    media="(min-device-width: 834px) and (max-device-width: 834px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait)"
-                />
-                <link
-                    rel="apple-touch-startup-image"
-                    href="/apple-touch-startup-image-2048x2732.png"
-                    media="(min-device-width: 1024px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: portrait)"
-                />
-            </head>
             <body className={inter.className}>
                 <nav>
                     <a href="/">All recipes</a>
