@@ -14,10 +14,10 @@ export const metadata: Metadata = {
         title: "Flatbread",
         statusBarStyle: "default",
         startupImage: [
-            "/apple-web-app-startup-image.png",
+            "/apple-web-app-startup-image-black.png",
             {
                 media: "screen and (device-width: 375px) and (device-height: 667px)", // iPhone 8
-                url: "/apple-web-app-startup-image.png",
+                url: "/apple-web-app-startup-image-black.png",
             },
         ],
     },
