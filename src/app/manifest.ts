@@ -4,7 +4,7 @@ import { WEBSITE_DESCRIPTION, WEBSITE_TITLE } from "@/lib/constants";
 
 export default function manifest(): MetadataRoute.Manifest {
     return {
-        background_color: "#fff",
+        background_color: "#ffffff",
         description: WEBSITE_DESCRIPTION,
         display: "standalone",
         icons: [
@@ -28,9 +28,11 @@ export default function manifest(): MetadataRoute.Manifest {
             },
         ],
         name: WEBSITE_TITLE,
+        orientation: "portrait",
         prefer_related_applications: true,
+        scope: ".",
         short_name: WEBSITE_TITLE,
         start_url: "/",
-        theme_color: "#fff",
+        theme_color: "#ffffff",
     };
 }
