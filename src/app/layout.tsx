@@ -1,15 +1,54 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
+
+import {
+    WEBSITE_DESCRIPTION,
+    WEBSITE_TITLE,
+    WEBSITE_URL,
+} from "@/lib/constants";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-    description: "A website for recipes.",
-    metadataBase: new URL("https://www.flatbread.app/"),
+    appleWebApp: {
+        title: "Flatbread",
+        statusBarStyle: "black-translucent",
+        startupImage: ["/apple-web-app-startup-image.png"],
+    },
+    applicationName: WEBSITE_TITLE,
+    description: WEBSITE_DESCRIPTION,
+    creator: "Sam Sverko",
+    metadataBase: new URL(WEBSITE_URL),
     openGraph: {
-        images: "/android-chrome-512x512.png",
+        description: WEBSITE_DESCRIPTION,
+        images: [
+            {
+                alt: "Flatbread logo",
+                height: 1200,
+                url: "/opengraph-image.png",
+                width: 630,
+            },
+        ],
+        locale: "en_US",
+        siteName: WEBSITE_TITLE,
+        title: WEBSITE_TITLE,
+        type: "website",
+        url: WEBSITE_URL,
+    },
+    robots: {
+        index: false,
+        follow: false,
+        googleBot: {
+            index: false,
+            follow: false,
+        },
     },
     title: "Flatbread",
+};
+
+export const viewport: Viewport = {
+    colorScheme: "light",
+    themeColor: "white",
 };
 
 export default function RootLayout({
@@ -19,41 +58,6 @@ export default function RootLayout({
 }>) {
     return (
         <html lang="en">
-            <head>
-                <link
-                    href="/apple-touch-icon.png"
-                    rel="apple-touch-icon"
-                    sizes="180x180"
-                />
-                <link
-                    href="/favicon-16x16.png"
-                    rel="icon"
-                    sizes="16x16"
-                    type="image/png"
-                />
-                <link
-                    href="/favicon-32x32.png"
-                    rel="icon"
-                    sizes="32x32"
-                    type="image/png"
-                />
-                <link href="/favicon.ico" rel="shortcut icon" />
-                <link
-                    color="#000000"
-                    href="/safari-pinned-tab.svg"
-                    rel="mask-icon"
-                />
-                <link href="/site.webmanifest" rel="manifest" />
-                <meta
-                    content="/browserconfig.xml"
-                    name="msapplication-config"
-                />
-                <meta content="#000000" name="msapplication-TileColor" />
-                <meta content="#000" name="theme-color" />
-                <meta content="nositelinkssearchbox" name="google" />
-                <meta content="noindex,nofollow" name="googlebot" />
-                <meta content="noindex,nofollow" name="robots" />
-            </head>
             <body className={inter.className}>
                 <nav>
                     <a href="/">All recipes</a>
