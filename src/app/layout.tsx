@@ -40,6 +40,9 @@ export const metadata: Metadata = {
         type: "website",
         url: WEBSITE_URL,
     },
+    other: {
+        "mobile-web-app-capable": "yes",
+    },
     robots: {
         index: false,
         follow: false,
