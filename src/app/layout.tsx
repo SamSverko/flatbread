@@ -13,7 +13,12 @@ export const metadata: Metadata = {
     appleWebApp: {
         title: "Flatbread",
         statusBarStyle: "default",
-        startupImage: ["/apple-touch-startup-image.png"],
+        startupImage: [
+            {
+                media: "(device-width: 375px) and (device-height: 667px)", // iPhone 8
+                url: "/apple-web-app-startup-image.png",
+            },
+        ],
     },
     applicationName: WEBSITE_TITLE,
     description: WEBSITE_DESCRIPTION,
