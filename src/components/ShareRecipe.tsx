@@ -1,5 +1,7 @@
 "use client";
 
+import { Link as LinkIcon } from "@mui/icons-material";
+import { IconButton, Snackbar } from "@mui/material";
 import { useState } from "react";
 
 type ShareRecipeProps = {
@@ -7,39 +9,44 @@ type ShareRecipeProps = {
 };
 
 export default function ShareRecipe({ slug }: ShareRecipeProps) {
-    const [buttonText, setButtonText] = useState("🔗");
-    const [isDisabled, setIsDisabled] = useState(false);
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState("");
 
     function handleClick() {
-        setIsDisabled(true);
-        const url = `${window.location.origin}/recipe/${slug}`;
-
-        navigator.clipboard.writeText(url).then(
-            () => {
-                setButtonText("✔️");
-
-                window.setTimeout(() => {
-                    setButtonText("🔗");
-                    setIsDisabled(false);
-                }, 3000);
-            },
-            (error) => {
-                setButtonText("❌");
-                setIsDisabled(false);
-
-                console.error(error);
-            }
-        );
+        navigator.clipboard
+            .writeText(`${window.location.origin}/recipe/${slug}`)
+            .then(
+                () => {
+                    setSnackbarMessage("Link copied to clipboard.");
+                    setOpenSnackbar(true);
+                },
+                (error) => {
+                    setSnackbarMessage(
+                        "Error copying link to clipboard. Please try again."
+                    );
+                    setOpenSnackbar(false);
+                    console.error(error);
+                }
+            );
     }
 
     return (
-        <button
-            aria-label="Copy link to clipboard"
-            disabled={isDisabled}
-            onClick={handleClick}
-            title="Copy link to clipboard"
-        >
-            {buttonText}
-        </button>
+        <>
+            <IconButton
+                aria-label="Copy link to clipboard"
+                onClick={handleClick}
+                size="small"
+                title="Copy link to clipboard"
+            >
+                <LinkIcon />
+            </IconButton>
+            <Snackbar
+                anchorOrigin={{ horizontal: "center", vertical: "top" }}
+                autoHideDuration={3000}
+                onClose={() => setOpenSnackbar(false)}
+                open={openSnackbar}
+                message={snackbarMessage}
+            />
+        </>
     );
 }

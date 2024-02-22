@@ -1,3 +1,15 @@
+import {
+    Box,
+    Link as MUILink,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+} from "@mui/material";
+import Link from "next/link";
+
 import { getAllRecipes } from "@/lib/api";
 import { RecipeEdit, RecipeSource, ShareRecipe } from "@/components";
 
@@ -5,42 +17,44 @@ export default function Index() {
     const allRecipes = getAllRecipes();
 
     return (
-        <main>
-            <h2>All recipes</h2>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th align="left" scope="col">
-                            Name
-                        </th>
-                        <th align="left" scope="col">
-                            Source
-                        </th>
-                        <th align="center" scope="col">
-                            Actions
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
+        <TableContainer
+            sx={{
+                height: "100%",
+            }}
+        >
+            <Table size="small" stickyHeader={true}>
+                <TableHead>
+                    <TableRow>
+                        <TableCell align="left">Name</TableCell>
+                        <TableCell align="left">Source</TableCell>
+                        <TableCell align="left">Actions</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
                     {allRecipes.map((recipe) => (
-                        <tr key={recipe.slug}>
-                            <th align="left" scope="row">
-                                <a href={`/recipe/${recipe.slug}`}>
-                                    <b>{recipe.title}</b>
-                                </a>
-                            </th>
-                            <td align="left">
+                        <TableRow key={recipe.slug}>
+                            <TableCell align="left">
+                                <Link
+                                    href={`/recipe/${recipe.slug}`}
+                                    legacyBehavior
+                                    passHref
+                                >
+                                    <MUILink>{recipe.title}</MUILink>
+                                </Link>
+                            </TableCell>
+                            <TableCell align="left">
                                 <RecipeSource source={recipe.source} />
-                            </td>
-                            <td align="center">
-                                <RecipeEdit slug={recipe.slug} />{" "}
-                                <ShareRecipe slug={recipe.slug} />
-                            </td>
-                        </tr>
+                            </TableCell>
+                            <TableCell align="center">
+                                <Box alignItems="center" display="flex" gap={1}>
+                                    <RecipeEdit slug={recipe.slug} />
+                                    <ShareRecipe slug={recipe.slug} />
+                                </Box>
+                            </TableCell>
+                        </TableRow>
                     ))}
-                </tbody>
-            </table>
-        </main>
+                </TableBody>
+            </Table>
+        </TableContainer>
     );
 }

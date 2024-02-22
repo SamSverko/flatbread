@@ -1,3 +1,6 @@
+import { Link as MUILink, Typography } from "@mui/material";
+import Link from "next/link";
+
 import type { RecipeFrontMatter } from "@/lib/types";
 
 type RecipeSourceProps = Pick<RecipeFrontMatter, "source">;
@@ -13,11 +16,17 @@ export default function RecipeSource({ source }: RecipeSourceProps) {
 
     if (source?.url) {
         return (
-            <a href={source.url} rel="noopener noreferrer" target="_blank">
-                {sourceName}
-            </a>
+            <Link href={source.url} legacyBehavior passHref>
+                <MUILink rel="noopener noreferrer" target="_blank">
+                    {sourceName}
+                </MUILink>
+            </Link>
         );
     } else {
-        return <span>{sourceName}</span>;
+        return (
+            <Typography component="span" variant="body1">
+                {sourceName}
+            </Typography>
+        );
     }
 }

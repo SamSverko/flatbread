@@ -1,13 +1,21 @@
-import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Box, CssBaseline } from "@mui/material";
+import { type Metadata, type Viewport } from "next";
+import { Roboto } from "next/font/google";
 
+import { AppBar, BottomNavigation } from "@/components";
 import {
+    APP_BAR_HEIGHT,
+    BOTTOM_NAVIGATION_HEIGHT,
     WEBSITE_DESCRIPTION,
     WEBSITE_TITLE,
     WEBSITE_URL,
 } from "@/lib/constants";
 
-const inter = Inter({ subsets: ["latin"] });
+const font = Roboto({
+    display: "swap",
+    subsets: ["latin"],
+    weight: ["300", "400", "500", "700"],
+});
 
 export const metadata: Metadata = {
     appleWebApp: {
@@ -86,13 +94,19 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en">
-            <body className={inter.className}>
-                <nav>
-                    <a href="/">All recipes</a>
-                </nav>
-                <hr />
-                <div>{children}</div>
+        <html className={font.className} lang="en">
+            <body>
+                <CssBaseline />
+                <AppBar />
+                <Box
+                    sx={{
+                        height: `calc(100vh - ${APP_BAR_HEIGHT}px - ${BOTTOM_NAVIGATION_HEIGHT}px)`,
+                        overflow: "scroll",
+                    }}
+                >
+                    {children}
+                </Box>
+                <BottomNavigation />
             </body>
         </html>
     );

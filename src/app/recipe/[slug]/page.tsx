@@ -1,16 +1,17 @@
+import { Box, Typography } from "@mui/material";
 import { notFound } from "next/navigation";
 
 import { getAllRecipes, getRecipeBySlug } from "@/lib/api";
 import { RecipeEdit, RecipeSource, ShareRecipe } from "@/components";
 import { markdownToHtml } from "@/lib/utils";
 
-type Params = {
+type RecipeProps = {
     params: {
         slug: string;
     };
 };
 
-export default async function Recipe({ params }: Params) {
+export default async function Recipe({ params }: RecipeProps) {
     const recipe = getRecipeBySlug(params.slug);
 
     if (!recipe) {
@@ -20,16 +21,30 @@ export default async function Recipe({ params }: Params) {
     const content = await markdownToHtml(recipe.content || "");
 
     return (
-        <article>
-            <h1>{recipe.title}</h1>
-            <p>
-                By <RecipeSource source={recipe.source} />
-                {" | "}
-                <RecipeEdit slug={recipe.slug} />{" "}
-                <ShareRecipe slug={recipe.slug} />
-            </p>
-            <div dangerouslySetInnerHTML={{ __html: content }} />
-        </article>
+        <Box sx={{ p: 2 }}>
+            <article>
+                <Box display="flex" flexDirection="column" gap={2}>
+                    <Typography component="h1" variant="h5">
+                        {recipe.title}
+                    </Typography>
+                    <Box
+                        alignItems="center"
+                        display="flex"
+                        gap={1}
+                        justifyContent="space-between"
+                    >
+                        <Typography component="span" variant="body1">
+                            By <RecipeSource source={recipe.source} />
+                        </Typography>
+                        <Box alignItems="center" display="flex" gap={1}>
+                            <RecipeEdit slug={recipe.slug} />
+                            <ShareRecipe slug={recipe.slug} />
+                        </Box>
+                    </Box>
+                </Box>
+                <div dangerouslySetInnerHTML={{ __html: content }} />
+            </article>
+        </Box>
     );
 }
 
