@@ -24,7 +24,7 @@ export default function RecipeSource({ source }: RecipeSourceProps) {
         );
     } else {
         return (
-            <Typography component="span" variant="body1">
+            <Typography component="span" variant="body2">
                 {sourceName}
             </Typography>
         );
