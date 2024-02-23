@@ -20,7 +20,7 @@ const font = Roboto({
 export const metadata: Metadata = {
     appleWebApp: {
         title: "Flatbread",
-        statusBarStyle: "default",
+        statusBarStyle: "black-translucent",
         startupImage: [
             {
                 media: "(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)",
@@ -95,11 +95,12 @@ export default function RootLayout({
 }>) {
     return (
         <html className={font.className} lang="en">
-            <body>
+            <body style={{ backgroundColor: "#1976d2" }}>
                 <CssBaseline />
                 <AppBar />
                 <Box
                     sx={{
+                        backgroundColor: "white",
                         height: `calc(100vh - ${APP_BAR_HEIGHT}px - ${BOTTOM_NAVIGATION_HEIGHT}px)`,
                         overflow: "scroll",
                     }}
