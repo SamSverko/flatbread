@@ -17,7 +17,7 @@ import {
     Toolbar,
 } from "@mui/material";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useRef, useState } from "react";
 
 import { LOGO_COLOR } from "@/lib/constants";
@@ -43,7 +43,6 @@ const Search = styled(Box)(({ theme }) => ({
 
 export default function AppBar() {
     const pathname = usePathname();
-    const router = useRouter();
 
     const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const searchInputRef = useRef<HTMLInputElement>(null);
@@ -113,7 +112,10 @@ export default function AppBar() {
                                 <InputBase
                                     fullWidth
                                     id="search-recipes"
-                                    inputProps={{ ref: searchInputRef }}
+                                    inputProps={{
+                                        enterKeyHint: "search",
+                                    }}
+                                    inputRef={searchInputRef}
                                     onChange={handleSearchInput}
                                     size="small"
                                     type="search"
