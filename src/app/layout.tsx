@@ -2,11 +2,10 @@ import { Box, CssBaseline } from "@mui/material";
 import { type Metadata, type Viewport } from "next";
 import { Roboto } from "next/font/google";
 
-import { AppBar, BottomNavigation } from "@/components";
+import { AppBar } from "@/components";
 import {
     APP_BAR_HEIGHT,
     APP_BAR_HEIGHT_LG,
-    BOTTOM_NAVIGATION_HEIGHT,
     WEBSITE_DESCRIPTION,
     WEBSITE_TITLE,
     WEBSITE_URL,
@@ -21,7 +20,7 @@ const font = Roboto({
 export const metadata: Metadata = {
     appleWebApp: {
         title: "Flatbread",
-        statusBarStyle: "black-translucent",
+        statusBarStyle: "default",
         startupImage: [
             {
                 media: "(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)",
@@ -96,22 +95,20 @@ export default function RootLayout({
 }>) {
     return (
         <html className={font.className} lang="en">
-            <body style={{ backgroundColor: "#1976d2" }}>
+            <body>
                 <CssBaseline />
-                <AppBar />
                 <Box
                     sx={{
-                        backgroundColor: "white",
-                        height: `calc(100vh - ${APP_BAR_HEIGHT}px - ${BOTTOM_NAVIGATION_HEIGHT}px)`,
+                        height: `calc(100vh - ${APP_BAR_HEIGHT}px)`,
                         overflow: "scroll",
                         "@media (min-width: 600px)": {
-                            height: `calc(100vh - ${APP_BAR_HEIGHT_LG}px - ${BOTTOM_NAVIGATION_HEIGHT}px)`,
+                            height: `calc(100vh - ${APP_BAR_HEIGHT_LG}px)`,
                         },
                     }}
                 >
                     {children}
                 </Box>
-                <BottomNavigation />
+                <AppBar />
             </body>
         </html>
     );
