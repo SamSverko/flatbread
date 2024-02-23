@@ -27,7 +27,7 @@ export default function Index() {
                     <TableRow>
                         <TableCell align="left">Name</TableCell>
                         <TableCell align="left">Source</TableCell>
-                        <TableCell align="left">Actions</TableCell>
+                        <TableCell align="center">Actions</TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -46,7 +46,12 @@ export default function Index() {
                                 <RecipeSource source={recipe.source} />
                             </TableCell>
                             <TableCell align="center">
-                                <Box alignItems="center" display="flex" gap={1}>
+                                <Box
+                                    alignItems="center"
+                                    display="flex"
+                                    gap={1}
+                                    justifyContent="center"
+                                >
                                     <RecipeEdit slug={recipe.slug} />
                                     <ShareRecipe slug={recipe.slug} />
                                 </Box>

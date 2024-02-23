@@ -5,6 +5,7 @@ import { Roboto } from "next/font/google";
 import { AppBar, BottomNavigation } from "@/components";
 import {
     APP_BAR_HEIGHT,
+    APP_BAR_HEIGHT_LG,
     BOTTOM_NAVIGATION_HEIGHT,
     WEBSITE_DESCRIPTION,
     WEBSITE_TITLE,
@@ -103,6 +104,9 @@ export default function RootLayout({
                         backgroundColor: "white",
                         height: `calc(100vh - ${APP_BAR_HEIGHT}px - ${BOTTOM_NAVIGATION_HEIGHT}px)`,
                         overflow: "scroll",
+                        "@media (min-width: 600px)": {
+                            height: `calc(100vh - ${APP_BAR_HEIGHT_LG}px - ${BOTTOM_NAVIGATION_HEIGHT}px)`,
+                        },
                     }}
                 >
                     {children}

@@ -1,4 +1,5 @@
 export const APP_BAR_HEIGHT = 56;
+export const APP_BAR_HEIGHT_LG = 64;
 export const BOTTOM_NAVIGATION_HEIGHT = 56;
 export const WEBSITE_DESCRIPTION = "A website for recipes.";
 export const WEBSITE_TITLE = "Flatbread";
