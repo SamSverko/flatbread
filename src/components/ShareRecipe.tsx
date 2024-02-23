@@ -42,7 +42,7 @@ export default function ShareRecipe({ slug }: ShareRecipeProps) {
             </IconButton>
             <Snackbar
                 anchorOrigin={{ horizontal: "center", vertical: "top" }}
-                autoHideDuration={3000}
+                autoHideDuration={2000}
                 onClose={() => setOpenSnackbar(false)}
                 open={openSnackbar}
                 message={snackbarMessage}
