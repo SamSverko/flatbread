@@ -27,7 +27,7 @@ type RecipeTableProps = {
     recipes: Recipe[];
 };
 
-export default function RecipeTable({ recipes }: RecipeTableProps) {
+export default function TableOfRecipes({ recipes }: RecipeTableProps) {
     const searchParams = useSearchParams();
     const searchTerm = searchParams.get("searchTerm");
 
@@ -96,7 +96,10 @@ export default function RecipeTable({ recipes }: RecipeTableProps) {
                                         justifyContent="center"
                                     >
                                         <RecipeEdit slug={recipe.slug} />
-                                        <ShareRecipe slug={recipe.slug} />
+                                        <ShareRecipe
+                                            slug={recipe.slug}
+                                            title={recipe.title}
+                                        />
                                     </Box>
                                 </TableCell>
                             </TableRow>

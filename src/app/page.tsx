@@ -1,14 +1,14 @@
 import { Suspense } from "react";
 
 import { getAllRecipes } from "@/lib/api";
-import { RecipeTable } from "@/components";
+import { TableOfRecipes } from "@/components";
 
 export default function Index() {
     const allRecipes = getAllRecipes();
 
     return (
         <Suspense>
-            <RecipeTable recipes={allRecipes} />
+            <TableOfRecipes recipes={allRecipes} />
         </Suspense>
     );
 }

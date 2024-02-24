@@ -3,8 +3,8 @@ import HighlightedText from "./HighlightedText";
 import MarkdownHTML from "./MarkdownHTML";
 import RecipeEdit from "./RecipeEdit";
 import RecipeSource from "./RecipeSource";
-import RecipeTable from "./RecipeTable";
 import ShareRecipe from "./ShareRecipe";
+import TableOfRecipes from "./TableOfRecipes";
 
 export {
     AppBar,
@@ -12,6 +12,6 @@ export {
     MarkdownHTML,
     RecipeEdit,
     RecipeSource,
-    RecipeTable,
     ShareRecipe,
+    TableOfRecipes,
 };

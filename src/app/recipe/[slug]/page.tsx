@@ -44,7 +44,7 @@ export default async function Recipe({ params }: RecipeProps) {
                 </Typography>
                 <Box alignItems="center" display="flex" gap={1}>
                     <RecipeEdit slug={recipe.slug} />
-                    <ShareRecipe slug={recipe.slug} />
+                    <ShareRecipe slug={recipe.slug} title={recipe.title} />
                 </Box>
             </Box>
             <MarkdownHTML markdown={recipe.content} />

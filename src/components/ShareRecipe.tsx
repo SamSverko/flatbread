@@ -1,23 +1,31 @@
 "use client";
 
-import { Link as LinkIcon } from "@mui/icons-material";
+import { Share } from "@mui/icons-material";
 import { IconButton, Snackbar } from "@mui/material";
 import { useState } from "react";
 
 type ShareRecipeProps = {
     slug: string;
+    title: string;
 };
 
-export default function ShareRecipe({ slug }: ShareRecipeProps) {
+export default function ShareRecipe({ slug, title }: ShareRecipeProps) {
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
 
     function handleClick() {
-        navigator.clipboard
-            .writeText(`${window.location.origin}/recipe/${slug}`)
-            .then(
+        const url = `${window.location.origin}/recipe/${slug}`;
+
+        if (navigator.share) {
+            navigator.share({
+                text: `Recipe: ${title}`,
+                title: `Recipe: ${title}`,
+                url: url,
+            });
+        } else if (navigator.clipboard) {
+            navigator.clipboard.writeText(url).then(
                 () => {
-                    setSnackbarMessage("Link copied to clipboard.");
+                    setSnackbarMessage("Recipe link copied to clipboard.");
                     setOpenSnackbar(true);
                 },
                 (error) => {
@@ -28,17 +36,23 @@ export default function ShareRecipe({ slug }: ShareRecipeProps) {
                     console.error(error);
                 }
             );
+        } else {
+            setSnackbarMessage(
+                "Unable to share or copy link to clipboard. What device are you using??"
+            );
+            setOpenSnackbar(true);
+        }
     }
 
     return (
         <>
             <IconButton
-                aria-label="Copy link to clipboard"
+                aria-label="Share recipe"
                 onClick={handleClick}
                 size="small"
-                title="Copy link to clipboard"
+                title="Share recipe"
             >
-                <LinkIcon />
+                <Share />
             </IconButton>
             <Snackbar
                 anchorOrigin={{ horizontal: "center", vertical: "top" }}
