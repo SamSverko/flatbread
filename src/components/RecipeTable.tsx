@@ -15,7 +15,12 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-import { RecipeEdit, RecipeSource, ShareRecipe } from "@/components";
+import {
+    HighlightedText,
+    RecipeEdit,
+    RecipeSource,
+    ShareRecipe,
+} from "@/components";
 import { Recipe } from "@/lib/types";
 
 type RecipeTableProps = {
@@ -29,8 +34,15 @@ export default function RecipeTable({ recipes }: RecipeTableProps) {
     const [openSnackbar, setOpenSnackbar] = useState(false);
 
     const filteredRecipes = searchTerm
-        ? recipes.filter((recipe) =>
-              recipe.title.toLowerCase().includes(searchTerm.toLowerCase())
+        ? recipes.filter(
+              (recipe) =>
+                  recipe.title
+                      .toLowerCase()
+                      .includes(searchTerm.toLowerCase()) ||
+                  (recipe.source?.name &&
+                      recipe.source.name
+                          .toLowerCase()
+                          .includes(searchTerm.toLowerCase()))
           )
         : recipes;
 
@@ -62,11 +74,19 @@ export default function RecipeTable({ recipes }: RecipeTableProps) {
                                         legacyBehavior
                                         passHref
                                     >
-                                        <MUILink>{recipe.title}</MUILink>
+                                        <MUILink>
+                                            <HighlightedText
+                                                searchTerm={searchTerm}
+                                                text={recipe.title}
+                                            />
+                                        </MUILink>
                                     </Link>
                                 </TableCell>
                                 <TableCell align="left">
-                                    <RecipeSource source={recipe.source} />
+                                    <RecipeSource
+                                        searchTerm={searchTerm}
+                                        source={recipe.source}
+                                    />
                                 </TableCell>
                                 <TableCell align="center">
                                     <Box
