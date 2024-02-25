@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import {
     HighlightedText,
@@ -32,6 +32,8 @@ type RecipeTableProps = {
 export default function TableOfRecipes({ recipes }: RecipeTableProps) {
     const searchParams = useSearchParams();
     const searchTerm = searchParams.get("searchTerm");
+
+    const tableContainerRef = useRef<HTMLTableSectionElement>(null);
 
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [page, setPage] = useState(0);
@@ -65,15 +67,23 @@ export default function TableOfRecipes({ recipes }: RecipeTableProps) {
         setPage(0);
     };
 
+    const handleTableHeadClick = () => {
+        if (tableContainerRef.current) {
+            tableContainerRef.current.scrollTop = 0;
+        }
+    };
+
     return (
         <Box sx={{ height: "100%", overflow: "hidden", width: "100%" }}>
             <TableContainer
+                ref={tableContainerRef}
                 sx={{
                     height: `calc(100% - ${TABLE_PAGINATION_HEIGHT}px)`,
+                    scrollBehavior: "smooth",
                 }}
             >
                 <Table size="small" stickyHeader={true}>
-                    <TableHead>
+                    <TableHead onClick={handleTableHeadClick}>
                         <TableRow>
                             <TableCell align="left">Name</TableCell>
                             <TableCell align="left">Source</TableCell>
