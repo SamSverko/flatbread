@@ -38,7 +38,7 @@ export default function TableOfRecipes({ recipes }: RecipeTableProps) {
     const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(recipes);
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [rowsPerPage, setRowsPerPage] = useState(25);
 
     useEffect(() => {
         const newFilteredRecipes = searchTerm
@@ -150,7 +150,7 @@ export default function TableOfRecipes({ recipes }: RecipeTableProps) {
                 onRowsPerPageChange={handleChangeRowsPerPage}
                 page={page}
                 rowsPerPage={rowsPerPage}
-                rowsPerPageOptions={[10, 25, 100]}
+                rowsPerPageOptions={[25, 50, 100]}
                 sx={{ ".MuiToolbar-root": { p: 0 } }}
             />
             <Snackbar
