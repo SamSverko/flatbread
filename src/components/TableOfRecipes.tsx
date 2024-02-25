@@ -22,7 +22,11 @@ import {
     RecipeSource,
     ShareRecipe,
 } from "@/components";
-import { TABLE_PAGINATION_HEIGHT } from "@/lib/constants";
+import {
+    APP_BAR_HEIGHT,
+    TABLE_PAGINATION_HEIGHT,
+    APP_BAR_HEIGHT_LG,
+} from "@/lib/constants";
 import { Recipe } from "@/lib/types";
 
 type RecipeTableProps = {
@@ -63,6 +67,11 @@ export default function TableOfRecipes({ recipes }: RecipeTableProps) {
     }, [filteredRecipes]);
 
     const handleChangePage = (event: unknown, newPage: number) => {
+        if (tableContainerRef.current) {
+            tableContainerRef.current.style.scrollBehavior = "auto";
+            tableContainerRef.current.scrollTop = 0;
+        }
+
         setPage(newPage);
     };
 
@@ -75,6 +84,7 @@ export default function TableOfRecipes({ recipes }: RecipeTableProps) {
 
     const handleTableHeadClick = () => {
         if (tableContainerRef.current) {
+            tableContainerRef.current.style.scrollBehavior = "smooth";
             tableContainerRef.current.scrollTop = 0;
         }
     };
@@ -84,8 +94,10 @@ export default function TableOfRecipes({ recipes }: RecipeTableProps) {
             <TableContainer
                 ref={tableContainerRef}
                 sx={{
-                    height: `calc(100% - ${TABLE_PAGINATION_HEIGHT}px)`,
-                    scrollBehavior: "smooth",
+                    height: `calc(100dvh - ${TABLE_PAGINATION_HEIGHT}px - ${APP_BAR_HEIGHT}px)`,
+                    "@media (min-width: 600px)": {
+                        height: `calc(100dvh - ${TABLE_PAGINATION_HEIGHT}px - ${APP_BAR_HEIGHT_LG}px)`,
+                    },
                 }}
             >
                 <Table size="small" stickyHeader={true}>

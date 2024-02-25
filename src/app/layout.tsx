@@ -101,10 +101,9 @@ export default function RootLayout({
                 <CssBaseline />
                 <Box
                     sx={{
-                        height: `calc(100dvh - ${APP_BAR_HEIGHT}px)`,
-                        overflow: "scroll",
+                        pb: `${APP_BAR_HEIGHT}px`,
                         "@media (min-width: 600px)": {
-                            height: `calc(100dvh - ${APP_BAR_HEIGHT_LG}px)`,
+                            pb: `${APP_BAR_HEIGHT_LG}px`,
                         },
                     }}
                 >
