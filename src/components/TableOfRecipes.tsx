@@ -35,22 +35,28 @@ export default function TableOfRecipes({ recipes }: RecipeTableProps) {
 
     const tableContainerRef = useRef<HTMLTableSectionElement>(null);
 
+    const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>(recipes);
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
-    const filteredRecipes = searchTerm
-        ? recipes.filter(
-              (recipe) =>
-                  recipe.title
-                      .toLowerCase()
-                      .includes(searchTerm.toLowerCase()) ||
-                  (recipe.source?.name &&
-                      recipe.source.name
+    useEffect(() => {
+        const newFilteredRecipes = searchTerm
+            ? recipes.filter(
+                  (recipe) =>
+                      recipe.title
                           .toLowerCase()
-                          .includes(searchTerm.toLowerCase()))
-          )
-        : recipes;
+                          .includes(searchTerm.toLowerCase()) ||
+                      (recipe.source?.name &&
+                          recipe.source.name
+                              .toLowerCase()
+                              .includes(searchTerm.toLowerCase()))
+              )
+            : recipes;
+
+        setFilteredRecipes(newFilteredRecipes);
+        setPage(0);
+    }, [recipes, searchTerm]);
 
     useEffect(() => {
         setOpenSnackbar(filteredRecipes.length === 0);
