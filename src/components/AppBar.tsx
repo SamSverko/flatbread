@@ -94,12 +94,10 @@ export default function AppBar() {
                 sx={{ top: "auto", bottom: 0 }}
             >
                 <Toolbar>
-                    <IconButton
-                        aria-label="Flatbread logo"
-                        sx={{ color: LOGO_COLOR }}
-                    >
-                        <HorizontalRule />
-                    </IconButton>
+                    <HorizontalRule
+                        sx={{ color: LOGO_COLOR, m: 1 }}
+                        titleAccess="Flatbread logo"
+                    />
                     <Box
                         alignItems="center"
                         display="flex"

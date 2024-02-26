@@ -1,6 +1,6 @@
-import { Box, CssBaseline } from "@mui/material";
+import { Box, CssBaseline, ThemeProvider } from "@mui/material";
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import { type Metadata, type Viewport } from "next";
-import { Roboto } from "next/font/google";
 
 import { AppBar } from "@/components";
 import {
@@ -10,12 +10,7 @@ import {
     WEBSITE_TITLE,
     WEBSITE_URL,
 } from "@/lib/constants";
-
-const font = Roboto({
-    display: "swap",
-    subsets: ["latin"],
-    weight: ["300", "400", "500", "700"],
-});
+import theme from "@/lib/theme";
 
 export const metadata: Metadata = {
     appleWebApp: {
@@ -96,20 +91,24 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html className={font.className} lang="en">
+        <html lang="en">
             <body>
-                <CssBaseline />
-                <Box
-                    sx={{
-                        pb: `${APP_BAR_HEIGHT}px`,
-                        "@media (min-width: 600px)": {
-                            pb: `${APP_BAR_HEIGHT_LG}px`,
-                        },
-                    }}
-                >
-                    {children}
-                </Box>
-                <AppBar />
+                <AppRouterCacheProvider>
+                    <ThemeProvider theme={theme}>
+                        <CssBaseline />
+                        <Box
+                            sx={{
+                                pb: `${APP_BAR_HEIGHT}px`,
+                                "@media (min-width: 600px)": {
+                                    pb: `${APP_BAR_HEIGHT_LG}px`,
+                                },
+                            }}
+                        >
+                            {children}
+                        </Box>
+                        <AppBar />
+                    </ThemeProvider>
+                </AppRouterCacheProvider>
             </body>
         </html>
     );
