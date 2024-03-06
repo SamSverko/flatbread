@@ -11,6 +11,7 @@ export function getAllRecipes(): Recipe[] {
     const slugs = getRecipeSlugs();
     const recipes = slugs
         .map((slug) => getRecipeBySlug(slug))
+        .filter((recipe): recipe is Recipe => recipe !== null)
         .sort((recipe1, recipe2) => (recipe1.title > recipe2.title ? 1 : -1)); // ascending order
     return recipes;
 }
@@ -18,7 +19,12 @@ export function getAllRecipes(): Recipe[] {
 export function getRecipeBySlug(slug: string) {
     const realSlug = slug.replace(/\.md$/, "");
     const fullPath = join(recipesDirectory, `${realSlug}.md`);
-    const fileContents = fs.readFileSync(fullPath, "utf8");
+    let fileContents;
+    try {
+        fileContents = fs.readFileSync(fullPath, "utf8");
+    } catch {
+        return null;
+    }
     const { content, data } = matter(fileContents);
 
     const ajv = new Ajv();
@@ -52,7 +58,7 @@ export function getRecipeBySlug(slug: string) {
     const validate = ajv.compile(frontMatterSchema);
     const valid = validate(data);
 
-    if (!valid) throw new Error(JSON.stringify(validate.errors));
+    if (!valid) return null;
 
     return { content, slug: realSlug, ...data } as Recipe;
 }

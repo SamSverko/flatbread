@@ -1,4 +1,5 @@
 import { Box, Typography } from "@mui/material";
+import { type Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { getAllRecipes, getRecipeBySlug } from "@/lib/api";
@@ -8,12 +9,29 @@ import {
     ShareRecipe,
     MarkdownHTML,
 } from "@/components";
+import { WEBSITE_TITLE } from "@/lib/constants";
 
 type RecipeProps = {
     params: {
         slug: string;
     };
 };
+
+export async function generateMetadata({
+    params,
+}: RecipeProps): Promise<Metadata> {
+    const recipe = getRecipeBySlug(params.slug);
+
+    let title = `${WEBSITE_TITLE}`;
+
+    if (recipe) {
+        title += ` | Recipe: ${recipe.title}`;
+    }
+
+    return {
+        title: title,
+    };
+}
 
 export default async function Recipe({ params }: RecipeProps) {
     const recipe = getRecipeBySlug(params.slug);
