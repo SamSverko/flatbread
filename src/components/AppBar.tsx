@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { LOGO_COLOR } from "@/lib/constants";
 
@@ -85,6 +85,10 @@ export default function AppBar() {
             debounceTimerRef.current = null;
         }, 500);
     };
+
+    useEffect(() => {
+        clearSearch();
+    }, [pathname]);
 
     return (
         <>
