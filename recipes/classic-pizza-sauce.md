@@ -11,7 +11,7 @@ source:
 - 2 garlic cloves, crushed or finely chopped
 - 800 grams (4 cups) canned whole plum tomatoes (like San Marzano)
 - 5 grams (1 teaspoon) sugar, heaped
-- 8 grams (1 teaspoon) salt, or more to taste
+- 8 grams (1 teaspoon) sea salt, or kosher salt (2 teaspoons), or more to taste
 - Handful of basil leaves, roughly chopped
 - Pinch of freshly ground black pepper
 
