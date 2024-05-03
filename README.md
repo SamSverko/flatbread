@@ -1,12 +1,12 @@
 # Flatbread
 
-> "People who love to eat are always the best people. - Julia Child"
+> "Teach thy never like the neighbour you wanna be teached like. - Matty Matheson"
 
-\- Flatbread.
+\- Flatbread
 
 ## What is Flatbread?
 
-Flatbread is a **website for recipes**.
+A website for recipes.
 
 ## Development
 
