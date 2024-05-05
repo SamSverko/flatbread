@@ -4,11 +4,11 @@
 
 \- Flatbread
 
-## What is Flatbread?
-
 A website for recipes.
 
-## Development
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your local machine for development. See **Deployment** section for notes on how to deploy the project to a production environment.
 
 ### Prerequisites
 
@@ -18,7 +18,7 @@ A website for recipes.
     git clone https://github.com/SamSverko/flatbread.git
     ```
 
-### Local
+### Installing
 
 1. Install dependencies:
     ```shell
@@ -30,15 +30,24 @@ A website for recipes.
     ```
 1. Development website is hosted at [http://localhost:3000](http://localhost:3000).
 
-## Production
+## Deployment
 
-Every push to the `main` branch will deploy a new build to production. The production website can be viewed at [https://www.flatbread.app](https://www.flatbread.app).
+Every push to the `main` branch will deploy a new build to production. The production website can be viewed at [https://flatbread.vercel.app](https://flatbread.vercel.app).
+
+To deploy this app to a production environment that fits your needs, refer to the [Next.js "Deploying" docs](https://nextjs.org/docs/pages/building-your-application/deploying).
 
 To build the website for a production environment:
 
 ```shell
 npm run build
 ```
+
+## Built With
+
+-   Frontend framework: [Next.js](https://nextjs.org/)
+-   Static types: [TypeScript](https://www.typescriptlang.org/)
+-   Recipe data storage: [Markdown files](https://www.markdownguide.org/)
+-   Website hosting: [Vercel](https://vercel.com/)
 
 ## Versioning
 
@@ -53,9 +62,6 @@ CalVer scheme: `YYYY.0M.0D_MICRO`:
 -   `0D` - Zero-padded day (e.g. `04` = Fourth day of the month).
 -   `_MICRO` - Version released (e.g. `_2` = second release under the same `YYYY.0M.0D` version).
 
-## Tech stack
+## License
 
--   Frontend framework: [Next.js](https://nextjs.org/)
--   Static types: [TypeScript](https://www.typescriptlang.org/)
--   Recipe data storage: [Markdown files](https://www.markdownguide.org/)
--   Website hosting: [Vercel](https://vercel.com/)
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
