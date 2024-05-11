@@ -1,5 +1,7 @@
 "use client";
 
+// TODO - Refactor to keep page server-side so I can change the page title
+
 import {
     Check as CheckIcon,
     InfoOutlined as InfoOutlinedIcon,
@@ -19,6 +21,7 @@ import {
     Tooltip,
     Typography,
 } from "@mui/material";
+
 import { APP_BAR_HEIGHT, APP_BAR_HEIGHT_LG } from "@/lib/constants";
 
 import { PRODUCE_AVAILABILITY } from "./constants";

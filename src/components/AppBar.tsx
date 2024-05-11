@@ -1,10 +1,11 @@
 "use client";
 
 import {
-    Clear,
-    HorizontalRule,
-    List,
-    Refresh,
+    Clear as ClearIcon,
+    DateRange as DateRangeIcon,
+    HorizontalRule as HorizontalRuleIcon,
+    List as ListIcon,
+    Refresh as RefreshIcon,
     Search as SearchIcon,
 } from "@mui/icons-material";
 import {
@@ -98,7 +99,7 @@ export default function AppBar() {
                 sx={{ top: "auto", bottom: 0 }}
             >
                 <Toolbar>
-                    <HorizontalRule
+                    <HorizontalRuleIcon
                         sx={{ color: LOGO_COLOR, m: 1 }}
                         titleAccess="Flatbread logo"
                     />
@@ -132,7 +133,7 @@ export default function AppBar() {
                                             p: 0,
                                         }}
                                     >
-                                        <Clear />
+                                        <ClearIcon />
                                     </IconButton>
                                 )}
                             </Search>
@@ -143,14 +144,22 @@ export default function AppBar() {
                             href="/"
                             LinkComponent={Link}
                         >
-                            <List />
+                            <ListIcon />
+                        </IconButton>
+                        <IconButton
+                            aria-label="Produce availability"
+                            color="inherit"
+                            href="/produce-availability"
+                            LinkComponent={Link}
+                        >
+                            <DateRangeIcon />
                         </IconButton>
                         <IconButton
                             aria-label="Refresh page"
                             color="inherit"
                             onClick={handleRefresh}
                         >
-                            <Refresh />
+                            <RefreshIcon />
                         </IconButton>
                     </Box>
                 </Toolbar>
