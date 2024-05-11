@@ -7,7 +7,9 @@ import {
 import {
     Box,
     ClickAwayListener,
+    FormControlLabel,
     IconButton,
+    Switch,
     Table,
     TableBody,
     TableCell,
@@ -26,6 +28,7 @@ import React, { useEffect, useState } from "react";
 export default function Index() {
     const [currentMonth, setCurrentMonth] = useState(0);
     const [isTooltipOpen, setIsTooltipOpen] = useState(false);
+    const [isSwitchChecked, setIsSwitchChecked] = React.useState(false);
 
     useEffect(() => {
         const currentDate = new Date();
@@ -62,6 +65,10 @@ export default function Index() {
         }
     };
 
+    const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setIsSwitchChecked(event.target.checked);
+    };
+
     const sortedProduce = PRODUCE_AVAILABILITY.sort((a, b) => {
         if (a.type !== b.type) {
             return a.type.localeCompare(b.type);
@@ -70,13 +77,17 @@ export default function Index() {
         return a.name.localeCompare(b.name);
     });
 
+    const filteredProduce = isSwitchChecked
+        ? sortedProduce.filter((item) => {
+              return item.availability.includes(currentMonth as Month);
+          })
+        : sortedProduce;
+
     return (
         <Box
             component="main"
             display="flex"
             flexDirection="column"
-            gap={2}
-            padding={2}
             sx={{
                 height: `calc(100dvh - ${APP_BAR_HEIGHT}px)`,
                 "@media (min-width: 600px)": {
@@ -84,7 +95,15 @@ export default function Index() {
                 },
             }}
         >
-            <Box alignItems="center" display="flex" flexWrap="nowrap" gap={1}>
+            <Box
+                alignItems="center"
+                borderBottom={(theme) => `1px solid ${theme.palette.divider}`}
+                display="flex"
+                flexWrap="nowrap"
+                gap={1}
+                px={2}
+                py={1}
+            >
                 <Typography component="h1" variant="h5">
                     Produce Availability
                 </Typography>
@@ -167,6 +186,7 @@ export default function Index() {
                             <TableCell>Produce</TableCell>
                             {[...Array(12)].map((_, index) => (
                                 <TableCell
+                                    align="center"
                                     key={index}
                                     sx={{
                                         backgroundColor:
@@ -181,10 +201,10 @@ export default function Index() {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        {sortedProduce.map((produce, index) => (
+                        {filteredProduce.map((produce, index) => (
                             <React.Fragment key={produce.name}>
                                 {index === 0 ||
-                                sortedProduce[index - 1].type !==
+                                filteredProduce[index - 1].type !==
                                     produce.type ? (
                                     <TableRow>
                                         <TableCell className="produce-availability-type-header">
@@ -213,6 +233,7 @@ export default function Index() {
                                     </TableCell>
                                     {[...Array(12)].map((_, index) => (
                                         <TableCell
+                                            align="center"
                                             key={index}
                                             sx={{
                                                 backgroundColor:
@@ -224,7 +245,9 @@ export default function Index() {
                                             {produce.availability.includes(
                                                 (index + 1) as Month
                                             ) ? (
-                                                <CheckIcon />
+                                                <Box display="flex">
+                                                    <CheckIcon />
+                                                </Box>
                                             ) : null}
                                         </TableCell>
                                     ))}
@@ -234,6 +257,30 @@ export default function Index() {
                     </TableBody>
                 </Table>
             </TableContainer>
+
+            <Box
+                borderTop={(theme) => `1px solid ${theme.palette.divider}`}
+                display="flex"
+                justifyContent="center"
+                px={2}
+                py={1}
+            >
+                <FormControlLabel
+                    control={
+                        <Switch
+                            checked={isSwitchChecked}
+                            onChange={handleSwitchChange}
+                            size="small"
+                        />
+                    }
+                    label="Show in season only"
+                    slotProps={{
+                        typography: {
+                            variant: "body2",
+                        },
+                    }}
+                />
+            </Box>
         </Box>
     );
 }
