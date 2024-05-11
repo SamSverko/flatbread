@@ -100,7 +100,7 @@ export default function TableOfRecipes({ recipes }: RecipeTableProps) {
                     },
                 }}
             >
-                <Table size="small" stickyHeader={true}>
+                <Table size="small" stickyHeader>
                     <TableHead onClick={handleTableHeadClick}>
                         <TableRow>
                             <TableCell align="left">Name</TableCell>
