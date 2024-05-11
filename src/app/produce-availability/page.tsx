@@ -186,7 +186,14 @@ export default function Index() {
                 >
                     <TableHead>
                         <TableRow>
-                            <TableCell>Produce</TableCell>
+                            <TableCell
+                                sx={{
+                                    borderRight: (theme) =>
+                                        `1px solid ${theme.palette.divider}`,
+                                }}
+                            >
+                                Produce
+                            </TableCell>
                             {[...Array(12)].map((_, index) => (
                                 <TableCell
                                     align="center"
@@ -209,7 +216,13 @@ export default function Index() {
                                 {index === 0 ||
                                 filteredProduce[index - 1].type !==
                                     produce.type ? (
-                                    <TableRow>
+                                    <TableRow
+                                        sx={{
+                                            position: "sticky",
+                                            top: "37px",
+                                            zIndex: 3,
+                                        }}
+                                    >
                                         <TableCell className="produce-availability-type-header">
                                             <Box
                                                 component="b"
@@ -231,7 +244,14 @@ export default function Index() {
                                     </TableRow>
                                 ) : null}
                                 <TableRow key={produce.name}>
-                                    <TableCell component="th" scope="row">
+                                    <TableCell
+                                        component="th"
+                                        scope="row"
+                                        sx={{
+                                            borderRight: (theme) =>
+                                                `1px solid ${theme.palette.divider}`,
+                                        }}
+                                    >
                                         {produce.name}
                                     </TableCell>
                                     {[...Array(12)].map((_, index) => (
@@ -261,13 +281,7 @@ export default function Index() {
                 </Table>
             </TableContainer>
 
-            <Box
-                borderTop={(theme) => `1px solid ${theme.palette.divider}`}
-                display="flex"
-                justifyContent="center"
-                px={2}
-                py={1}
-            >
+            <Box display="flex" justifyContent="center" px={2} py={1}>
                 <FormControlLabel
                     control={
                         <Switch
