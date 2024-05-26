@@ -1,5 +1,5 @@
 ---
-title: "Classic Potato Salad Recipe"
+title: "Classic Potato Salad"
 source:
     name: "Serious Eats"
     url: "https://www.seriouseats.com/classic-potato-salad-recipe"
@@ -21,7 +21,7 @@ source:
 -   1 medium (8-ounce; 225g) red onion, finely diced (about 1/2 cup)
 -   4 scallions, green parts only, thinly sliced (about 1/2 cup, optional)
 -   1/4 cup fresh parsley leaves, washed and minced (optional)
--   1/4 cup chopped cornichons (see notes)
+-   1/4 cup chopped cornichons (see note)
 -   2 tablespoons whole grain mustard (more or less to taste)
 -   1 1/4 cups mayonnaise
 -   Fresh ground black pepper
@@ -35,7 +35,7 @@ source:
 
 ## Special Equipment
 
-Large saucepan
+Large saucepan, colander
 
 ## Make-Ahead and Storage
 
