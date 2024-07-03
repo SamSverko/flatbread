@@ -53,13 +53,13 @@ export default function AppBar() {
 
     const clearSearch = () => {
         setSearchTerm("");
-        window.history.pushState({}, "", window.location.pathname);
+        window.history.replaceState({}, "", window.location.pathname);
         searchInputRef.current && searchInputRef.current.focus();
     };
 
     const handleRefresh = () => {
         setOpenSnackbar(true);
-        window.history.pushState({}, "", window.location.pathname);
+        window.history.replaceState({}, "", window.location.pathname);
         window.location.reload();
     };
 
@@ -77,7 +77,7 @@ export default function AppBar() {
                 "searchTerm",
                 (searchInputRef.current && searchInputRef.current.value) || ""
             );
-            window.history.pushState(
+            window.history.replaceState(
                 {},
                 "",
                 `${window.location.pathname}?${params}`
