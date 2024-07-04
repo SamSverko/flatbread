@@ -3,110 +3,110 @@
   "cuisines": [
     {
       "id": 1,
-      "createdAt": "2024-07-04T12:18:57.516Z",
-      "updatedAt": "2024-07-04T12:18:57.516Z",
+      "createdAt": "2024-07-04T12:54:34.390Z",
+      "updatedAt": "2024-07-04T12:54:34.390Z",
       "name": "American"
     },
     {
       "id": 2,
-      "createdAt": "2024-07-04T12:18:57.519Z",
-      "updatedAt": "2024-07-04T12:18:57.519Z",
+      "createdAt": "2024-07-04T12:54:34.392Z",
+      "updatedAt": "2024-07-04T12:54:34.392Z",
       "name": "Italian"
     },
     {
       "id": 3,
-      "createdAt": "2024-07-04T12:18:57.520Z",
-      "updatedAt": "2024-07-04T12:18:57.520Z",
+      "createdAt": "2024-07-04T12:54:34.393Z",
+      "updatedAt": "2024-07-04T12:54:34.393Z",
       "name": "Mexican"
     },
     {
       "id": 4,
-      "createdAt": "2024-07-04T12:18:57.521Z",
-      "updatedAt": "2024-07-04T12:18:57.521Z",
+      "createdAt": "2024-07-04T12:54:34.393Z",
+      "updatedAt": "2024-07-04T12:54:34.393Z",
       "name": "Chinese"
     },
     {
       "id": 5,
-      "createdAt": "2024-07-04T12:18:57.521Z",
-      "updatedAt": "2024-07-04T12:18:57.521Z",
+      "createdAt": "2024-07-04T12:54:34.394Z",
+      "updatedAt": "2024-07-04T12:54:34.394Z",
       "name": "Japanese"
     },
     {
       "id": 6,
-      "createdAt": "2024-07-04T12:18:57.522Z",
-      "updatedAt": "2024-07-04T12:18:57.522Z",
+      "createdAt": "2024-07-04T12:54:34.394Z",
+      "updatedAt": "2024-07-04T12:54:34.394Z",
       "name": "Korean"
     },
     {
       "id": 7,
-      "createdAt": "2024-07-04T12:18:57.523Z",
-      "updatedAt": "2024-07-04T12:18:57.523Z",
+      "createdAt": "2024-07-04T12:54:34.395Z",
+      "updatedAt": "2024-07-04T12:54:34.395Z",
       "name": "Vietnamese"
     },
     {
       "id": 8,
-      "createdAt": "2024-07-04T12:18:57.523Z",
-      "updatedAt": "2024-07-04T12:18:57.523Z",
+      "createdAt": "2024-07-04T12:54:34.395Z",
+      "updatedAt": "2024-07-04T12:54:34.395Z",
       "name": "Indian"
     },
     {
       "id": 9,
-      "createdAt": "2024-07-04T12:18:57.524Z",
-      "updatedAt": "2024-07-04T12:18:57.524Z",
+      "createdAt": "2024-07-04T12:54:34.396Z",
+      "updatedAt": "2024-07-04T12:54:34.396Z",
       "name": "French"
     },
     {
       "id": 10,
-      "createdAt": "2024-07-04T12:18:57.525Z",
-      "updatedAt": "2024-07-04T12:18:57.525Z",
+      "createdAt": "2024-07-04T12:54:34.396Z",
+      "updatedAt": "2024-07-04T12:54:34.396Z",
       "name": "Spanish"
     },
     {
       "id": 11,
-      "createdAt": "2024-07-04T12:18:57.525Z",
-      "updatedAt": "2024-07-04T12:18:57.525Z",
+      "createdAt": "2024-07-04T12:54:34.397Z",
+      "updatedAt": "2024-07-04T12:54:34.397Z",
       "name": "Middle Eastern"
     },
     {
       "id": 12,
-      "createdAt": "2024-07-04T12:18:57.526Z",
-      "updatedAt": "2024-07-04T12:18:57.526Z",
+      "createdAt": "2024-07-04T12:54:34.397Z",
+      "updatedAt": "2024-07-04T12:54:34.397Z",
       "name": "British"
     },
     {
       "id": 13,
-      "createdAt": "2024-07-04T12:18:57.526Z",
-      "updatedAt": "2024-07-04T12:18:57.526Z",
+      "createdAt": "2024-07-04T12:54:34.398Z",
+      "updatedAt": "2024-07-04T12:54:34.398Z",
       "name": "African"
     },
     {
       "id": 14,
-      "createdAt": "2024-07-04T12:18:57.527Z",
-      "updatedAt": "2024-07-04T12:18:57.527Z",
+      "createdAt": "2024-07-04T12:54:34.398Z",
+      "updatedAt": "2024-07-04T12:54:34.398Z",
       "name": "Caribbean"
     },
     {
       "id": 15,
-      "createdAt": "2024-07-04T12:18:57.527Z",
-      "updatedAt": "2024-07-04T12:18:57.527Z",
+      "createdAt": "2024-07-04T12:54:34.399Z",
+      "updatedAt": "2024-07-04T12:54:34.399Z",
       "name": "South American"
     },
     {
       "id": 16,
-      "createdAt": "2024-07-04T12:18:57.528Z",
-      "updatedAt": "2024-07-04T12:18:57.528Z",
+      "createdAt": "2024-07-04T12:54:34.399Z",
+      "updatedAt": "2024-07-04T12:54:34.399Z",
       "name": "Mediterranean"
     },
     {
       "id": 17,
-      "createdAt": "2024-07-04T12:18:57.528Z",
-      "updatedAt": "2024-07-04T12:18:57.528Z",
+      "createdAt": "2024-07-04T12:54:34.400Z",
+      "updatedAt": "2024-07-04T12:54:34.400Z",
       "name": "Australian"
     },
     {
       "id": 18,
-      "createdAt": "2024-07-04T12:18:57.529Z",
-      "updatedAt": "2024-07-04T12:18:57.529Z",
+      "createdAt": "2024-07-04T12:54:34.400Z",
+      "updatedAt": "2024-07-04T12:54:34.400Z",
       "name": "Canadian"
     }
   ]

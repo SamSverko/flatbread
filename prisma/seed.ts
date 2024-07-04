@@ -61,6 +61,7 @@ const SEED_RECIPE: Prisma.RecipeCreateInput[] = [
     {
         title: "Spaghetti Carbonara",
         slug: "spaghetti-carbonara",
+        sourceName: "DB Seed",
         cuisines: {
             connect: {
                 name: "Italian",
@@ -70,6 +71,7 @@ const SEED_RECIPE: Prisma.RecipeCreateInput[] = [
     {
         title: "Chicken Tikka Masala",
         slug: "chicken-tikka-masala",
+        sourceName: "DB Seed",
         cuisines: {
             connect: {
                 name: "Indian",
@@ -79,6 +81,7 @@ const SEED_RECIPE: Prisma.RecipeCreateInput[] = [
     {
         title: "Tacos",
         slug: "tacos",
+        sourceName: "DB Seed",
         cuisines: {
             connect: {
                 name: "Mexican",
@@ -88,6 +91,7 @@ const SEED_RECIPE: Prisma.RecipeCreateInput[] = [
     {
         title: "Kimchi Fried Rice",
         slug: "kimchi-fried-rice",
+        sourceName: "DB Seed",
         cuisines: {
             connect: {
                 name: "Korean",

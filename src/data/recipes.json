@@ -3,60 +3,68 @@
   "recipes": [
     {
       "id": 1,
-      "createdAt": "2024-07-04T12:18:57.529Z",
-      "updatedAt": "2024-07-04T12:18:57.529Z",
+      "createdAt": "2024-07-04T12:54:34.400Z",
+      "updatedAt": "2024-07-04T12:54:34.400Z",
       "title": "Spaghetti Carbonara",
       "slug": "spaghetti-carbonara",
+      "sourceName": "DB Seed",
+      "sourceUrl": null,
       "cuisines": [
         {
           "id": 2,
-          "createdAt": "2024-07-04T12:18:57.519Z",
-          "updatedAt": "2024-07-04T12:18:57.519Z",
+          "createdAt": "2024-07-04T12:54:34.392Z",
+          "updatedAt": "2024-07-04T12:54:34.392Z",
           "name": "Italian"
         }
       ]
     },
     {
       "id": 2,
-      "createdAt": "2024-07-04T12:18:57.531Z",
-      "updatedAt": "2024-07-04T12:18:57.531Z",
+      "createdAt": "2024-07-04T12:54:34.401Z",
+      "updatedAt": "2024-07-04T12:54:34.401Z",
       "title": "Chicken Tikka Masala",
       "slug": "chicken-tikka-masala",
+      "sourceName": "DB Seed",
+      "sourceUrl": null,
       "cuisines": [
         {
           "id": 8,
-          "createdAt": "2024-07-04T12:18:57.523Z",
-          "updatedAt": "2024-07-04T12:18:57.523Z",
+          "createdAt": "2024-07-04T12:54:34.395Z",
+          "updatedAt": "2024-07-04T12:54:34.395Z",
           "name": "Indian"
         }
       ]
     },
     {
       "id": 3,
-      "createdAt": "2024-07-04T12:18:57.531Z",
-      "updatedAt": "2024-07-04T12:18:57.531Z",
+      "createdAt": "2024-07-04T12:54:34.402Z",
+      "updatedAt": "2024-07-04T12:54:34.402Z",
       "title": "Tacos",
       "slug": "tacos",
+      "sourceName": "DB Seed",
+      "sourceUrl": null,
       "cuisines": [
         {
           "id": 3,
-          "createdAt": "2024-07-04T12:18:57.520Z",
-          "updatedAt": "2024-07-04T12:18:57.520Z",
+          "createdAt": "2024-07-04T12:54:34.393Z",
+          "updatedAt": "2024-07-04T12:54:34.393Z",
           "name": "Mexican"
         }
       ]
     },
     {
       "id": 4,
-      "createdAt": "2024-07-04T12:18:57.532Z",
-      "updatedAt": "2024-07-04T12:18:57.532Z",
+      "createdAt": "2024-07-04T12:54:34.403Z",
+      "updatedAt": "2024-07-04T12:54:34.403Z",
       "title": "Kimchi Fried Rice",
       "slug": "kimchi-fried-rice",
+      "sourceName": "DB Seed",
+      "sourceUrl": null,
       "cuisines": [
         {
           "id": 6,
-          "createdAt": "2024-07-04T12:18:57.522Z",
-          "updatedAt": "2024-07-04T12:18:57.522Z",
+          "createdAt": "2024-07-04T12:54:34.394Z",
+          "updatedAt": "2024-07-04T12:54:34.394Z",
           "name": "Korean"
         }
       ]
