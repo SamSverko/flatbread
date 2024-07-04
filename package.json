@@ -23,9 +23,16 @@
         "type": "git",
         "url": "https://github.com/SamSverko/flatbread.git"
     },
+    "prisma": {
+        "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
+    },
     "scripts": {
         "build": "next build",
+        "build-db-files": "ts-node --compiler-options '{\"module\":\"CommonJS\"}' prisma/build-db-files.ts",
         "dev": "next",
+        "prisma-db-push": "prisma db push",
+        "prisma-db-seed": "prisma db seed",
+        "prisma-studio": "prisma studio",
         "start": "next start"
     },
     "dependencies": {
@@ -35,6 +42,7 @@
         "@mui/icons-material": "^5.15.21",
         "@mui/material": "^5.15.21",
         "@mui/material-nextjs": "^5.15.11",
+        "@prisma/client": "^5.16.1",
         "ajv": "^8.16.0",
         "gray-matter": "^4.0.3",
         "next": "14.2.4",
@@ -46,6 +54,8 @@
         "@types/node": "^20.14.9",
         "@types/react": "^18.3.3",
         "@types/react-dom": "^18.3.0",
+        "prisma": "^5.16.1",
+        "ts-node": "^10.9.2",
         "typescript": "^5.4.5"
     }
 }
