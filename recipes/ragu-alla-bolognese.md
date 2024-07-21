@@ -31,7 +31,9 @@ source:
 
 ## Note
 
-Traditionally, in Bologna hanger or skirt steak is used (the diaphragm of the beef, which is difficult to find today). In lieu or in addition, favour anterior cuts, rich in collagen, such as shoulder or chuck, brisket, plate or flank. Combinations are acceptable, as is the modern technique of browning the meat separately and then adding it to the softened minced vegetables in the pan.
+- Traditionally, in Bologna hanger or skirt steak is used (the diaphragm of the beef, which is difficult to find today). In lieu or in addition, favour anterior cuts, rich in collagen, such as shoulder or chuck, brisket, plate or flank. Combinations are acceptable, as is the modern technique of browning the meat separately and then adding it to the softened minced vegetables in the pan.
+- Doubling the recipe works well!
+- White wines that work well: Pinot Grigio or Sauvingnon Blanc.
 
 ## Permitted variants
 
