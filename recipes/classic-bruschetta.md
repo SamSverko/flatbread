@@ -8,10 +8,10 @@ source:
 ## Ingredients
 
 -   3 slices (3/4 inch thick) crusty Italian bread
--   5 tablespoons extra-virgin olive oil , divided
--   1 clove garlic , halved
--   2 vine-ripened tomatoes , finely chopped
--   1/2 cup basil leaves , chopped
+-   5 tablespoons extra-virgin olive oil, divided
+-   1 clove garlic, halved
+-   2 vine-ripened tomatoes, finely chopped
+-   1/2 cup basil leaves, chopped
 -   1 tablespoon red wine vinegar
 -   1/2 teaspoon salt
 -   1/4 teaspoon pepper

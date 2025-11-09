@@ -1,52 +1,52 @@
 ---
 title: "Fried Shrimp Tacos"
 source:
-  name: "Matty Matheson"
-  url: "https://youtu.be/mJHZOflu9sM?si=H2gYtjBkuLZcjxu1"
+    name: "Matty Matheson"
+    url: "https://youtu.be/mJHZOflu9sM?si=H2gYtjBkuLZcjxu1"
 ---
 
 ## Ingredients
 
 ### For the Campechana (seafood salsa)
 
-- 1 poblano pepper
-- 1 jalapeno
-- 1 pound octopus, cooked and chilled
-- 12 clams, cooked and chilled
-- 12 oysters, cooked and chilled
-- 10 scallops, cooked and chilled
-- 2 cups tomato juice
-- 1 cup clam juice
-- 1 Roma tomato, deseeded and chopped
-- ½ small white onion, finely chopped
-- 3 garlic cloves, minced
-- 1 tablespoons fresh oregano, chopped
-- ½ bunch cilantro leaves and tender stems, chopped
-- 3 limes, juiced
-- Kosher salt, to taste
-- Freshly cracked pepper
+-   1 poblano pepper
+-   1 jalapeno
+-   1 pound octopus, cooked and chilled
+-   12 clams, cooked and chilled
+-   12 oysters, cooked and chilled
+-   10 scallops, cooked and chilled
+-   2 cups tomato juice
+-   1 cup clam juice
+-   1 Roma tomato, deseeded and chopped
+-   ½ small white onion, finely chopped
+-   3 garlic cloves, minced
+-   1 tablespoons fresh oregano, chopped
+-   ½ bunch cilantro leaves and tender stems, chopped
+-   3 limes, juiced
+-   Kosher salt, to taste
+-   Freshly cracked pepper
 
 ### For the Taco Filling
 
-- 2 Russet potatoes, peeled and cubed
-- 3 tablespoons vegetable oil
-- ½ white onion, chopped
-- 2 Roma tomatoes, deseeded and chopped
-- 3 garlic cloves, chopped
-- 1 pound peeled, deveined shrimp, chopped into bite-sized pieces
-- Cumin
-- Coriander
-- Chili powder
-- ½ cup shredded whole milk mozzarella
-- Kosher salt
-- 6 corn tortillas
-- Vegetable oil
+-   2 Russet potatoes, peeled and cubed
+-   3 tablespoons vegetable oil
+-   ½ white onion, chopped
+-   2 Roma tomatoes, deseeded and chopped
+-   3 garlic cloves, chopped
+-   1 pound peeled, deveined shrimp, chopped into bite-sized pieces
+-   Cumin
+-   Coriander
+-   Chili powder
+-   ½ cup shredded whole milk mozzarella
+-   Kosher salt
+-   6 corn tortillas
+-   Vegetable oil
 
 ### For Serving
 
-- Red El Yucateco
-- Green El Yucateco
-- Cilantro leaves
+-   Red El Yucateco
+-   Green El Yucateco
+-   Cilantro leaves
 
 ## Directions
 

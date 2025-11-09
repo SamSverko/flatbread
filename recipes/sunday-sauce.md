@@ -1,22 +1,22 @@
 ---
 title: "Sunday Sauce"
 source:
-  name: "Adam Ragusea"
-  url: "https://www.youtube.com/watch?v=VZjkn9zJdkA&list=PLUA5hDZ3A0uD0hpLJIVST82gnesQX2lC-"
+    name: "Adam Ragusea"
+    url: "https://www.youtube.com/watch?v=VZjkn9zJdkA&list=PLUA5hDZ3A0uD0hpLJIVST82gnesQX2lC-"
 ---
 
 ## Ingredients
 
-- Giant heap of meat suitable for braising (fatty cuts that you have to cook low and slow), such as, pork ribs, italian sausages, lamb leg, beef roast, beef ox tail (or anything with bone marrow). If you want chicken, go with whole, dark meat pieces, like a leg.
-- 1 large onion, chopped
-- 1 large carrot, chopped
-- 3-4 garlic cloves, chopped
-- 2 cans of crushed tomatoes
-- 1 can of whole tomatoes
-- Red wine of your choice (such as Chianti, Merlot, or Cabernet Sauvignon)
-- Dried italian herbs (basil, oregano, marjoram, rosemary, thyme, red pepper flakes)
-- Optional: Vinegar and sugar for end results seasoning
-- Garnish: Fresh basil
+-   Giant heap of meat suitable for braising (fatty cuts that you have to cook low and slow), such as, pork ribs, italian sausages, lamb leg, beef roast, beef ox tail (or anything with bone marrow). If you want chicken, go with whole, dark meat pieces, like a leg.
+-   1 large onion, chopped
+-   1 large carrot, chopped
+-   3-4 garlic cloves, chopped
+-   2 cans of crushed tomatoes
+-   1 can of whole tomatoes
+-   Red wine of your choice (such as Chianti, Merlot, or Cabernet Sauvignon)
+-   Dried italian herbs (basil, oregano, marjoram, rosemary, thyme, red pepper flakes)
+-   Optional: Vinegar and sugar for end results seasoning
+-   Garnish: Fresh basil
 
 ## Directions
 
