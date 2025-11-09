@@ -12,13 +12,7 @@ export default function RecipeSource({
     searchTerm,
     source,
 }: RecipeSourceProps) {
-    let sourceName = "";
-
-    if (source?.name) {
-        sourceName = source.name;
-    } else {
-        sourceName = "Unknown";
-    }
+    const sourceName = source?.name ?? "Unknown";
 
     const RecipeSourceText = () => (
         <HighlightedText searchTerm={searchTerm} text={sourceName} />

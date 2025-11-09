@@ -7,8 +7,8 @@ export type Recipe = RecipeFrontMatter & {
  * Make sure stays in sync with `frontMatterSchema` in `@/lib/api.ts`
  */
 export type RecipeFrontMatter = {
-    source?: {
-        name?: string;
+    source: {
+        name: string;
         url?: string;
     };
     title: string;

@@ -45,13 +45,14 @@ export function getRecipeBySlug(slug: string) {
                         type: "string",
                     },
                 },
+                required: ["name"],
                 type: "object",
             },
             title: {
                 type: "string",
             },
         },
-        required: ["title"],
+        required: ["title", "source"],
         type: "object",
     };
 
