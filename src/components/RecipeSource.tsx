@@ -13,10 +13,6 @@ export default function RecipeSource({
 }: RecipeSourceProps) {
     const sourceName = source?.name ?? "Unknown";
 
-    const RecipeSourceText = () => (
-        <HighlightedText searchTerm={searchTerm} text={sourceName} />
-    );
-
     if (source?.url) {
         return (
             <Link
@@ -26,13 +22,18 @@ export default function RecipeSource({
                 rel="noopener noreferrer"
                 target="_blank"
             >
-                <RecipeSourceText />
+                <a>
+                    <HighlightedText
+                        searchTerm={searchTerm}
+                        text={sourceName}
+                    />
+                </a>
             </Link>
         );
     } else {
         return (
             <span>
-                <RecipeSourceText />
+                <HighlightedText searchTerm={searchTerm} text={sourceName} />
             </span>
         );
     }
