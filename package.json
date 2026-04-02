@@ -29,7 +29,6 @@
         "start": "next start"
     },
     "dependencies": {
-        "ajv": "^8.17.1",
         "gray-matter": "^4.0.3",
         "next": "^14.2.4",
         "react": "^18.3.1",
