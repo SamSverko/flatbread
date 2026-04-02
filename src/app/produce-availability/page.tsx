@@ -2,27 +2,7 @@
 
 // TODO - Refactor to keep page server-side so I can change the page title
 
-import {
-    Check as CheckIcon,
-    InfoOutlined as InfoOutlinedIcon,
-} from "@mui/icons-material";
-import {
-    Box,
-    ClickAwayListener,
-    FormControlLabel,
-    IconButton,
-    Switch,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    Tooltip,
-    Typography,
-} from "@mui/material";
-
-import { APP_BAR_HEIGHT, APP_BAR_HEIGHT_LG } from "@/lib/constants";
+import { APP_BAR_HEIGHT } from "@/lib/constants";
 
 import { PRODUCE_AVAILABILITY } from "./constants";
 import { type Month } from "./types";
@@ -87,217 +67,145 @@ export default function Index() {
         : sortedProduce;
 
     return (
-        <Box
-            component="main"
-            display="flex"
-            flexDirection="column"
-            sx={{
+        <main
+            style={{
+                display: "flex",
+                flexDirection: "column",
                 height: `calc(100dvh - ${APP_BAR_HEIGHT}px)`,
-                "@media (min-width: 600px)": {
-                    height: `calc(100dvh - ${APP_BAR_HEIGHT_LG}px)`,
-                },
             }}
         >
-            <Box
-                alignItems="center"
-                borderBottom={(theme) => `1px solid ${theme.palette.divider}`}
-                display="flex"
-                flexWrap="nowrap"
-                gap={1}
-                px={2}
-                py={1}
+            <div
+                style={{
+                    alignItems: "center",
+                    borderBottom: "1px solid grey",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "8px",
+                    padding: "8px 16px",
+                }}
             >
-                <Typography component="h1" variant="h5">
-                    Produce Availability
-                </Typography>
+                <h1>Produce Availability</h1>
+                <span style={{ fontSize: "12px" }}>
+                    This page provides information on when produce is in season
+                    in Ontario, Canada.
+                    <br />
+                    <br />
+                    The highlighted cells indicate the current month.
+                    <br />
+                    <br />
+                    Last updated: 2024-05-11.
+                </span>
+            </div>
 
-                <ClickAwayListener onClickAway={() => setIsTooltipOpen(false)}>
-                    <Tooltip
-                        arrow
-                        disableFocusListener
-                        disableHoverListener
-                        disableTouchListener
-                        onClose={() => setIsTooltipOpen(false)}
-                        open={isTooltipOpen}
-                        PopperProps={{
-                            disablePortal: true,
-                        }}
-                        slotProps={{
-                            popper: {
-                                modifiers: [
-                                    {
-                                        name: "offset",
-                                        options: {
-                                            offset: [0, -14],
-                                        },
-                                    },
-                                ],
-                            },
-                        }}
-                        title={
-                            <>
-                                This page provides information on when produce
-                                is in season in Ontario, Canada.
-                                <br />
-                                <br />
-                                The highlighted cells indicate the current
-                                month.
-                                <br />
-                                <br />
-                                Last updated: 2024-05-11.
-                            </>
-                        }
-                    >
-                        <IconButton
-                            aria-label="More info"
-                            onClick={() => setIsTooltipOpen(true)}
-                        >
-                            <InfoOutlinedIcon />
-                        </IconButton>
-                    </Tooltip>
-                </ClickAwayListener>
-            </Box>
-
-            <TableContainer
-                sx={{
+            <div
+                style={{
                     flexGrow: 1,
                     overflow: "scroll",
                 }}
             >
-                <Table
-                    size="small"
-                    stickyHeader
-                    sx={{
-                        "& th:first-child, & td:first-child": {
-                            backgroundColor: "white",
-                            left: 0,
-                            position: "sticky",
-                        },
-                        "& thead th": {
-                            zIndex: 4,
-                            "&:first-child": {
-                                zIndex: 5,
-                            },
-                        },
-                        "& td.produce-availability-type-header": {
-                            backgroundColor: "grey.100",
-                        },
-                    }}
-                >
-                    <TableHead>
-                        <TableRow>
-                            <TableCell
-                                sx={{
-                                    borderRight: (theme) =>
-                                        `1px solid ${theme.palette.divider}`,
+                <table>
+                    <thead>
+                        <tr>
+                            <th
+                                style={{
+                                    borderRight: "1px solid grey",
                                 }}
                             >
                                 Produce
-                            </TableCell>
+                            </th>
                             {[...Array(12)].map((_, index) => (
-                                <TableCell
+                                <th
                                     align="center"
                                     key={index}
-                                    sx={{
+                                    style={{
                                         backgroundColor:
                                             index + 1 === currentMonth
-                                                ? "grey.300"
-                                                : "common.white",
+                                                ? "grey"
+                                                : "white",
                                     }}
                                 >
                                     {getMonthString(index + 1)}
-                                </TableCell>
+                                </th>
                             ))}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
+                        </tr>
+                    </thead>
+                    <tbody>
                         {filteredProduce.map((produce, index) => (
                             <React.Fragment key={produce.name}>
                                 {index === 0 ||
                                 filteredProduce[index - 1].type !==
                                     produce.type ? (
-                                    <TableRow
-                                        sx={{
+                                    <tr
+                                        style={{
                                             position: "sticky",
                                             top: "37px",
                                             zIndex: 3,
                                         }}
                                     >
-                                        <TableCell className="produce-availability-type-header">
-                                            <Box
-                                                component="b"
-                                                sx={{
+                                        <td className="produce-availability-type-header">
+                                            <b
+                                                style={{
                                                     textTransform: "capitalize",
                                                 }}
                                             >
                                                 {`${produce.type}s`}
-                                            </Box>
-                                        </TableCell>
+                                            </b>
+                                        </td>
                                         {[...Array(12)].map((_, index) => (
-                                            <TableCell
+                                            <td
                                                 key={index}
-                                                sx={{
-                                                    backgroundColor: "grey.100",
+                                                style={{
+                                                    backgroundColor: "grey",
                                                 }}
                                             />
                                         ))}
-                                    </TableRow>
+                                    </tr>
                                 ) : null}
-                                <TableRow key={produce.name}>
-                                    <TableCell
-                                        component="th"
+                                <tr key={produce.name}>
+                                    <th
                                         scope="row"
-                                        sx={{
-                                            borderRight: (theme) =>
-                                                `1px solid ${theme.palette.divider}`,
+                                        style={{
+                                            borderRight: "1px solid #e0e0e0",
                                         }}
                                     >
                                         {produce.name}
-                                    </TableCell>
+                                    </th>
                                     {[...Array(12)].map((_, index) => (
-                                        <TableCell
+                                        <td
                                             align="center"
                                             key={index}
-                                            sx={{
+                                            style={{
                                                 backgroundColor:
                                                     index + 1 === currentMonth
-                                                        ? "grey.300"
-                                                        : "common.white",
+                                                        ? "300"
+                                                        : "white",
                                             }}
                                         >
                                             {produce.availability.includes(
-                                                (index + 1) as Month
+                                                (index + 1) as Month,
                                             ) ? (
-                                                <Box display="flex">
-                                                    <CheckIcon />
-                                                </Box>
+                                                <div>Y</div>
                                             ) : null}
-                                        </TableCell>
+                                        </td>
                                     ))}
-                                </TableRow>
+                                </tr>
                             </React.Fragment>
                         ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+                    </tbody>
+                </table>
+            </div>
 
-            <Box display="flex" justifyContent="center" px={2} py={1}>
-                <FormControlLabel
-                    control={
-                        <Switch
-                            checked={isSwitchChecked}
-                            onChange={handleSwitchChange}
-                            size="small"
-                        />
-                    }
-                    label="Show in season only"
-                    slotProps={{
-                        typography: {
-                            variant: "body2",
-                        },
-                    }}
-                />
-            </Box>
-        </Box>
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    padding: "8px 16px",
+                }}
+            >
+                <button onClick={() => setIsSwitchChecked(!isSwitchChecked)}>
+                    TOGGLE IN SEASON ONLY
+                </button>
+            </div>
+        </main>
     );
 }

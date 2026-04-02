@@ -1,14 +1,9 @@
-import { Box, Typography } from "@mui/material";
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
+import Markdown from "react-markdown";
 
 import { getAllRecipes, getRecipeBySlug } from "@/lib/api";
-import {
-    RecipeEdit,
-    RecipeSource,
-    ShareRecipe,
-    MarkdownHTML,
-} from "@/components";
+import { RecipeEdit, RecipeSource, ShareRecipe } from "@/components";
 import { WEBSITE_TITLE } from "@/lib/constants";
 
 type RecipeProps = {
@@ -41,32 +36,39 @@ export default async function Recipe({ params }: RecipeProps) {
     }
 
     return (
-        <Box
-            component="article"
-            display="flex"
-            flexDirection="column"
-            gap={2}
-            padding={2}
+        <article
+            style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "16px",
+                padding: "16px",
+            }}
         >
-            <Typography component="h1" variant="h5">
-                {recipe.title}
-            </Typography>
-            <Box
-                alignItems="center"
-                display="flex"
-                gap={1}
-                justifyContent="space-between"
+            <h1>{recipe.title}</h1>
+            <div
+                style={{
+                    alignItems: "center",
+                    display: "flex",
+                    gap: "8px",
+                    justifyContent: "space-between",
+                }}
             >
-                <Typography component="span" variant="body2">
+                <span>
                     By <RecipeSource source={recipe.source} />
-                </Typography>
-                <Box alignItems="center" display="flex" gap={1}>
+                </span>
+                <div
+                    style={{
+                        alignItems: "center",
+                        display: "flex",
+                        gap: "8px",
+                    }}
+                >
                     <RecipeEdit slug={recipe.slug} />
                     <ShareRecipe slug={recipe.slug} title={recipe.title} />
-                </Box>
-            </Box>
-            <MarkdownHTML markdown={recipe.content} />
-        </Box>
+                </div>
+            </div>
+            <Markdown>{recipe.content}</Markdown>
+        </article>
     );
 }
 

@@ -1,4 +1,3 @@
-import { Link as MUILink, Typography } from "@mui/material";
 import Link from "next/link";
 
 import { HighlightedText } from "@/components";
@@ -20,17 +19,21 @@ export default function RecipeSource({
 
     if (source?.url) {
         return (
-            <Link href={source.url} legacyBehavior passHref>
-                <MUILink rel="noopener noreferrer" target="_blank">
-                    <RecipeSourceText />
-                </MUILink>
+            <Link
+                href={source.url}
+                legacyBehavior
+                passHref
+                rel="noopener noreferrer"
+                target="_blank"
+            >
+                <RecipeSourceText />
             </Link>
         );
     } else {
         return (
-            <Typography component="span" variant="body2">
+            <span>
                 <RecipeSourceText />
-            </Typography>
+            </span>
         );
     }
 }

@@ -1,16 +1,12 @@
-import { Box, CssBaseline, ThemeProvider } from "@mui/material";
-import { AppRouterCacheProvider } from "@mui/material-nextjs/v13-appRouter";
 import { type Metadata, type Viewport } from "next";
 
 import { AppBar } from "@/components";
 import {
     APP_BAR_HEIGHT,
-    APP_BAR_HEIGHT_LG,
     WEBSITE_DESCRIPTION,
     WEBSITE_TITLE,
     WEBSITE_URL,
 } from "@/lib/constants";
-import theme from "@/lib/theme";
 
 export const metadata: Metadata = {
     appleWebApp: {
@@ -93,22 +89,14 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body>
-                <AppRouterCacheProvider>
-                    <ThemeProvider theme={theme}>
-                        <CssBaseline />
-                        <Box
-                            sx={{
-                                pb: `${APP_BAR_HEIGHT}px`,
-                                "@media (min-width: 600px)": {
-                                    pb: `${APP_BAR_HEIGHT_LG}px`,
-                                },
-                            }}
-                        >
-                            {children}
-                        </Box>
-                        <AppBar />
-                    </ThemeProvider>
-                </AppRouterCacheProvider>
+                <div
+                    style={{
+                        paddingBottom: `${APP_BAR_HEIGHT}px`,
+                    }}
+                >
+                    {children}
+                </div>
+                <AppBar />
             </body>
         </html>
     );
