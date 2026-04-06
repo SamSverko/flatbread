@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { HighlightedText } from "@/components";
+import HighlightedText from "@/components/HighlightedText";
 import type { RecipeFrontMatter } from "@/lib/types";
 
 type RecipeSourceProps = Pick<RecipeFrontMatter, "source"> & {

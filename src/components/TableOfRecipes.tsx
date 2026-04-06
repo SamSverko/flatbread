@@ -3,12 +3,10 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 
-import {
-    HighlightedText,
-    RecipeEdit,
-    RecipeSource,
-    ShareRecipe,
-} from "@/components";
+import HighlightedText from "@/components/HighlightedText";
+import RecipeEdit from "@/components/RecipeEdit";
+import RecipeSource from "@/components/RecipeSource";
+import ShareRecipe from "@/components/ShareRecipe";
 import { Recipe } from "@/lib/types";
 import { useEffect, useState } from "react";
 

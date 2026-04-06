@@ -1,6 +1,6 @@
 import { type Metadata, type Viewport } from "next";
 
-import { AppBar } from "@/components";
+import AppBar from "@/components/AppBar";
 import {
     APP_BAR_HEIGHT,
     WEBSITE_DESCRIPTION,

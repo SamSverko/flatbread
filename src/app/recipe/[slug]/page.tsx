@@ -2,8 +2,10 @@ import { type Metadata } from "next";
 import { notFound } from "next/navigation";
 import Markdown from "react-markdown";
 
+import RecipeEdit from "@/components/RecipeEdit";
+import RecipeSource from "@/components/RecipeSource";
+import ShareRecipe from "@/components/ShareRecipe";
 import { getAllRecipes, getRecipeBySlug } from "@/lib/api";
-import { RecipeEdit, RecipeSource, ShareRecipe } from "@/components";
 import { WEBSITE_TITLE } from "@/lib/constants";
 
 type RecipeProps = {
