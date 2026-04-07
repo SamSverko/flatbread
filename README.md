@@ -28,7 +28,7 @@ These instructions will get you a copy of the project up and running on your loc
     ```shell
     npm run dev
     ```
-1. Development website is hosted at [http://localhost:5173](http://localhost:5173).
+1. Development website is hosted at [http://localhost:5173/flatbread/](http://localhost:5173/flatbread/).
 
 ## Deployment
 
