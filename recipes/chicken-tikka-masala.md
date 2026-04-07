@@ -1,8 +1,8 @@
 ---
 title: "Chicken Tikka Masala"
 source:
-  name: "https://www.theguardian.com/food/2020/sep/28/madhur-jaffreys-chicken-tikka-masala"
-  url: "Madhur Jaffrey"
+  name: "Madhur Jaffrey"
+  url: "https://www.theguardian.com/food/2020/sep/28/madhur-jaffreys-chicken-tikka-masala"
 ---
 
 ## Ingredients

@@ -1,0 +1,46 @@
+:root {
+    --spacer: 8px;
+}
+
+#root {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    font-family:
+        -apple-system, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
+    font-size: 1rem;
+    margin: 0;
+    padding: max(calc(var(--spacer) * 1), env(safe-area-inset-left));
+    padding-bottom: calc(var(--spacer) * 12);
+}
+
+button {
+    font-size: 1rem;
+}
+
+h1 {
+    margin: 0;
+    padding: 0;
+}
+
+input {
+    font-family: inherit;
+    font-size: 1rem;
+}
+
+table {
+    display: block;
+    overflow-x: auto;
+    width: 100%;
+}
+
+th,
+td {
+    padding: calc(var(--spacer) * 1);
+}
