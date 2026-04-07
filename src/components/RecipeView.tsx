@@ -36,10 +36,18 @@ export default function RecipeView({ onBack, recipe }: RecipeViewProps) {
             <button
                 onClick={onBack}
                 style={{
-                    bottom: `calc(${STYLE_SPACER} * 1)`,
-                    left: "50%",
+                    background: "rgba(255,255,255,0.9)",
+                    backdropFilter: "blur(10px)",
+                    border: "1px solid #ddd",
+                    borderRadius: "100px",
+                    boxShadow: "0 -2px 10px rgba(0,0,0,0.08)",
+                    bottom: `env(safe-area-inset-bottom, calc(${STYLE_SPACER} * 1))`,
+                    fontSize: "1rem",
+                    left: 0,
+                    padding: "14px 16px",
+                    margin: `0 calc(${STYLE_SPACER} * 2)`,
                     position: "fixed",
-                    transform: "translateX(-50%)",
+                    right: 0,
                 }}
             >
                 Back to all recipes

@@ -17,7 +17,7 @@ body {
     font-size: 1rem;
     margin: 0;
     padding: max(calc(var(--spacer) * 1), env(safe-area-inset-left));
-    padding-bottom: calc(var(--spacer) * 5);
+    padding-bottom: calc(var(--spacer) * 12);
 }
 
 button {

@@ -13,10 +13,11 @@ export default function SearchBar({ onChange, value }: SearchBarProps) {
     return (
         <div
             style={{
-                bottom: `calc(${STYLE_SPACER} * 1)`,
-                left: "50%",
+                bottom: `env(safe-area-inset-bottom, calc(${STYLE_SPACER} * 1))`,
+                left: 0,
+                padding: `0 calc(${STYLE_SPACER} * 2)`,
                 position: "fixed",
-                transform: "translateX(-50%)",
+                right: 0,
             }}
         >
             <input
@@ -26,8 +27,12 @@ export default function SearchBar({ onChange, value }: SearchBarProps) {
                 style={{
                     backdropFilter: "blur(10px)",
                     background: "rgba(255, 255, 255, 0.8)",
-                    bottom: `env(safe-area-inset-bottom, calc(${STYLE_SPACER} * 2))`,
+                    border: "1px solid #ddd",
+                    borderRadius: "100px",
                     boxShadow: "0 -2px 10px rgba(0, 0, 0, 0.08)",
+                    fontSize: "1rem",
+                    padding: "14px 16px",
+                    width: "100%",
                 }}
                 type="search"
                 value={value}
