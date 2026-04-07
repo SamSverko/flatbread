@@ -23,6 +23,12 @@ export default function SearchBar({ onChange, value }: SearchBarProps) {
                 enterKeyHint="search"
                 onChange={(event) => onChange(event.target.value)}
                 placeholder="Search..."
+                style={{
+                    backdropFilter: "blur(10px)",
+                    background: "rgba(255, 255, 255, 0.8)",
+                    bottom: `env(safe-area-inset-bottom, calc(${STYLE_SPACER} * 2))`,
+                    boxShadow: "0 -2px 10px rgba(0, 0, 0, 0.08)",
+                }}
                 type="search"
                 value={value}
             />

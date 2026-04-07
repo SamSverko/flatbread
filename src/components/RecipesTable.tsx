@@ -1,3 +1,4 @@
+import { STYLE_SPACER } from "../constants";
 import { type Recipe } from "../utils";
 import EditLink from "./EditLink";
 import HighlightedText from "./HighlightedText";
@@ -70,7 +71,8 @@ export default function RecipesTable({
                                 style={{
                                     alignItems: "center",
                                     display: "flex",
-                                    gap: "8px",
+                                    flexDirection: "column",
+                                    gap: `calc(${STYLE_SPACER} * 1)`,
                                     justifyContent: "center",
                                 }}
                             >

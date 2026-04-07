@@ -2,6 +2,7 @@ import ReactMarkdown from "react-markdown";
 
 import { type Recipe } from "../utils";
 import { STYLE_SPACER } from "../constants";
+import { useEffect } from "react";
 
 type RecipeViewProps = {
     onBack: () => void;
@@ -9,6 +10,10 @@ type RecipeViewProps = {
 };
 
 export default function RecipeView({ onBack, recipe }: RecipeViewProps) {
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: "auto" });
+    }, [recipe.slug]);
+
     return (
         <div>
             <h1>{recipe.title}</h1>
