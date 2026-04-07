@@ -1,6 +1,6 @@
 {
   "name": "flatbread",
-  "version": "2026.04.06_1",
+  "version": "2026.04.07_1",
   "description": "A website for recipes.",
   "type": "module",
   "scripts": {
