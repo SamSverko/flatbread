@@ -6,12 +6,16 @@ type SearchBarProps = {
 };
 
 export default function SearchBar({ onChange, value }: SearchBarProps) {
+    const params = new URLSearchParams(window.location.search);
+
+    if (params.get("recipe")) return null;
+
     return (
         <div
             style={{
-                position: "fixed",
                 bottom: `calc(${STYLE_SPACER} * 1)`,
                 left: "50%",
+                position: "fixed",
                 transform: "translateX(-50%)",
             }}
         >

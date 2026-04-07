@@ -31,9 +31,10 @@ export default function RecipeView({ onBack, recipe }: RecipeViewProps) {
             <button
                 onClick={onBack}
                 style={{
-                    position: "fixed",
                     bottom: `calc(${STYLE_SPACER} * 1)`,
-                    left: `calc(${STYLE_SPACER} * 1)`,
+                    left: "50%",
+                    position: "fixed",
+                    transform: "translateX(-50%)",
                 }}
             >
                 Back to all recipes
