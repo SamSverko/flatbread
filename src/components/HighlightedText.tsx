@@ -1,5 +1,3 @@
-import { LOGO_COLOR } from "@/lib/constants";
-
 type HighlightedTextProps = {
     searchTerm?: null | string | undefined;
     text: string;
@@ -21,10 +19,7 @@ export default function HighlightedText({
             {parts.map((part, index) => {
                 if (part.toLowerCase() === searchTermLower) {
                     return (
-                        <mark
-                            key={index}
-                            style={{ backgroundColor: LOGO_COLOR }}
-                        >
+                        <mark key={index} style={{ backgroundColor: "yellow" }}>
                             {part}
                         </mark>
                     );

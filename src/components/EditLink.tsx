@@ -1,15 +1,15 @@
-type RecipeEditProps = {
-    slug: string;
-};
+import { type Recipe } from "../utils";
 
-export default function RecipeEdit({ slug }: RecipeEditProps) {
+type EditLinkProps = Pick<Recipe, "slug">;
+
+export default function EditLink({ slug }: EditLinkProps) {
     return (
         <a
             href={`https://github.com/SamSverko/flatbread/blob/main/recipes/${slug}.md`}
             rel="noopener noreferrer"
             target="_blank"
         >
-            EDIT
+            Edit
         </a>
     );
 }

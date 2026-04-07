@@ -1,13 +1,12 @@
-"use client";
+import { type Recipe } from "../utils";
 
-type ShareRecipeProps = {
-    slug: string;
-    title: string;
-};
+type ShareButtonProps = Pick<Recipe, "slug" | "title">;
 
-export default function ShareRecipe({ slug, title }: ShareRecipeProps) {
+export default function ShareButton({ slug, title }: ShareButtonProps) {
     function handleClick() {
-        const url = `${window.location.origin}/recipe/${slug}`;
+        const url = `${window.location.origin}/?recipe=${slug}`;
+
+        console.log("Sharing URL:", url);
 
         if (navigator.share) {
             navigator.share({
@@ -27,5 +26,5 @@ export default function ShareRecipe({ slug, title }: ShareRecipeProps) {
         }
     }
 
-    return <button onClick={handleClick}>SHARE</button>;
+    return <button onClick={handleClick}>Share</button>;
 }
