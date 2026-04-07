@@ -5,7 +5,7 @@ type SearchBarProps = {
     value: string;
 };
 
-const SearchBar = ({ onChange, value }: SearchBarProps) => {
+export default function SearchBar({ onChange, value }: SearchBarProps) {
     return (
         <div
             style={{
@@ -24,6 +24,4 @@ const SearchBar = ({ onChange, value }: SearchBarProps) => {
             />
         </div>
     );
-};
-
-export default SearchBar;
+}
