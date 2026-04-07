@@ -4,6 +4,7 @@ updates:
       directory: "/"
       schedule:
           interval: "monthly"
-          day: 1
+          time: "02:42"
+          timezone: "America/Toronto"
       labels:
           - "dependencies"
