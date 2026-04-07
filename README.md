@@ -32,14 +32,14 @@ These instructions will get you a copy of the project up and running on your loc
 
 ## Deployment
 
-TBD - probably GitHub pages.
+Every push to the `main` branch will deploy a new build to production. The production website can be viewed at [https://samsverko.github.io/flatbread/](https://samsverko.github.io/flatbread/).
 
 ## Built With
 
 -   Frontend framework: [Vite](https://vite.dev/)
 -   Static types: [TypeScript](https://www.typescriptlang.org/)
 -   Recipe data storage: [Markdown files](https://www.markdownguide.org/)
--   Website hosting: TBD - probably GitHub pages.
+-   Website hosting: [GitHub Pages](https://docs.github.com/en/pages)
 
 ## Versioning
 
