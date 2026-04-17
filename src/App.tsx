@@ -4,6 +4,7 @@ import { getAllRecipes, getRecipeBySlug, type Recipe } from "./utils";
 import SearchBar from "./components/SearchBar";
 import RecipeView from "./components/RecipeView";
 import RecipesTable from "./components/RecipesTable";
+import { STYLE_SPACER } from "./constants";
 
 function getInitialRecipe(): Recipe | null {
     const params = new URLSearchParams(window.location.search);
@@ -48,12 +49,21 @@ export default function App() {
         <div style={{ position: "relative" }}>
             {selectedRecipe ? (
                 <RecipeView onBack={backToTable} recipe={selectedRecipe} />
-            ) : (
+            ) : filteredRecipes.length > 0 ? (
                 <RecipesTable
                     onViewRecipe={viewRecipe}
                     recipes={filteredRecipes}
                     searchTerm={searchTerm}
                 />
+            ) : (
+                <p
+                    style={{
+                        marginTop: `calc(${STYLE_SPACER} * 12)`,
+                        textAlign: "center",
+                    }}
+                >
+                    No recipes found.
+                </p>
             )}
             <SearchBar onChange={setSearchTerm} value={searchTerm} />
         </div>
