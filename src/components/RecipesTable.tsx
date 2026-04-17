@@ -18,9 +18,9 @@ export default function RecipesTable({
     return (
         <table
             style={{
-                width: "100%",
                 borderCollapse: "collapse",
                 tableLayout: "auto",
+                width: "100%",
             }}
         >
             <thead>
@@ -36,7 +36,7 @@ export default function RecipesTable({
                         key={recipe.slug}
                         style={{ borderBottom: "1px solid #ddd" }}
                     >
-                        <td>
+                        <td align="left" style={{ width: "100%" }}>
                             <button
                                 onClick={() => onViewRecipe(recipe)}
                                 style={{ textAlign: "left" }}
@@ -47,7 +47,7 @@ export default function RecipesTable({
                                 />
                             </button>
                         </td>
-                        <td>
+                        <td align="left">
                             {recipe.source.url ? (
                                 <a
                                     href={recipe.source.url}
@@ -66,7 +66,7 @@ export default function RecipesTable({
                                 />
                             )}
                         </td>
-                        <td>
+                        <td align="center">
                             <div
                                 style={{
                                     alignItems: "center",
